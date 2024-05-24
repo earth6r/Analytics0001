@@ -5,6 +5,9 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { db } from "@/utils/firebase/initialize";
+import { collection, getDocs } from 'firebase/firestore/lite';
+import signIn from "@/utils/firebase/signin";
 
 let post = {
   id: 1,
@@ -46,5 +49,13 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
-    // get unanswered messages
+  getUnansweredMessagesCount: publicProcedure.query(
+    async () => {
+      const user = await signIn(process.env.EMAIL, process.env.PASSWORD);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const querySnapshot = await getDocs(collection(db, 'messages'));
+      return querySnapshot.size;
+    }),
 });
