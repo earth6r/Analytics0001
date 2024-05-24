@@ -44,6 +44,11 @@ export function PasswordInput() {
         })
 
         if (response.valid) {
+            const authenticatedData = {
+                "authenticated": "true",
+                "expires": new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
+            }
+            localStorage.setItem("authenticated", JSON.stringify(authenticatedData))
             await router.push("/stats")
         } else {
             toast({
