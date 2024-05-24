@@ -26,7 +26,7 @@ const FormSchema = z.object({
     }),
 })
 
-export function PasswordInput() {
+const PasswordInput = () => {
     const router = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -90,3 +90,5 @@ export function PasswordInput() {
         </Form>
     )
 }
+
+export default PasswordInput;
