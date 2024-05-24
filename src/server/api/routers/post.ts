@@ -37,4 +37,15 @@ export const postRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+
+  validatePassword: publicProcedure
+    .input(z.object({ password: z.string().min(2) }))
+    .mutation(({ input }) => {
+      console.log("input", input.password);
+      console.log("process.env.PASSWORD", process.env.PASSWORD);
+      console.log("valid", input.password === process.env.PASSWORD);
+      return {
+        valid: input.password === process.env.PASSWORD,
+      };
+    }),
 });
