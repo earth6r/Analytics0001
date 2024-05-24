@@ -44,7 +44,7 @@ export function PasswordInput() {
         })
 
         if (response.valid) {
-            router.push("/stats")
+            await router.push("/stats")
         } else {
             toast({
                 title: "Password is invalid!",
