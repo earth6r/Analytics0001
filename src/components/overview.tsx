@@ -21,7 +21,9 @@ const Overview = () => {
                     </CardHeader>
                     <CardContent className="space-y-5">
                         {JSON.stringify(recentMessages.data)}
-                        <MessageItem />
+                        {(recentMessages.data ?? []).map((message, index) => (
+                            <MessageItem key={index} />
+                        ))}
                     </CardContent>
                 </Card>
             </div>

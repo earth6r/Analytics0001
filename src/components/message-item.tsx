@@ -1,8 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-const MessageItem = () => {
+interface MessageItemProps {
+    key: number;
+}
+
+const MessageItem = (props: MessageItemProps) => {
+    const { key } = props;
+
     return (
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between" key={key}>
             <div className="flex flex-row items-center space-x-4">
                 <Avatar className="w-10 h-10">
                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
