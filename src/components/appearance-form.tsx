@@ -21,32 +21,28 @@ import { Switch } from "./ui/switch"
 import ToggleTheme from "./toggle-theme"
 
 const FormSchema = z.object({
-    name: z.string().min(2, {
-        message: "name must be at least 2 characters.",
-    }),
+    // name: z.string().min(2, {
+    //     message: "name must be at least 2 characters.",
+    // }),
 })
 
 const AppearanceForm = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            name: "",
+            // name: "",
         },
     })
 
     useEffect(() => {
-        const name = localStorage.getItem("name") ?? ""
-        form.setValue("name", name);
+        // const name = localStorage.getItem("name") ?? ""
+        // form.setValue("name", name);
     }, [form]);
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const { name } = data;
-
-        localStorage.setItem("name", name);
-
         toast({
-            title: "Name Updated",
-            description: "Your name has been updated successfully.",
+            title: "Appearance Updated",
+            description: "Your preferences has been updated successfully.",
         })
     }
 
