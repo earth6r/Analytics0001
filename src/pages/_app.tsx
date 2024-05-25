@@ -8,6 +8,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { IntervalProvider } from "@/contexts/IntervalContext";
+import { ThemeProvider } from "next-themes";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +18,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <main className={GeistSans.className}>
         <IntervalProvider>
-          <Component {...pageProps} />
+          <ThemeProvider attribute="class">
+            <Component {...pageProps} />
+          </ThemeProvider>
         </IntervalProvider>
         <Toaster />
       </main>
