@@ -12,9 +12,13 @@ const SettingsTab = (props: SettingsTabProps) => {
 
     return (
         <div
-            className={cn(`cursor-pointer rounded-md p-2 ${selectedSettingsTab === titleValue ? "text-foreground bg-slate-100" : "text-muted-foreground"}`)}
+            className={cn(`cursor-pointer rounded-md p-2 ${selectedSettingsTab === titleValue ? "text-foreground bg-slate-100 dark:bg-slate-800" : "text-muted-foreground"}`)}
             onClick={() => setSelectedSettingsTab(titleValue)}
-        >{title}</div>
+        >
+            <h1 className="ml-2">
+                {title}
+            </h1>
+        </div>
     );
 };
 
