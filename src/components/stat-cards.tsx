@@ -6,6 +6,9 @@ import { BookOpenCheckIcon, BookUserIcon, MessageCircle, UserIcon } from "lucide
 const StatCards = () => {
     const { interval } = useInterval();
 
+    const v = `interval: ${interval} type: ${typeof interval}`
+    console.log(v)
+
     const totalMessagesCount = api.post.getTotalMessagesCount.useQuery(
         {},
         {

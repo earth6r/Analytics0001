@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface MessageItemProps {
-    key: number;
     message: {
         username: string;
         message: string;
@@ -53,10 +52,10 @@ const convertDateToWords = (date: string) => {
 }
 
 const MessageItem = (props: MessageItemProps) => {
-    const { key, message } = props;
+    const { message } = props;
 
     return (
-        <div className="flex flex-row items-center justify-between" key={key}>
+        <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center space-x-4">
                 <Avatar className="w-10 h-10">
                     <AvatarImage src={`https://ui-avatars.com/api/?name=${message.username}`} alt={message.username} />

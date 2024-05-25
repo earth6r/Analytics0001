@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, type ReactNode } from 'react';
+import React, { createContext, useState, useContext, type ReactNode, useEffect } from 'react';
 
 export type Interval = number | false;
 
@@ -13,9 +13,16 @@ const IntervalContext = createContext<IntervalContextProps | undefined>(undefine
 const IntervalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [interval, setInterval] = useState<number | false>(false);
 
+  useEffect(() => {
+    const interval = localStorage.getItem('interval');
+    if (interval) {
+      setInterval(parseInt(interval) * 1000);
+    }
+  }, []);
+
   const setIntervalWithLocalStorage = (value: Interval) => {
     if (value) {
-      localStorage.setItem('interval', value.toString());
+      localStorage.setItem('interval', (value * 1000).toString());
       setInterval(value);
     } else {
       localStorage.removeItem('interval');

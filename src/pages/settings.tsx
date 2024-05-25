@@ -1,5 +1,6 @@
 import AccountForm from "@/components/account-form";
 import AppearanceForm from "@/components/appearance-form";
+import DisplayForm from "@/components/display-form";
 import Header from "@/components/header";
 import ProfileForm from "@/components/profile-form";
 import SettingsTab from "@/components/settings-tab";
@@ -74,17 +75,19 @@ const Settings = () => {
                         {selectedSettingsTab === "notification" && (
                             <div>
                                 <h2 className="text-2xl mt-6">Notification</h2>
-                                <div className="flex flex-row items-center space-x-4 mt-4">
-                                    <Switch checked={false} />
+                                <h3 className="text-md text-muted-foreground font-light mt-2">Configure how you receive notifications.</h3>
+                                <Separator className="mt-6 mb-6" />
+                                <div className="flex flex-row items-center justify-between">
+                                    <p>Coming Soon</p>
                                 </div>
                             </div>
                         )}
                         {selectedSettingsTab === "display" && (
                             <div>
                                 <h2 className="text-2xl mt-6">Display</h2>
-                                <div className="flex flex-row items-center space-x-4 mt-4">
-                                    <Switch checked={false} />
-                                </div>
+                                <h3 className="text-md text-muted-foreground font-light mt-2">{`Turn items on or off to control what's displayed in the app.`}</h3>
+                                <Separator className="mt-6 mb-6" />
+                                <DisplayForm />
                             </div>
                         )}
                     </div>
