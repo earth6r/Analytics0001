@@ -1,12 +1,35 @@
 import StatCard from "@/components/stat-card";
+import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { BookOpenCheckIcon, BookUserIcon, MessageCircle, UserIcon } from "lucide-react";
 
 const StatCards = () => {
-    const totalMessagesCount = api.post.getTotalMessagesCount.useQuery();
-    const unansweredMessagesCount = api.post.getUnansweredMessagesCount.useQuery();
-    const totalUniqueRegisteredUsersCount = api.post.getTotalUniqueRegisteredUsersCount.useQuery();
-    const totalUniqueUsersCount = api.post.getTotalUniqueUsers.useQuery();
+    const { interval } = useInterval();
+
+    const totalMessagesCount = api.post.getTotalMessagesCount.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const unansweredMessagesCount = api.post.getUnansweredMessagesCount.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const totalUniqueRegisteredUsersCount = api.post.getTotalUniqueRegisteredUsersCount.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const totalUniqueUsersCount = api.post.getTotalUniqueUsers.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
 
     return (
         <div className="grid grid-cols-1 gap-6 pl-6 pr-6 pt-2 md:grid-cols-2 lg:grid-cols-4">

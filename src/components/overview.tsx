@@ -3,9 +3,22 @@ import NumberOfMessagesChart from "@/components/number-of-messages-chart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import MessageItem from "./message-item";
 import { api } from "@/utils/api";
+import { useInterval } from "@/contexts/IntervalContext";
 
 const Overview = () => {
-    const recentMessages = api.post.getRecentMessages.useQuery();
+    const { interval } = useInterval();
+    const recentMessages = api.post.getRecentMessages.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const getMessagesCountThisMonth = api.post.getMessagesThisMonth.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
 
     return (
         <div>
@@ -16,13 +29,12 @@ const Overview = () => {
                     <CardHeader>
                         <CardTitle>Recent Messages</CardTitle>
                         <CardDescription>
-                            There are 265 messages this month
+                            {`There are ${getMessagesCountThisMonth.data ?? 0} messages this month`}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-5">
-                        {JSON.stringify(recentMessages.data)}
                         {(recentMessages.data ?? []).map((message, index) => (
-                            <MessageItem key={index} />
+                            <MessageItem key={index} message={message} />
                         ))}
                     </CardContent>
                 </Card>
