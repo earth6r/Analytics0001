@@ -6,15 +6,20 @@ import { BookOpenCheckIcon, BookUserIcon, MessageCircle, UserIcon } from "lucide
 const StatCards = () => {
     const { interval } = useInterval();
 
-    const v = `interval: ${interval} type: ${typeof interval}`
-    console.log(v)
-
     const totalMessagesCount = api.post.getTotalMessagesCount.useQuery(
         {},
         {
             refetchInterval: interval,
         }
     );
+    const getTotalMessagesCountDelta = api.post.getTotalMessagesCountDelta.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+
+
     const unansweredMessagesCount = api.post.getUnansweredMessagesCount.useQuery(
         {},
         {
@@ -37,27 +42,27 @@ const StatCards = () => {
     return (
         <div className="grid grid-cols-1 gap-6 pl-6 pr-6 pt-2 md:grid-cols-2 lg:grid-cols-4">
             <StatCard
-                title={totalMessagesCount.data?.toString() ?? "0"}
+                title={totalMessagesCount.data?.toString()}
                 description="Total Messages"
-                deltaMessage="+5% from last month"
+                deltaValue={getTotalMessagesCountDelta.data}
                 icon={<BookUserIcon className="h-6 w-6 text-muted-foreground" />}
             />
             <StatCard
-                title={unansweredMessagesCount.data?.toString() ?? "0"}
+                title={unansweredMessagesCount.data?.toString()}
                 description="Unanswered Messages"
-                deltaMessage="+5% from last month"
+                deltaValue={5}
                 icon={<MessageCircle className="h-6 w-6 text-muted-foreground" />}
             />
             <StatCard
-                title={totalUniqueRegisteredUsersCount.data?.toString() ?? "0"}
+                title={totalUniqueRegisteredUsersCount.data?.toString()}
                 description="Total Unique Registered Users"
-                deltaMessage="+5% from last month"
+                deltaValue={5}
                 icon={<BookOpenCheckIcon className="h-6 w-6 text-muted-foreground" />}
             />
             <StatCard
-                title={totalUniqueUsersCount.data?.toString() ?? "0"}
+                title={totalUniqueUsersCount.data?.toString()}
                 description="Total Unique Users"
-                deltaMessage="+5% from last month"
+                deltaValue={5}
                 icon={<UserIcon className="h-6 w-6 text-muted-foreground" />}
             />
         </div>

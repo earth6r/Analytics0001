@@ -2,68 +2,30 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { api } from '@/utils/api';
+import { useInterval } from '@/contexts/IntervalContext';
+import { Skeleton } from './ui/skeleton';
 
-const data = [
-    {
-        name: 'Jan',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Feb',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Mar',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Apr',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'May',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Jun',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Jul',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Aug',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Sep',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Oct',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Nov',
-        total: Math.floor(Math.random() * 5000) + 1000
-    },
-    {
-        name: 'Dec',
-        total: Math.floor(Math.random() * 5000) + 1000
-    }
-];
-
-// TODO: add real data
 const NumberOfMessagesChart = () => {
+    const { interval } = useInterval();
+    const getMessagesForTheYearGroupedCount = api.post.getMessagesForTheYearGroupedCount.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+
+
     return (
         <Card className='w-full lg:w-3/5 shadow'>
             <CardHeader>
-                <CardTitle>Lorem Ipsum</CardTitle>
-                <CardDescription>Lorem Ipsum blah blah blah.</CardDescription>
+                <CardTitle>Total Messages Per Month</CardTitle>
+                <CardDescription>
+                    Total messages sent per month
+                </CardDescription>
             </CardHeader>
             <ResponsiveContainer height={350}>
-                <BarChart data={data}>
+                {getMessagesForTheYearGroupedCount.data ? <BarChart data={getMessagesForTheYearGroupedCount.data}>
                     <XAxis
                         dataKey="name"
                         stroke="#888888"
@@ -76,10 +38,10 @@ const NumberOfMessagesChart = () => {
                         fontSize={12}
                         tickLine={false}
                         axisLine={false}
-                        tickFormatter={(value) => `$${value}`}
+                        tickFormatter={(value) => `${value}`}
                     />
                     <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                </BarChart> : <div className="pl-6 pr-6 pb-6 h-full w-full"><Skeleton className="w-full h-full" /></div>}
             </ResponsiveContainer>
         </Card>
     );

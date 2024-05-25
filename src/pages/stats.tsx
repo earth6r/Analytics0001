@@ -15,11 +15,11 @@ const Stats = () => {
     return (
         <div>
             <Header />
-            <div className="flex flex-row items-center justify-between pl-6 pt-6 pr-6">
+            <div className="flex flex-col md:flex-row items-center justify-between pl-6 pt-6 pr-6">
                 <h1 className="text-4xl font-bold">Dashboard</h1>
                 <div className="flex flex-row items-center space-x-2">
                     <DateRangePicker />
-                    <Button>Download</Button>
+                    <Button className="hidden md:block">Download</Button>
                 </div>
             </div>
             <DashboardTabs />

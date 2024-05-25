@@ -141,7 +141,14 @@ const Header = () => {
                             }>Settings</DropdownMenuItem>
                             <DropdownMenuItem>Support</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Logout</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={
+                                    async () => {
+                                        localStorage.removeItem("authenticated")
+                                        await router.push("/")
+                                    }
+                                }
+                            >Logout</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

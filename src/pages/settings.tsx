@@ -5,16 +5,10 @@ import Header from "@/components/header";
 import ProfileForm from "@/components/profile-form";
 import SettingsTab from "@/components/settings-tab";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Interval, useInterval } from "@/contexts/IntervalContext";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 const Settings = () => {
-    const [appearance, setAppearance] = useState(false);
     const [selectedSettingsTab, setSelectedSettingsTab] = useState("profile");
-
-    const { interval, setIntervalWithLocalStorage } = useInterval();
 
     useEffect(() => {
         const authenticatedData = JSON.parse(localStorage.getItem("authenticated") ?? "{}");
@@ -22,14 +16,6 @@ const Settings = () => {
             window.location.href = "/";
         }
     }, []);
-
-    const handleIntervalChange = (value: Interval) => {
-        setIntervalWithLocalStorage(value);
-    }
-
-    const handleIntervalSwitch = () => {
-        handleIntervalChange(interval ? false : 10000);
-    }
 
     return (
         <div>
@@ -44,7 +30,7 @@ const Settings = () => {
                         <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Profile" titleValue="profile" />
                         <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Account" titleValue="account" />
                         <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Appearance" titleValue="appearance" />
-                        <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Notification" titleValue="notification" />
+                        <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Notifications" titleValue="notifications" />
                         <SettingsTab selectedSettingsTab={selectedSettingsTab} setSelectedSettingsTab={setSelectedSettingsTab} title="Display" titleValue="display" />
                     </div>
                     <div className="w-4/5">
@@ -72,9 +58,9 @@ const Settings = () => {
                                 <AppearanceForm />
                             </div>
                         )}
-                        {selectedSettingsTab === "notification" && (
+                        {selectedSettingsTab === "notifications" && (
                             <div>
-                                <h2 className="text-2xl mt-6">Notification</h2>
+                                <h2 className="text-2xl mt-6">Notifications</h2>
                                 <h3 className="text-md text-muted-foreground font-light mt-2">Configure how you receive notifications.</h3>
                                 <Separator className="mt-6 mb-6" />
                                 <div className="flex flex-row items-center justify-between">

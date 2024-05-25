@@ -8,6 +8,21 @@ import { db } from "@/utils/firebase/initialize";
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import signIn from "@/utils/firebase/signin";
 
+const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
 // TODO: fix this
 let idToken = null;
 
@@ -59,6 +74,34 @@ export const postRouter = createTRPCRouter({
       await authenticate();
       const querySnapshot = await getDocs(collection(db, 'messages'));
       return querySnapshot.size;
+    }),
+
+  getTotalMessagesCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = lastMonthMessageCount ? (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100 : 100;
+
+      return percentValue; // percentage
     }),
 
   getTotalUniqueRegisteredUsersCount: publicProcedure.query(
@@ -114,25 +157,61 @@ export const postRouter = createTRPCRouter({
       return messages;
     }),
 
-    getMessagesThisMonth: publicProcedure.query(
-      async () => {
-        await authenticate();
-        const messagesRef = collection(db, 'messages');
-        const dateReference = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-        const q = query(
-          messagesRef,
-        );
+  getMessagesThisMonth: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const dateReference = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      const q = query(
+        messagesRef,
+      );
 
-        const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-        let count = 0;
-        querySnapshot.forEach((doc) => {
-          const createdAt = new Date(doc.data().createdAt);
-          if (createdAt >= dateReference) {
-            count++;
-          }
+      let count = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt >= dateReference) {
+          count++;
+        }
+      });
+
+      return querySnapshot.size;
+    }),
+
+  getMessagesForTheYearGroupedCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+
+      const messagesRef = collection(db, 'messages');
+
+      const q = query(messagesRef);
+
+      const querySnapshot = await getDocs(q);
+
+      const data = {};
+
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getFullYear() !== new Date().getFullYear()) {
+          return;
+        }
+        const month = createdAt.getMonth();
+        const monthName = monthNames[month];
+        if (!data[monthName]) {
+          data[monthName] = 0;
+        }
+        data[monthName]++;
+      });
+
+      const formattedData = [];
+      monthNames.forEach((monthName) => {
+        formattedData.push({
+          name: monthName,
+          total: data[monthName] ?? 0,
         });
+      });
 
-        return querySnapshot.size;
-      }),
+      return formattedData;
+    }),
 });
