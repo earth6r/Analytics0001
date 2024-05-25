@@ -2,8 +2,11 @@ import StatCards from "@/components/stat-cards";
 import NumberOfMessagesChart from "@/components/number-of-messages-chart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import MessageItem from "./message-item";
+import { api } from "@/utils/api";
 
 const Overview = () => {
+    const recentMessages = api.post.getRecentMessages.useQuery();
+
     return (
         <div>
             <StatCards />
@@ -17,10 +20,7 @@ const Overview = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-5">
-                        <MessageItem />
-                        <MessageItem />
-                        <MessageItem />
-                        <MessageItem />
+                        {JSON.stringify(recentMessages.data)}
                         <MessageItem />
                     </CardContent>
                 </Card>

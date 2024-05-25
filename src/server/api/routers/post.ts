@@ -2,17 +2,11 @@ import { z } from "zod";
 
 import {
   createTRPCRouter,
-  protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore/lite';
 import signIn from "@/utils/firebase/signin";
-
-let post = {
-  id: 1,
-  name: "Hello World",
-};
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -22,24 +16,6 @@ export const postRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-
-  create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      post = { id: post.id + 1, name: input.name };
-      return post;
-    }),
-
-  getLatest: protectedProcedure.query(() => {
-    return post;
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 
   validatePassword: publicProcedure
     .input(z.object({ password: z.string().min(2) }))
@@ -55,7 +31,98 @@ export const postRouter = createTRPCRouter({
       if (!user) {
         throw new Error("User not found");
       }
-      const querySnapshot = await getDocs(collection(db, 'messages'));
-      return querySnapshot.size;
+      const messagesRef = collection(db, 'messages');
+      let q = query(messagesRef, where('initialMessage', '==', true));
+      let querySnapshot = await getDocs(q);
+
+      const toUsers = new Set();
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        const to = data.to;
+        toUsers.add(to);
+      }
+
+      q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
+
+      querySnapshot = await getDocs(q);
+
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        toUsers.delete(data.username);
+      }
+
+      return toUsers.size;
     }),
+
+    getTotalMessagesCount: publicProcedure.query(
+      async () => {
+        const user = await signIn(process.env.EMAIL, process.env.PASSWORD);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        const querySnapshot = await getDocs(collection(db, 'messages'));
+        return querySnapshot.size;
+      }),
+
+    getTotalUniqueRegisteredUsersCount: publicProcedure.query(
+      async () => {
+        const user = await signIn(process.env.EMAIL, process.env.PASSWORD);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        const querySnapshot = await getDocs(collection(db, 'register'));
+        const emails = new Set();
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          emails.add(data.email.toLowerCase());
+        });
+
+        return emails.size;
+      }),
+
+    getTotalUniqueUsers: publicProcedure.query(
+      async () => {
+        const user = await signIn(process.env.EMAIL, process.env.PASSWORD);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        const querySnapshot = await getDocs(collection(db, 'messages'));
+        const users = new Set();
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          users.add(data.username);
+        });
+
+        return users.size;
+      }),
+
+      getRecentMessages: publicProcedure.query(
+        async () => {
+          const limit = 5;
+          const user = await signIn(process.env.EMAIL, process.env.PASSWORD);
+          if (!user) {
+            throw new Error("User not found");
+          }
+
+          const messagesRef = collection(db, 'messages');
+          const q = query(
+            messagesRef,
+            where('initialMessage', '==', false),
+            orderBy('createdAt', 'desc'),
+          );
+
+          const querySnapshot = await getDocs(q);
+
+          const messages = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+
+            if (messages.length >= limit) {
+              return;
+            }
+            messages.push(data);
+          });
+
+          return messages;
+        }),
 });
