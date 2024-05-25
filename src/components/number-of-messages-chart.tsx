@@ -54,9 +54,10 @@ const data = [
     }
 ];
 
+// TODO: add real data
 const NumberOfMessagesChart = () => {
     return (
-        <Card className='w-3/5 shadow'>
+        <Card className='w-full lg:w-3/5 shadow'>
             <CardHeader>
                 <CardTitle>Lorem Ipsum</CardTitle>
                 <CardDescription>Lorem Ipsum blah blah blah.</CardDescription>

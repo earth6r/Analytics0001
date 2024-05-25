@@ -62,14 +62,15 @@ const MessageItem = (props: MessageItemProps) => {
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div className="">
-                    <div>{message.username}</div>
+                    <div className="truncate max-w-24">{message.username}</div>
                     <div className="text-muted-foreground text-sm">{
                         convertDateToWords(message.createdAt)
                     }</div>
                 </div>
             </div>
             <div>
-                <div>{message.message}</div>
+                <div className="truncate max-w-36"
+                >{message.message}</div>
             </div>
         </div>
     );

@@ -23,9 +23,10 @@ const Overview = () => {
     return (
         <div>
             <StatCards />
-            <div className="flex flex-row items-center p-6 space-x-6">
+            <div className="flex flex-col lg:flex-row items-center p-6 lg:space-x-6">
                 <NumberOfMessagesChart />
-                <Card className="w-2/5 shadow h-[450px]">
+                {/* TODO: make this its own component */}
+                <Card className="w-full lg:w-2/5 mt-6 lg:mt-0 shadow h-[450px]">
                     <CardHeader>
                         <CardTitle>Recent Messages</CardTitle>
                         <CardDescription>
