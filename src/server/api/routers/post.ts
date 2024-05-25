@@ -8,10 +8,12 @@ import { db } from "@/utils/firebase/initialize";
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import signIn from "@/utils/firebase/signin";
 
+// TODO: fix this
 let idToken = null;
 
 const authenticate = async () => {
   if (!idToken) {
+    console.log("Authenticating")
     idToken = await signIn(process.env.EMAIL, process.env.PASSWORD);
   }
   return idToken;

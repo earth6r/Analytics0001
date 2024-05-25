@@ -2,10 +2,22 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import { CircleUser, Menu, Package2, Search } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 const Header = () => {
+    const router = useRouter();
+
+    const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        setProfilePictureUrl(localStorage.getItem("profilePictureUrl"));
+    }, []);
+
     return (
         <div>
             <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -18,8 +30,8 @@ const Header = () => {
                         <span className="sr-only">Acme Inc</span>
                     </Link>
                     <Link
-                        href="#"
-                        className="text-foreground transition-colors hover:text-foreground"
+                        href="/stats"
+                        className={cn("transition-colors hover:text-foreground", router.pathname === "/stats" ? "text-foreground" : "text-muted-foreground")}
                     >
                         Dashboard
                     </Link>
@@ -42,8 +54,8 @@ const Header = () => {
                         Customers
                     </Link>
                     <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
+                        href="/settings"
+                        className={cn("transition-colors hover:text-foreground", router.pathname === "/settings" ? "text-foreground" : "text-muted-foreground")}
                     >
                         Settings
                     </Link>
@@ -112,14 +124,21 @@ const Header = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" size="icon" className="rounded-full">
-                                <CircleUser className="h-5 w-5" />
+                                <Avatar className="w-10 h-10">
+                                    <AvatarImage src={profilePictureUrl} alt="@user" />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
                                 <span className="sr-only">Toggle user menu</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Settings</DropdownMenuItem>
+                            <DropdownMenuItem onClick={
+                                async () => {
+                                    await router.push("/settings")
+                                }
+                            }>Settings</DropdownMenuItem>
                             <DropdownMenuItem>Support</DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Logout</DropdownMenuItem>

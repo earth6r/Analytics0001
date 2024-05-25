@@ -59,7 +59,7 @@ const MessageItem = (props: MessageItemProps) => {
         <div className="flex flex-row items-center justify-between" key={key}>
             <div className="flex flex-row items-center space-x-4">
                 <Avatar className="w-10 h-10">
-                    <AvatarImage src={`https://ui-avatars.com/api/?name=${message.username}`} alt="@shadcn" />
+                    <AvatarImage src={`https://ui-avatars.com/api/?name=${message.username}`} alt={message.username} />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div className="">

@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext, type ReactNode } from 'react';
 
-type Interval = number | false;
+export type Interval = number | false;
 
 interface IntervalContextProps {
   interval: Interval;
   setInterval: React.Dispatch<React.SetStateAction<Interval>>;
+  setIntervalWithLocalStorage: (value: Interval) => void;
 }
 
 const IntervalContext = createContext<IntervalContextProps | undefined>(undefined);
@@ -12,8 +13,18 @@ const IntervalContext = createContext<IntervalContextProps | undefined>(undefine
 const IntervalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [interval, setInterval] = useState<number | false>(false);
 
+  const setIntervalWithLocalStorage = (value: Interval) => {
+    if (value) {
+      localStorage.setItem('interval', value.toString());
+      setInterval(value);
+    } else {
+      localStorage.removeItem('interval');
+      setInterval(false);
+    }
+  };
+
   return (
-    <IntervalContext.Provider value={{ interval, setInterval }}>
+    <IntervalContext.Provider value={{ interval, setInterval, setIntervalWithLocalStorage }}>
       {children}
     </IntervalContext.Provider>
   );
