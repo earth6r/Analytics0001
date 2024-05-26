@@ -15,17 +15,17 @@ const DashboardTabs = () => {
         <Tabs defaultValue="overview" className="w-full">
             <div className="pt-6 pl-6 pr-6">
                 <TabsList className="grid grid-cols-3 w-full md:w-72">
-                    <TabsTrigger value="overview" className={cn(activeTab === "overview" ? "opacity-100" : "opacity-50",
+                    <TabsTrigger value="overview" className={cn(activeTab === "overview" ? "" : "text-muted-foreground",
                         "cursor-pointer",
                     )}
                         onClick={() => setActiveTab("overview")}
                     >Overview</TabsTrigger>
-                    <TabsTrigger value="messages" className={cn(activeTab === "messages" ? "opacity-100" : "opacity-50",
+                    <TabsTrigger value="messages" className={cn(activeTab === "messages" ? "" : "text-muted-foreground",
                         "cursor-pointer"
                     )}
                         onClick={() => setActiveTab("messages")}
                     >Messages</TabsTrigger>
-                    <TabsTrigger value="emails" className={cn(activeTab === "emails" ? "opacity-100" : "opacity-50", "cursor-pointer")}
+                    <TabsTrigger value="emails" className={cn(activeTab === "emails" ? "" : "text-muted-foreground", "cursor-pointer")}
                         onClick={() => setActiveTab("emails")}
                     >Emails</TabsTrigger>
                 </TabsList>
