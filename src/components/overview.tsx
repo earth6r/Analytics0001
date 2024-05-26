@@ -5,6 +5,8 @@ import MessageItem from "./message-item";
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import PieChart from "./interest-chart";
+import RecentRegisters from "./recent-registers";
 
 const Overview = () => {
     const { interval } = useInterval();
@@ -53,6 +55,10 @@ const Overview = () => {
                         }
                     </CardContent>
                 </Card>
+            </div>
+            <div className="px-6 pb-6 flex flex-row items-center space-x-6">
+                <PieChart />
+                <RecentRegisters />
             </div>
         </div>
     );

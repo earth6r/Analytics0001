@@ -328,4 +328,42 @@ export const postRouter = createTRPCRouter({
 
       return formattedData;
     }),
+
+  getLocationsOfInterest: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const location = doc.data().locationsOfInterest;
+        if (location && typeof location === "string") {
+          if (!data[location]) {
+            data[location] = 0;
+          }
+          data[location]++;
+        } else if (location && Array.isArray(location)) {
+          location.forEach((loc) => {
+            if (!data[loc]) {
+              data[loc] = 0;
+            }
+            data[loc]++;
+          });
+        }
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
 });
