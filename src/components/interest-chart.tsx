@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
 import { Skeleton } from './ui/skeleton';
+import { ScrollArea } from '@/components/ui/scroll-area'; // Import the ScrollArea component
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -64,43 +65,39 @@ const PieChart = () => {
                 <CardDescription>Property interests by type</CardDescription>
             </CardHeader>
             <div className='h-[300px]'>
-                <Pie data={data} options={
-                    {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false,
-                            },
+                <Pie data={data} options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
                         },
-                    }
-                } />
+                    },
+                }} />
             </div>
             {
                 locationInterests.isLoading || locationInterests.isError ? (
-                    <div className="flex flex-col space-y-3 p-4 overflow-auto max-h-48">
+                    <ScrollArea className="flex flex-col space-y-3 p-4 max-h-48">
                         <Skeleton className="w-full h-12" />
                         <Skeleton className="w-full h-12" />
                         <Skeleton className="w-full h-12" />
-                    </div>
-                )
-                    :
-                    (<div className="flex flex-col space-y-3 p-4 overflow-auto max-h-48">
-                        {(locationInterests.data)
-                            .map((item, index) => (
-                                <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg" style={{ backgroundColor: 'transparent' }}>
-                                    <div className="absolute left-0 top-0 h-full bg-blue-200 rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
-                                    <span className="relative text-blue-800">{
-                                        Object.keys(item)[0]
-                                    }</span>
-                                    <span className="relative text-blue-800">{
-                                        Object.values(item)[0]
-                                    }</span>
-                                </div>
-                            ))}
-                    </div>)}
+                    </ScrollArea>
+                ) : (
+                    <ScrollArea className="flex flex-col space-y-3 max-h-48">
+                        <div className='space-y-3 pl-4 pr-4'>
+                            {(locationInterests.data)
+                                .map((item, index) => (
+                                    <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg" style={{ backgroundColor: 'transparent' }}>
+                                        <div className="absolute left-0 top-0 h-full bg-blue-200 rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
+                                        <span className="relative text-blue-800">{Object.keys(item)[0]}</span>
+                                        <span className="relative text-blue-800">{Object.values(item)[0]}</span>
+                                    </div>
+                                ))}
+                        </div>
+                    </ScrollArea>
+                )}
         </Card>
-    )
+    );
 };
 
 export default PieChart;
