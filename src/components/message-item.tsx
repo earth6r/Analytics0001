@@ -19,36 +19,36 @@ const convertDateToWords = (date: string) => {
     const seconds = Math.floor(diff / 1000);
 
     if (seconds < 60) {
-        return `${seconds} seconds ago`;
+        return seconds === 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
     }
 
     const minutes = Math.floor(seconds / 60);
 
     if (minutes < 60) {
-        return `${minutes} minutes ago`;
+        return minutes === 1 ? `${minutes} minute ago` : `${minutes} minutes ago`;
     }
 
     const hours = Math.floor(minutes / 60);
 
     if (hours < 24) {
-        return `${hours} hours ago`;
+        return hours === 1 ? `${hours} hour ago` : `${hours} hours ago`;
     }
 
     const days = Math.floor(hours / 24);
 
     if (days < 30) {
-        return `${days} days ago`;
+        return days === 1 ? `${days} day ago` : `${days} days ago`;
     }
 
     const months = Math.floor(days / 30);
 
     if (months < 12) {
-        return `${months} months ago`;
+        return months === 1 ? `${months} month ago` : `${months} months ago`;
     }
 
     const years = Math.floor(months / 12);
 
-    return `${years} years ago`;
+    return years === 1 ? `${years} year ago` : `${years} years ago`;
 }
 
 const MessageItem = (props: MessageItemProps) => {

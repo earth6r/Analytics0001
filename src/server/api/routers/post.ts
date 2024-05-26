@@ -69,6 +69,57 @@ export const postRouter = createTRPCRouter({
       return toUsers.size;
     }),
 
+  getUnansweredMessagesCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      let q = query(messagesRef, where('initialMessage', '==', true));
+      let querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+      const toUsers = new Set();
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+
+        if (new Date(data.createdAt).getMonth() !== currentMonth) {
+          continue;
+        }
+
+        const to = data.to;
+        toUsers.add(to);
+      }
+
+      q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
+
+      querySnapshot = await getDocs(q);
+
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        toUsers.delete(data.username);
+      }
+
+      const currentMonthMessageCount = toUsers.size;
+      let lastMonthMessageCount = 0;
+
+      q = query(messagesRef, where('initialMessage', '==', true));
+
+      querySnapshot = await getDocs(q);
+
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+
+        if (new Date(data.createdAt).getMonth() !== lastMonth) {
+          continue;
+        }
+
+        lastMonthMessageCount++;
+      }
+
+      return (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+    }),
+
   getTotalMessagesCount: publicProcedure.query(
     async () => {
       await authenticate();
@@ -99,7 +150,7 @@ export const postRouter = createTRPCRouter({
         }
       });
 
-      const percentValue = lastMonthMessageCount ? (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100 : 100;
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
 
       return percentValue; // percentage
     }),
@@ -117,6 +168,34 @@ export const postRouter = createTRPCRouter({
       return emails.size;
     }),
 
+  getTotalUniqueRegisteredUsersCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
+
   getTotalUniqueUsers: publicProcedure.query(
     async () => {
       await authenticate();
@@ -128,6 +207,41 @@ export const postRouter = createTRPCRouter({
       });
 
       return users.size;
+    }),
+
+  getTotalUniqueUsersDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const users = new Set();
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          users.add(doc.data().username);
+        }
+      });
+
+      const currentMonthMessageCount = users.size;
+      users.clear();
+
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === lastMonth) {
+          users.add(doc.data().username);
+        }
+      });
+
+      const lastMonthMessageCount = users.size;
+
+      return (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
     }),
 
   getRecentMessages: publicProcedure.query(

@@ -13,9 +13,11 @@ const Header = () => {
     const router = useRouter();
 
     const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+    const [name, setName] = useState<string | null>(null);
 
     useEffect(() => {
         setProfilePictureUrl(localStorage.getItem("profilePictureUrl"));
+        setName(localStorage.getItem("name"));
     }, []);
 
     return (
@@ -125,7 +127,7 @@ const Header = () => {
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" size="icon" className="rounded-full">
                                 <Avatar className="w-10 h-10">
-                                    <AvatarImage src={profilePictureUrl} alt="@user" />
+                                    <AvatarImage src={profilePictureUrl ?? name ? `https://ui-avatars.com/api/?name=${name}` : null} alt="@user" />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
                                 <span className="sr-only">Toggle user menu</span>
