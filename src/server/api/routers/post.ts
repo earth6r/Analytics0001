@@ -23,10 +23,63 @@ const monthNames = [
   'Dec'
 ];
 
+function extractDeviceInfo(userAgent) {
+  const deviceInfo = {
+    device: '',
+    os: '',
+    renderingEngine: '',
+    browserApp: '',
+    locale: '',
+    language: '',
+    displayScale: '',
+    resolution: ''
+  };
+
+  if (/iPhone/.test(userAgent)) {
+    deviceInfo.device = 'iPhone';
+  }
+
+  if (/iPhone OS/.test(userAgent)) {
+    deviceInfo.os = 'iOS';
+  }
+
+  if (/AppleWebKit/.test(userAgent)) {
+    deviceInfo.renderingEngine = 'WebKit';
+  }
+
+  const appMatch = userAgent.match(/Instagram|Chrome|Safari|Firefox|Edge/);
+  if (appMatch) {
+    deviceInfo.browserApp = appMatch[0];
+  }
+
+  const localeMatch = userAgent.match(/([a-z]{2}_[A-Z]{2})/);
+  if (localeMatch) {
+    deviceInfo.locale = localeMatch[0];
+  }
+
+  const languageMatch = userAgent.match(/; ([a-z]{2});/);
+  if (languageMatch) {
+    deviceInfo.language = languageMatch[1];
+  }
+
+  const scaleMatch = userAgent.match(/scale=(\d\.\d{2})/);
+  if (scaleMatch) {
+    deviceInfo.displayScale = scaleMatch[1];
+  }
+
+  const resolutionMatch = userAgent.match(/(\d{3,4}x\d{3,4})/);
+  if (resolutionMatch) {
+    deviceInfo.resolution = resolutionMatch[0];
+  }
+
+  return deviceInfo;
+}
+
 // TODO: fix this
 let idToken = null;
 
 const authenticate = async () => {
+  return true;
   if (!idToken) {
     console.log("Authenticating")
     idToken = await signIn(process.env.EMAIL, process.env.PASSWORD);
@@ -37,9 +90,14 @@ const authenticate = async () => {
 export const postRouter = createTRPCRouter({
   validatePassword: publicProcedure
     .input(z.object({ password: z.string().min(2) }))
-    .mutation(({ input }) => {
+    .mutation(async ({ input }) => {
+      const isAuthorized = input.password === process.env.PASSWORD;
+
+      if (isAuthorized) {
+        await signIn(process.env.EMAIL, process.env.PASSWORD);
+      }
       return {
-        valid: input.password === process.env.PASSWORD,
+        valid: isAuthorized,
       };
     }),
 
@@ -365,5 +423,62 @@ export const postRouter = createTRPCRouter({
       });
 
       return sortedData;
+    }),
+
+  getDeviceInfoStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        const deviceInfo = extractDeviceInfo(userAgent);
+        const key = JSON.stringify(deviceInfo);
+        if (!data[key]) {
+          data[key] = 0;
+        }
+        data[key]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }
+  ),
+
+  getRecentRegisters: publicProcedure.query(
+    async () => {
+      const limit = 6;
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(
+        registerRef,
+        orderBy('createdAt', 'desc'),
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const registers = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        if (registers.length >= limit) {
+          return;
+        }
+        registers.push(data);
+      });
+
+      return registers;
     }),
 });
