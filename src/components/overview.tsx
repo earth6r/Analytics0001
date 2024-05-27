@@ -56,7 +56,7 @@ const Overview = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="px-6 pb-6 flex flex-row items-center space-x-6">
+            <div className="px-6 pb-6 flex flex-col md:flex-row items-center md:space-x-6">
                 <PieChart />
                 <RecentRegisters />
             </div>

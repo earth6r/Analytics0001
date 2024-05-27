@@ -220,6 +220,9 @@ export const postRouter = createTRPCRouter({
       const emails = new Set();
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        if (!data.email) {
+          return;
+        }
         emails.add(data.email.toLowerCase());
       });
 
@@ -477,6 +480,22 @@ export const postRouter = createTRPCRouter({
           return;
         }
         registers.push(data);
+      });
+
+      return registers;
+    }),
+
+  getRegisters: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+
+      const registers = [];
+
+      querySnapshot.forEach((doc) => {
+        registers.push(doc.data());
       });
 
       return registers;

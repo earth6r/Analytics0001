@@ -20,7 +20,7 @@ const RecentRegisters = () => {
     );
 
     return (
-        <Card className="md:w-3/5 shadow h-[600px]">
+        <Card className="w-full md:w-3/5 shadow h-[600px] mt-6 md:mt-0">
             <CardHeader className="flex flex-row items-center">
                 <div className="grid gap-2">
                     <CardTitle>Registers</CardTitle>
@@ -47,7 +47,7 @@ const RecentRegisters = () => {
                             <TableHead className="hidden xl:table-column">
                                 Status
                             </TableHead>
-                            <TableHead className="hidden xl:table-column">
+                            <TableHead className="hidden md:table-column">
                                 Date
                             </TableHead>
                             <TableHead className="text-right">Amount</TableHead>
@@ -71,7 +71,7 @@ const RecentRegisters = () => {
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                                    {register.date}
+                                    {register.createdAt}
                                 </TableCell>
                                 <TableCell className="text-right">{45}</TableCell>
                             </TableRow>

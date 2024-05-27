@@ -30,13 +30,13 @@ const ToggleTheme = () => {
                 checked={isDarkMode}
                 onClick={handleToggleTheme}
             />
-            <Button
+            {theme !== "system" && <Button
                 onClick={() => {
                     setTheme("system");
                 }}
                 variant="outline"
                 type="button"
-            >Use System</Button>
+            >Use System</Button>}
         </div>
     );
 };

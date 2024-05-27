@@ -29,7 +29,7 @@ const Header = () => {
                         className="flex items-center gap-2 text-lg font-semibold md:text-base"
                     >
                         <Package2 className="h-6 w-6" />
-                        <span className="sr-only">Acme Inc</span>
+                        <span className="sr-only">Home0001</span>
                     </Link>
                     <Link
                         href="/stats"
@@ -38,20 +38,20 @@ const Header = () => {
                         Dashboard
                     </Link>
                     <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
+                        href="/registers"
+                        className={cn("text-muted-foreground transition-colors hover:text-foreground", router.pathname === "/registers" ? "text-foreground" : "text-muted-foreground")}
                     >
-                        Orders
+                        Registers
                     </Link>
                     <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
+                        href="/products"
+                        className={cn("text-muted-foreground transition-colors hover:text-foreground", router.pathname === "/products" ? "text-foreground" : "text-muted-foreground")}
                     >
                         Products
                     </Link>
                     <Link
-                        href="#"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
+                        href="/customers"
+                        className={cn("text-muted-foreground transition-colors hover:text-foreground", router.pathname === "/customers" ? "text-foreground" : "text-muted-foreground")}
                     >
                         Customers
                     </Link>
@@ -83,30 +83,32 @@ const Header = () => {
                                 <span className="sr-only">Acme Inc</span>
                             </Link>
                             <Link
-                                href="#"
-                                className="hover:text-foreground"
+                                href="/stats"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/stats" ? "text-foreground" : "text-muted-foreground")}
                             >
                                 Dashboard
                             </Link>
                             <Link
-                                href="#"
-                                className="text-muted-foreground hover:text-foreground"
+                                href="/registers"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/registers" ? "text-foreground" : "text-muted-foreground")}
                             >
-                                Orders
+                                Registers
                             </Link>
                             <Link
-                                href="#"
-                                className="text-muted-foreground hover:text-foreground"
+                                href="/products"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/products" ? "text-foreground" : "text-muted-foreground")}
                             >
                                 Products
                             </Link>
                             <Link
-                                href="#"
-                                className="text-muted-foreground hover:text-foreground"
+                                href="/customers"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/customers" ? "text-foreground" : "text-muted-foreground")}
                             >
                                 Customers
                             </Link>
-                            <Link href="#" className="text-muted-foreground hover:text-foreground">
+                            <Link href="/settings"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/settings" ? "text-foreground" : "text-muted-foreground")}
+                            >
                                 Settings
                             </Link>
                         </nav>
