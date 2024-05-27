@@ -475,7 +475,7 @@ export const postRouter = createTRPCRouter({
       const registers = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-
+        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
         if (registers.length >= limit) {
           return;
         }
@@ -495,7 +495,9 @@ export const postRouter = createTRPCRouter({
       const registers = [];
 
       querySnapshot.forEach((doc) => {
-        registers.push(doc.data());
+        const data = doc.data();
+        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
+        registers.push(data);
       });
 
       return registers;

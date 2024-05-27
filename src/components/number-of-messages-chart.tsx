@@ -5,9 +5,11 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
 import { Skeleton } from './ui/skeleton';
+import { useTheme } from 'next-themes';
 
 const NumberOfMessagesChart = () => {
     const { interval } = useInterval();
+    const { theme } = useTheme();
     const getMessagesForTheYearGroupedCount = api.post.getMessagesForTheYearGroupedCount.useQuery(
         {},
         {
@@ -40,7 +42,7 @@ const NumberOfMessagesChart = () => {
                         axisLine={false}
                         tickFormatter={(value) => `${value}`}
                     />
-                    <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="total" fill='hsl(var(--primary))' radius={[4, 4, 0, 0]} />
                 </BarChart> : <div className="pl-6 pr-6 pb-6 h-full w-full"><Skeleton className="w-full h-full" /></div>}
             </ResponsiveContainer>
         </Card>

@@ -39,6 +39,7 @@ import { api } from "@/utils/api"
 import { useInterval } from "@/contexts/IntervalContext"
 import Header from "@/components/header"
 import { useEffect, useState } from "react"
+import { Badge } from "@/components/ui/badge"
 
 const data: Payment[] = [
     {
@@ -80,6 +81,7 @@ export type Payment = {
     email: string
     firstName: string
     lastName: string
+    locationsOfInterest: string[]
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -128,10 +130,25 @@ export const columns: ColumnDef<Payment>[] = [
         ),
     },
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "createdAt",
+        header: "Date",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
+            <div>
+                {row.original.createdAt}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "locationsOfInterest",
+        header: "Locations of Interest",
+        cell: ({ row }) => (
+            <div className="">
+                {row.original.locationsOfInterest || [].map((location, index) => (
+                    <Badge key={index} className="capitalize">
+                        {location}
+                    </Badge>
+                ))}
+            </div>
         ),
     },
     // {

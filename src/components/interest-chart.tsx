@@ -88,9 +88,9 @@ const PieChart = () => {
                             {(locationInterests.data)
                                 .map((item, index) => (
                                     <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg" style={{ backgroundColor: 'transparent' }}>
-                                        <div className="absolute left-0 top-0 h-full bg-blue-200 rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
-                                        <span className="relative text-blue-800">{Object.keys(item)[0]}</span>
-                                        <span className="relative text-blue-800">{Object.values(item)[0]}</span>
+                                        <div className="absolute left-0 top-0 h-full bg-secondary rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
+                                        <span className="relative text-muted-foreground">{Object.keys(item)[0]}</span>
+                                        <span className="relative text-muted-foreground">{Object.values(item)[0]}</span>
                                     </div>
                                 ))}
                         </div>

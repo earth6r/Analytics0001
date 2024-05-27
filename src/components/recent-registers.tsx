@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
+import { Skeleton } from "./ui/skeleton";
 
 const RecentRegisters = () => {
     const { interval } = useInterval();
@@ -44,8 +45,8 @@ const RecentRegisters = () => {
                             <TableHead className="hidden xl:table-column">
                                 Type
                             </TableHead>
-                            <TableHead className="hidden xl:table-column">
-                                Status
+                            <TableHead className="">
+                                Locations of Interest
                             </TableHead>
                             <TableHead className="hidden md:table-column">
                                 Date
@@ -54,7 +55,7 @@ const RecentRegisters = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {recentRegisters.data?.map((register, index) => (
+                        {recentRegisters.data ? recentRegisters.data.map((register, index) => (
                             <TableRow key={index}>
                                 <TableCell>
                                     <div className="font-medium">{register.firstName + " " + register.lastName}</div>
@@ -65,21 +66,48 @@ const RecentRegisters = () => {
                                 <TableCell className="hidden xl:table-column">
                                     {register.type}
                                 </TableCell>
-                                <TableCell className="hidden xl:table-column">
-                                    <Badge className="text-xs" variant="outline">
-                                        {register.status}
-                                    </Badge>
+                                <TableCell className="space-x-2">
+                                    {register.locationsOfInterest.slice(0, 2).map((location, index) => (
+                                        <Badge key={index} className="text-xs" variant="outline">
+                                            {location}
+                                        </Badge>
+                                    ))}
+                                    {register.locationsOfInterest.length > 2 && (
+                                        <Badge className="text-xs" variant="outline">
+                                            +{register.locationsOfInterest.length - 2}
+                                        </Badge>
+                                    )}
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                                     {register.createdAt}
                                 </TableCell>
                                 <TableCell className="text-right">{45}</TableCell>
                             </TableRow>
-                        ))}
+                        )) :
+                            [1, 2, 3, 4, 5, 6].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Skeleton className="w-full h-12" />
+                                    </TableCell>
+                                    <TableCell className="hidden xl:table-column">
+                                        <Skeleton className="w-full h-12" />
+                                    </TableCell>
+                                    <TableCell className="hidden xl:table-column">
+                                        <Skeleton className="w-full h-12" />
+                                    </TableCell>
+                                    <TableCell className="hidden md:table-column">
+                                        <Skeleton className="w-full h-12" />
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <Skeleton className="w-full h-12" />
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
                     </TableBody>
                 </Table>
             </CardContent>
-        </Card>
+        </Card >
     );
 };
 
