@@ -6,6 +6,7 @@ import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
 import { Skeleton } from './ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area'; // Import the ScrollArea component
+import ProgressChart from './progress-chart';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -38,12 +39,12 @@ const PieChart = () => {
                 label: 'Property Interests',
                 data: pieData,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(25, 25, 112, 1)', // midnight blue
+                    'rgba(0, 0, 255, 1)', // blue
+                    'rgba(70, 130, 180, 1)', // steel blue
+                    'rgba(135, 206, 235, 1)', // sky blue
+                    'rgba(240, 248, 255, 1)', // alice blue
+                    'rgba(70, 130, 180, 1)', // steel blue
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -84,7 +85,7 @@ const PieChart = () => {
                     </ScrollArea>
                 ) : (
                     <ScrollArea className="flex flex-col space-y-3 max-h-48">
-                        <div className='space-y-3 pl-4 pr-4'>
+                        {/* <div className='space-y-3 pl-4 pr-4'>
                             {(locationInterests.data)
                                 .map((item, index) => (
                                     <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg" style={{ backgroundColor: 'transparent' }}>
@@ -93,7 +94,8 @@ const PieChart = () => {
                                         <span className="relative text-muted-foreground">{Object.values(item)[0]}</span>
                                     </div>
                                 ))}
-                        </div>
+                        </div> */}
+                        <ProgressChart data={locationInterests.data} maxValue={maxValue} />
                     </ScrollArea>
                 )}
         </Card>

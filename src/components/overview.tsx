@@ -7,6 +7,8 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import PieChart from "./interest-chart";
 import RecentRegisters from "./recent-registers";
+import ProgressChart from "./progress-chart";
+import { useEffect, useState } from "react";
 
 const Overview = () => {
     const { interval } = useInterval();
@@ -22,6 +24,22 @@ const Overview = () => {
             refetchInterval: interval,
         }
     );
+    const deviceInfoStats = api.post.getDeviceInfoStats.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+
+    const [maxValue, setMaxValue] = useState(0);
+
+    useEffect(() => {
+        if (deviceInfoStats.data) {
+            setMaxValue(Math.max(
+                ...deviceInfoStats.data.map((item) => item.value)
+            ));
+        }
+    }, [deviceInfoStats.data]);
 
     return (
         <div>
@@ -59,6 +77,12 @@ const Overview = () => {
             <div className="px-6 pb-6 flex flex-col md:flex-row items-center md:space-x-6">
                 <PieChart />
                 <RecentRegisters />
+            </div>
+            <div>
+                {/* TODO: make this its own component */}
+                {deviceInfoStats.isLoading || deviceInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
+                    <ProgressChart data={deviceInfoStats.data || []} maxValue={maxValue} />
+                )}
             </div>
         </div>
     );

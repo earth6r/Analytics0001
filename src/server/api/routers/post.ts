@@ -23,68 +23,29 @@ const monthNames = [
   'Dec'
 ];
 
-function extractDeviceInfo(userAgent) {
-  const deviceInfo = {
-    device: '',
-    os: '',
-    renderingEngine: '',
-    browserApp: '',
-    locale: '',
-    language: '',
-    displayScale: '',
-    resolution: ''
+function extractOsInfo(userAgent) {
+  // Regular expressions to match broad OS categories
+  const osRegexes = {
+    'Mac': /Macintosh|Mac OS X/,
+    'Windows': /Windows/,
+    'GNU/Linux': /Linux(?!.*Android)/, // Exclude Android from Linux matches
+    'iOS': /iPhone|iPad/,
+    'Android': /Android/,
+    'Chrome OS': /CrOS/,
   };
 
-  if (/iPhone/.test(userAgent)) {
-    deviceInfo.device = 'iPhone';
+  // Check the user agent string against each regex
+  for (const [os, regex] of Object.entries(osRegexes)) {
+    if (regex.test(userAgent)) {
+      return os;
+    }
   }
 
-  if (/iPhone OS/.test(userAgent)) {
-    deviceInfo.os = 'iOS';
-  }
-
-  if (/AppleWebKit/.test(userAgent)) {
-    deviceInfo.renderingEngine = 'WebKit';
-  }
-
-  const appMatch = userAgent.match(/Instagram|Chrome|Safari|Firefox|Edge/);
-  if (appMatch) {
-    deviceInfo.browserApp = appMatch[0];
-  }
-
-  const localeMatch = userAgent.match(/([a-z]{2}_[A-Z]{2})/);
-  if (localeMatch) {
-    deviceInfo.locale = localeMatch[0];
-  }
-
-  const languageMatch = userAgent.match(/; ([a-z]{2});/);
-  if (languageMatch) {
-    deviceInfo.language = languageMatch[1];
-  }
-
-  const scaleMatch = userAgent.match(/scale=(\d\.\d{2})/);
-  if (scaleMatch) {
-    deviceInfo.displayScale = scaleMatch[1];
-  }
-
-  const resolutionMatch = userAgent.match(/(\d{3,4}x\d{3,4})/);
-  if (resolutionMatch) {
-    deviceInfo.resolution = resolutionMatch[0];
-  }
-
-  return deviceInfo;
+  return 'Unknown';
 }
-
-// TODO: fix this
-let idToken = null;
 
 const authenticate = async () => {
   return true;
-  if (!idToken) {
-    console.log("Authenticating")
-    idToken = await signIn(process.env.EMAIL, process.env.PASSWORD);
-  }
-  return idToken;
 };
 
 export const postRouter = createTRPCRouter({
@@ -437,12 +398,14 @@ export const postRouter = createTRPCRouter({
       const data = {};
       querySnapshot.forEach((doc) => {
         const userAgent = doc.data().userAgent;
-        const deviceInfo = extractDeviceInfo(userAgent);
-        const key = JSON.stringify(deviceInfo);
-        if (!data[key]) {
-          data[key] = 0;
+        if (!userAgent) {
+          return;
         }
-        data[key]++;
+        const osInfo = extractOsInfo(userAgent);
+        if (!data[osInfo]) {
+          data[osInfo] = 0;
+        }
+        data[osInfo]++;
       });
 
       const formattedData = [];
