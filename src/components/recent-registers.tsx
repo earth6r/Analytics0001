@@ -87,12 +87,12 @@ const RecentRegisters = () => {
                             [1, 2, 3, 4, 5, 6].map((_, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Skeleton className="w-[400px] h-8" />
+                                        <Skeleton className="w-[400px] h-10" />
                                     </TableCell>
                                     <TableCell className="hidden xl:table-column">
                                         <Skeleton className="w-20 h-8" />
                                     </TableCell>
-                                    <TableCell className="space-x-2 flex items-center">
+                                    <TableCell className="w-full space-x-2 flex items-center">
                                         <Skeleton className="rounded-full w-12 h-6 border" />
                                         <Skeleton className="rounded-full w-12 h-6 border" />
                                         <Skeleton className="rounded-full w-12 h-6 border" />
@@ -100,7 +100,12 @@ const RecentRegisters = () => {
                                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                                         <Skeleton className="w-20 h-8" />
                                     </TableCell>
+                                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                                        <Skeleton className="w-20 h-8" />
+                                    </TableCell>
                                     <TableCell>
+                                    </TableCell>
+                                    <TableCell className="">
                                         <div className="w-full flex items-center justify-end">
                                             <Skeleton className="w-20 h-8" />
                                         </div>
