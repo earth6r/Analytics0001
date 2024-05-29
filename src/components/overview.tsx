@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import PieChart from "./interest-chart";
 import RecentRegisters from "./recent-registers";
 import ProgressChart from "./progress-chart";
-import { useEffect, useState } from "react";
+import { ScrollArea } from "./ui/scroll-area";
 
 const Overview = () => {
     const { interval } = useInterval();
@@ -30,16 +30,30 @@ const Overview = () => {
             refetchInterval: interval,
         }
     );
-
-    const [maxValue, setMaxValue] = useState(0);
-
-    useEffect(() => {
-        if (deviceInfoStats.data) {
-            setMaxValue(Math.max(
-                ...deviceInfoStats.data.map((item) => item.value)
-            ));
+    const browserInfoStats = api.post.getBrowserInfoStats.useQuery(
+        {},
+        {
+            refetchInterval: interval,
         }
-    }, [deviceInfoStats.data]);
+    );
+    const languageStats = api.post.getLanguageStats.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const ipAddressStats = api.post.getIpAddressStats.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const cityStats = api.post.getCityStats.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
 
     return (
         <div>
@@ -78,11 +92,73 @@ const Overview = () => {
                 <PieChart />
                 <RecentRegisters />
             </div>
-            <div>
+            <div className="pl-6 pr-6 pb-6 flex flex-col md:flex-row md:space-x-6">
                 {/* TODO: make this its own component */}
-                {deviceInfoStats.isLoading || deviceInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
-                    <ProgressChart data={deviceInfoStats.data || []} maxValue={maxValue} />
-                )}
+                <Card className="w-1/5 min-h-80">
+                    <CardHeader>
+                        <CardTitle>Device Info Stats</CardTitle>
+                        <CardDescription>
+                            Register Device Information Stats
+                        </CardDescription>
+                    </CardHeader>
+                    <ScrollArea className="flex flex-col max-h-48">
+                        {deviceInfoStats.isLoading || deviceInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
+                            <ProgressChart data={deviceInfoStats.data || []} />
+                        )}
+                    </ScrollArea>
+                </Card>
+                <Card className="w-1/5 min-h-80">
+                    <CardHeader>
+                        <CardTitle>Browser Info Stats</CardTitle>
+                        <CardDescription>
+                            Register Browser Information Stats
+                        </CardDescription>
+                    </CardHeader>
+                    <ScrollArea className="flex flex-col max-h-48">
+                        {browserInfoStats.isLoading || browserInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
+                            <ProgressChart data={browserInfoStats.data || []} />
+                        )}
+                    </ScrollArea>
+                </Card>
+                <Card className="w-1/5 min-h-80 max-h-80 overflow-hidden">
+                    <CardHeader>
+                        <CardTitle>Language Stats</CardTitle>
+                        <CardDescription>
+                            Register Language Stats
+                        </CardDescription>
+                    </CardHeader>
+                    <ScrollArea className="flex flex-col max-h-48">
+                        {languageStats.isLoading || languageStats.isError ? <Skeleton className="w-full h-5" /> : (
+                            <ProgressChart data={languageStats.data || []} />
+                        )}
+                    </ScrollArea>
+                </Card>
+                <Card className="w-1/5 min-h-80">
+                    <CardHeader>
+                        <CardTitle>IP Address Stats</CardTitle>
+                        <CardDescription>
+                            Register IP Address Stats
+                        </CardDescription>
+                    </CardHeader>
+                    <ScrollArea className="flex flex-col max-h-48">
+                        {ipAddressStats.isLoading || ipAddressStats.isError ? <Skeleton className="w-full h-5" /> : (
+                            <ProgressChart data={ipAddressStats.data || []} />
+                        )}
+                    </ScrollArea>
+                </Card>
+                <Card className="w-1/5 min-h-80">
+                    <CardHeader>
+                        <CardTitle>City Stats</CardTitle>
+                        <CardDescription>
+                            Register City Stats
+                        </CardDescription>
+                    </CardHeader>
+                    <ScrollArea className="flex flex-col max-h-48">
+                        {cityStats.isLoading || cityStats.isError ? <Skeleton className="w-full h-5" /> : (
+                            <ProgressChart data={cityStats.data || []} />
+                        )}
+                    </ScrollArea>
+                </Card>
             </div>
         </div>
     );

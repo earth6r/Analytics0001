@@ -7,6 +7,7 @@ import {
 import { db } from "@/utils/firebase/initialize";
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import signIn from "@/utils/firebase/signin";
+import axios from "axios";
 
 const monthNames = [
   'Jan',
@@ -42,6 +43,32 @@ function extractOsInfo(userAgent) {
   }
 
   return 'Unknown';
+}
+
+function extractBrowserInfo(userAgent) {
+  // Regular expressions to match broad browser categories
+  const browserRegexes = {
+    'Instagram': /Instagram/,
+    'Chrome': /Chrome|Chromium|CriOS/,
+    'Firefox': /Firefox/,
+    'Safari': /Safari|AppleWebKit/,
+    'Edge': /Edg|Edge/,
+    'IE': /MSIE|Trident/,
+  };
+
+  // Check the user agent string against each regex
+  for (const [browser, regex] of Object.entries(browserRegexes)) {
+    if (regex.test(userAgent)) {
+      return browser;
+    }
+  }
+
+  return 'Unknown';
+}
+
+function extractLanguage(userAgent) {
+  const languageMatch = userAgent.match(/([a-z]{2}_[A-Z]{2})/);
+  return languageMatch ? languageMatch[1] : null;
 }
 
 const authenticate = async () => {
@@ -422,6 +449,206 @@ export const postRouter = createTRPCRouter({
       return sortedData;
     }
   ),
+
+  getBrowserInfoStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        if (!userAgent) {
+          return;
+        }
+        const browserInfo = extractBrowserInfo(userAgent);
+        if (!data[browserInfo]) {
+          data[browserInfo] = 0;
+        }
+        data[browserInfo]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  getLanguageStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        if (!userAgent) {
+          return;
+        }
+        const language = extractLanguage(userAgent);
+        if (!data[language]) {
+          data[language] = 0;
+        }
+        data[language]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  getIpAddressStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+
+      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
+      // const response = await axios.get(api_url);
+      const responseData = {
+        "ip": "0.0.0.0",
+        "network": "0.0.0.0/20",
+        "version": "IPv4",
+        "city": "Toronto",
+        "region": "Ontario",
+        "region_code": "ON",
+        "country": "CA",
+        "country_name": "Canada",
+        "country_code": "CA",
+        "country_code_iso3": "CAN",
+        "country_capital": "Ottawa",
+        "country_tld": ".ca",
+        "continent_code": "NA",
+        "in_eu": false,
+        "postal": "M3C",
+        "latitude": 43.7338,
+        "longitude": -79.3325,
+        "timezone": "America/Toronto",
+        "utc_offset": "-0400",
+        "country_calling_code": "+1",
+        "currency": "CAD",
+        "currency_name": "Dollar",
+        "languages": "en-CA,fr-CA,iu",
+        "country_area": 9984670,
+        "country_population": 37058856,
+        "asn": "AS812",
+        "org": "ROGERS-COMMUNICATIONS"
+      };
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
+        if (!ipAddress) {
+          return;
+        }
+        const country = responseData.country;
+        if (!data[country]) {
+          data[country] = 0;
+        }
+        data[country]++;
+      });
+
+      await Promise.all(promises);
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  getCityStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+
+      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
+      // const response = await axios.get(api_url);
+      const responseData = {
+        "ip": "0.0.0.0",
+        "network": "0.0.0.0/20",
+        "version": "IPv4",
+        "city": "Toronto",
+        "region": "Ontario",
+        "region_code": "ON",
+        "country": "CA",
+        "country_name": "Canada",
+        "country_code": "CA",
+        "country_code_iso3": "CAN",
+        "country_capital": "Ottawa",
+        "country_tld": ".ca",
+        "continent_code": "NA",
+        "in_eu": false,
+        "postal": "M3C",
+        "latitude": 43.7338,
+        "longitude": -79.3325,
+        "timezone": "America/Toronto",
+        "utc_offset": "-0400",
+        "country_calling_code": "+1",
+        "currency": "CAD",
+        "currency_name": "Dollar",
+        "languages": "en-CA,fr-CA,iu",
+        "country_area": 9984670,
+        "country_population": 37058856,
+        "asn": "AS812",
+        "org": "ROGERS-COMMUNICATIONS"
+      };
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
+        if (!ipAddress) {
+          return;
+        }
+        const city = responseData.city;
+        if (!data[city]) {
+          data[city] = 0;
+        }
+        data[city]++;
+      });
+
+      await Promise.all(promises);
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
 
   getRecentRegisters: publicProcedure.query(
     async () => {

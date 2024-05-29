@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
+        "firestore",
         "hookform",
         "lucide",
+        "Regexes",
+        "signin",
         "tanstack",
         "TRPC"
     ]

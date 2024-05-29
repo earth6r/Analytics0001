@@ -7,6 +7,7 @@ import {
 import Overview from "@/components/overview"
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Messages from "./messages";
 
 const DashboardTabs = () => {
     const [activeTab, setActiveTab] = useState("overview");
@@ -34,10 +35,12 @@ const DashboardTabs = () => {
                 <Overview />
             </TabsContent>
             <TabsContent value="messages">
-                <Overview />
+                <Messages />
             </TabsContent>
-            <TabsContent value="emails">
-                <Overview />
+            <TabsContent value="emails" className="p-6">
+                <div className="flex items-center justify-center border rounded-md min-h-screen-calc-35vh">
+                    Coming Soon!
+                </div>
             </TabsContent>
         </Tabs>
     )

@@ -5,15 +5,13 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
 import { Skeleton } from './ui/skeleton';
-import { ScrollArea } from '@/components/ui/scroll-area'; // Import the ScrollArea component
-import ProgressChart from './progress-chart';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import ProgressChart from '@/components/progress-chart';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = () => {
     const { interval } = useInterval();
-
-    const [maxValue, setMaxValue] = useState(0);
     const [labels, setLabels] = useState([]);
     const [pieData, setPieData] = useState([]);
 
@@ -26,7 +24,6 @@ const PieChart = () => {
 
     useEffect(() => {
         if (locationInterests.data) {
-            setMaxValue(Math.max(...(locationInterests.data).map((item) => Object.values(item)[0])));
             setLabels((locationInterests.data).map((item) => Object.keys(item)[0]));
             setPieData((locationInterests.data).map((item) => Object.values(item)[0]));
         }
@@ -85,17 +82,7 @@ const PieChart = () => {
                     </ScrollArea>
                 ) : (
                     <ScrollArea className="flex flex-col space-y-3 max-h-48">
-                        {/* <div className='space-y-3 pl-4 pr-4'>
-                            {(locationInterests.data)
-                                .map((item, index) => (
-                                    <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg" style={{ backgroundColor: 'transparent' }}>
-                                        <div className="absolute left-0 top-0 h-full bg-secondary rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
-                                        <span className="relative text-muted-foreground">{Object.keys(item)[0]}</span>
-                                        <span className="relative text-muted-foreground">{Object.values(item)[0]}</span>
-                                    </div>
-                                ))}
-                        </div> */}
-                        <ProgressChart data={locationInterests.data} maxValue={maxValue} />
+                        <ProgressChart data={locationInterests.data} />
                     </ScrollArea>
                 )}
         </Card>
