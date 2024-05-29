@@ -78,3 +78,7 @@
   .min-h-screen-calc-35vh {
     min-height: calc(100vh - 34vh);
   }
+
+  .min-h-screen-calc-13vh {
+    min-height: calc(100vh - 13vh);
+  }
