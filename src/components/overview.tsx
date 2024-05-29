@@ -102,22 +102,18 @@ const Overview = () => {
                         </CardDescription>
                     </CardHeader>
                     <ScrollArea className="flex flex-col max-h-48">
-                        {deviceInfoStats.isLoading || deviceInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
-                            <ProgressChart data={deviceInfoStats.data || []} />
-                        )}
+                        <ProgressChart data={deviceInfoStats} />
                     </ScrollArea>
                 </Card>
                 <Card className="w-1/5 min-h-80">
                     <CardHeader>
                         <CardTitle>Browser Info Stats</CardTitle>
                         <CardDescription>
-                            Register Browser Information Stats
+                            Register Browser Info Stats
                         </CardDescription>
                     </CardHeader>
                     <ScrollArea className="flex flex-col max-h-48">
-                        {browserInfoStats.isLoading || browserInfoStats.isError ? <Skeleton className="w-full h-5" /> : (
-                            <ProgressChart data={browserInfoStats.data || []} />
-                        )}
+                        <ProgressChart data={browserInfoStats} />
                     </ScrollArea>
                 </Card>
                 <Card className="w-1/5 min-h-80 max-h-80 overflow-hidden">
@@ -128,9 +124,7 @@ const Overview = () => {
                         </CardDescription>
                     </CardHeader>
                     <ScrollArea className="flex flex-col max-h-48">
-                        {languageStats.isLoading || languageStats.isError ? <Skeleton className="w-full h-5" /> : (
-                            <ProgressChart data={languageStats.data || []} />
-                        )}
+                        <ProgressChart data={languageStats} />
                     </ScrollArea>
                 </Card>
                 <Card className="w-1/5 min-h-80">
@@ -141,9 +135,7 @@ const Overview = () => {
                         </CardDescription>
                     </CardHeader>
                     <ScrollArea className="flex flex-col max-h-48">
-                        {ipAddressStats.isLoading || ipAddressStats.isError ? <Skeleton className="w-full h-5" /> : (
-                            <ProgressChart data={ipAddressStats.data || []} />
-                        )}
+                        <ProgressChart data={ipAddressStats} />
                     </ScrollArea>
                 </Card>
                 <Card className="w-1/5 min-h-80">
@@ -154,9 +146,7 @@ const Overview = () => {
                         </CardDescription>
                     </CardHeader>
                     <ScrollArea className="flex flex-col max-h-48">
-                        {cityStats.isLoading || cityStats.isError ? <Skeleton className="w-full h-5" /> : (
-                            <ProgressChart data={cityStats.data || []} />
-                        )}
+                        <ProgressChart data={cityStats} />
                     </ScrollArea>
                 </Card>
             </div>
