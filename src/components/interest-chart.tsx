@@ -85,7 +85,7 @@ const PieChart = () => {
                     </ScrollArea>
                 ) : (
                     <ScrollArea className="flex flex-col space-y-3 max-h-48">
-                        <ProgressChart data={locationInterests.data} />
+                        <ProgressChart data={locationInterests} />
                     </ScrollArea>
                 )}
         </Card>
