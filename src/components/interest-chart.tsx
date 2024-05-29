@@ -74,11 +74,14 @@ const PieChart = () => {
                 }} />
             </div>
             {
-                locationInterests.isLoading || locationInterests.isError ? (
-                    <ScrollArea className="flex flex-col space-y-3 p-4 max-h-48">
-                        <Skeleton className="w-full h-12" />
-                        <Skeleton className="w-full h-12" />
-                        <Skeleton className="w-full h-12" />
+                (locationInterests.isLoading || locationInterests.isError) ? (
+                    <ScrollArea className="max-h-48">
+                        <div className='flex flex-col space-y-3 p-4'>
+                            <Skeleton className="w-full h-10" />
+                            <Skeleton className="w-full h-10" />
+                            <Skeleton className="w-full h-10" />
+                            <Skeleton className="w-full h-10" />
+                        </div>
                     </ScrollArea>
                 ) : (
                     <ScrollArea className="flex flex-col space-y-3 max-h-48">

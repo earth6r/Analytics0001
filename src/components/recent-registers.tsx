@@ -87,19 +87,23 @@ const RecentRegisters = () => {
                             [1, 2, 3, 4, 5, 6].map((_, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Skeleton className="w-full h-12" />
+                                        <Skeleton className="w-[400px] h-8" />
                                     </TableCell>
                                     <TableCell className="hidden xl:table-column">
-                                        <Skeleton className="w-full h-12" />
+                                        <Skeleton className="w-20 h-8" />
                                     </TableCell>
-                                    <TableCell className="hidden xl:table-column">
-                                        <Skeleton className="w-full h-12" />
+                                    <TableCell className="space-x-2 flex items-center">
+                                        <Skeleton className="rounded-full w-12 h-6 border" />
+                                        <Skeleton className="rounded-full w-12 h-6 border" />
+                                        <Skeleton className="rounded-full w-12 h-6 border" />
                                     </TableCell>
-                                    <TableCell className="hidden md:table-column">
-                                        <Skeleton className="w-full h-12" />
+                                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                                        <Skeleton className="w-20 h-8" />
                                     </TableCell>
-                                    <TableCell className="text-right">
-                                        <Skeleton className="w-full h-12" />
+                                    <TableCell>
+                                        <div className="w-full flex items-center justify-end">
+                                            <Skeleton className="w-20 h-8" />
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
