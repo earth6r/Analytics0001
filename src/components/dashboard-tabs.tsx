@@ -8,6 +8,7 @@ import Overview from "@/components/overview"
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Messages from "./messages";
+import Image from "next/image";
 
 const DashboardTabs = () => {
     const [activeTab, setActiveTab] = useState("overview");
@@ -38,8 +39,9 @@ const DashboardTabs = () => {
                 <Messages />
             </TabsContent>
             <TabsContent value="emails" className="p-6">
-                <div className="flex items-center justify-center border rounded-md min-h-screen-calc-35vh">
-                    Coming Soon!
+                <div className="flex flex-col items-center justify-center border rounded-md min-h-screen-calc-35vh">
+                    <Image src="/coming-soon.png" className="rounded-full aspect-square object-cover" width={300} height={300} alt="Coming Soon" />
+                    <div className="text-5xl">Coming Soon!</div>
                 </div>
             </TabsContent>
         </Tabs>
