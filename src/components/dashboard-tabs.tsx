@@ -7,13 +7,13 @@ import {
 import Overview from "@/components/overview"
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import Messages from "./messages";
+import Messages from "@/components/messages";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 const DashboardTabs = () => {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState(router.query.tab ?? "overview");
+    const [activeTab, setActiveTab] = useState(router.query.tab ?? "registers");
 
     const handleSetActiveTab = async (tab: string) => {
         setActiveTab(tab);
@@ -24,14 +24,14 @@ const DashboardTabs = () => {
     }
 
     return (
-        <Tabs value={router.query.tab ?? "overview"} defaultValue={router.query.tab ?? "overview"} className="w-full">
+        <Tabs value={router.query.tab ?? "registers"} defaultValue={router.query.tab ?? "registers"} className="w-full">
             <div className="pt-6 pl-6 pr-6">
                 <TabsList className="grid grid-cols-3 w-full md:w-72">
-                    <TabsTrigger value="overview" className={cn(activeTab === "overview" ? "" : "text-muted-foreground",
+                    <TabsTrigger value="registers" className={cn(activeTab === "registers" ? "" : "text-muted-foreground",
                         "cursor-pointer",
                     )}
-                        onClick={() => handleSetActiveTab("overview")}
-                    >Overview</TabsTrigger>
+                        onClick={() => handleSetActiveTab("registers")}
+                    >Registers</TabsTrigger>
                     <TabsTrigger value="messages" className={cn(activeTab === "messages" ? "" : "text-muted-foreground",
                         "cursor-pointer"
                     )}
@@ -42,7 +42,7 @@ const DashboardTabs = () => {
                     >Emails</TabsTrigger>
                 </TabsList>
             </div>
-            <TabsContent value="overview" className="w-full">
+            <TabsContent value="registers" className="w-full">
                 <Overview />
             </TabsContent>
             <TabsContent value="messages">

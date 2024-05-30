@@ -782,4 +782,127 @@ export const postRouter = createTRPCRouter({
 
       return percentValue; // percentage
     }),
+
+  getBuyingTimelineNowCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "now")
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.size;
+    }),
+
+  getBuyingTimelineNowCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "now")
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
+
+  getBuyingTimelineOneToThreeMonthsCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "1to3mos")
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.size;
+    }),
+
+  getBuyingTimelineOneToThreeMonthsCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "1to3mos")
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
+
+  getBuyingTimelineNotSureCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "notsure")
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.size;
+    }),
+
+  getBuyingTimelineNotSureCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'register');
+      const q = query(
+        messagesRef,
+        where("buyingTimelinedec2023", "==", "notsure")
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
 });
