@@ -9,26 +9,36 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Messages from "./messages";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const DashboardTabs = () => {
-    const [activeTab, setActiveTab] = useState("overview");
+    const router = useRouter();
+    const [activeTab, setActiveTab] = useState(router.query.tab ?? "overview");
+
+    const handleSetActiveTab = async (tab: string) => {
+        setActiveTab(tab);
+        await router.push({
+            pathname: router.pathname,
+            query: { tab: tab },
+        });
+    }
 
     return (
-        <Tabs defaultValue="overview" className="w-full">
+        <Tabs value={router.query.tab ?? "overview"} defaultValue={router.query.tab ?? "overview"} className="w-full">
             <div className="pt-6 pl-6 pr-6">
                 <TabsList className="grid grid-cols-3 w-full md:w-72">
                     <TabsTrigger value="overview" className={cn(activeTab === "overview" ? "" : "text-muted-foreground",
                         "cursor-pointer",
                     )}
-                        onClick={() => setActiveTab("overview")}
+                        onClick={() => handleSetActiveTab("overview")}
                     >Overview</TabsTrigger>
                     <TabsTrigger value="messages" className={cn(activeTab === "messages" ? "" : "text-muted-foreground",
                         "cursor-pointer"
                     )}
-                        onClick={() => setActiveTab("messages")}
+                        onClick={() => handleSetActiveTab("messages")}
                     >Messages</TabsTrigger>
                     <TabsTrigger value="emails" className={cn(activeTab === "emails" ? "" : "text-muted-foreground", "cursor-pointer")}
-                        onClick={() => setActiveTab("emails")}
+                        onClick={() => handleSetActiveTab("emails")}
                     >Emails</TabsTrigger>
                 </TabsList>
             </div>
