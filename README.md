@@ -1,3 +1,4 @@
 - need to fix skeletons
 - change ./ to @/
 - start tracking ips and calling ip info before saving to registers db
+- file structuring

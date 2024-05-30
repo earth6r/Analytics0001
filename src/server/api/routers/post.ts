@@ -692,4 +692,94 @@ export const postRouter = createTRPCRouter({
 
       return registers;
     }),
+
+  getMessageGroupsCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+        where('initialMessage', '==', true),
+      );
+      const querySnapshot = await getDocs(q);
+
+      return querySnapshot.size;
+    }),
+
+  getMessageGroupsCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+        where('initialMessage', '==', true),
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
+
+  getInstagramMessagesCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+      );
+      const querySnapshot = await getDocs(q);
+
+      let count = 0;
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        if (data?.visitor?.includes('instagram')) {
+          count++;
+        }
+      }
+
+      return count;
+    }),
+
+  getInstagramMessagesCountDelta: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const currentMonth = new Date().getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      let currentMonthMessageCount = 0;
+      let lastMonthMessageCount = 0;
+      querySnapshot.forEach((doc) => {
+        const createdAt = new Date(doc.data().createdAt);
+        if (createdAt.getMonth() === currentMonth && doc.data()?.visitor?.includes('instagram')) {
+          currentMonthMessageCount++;
+        } else if (createdAt.getMonth() === lastMonth && doc.data()?.visitor?.includes('instagram')) {
+          lastMonthMessageCount++;
+        }
+      });
+
+      const percentValue = (currentMonthMessageCount - lastMonthMessageCount) / lastMonthMessageCount * 100;
+
+      return percentValue; // percentage
+    }),
 });

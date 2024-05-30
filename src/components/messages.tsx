@@ -1,10 +1,10 @@
 import { useInterval } from "@/contexts/IntervalContext";
 import MessageItem from "./message-item";
 import NumberOfMessagesChart from "./number-of-messages-chart";
-import StatCards from "./stat-cards";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/utils/api";
+import MessagesStatCards from "@/components/messages-stats-cards";
 
 const Messages = () => {
     const { interval } = useInterval();
@@ -23,7 +23,7 @@ const Messages = () => {
 
     return (
         <div>
-            <StatCards />
+            <MessagesStatCards />
             <div className="flex flex-col lg:flex-row items-center p-6 lg:space-x-6">
                 <NumberOfMessagesChart />
                 {/* TODO: make this its own component */}
