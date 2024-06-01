@@ -949,12 +949,10 @@ export const postRouter = createTRPCRouter({
 
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
-        const week = Math.floor(date.getDate() / 7) + 1;
         const day = date.getDate();
 
         const key = `${year}-${month}-${day}`;
 
-        console.log(key, date, data)
         if (!data[key]) {
           data[key] = 1;
         } else {
