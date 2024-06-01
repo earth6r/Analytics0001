@@ -1,5 +1,5 @@
 import { BookOpenCheckIcon } from "lucide-react";
-import StatCard from "@/components/stat-card";
+import StatCard from "@/components/common/stat-card";
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 

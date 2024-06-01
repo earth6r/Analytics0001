@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // TODO: rename data
 interface ProgressChartProps {

@@ -4,10 +4,10 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import Overview from "@/components/overview"
+import Registers from "@/components/dashboard/registers/registers";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import Messages from "@/components/messages";
+import Messages from "@/components/dashboard/messages/messages";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -43,7 +43,7 @@ const DashboardTabs = () => {
                 </TabsList>
             </div>
             <TabsContent value="registers" className="w-full">
-                <Overview />
+                <Registers />
             </TabsContent>
             <TabsContent value="messages">
                 <Messages />

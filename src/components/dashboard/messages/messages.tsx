@@ -1,13 +1,13 @@
-import { useInterval } from "@/contexts/IntervalContext";
-import MessageItem from "./message-item";
-import NumberOfMessagesChart from "./number-of-messages-chart";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import MessagesStatCards from "@/components/dashboard/messages/messages-stats-cards";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
-import MessagesStatCards from "@/components/messages-stats-cards";
-import { Button } from "./ui/button";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import NumberOfMessagesChart from "@/components/dashboard/messages/number-of-messages-chart";
+import MessageItem from "@/components/dashboard/messages/message-item";
 
 const Messages = () => {
     const { interval } = useInterval();

@@ -4,9 +4,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
-import { Skeleton } from './ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import ProgressChart from '@/components/progress-chart';
+import ProgressChart from '@/components//common/progress-chart';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

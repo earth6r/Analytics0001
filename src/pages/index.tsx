@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 
-import PasswordInput from "@/components/password-input";
+import PasswordInput from "@/components/login/password-input";
 
 export default function Home() {
   return (

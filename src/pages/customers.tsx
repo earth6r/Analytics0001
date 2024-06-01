@@ -1,4 +1,4 @@
-import Header from "@/components/header";
+import Header from "@/components/common/header";
 import Image from "next/image";
 
 const Customers = () => {

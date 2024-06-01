@@ -23,7 +23,6 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -37,7 +36,7 @@ import {
 } from "@/components/ui/table"
 import { api } from "@/utils/api"
 import { useInterval } from "@/contexts/IntervalContext"
-import Header from "@/components/header"
+import Header from "@/components/common/header"
 import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"

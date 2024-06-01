@@ -1,5 +1,5 @@
 import { useInterval } from "@/contexts/IntervalContext";
-import ProgressChart from "@/components/progress-chart";
+import ProgressChart from "@/components/common/progress-chart";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/utils/api";

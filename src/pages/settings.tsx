@@ -1,9 +1,9 @@
-import AccountForm from "@/components/account-form";
-import AppearanceForm from "@/components/appearance-form";
-import DisplayForm from "@/components/display-form";
-import Header from "@/components/header";
-import ProfileForm from "@/components/profile-form";
-import SettingsTab from "@/components/settings-tab";
+import AccountForm from "@/components/settings/account-form";
+import AppearanceForm from "@/components/settings/appearance-form";
+import DisplayForm from "@/components/settings/display-form";
+import Header from "@/components/common/header";
+import ProfileForm from "@/components/settings/profile-form";
+import SettingsTab from "@/components/settings/settings-tab";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 

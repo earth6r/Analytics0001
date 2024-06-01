@@ -19,7 +19,7 @@ import { toast } from "@/components/ui/use-toast"
 import { api } from "@/utils/api"
 import { ToastAction } from "@radix-ui/react-toast"
 import { useRouter } from "next/router"
-import Spinner from "./spinner"
+import Spinner from "@/components/common/spinner"
 
 const FormSchema = z.object({
     password: z.string().min(2, {

@@ -1,14 +1,14 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
-import { ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
-import { Skeleton } from "./ui/skeleton";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const RecentRegisters = () => {
     const { interval } = useInterval();

@@ -103,13 +103,15 @@ export const postRouter = createTRPCRouter({
         toUsers.add(to);
       }
 
-      q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
+      if (toUsers.size !== 0) {
+        q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
 
-      querySnapshot = await getDocs(q);
+        querySnapshot = await getDocs(q);
 
-      for (const doc of querySnapshot.docs) {
-        const data = doc.data();
-        toUsers.delete(data.username);
+        for (const doc of querySnapshot.docs) {
+          const data = doc.data();
+          toUsers.delete(data.username);
+        }
       }
 
       return toUsers.size;
@@ -137,13 +139,15 @@ export const postRouter = createTRPCRouter({
         toUsers.add(to);
       }
 
-      q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
+      if (toUsers.size !== 0) {
+        q = query(messagesRef, where('username', 'in', Array.from(toUsers)));
 
-      querySnapshot = await getDocs(q);
+        querySnapshot = await getDocs(q);
 
-      for (const doc of querySnapshot.docs) {
-        const data = doc.data();
-        toUsers.delete(data.username);
+        for (const doc of querySnapshot.docs) {
+          const data = doc.data();
+          toUsers.delete(data.username);
+        }
       }
 
       const currentMonthMessageCount = toUsers.size;

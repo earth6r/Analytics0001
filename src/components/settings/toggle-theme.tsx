@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 const ToggleTheme = () => {
     const { theme, setTheme, resolvedTheme } = useTheme();

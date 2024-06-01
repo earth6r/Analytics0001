@@ -1,5 +1,5 @@
 import { api } from "@/utils/api";
-import StatCard from "@/components/stat-card";
+import StatCard from "@/components/common/stat-card";
 import { useInterval } from "@/contexts/IntervalContext";
 import { UserIcon } from "lucide-react";
 

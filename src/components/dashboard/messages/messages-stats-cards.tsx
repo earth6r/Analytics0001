@@ -1,8 +1,7 @@
-import TotalMessagesStatsCard from "@/components/total-messages-stats-card";
-import UnansweredMessageStatsCard from "@/components/unanswered-messages-stats-card";
-import MessageGroupCountsStatsCard from "@/components/message-groups-count";
-import InstagramMessagesCountStatsCard from "@/components/instagram-messages-count-stats-card";
-import TotalUniqueUsersStatsCard from "@/components/total-unique-users-stats-card";
+import MessageGroupCountsStatsCard from "@/components/dashboard/messages/message-groups-count";
+import TotalMessagesStatsCard from "@/components/dashboard/messages/total-messages-stats-card";
+import TotalUniqueUsersStatsCard from "@/components/dashboard/messages/total-unique-users-stats-card";
+import UnansweredMessageStatsCard from "@/components/dashboard/messages/unanswered-messages-stats-card";
 
 const MessagesStatCards = () => {
     return (

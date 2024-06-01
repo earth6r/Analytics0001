@@ -14,27 +14,17 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { toast } from "@/components/ui/use-toast"
-import { useEffect } from "react"
-import ToggleTheme from "./toggle-theme"
+import ToggleTheme from "@/components/settings/toggle-theme";
 
 const FormSchema = z.object({
-    // name: z.string().min(2, {
-    //     message: "name must be at least 2 characters.",
-    // }),
 })
 
 const AppearanceForm = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            // name: "",
         },
     })
-
-    useEffect(() => {
-        // const name = localStorage.getItem("name") ?? ""
-        // form.setValue("name", name);
-    }, [form]);
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         toast({

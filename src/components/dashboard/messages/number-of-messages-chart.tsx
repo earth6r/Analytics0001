@@ -4,12 +4,10 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { api } from '@/utils/api';
 import { useInterval } from '@/contexts/IntervalContext';
-import { Skeleton } from './ui/skeleton';
-import { useTheme } from 'next-themes';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const NumberOfMessagesChart = () => {
     const { interval } = useInterval();
-    const { theme } = useTheme();
     const getMessagesForTheYearGroupedCount = api.post.getMessagesForTheYearGroupedCount.useQuery(
         {},
         {

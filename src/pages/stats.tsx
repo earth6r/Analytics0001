@@ -1,6 +1,6 @@
-import DashboardTabs from "@/components/dashboard-tabs";
-import DateRangePicker from "@/components/date-range-picker";
-import Header from "@/components/header";
+import DashboardTabs from "@/components/dashboard/dashboard-tabs";
+import DateRangePicker from "@/components/dashboard/date-range-picker";
+import Header from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
