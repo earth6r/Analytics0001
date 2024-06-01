@@ -40,7 +40,7 @@ import { useInterval } from "@/contexts/IntervalContext"
 import Header from "@/components/header"
 import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 
 const data: Payment[] = [
@@ -100,38 +100,49 @@ const ActionCell = ({ row }) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
-                    onClick={() => navigator.clipboard.writeText(row.original.email)}
+                    onClick={() => navigator.clipboard.writeText(row.original.username)}
                 >
-                    Copy Email
+                    Copy Username
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    onClick={() => window.open(`mailto:${row.original.email}`, "_blank")}
+                    onClick={() => {
+                        window.open(`https://home0001.com/chat`);
+                    }}
                 >
-                    Send Email
+                    Send Message
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => setIsDialogOpen(true)}
-                >
+                <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
                     View Details
                 </DropdownMenuItem>
             </DropdownMenuContent>
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="sm:max-w-[450px] w-[450px]">
+                <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Message Details</DialogTitle>
                         <DialogDescription>
-                            {`Details for ${row.original.firstName} ${row.original.lastName}`}
+                            {`Details for ${row.original.username}`}
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4 px-4 max-h-96 min-w-96 overflow-auto">
+                    <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
-                                Name
+                            <Label htmlFor="username" className="text-right">
+                                Username
                             </Label>
                             <Input
-                                id="name"
-                                value={`${row.original.firstName} ${row.original.lastName}`}
+                                id="username"
+                                value={row.original.username}
+                                readOnly
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="to" className="text-right">
+                                To
+                            </Label>
+                            <Input
+                                id="to"
+                                value={row.original.to}
                                 readOnly
                                 className="col-span-3"
                             />
@@ -147,212 +158,49 @@ const ActionCell = ({ row }) => {
                                 className="col-span-3"
                             />
                         </div>
-                        {/* userAgent, source, routes, page, medium, locationsOfInterest, lastName, hutk, fullQuery, firstName, error, email, content, city, campaign, buyingTimelinedec2023, bedroomPreference, adSet, Else */}
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="userAgent" className="text-right">
-                                User Agent
+                            <Label htmlFor="status" className="text-right">
+                                Agent
                             </Label>
                             <Input
-                                id="userAgent"
-                                value={row.original.userAgent}
+                                id="status"
+                                value={row.original.agent}
                                 readOnly
                                 className="col-span-3"
                             />
                         </div>
+                        {/* initialMessage */}
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="source" className="text-right">
-                                Source
+                            <Label htmlFor="status" className="text-right">
+                                Initial Message
                             </Label>
                             <Input
-                                id="source"
-                                value={row.original.source}
+                                id="status"
+                                value={row.original.initialMessage}
                                 readOnly
                                 className="col-span-3"
                             />
                         </div>
+                        {/* message */}
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="routes" className="text-right">
-                                Routes
+                            <Label htmlFor="status" className="text-right">
+                                Message
                             </Label>
                             <Input
-                                id="routes"
-                                value={row.original.routes}
+                                id="status"
+                                value={row.original.message}
                                 readOnly
                                 className="col-span-3"
                             />
                         </div>
+                        {/* visitor */}
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="page" className="text-right">
-                                Page
+                            <Label htmlFor="status" className="text-right">
+                                Visitor
                             </Label>
                             <Input
-                                id="page"
-                                value={row.original.page}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="medium" className="text-right">
-                                Medium
-                            </Label>
-                            <Input
-                                id="medium"
-                                value={row.original.medium}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="locationsOfInterest" className="text-right">
-                                Locations of Interest
-                            </Label>
-                            <Input
-                                id="locationsOfInterest"
-                                value={row.original.locationsOfInterest?.join(", ")}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="lastName" className="text-right">
-                                Last Name
-                            </Label>
-                            <Input
-                                id="lastName"
-                                value={row.original.lastName}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="hutk" className="text-right">
-                                Hutk
-                            </Label>
-                            <Input
-                                id="hutk"
-                                value={row.original.hutk}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="fullQuery" className="text-right">
-                                Full Query
-                            </Label>
-                            <Input
-                                id="fullQuery"
-                                value={row.original.fullQuery}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="firstName" className="text-right">
-                                First Name
-                            </Label>
-                            <Input
-                                id="firstName"
-                                value={row.original.firstName}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="error" className="text-right">
-                                Error
-                            </Label>
-                            <Input
-                                id="error"
-                                value={row.original.error}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="email" className="text-right">
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                value={row.original.email}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="content" className="text-right">
-                                Content
-                            </Label>
-                            <Input
-                                id="content"
-                                value={row.original.content}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="city" className="text-right">
-                                City
-                            </Label>
-                            <Input
-                                id="city"
-                                value={row.original.city}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="campaign" className="text-right">
-                                Campaign
-                            </Label>
-                            <Input
-                                id="campaign"
-                                value={row.original.campaign}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="buyingTimelinedec2023" className="text-right">
-                                Buying Timeline Dec 2023
-                            </Label>
-                            <Input
-                                id="buyingTimelinedec2023"
-                                value={row.original.buyingTimelinedec2023}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="bedroomPreference" className="text-right">
-                                Bedroom Preference
-                            </Label>
-                            <Input
-                                id="bedroomPreference"
-                                value={row.original.bedroomPreference}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="adSet" className="text-right">
-                                Ad Set
-                            </Label>
-                            <Input
-                                id="adSet"
-                                value={row.original.adSet}
-                                readOnly
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="Else" className="text-right">
-                                Else
-                            </Label>
-                            <Input
-                                id="Else"
-                                value={row.original.Else}
+                                id="status"
+                                value={row.original.visitor}
                                 readOnly
                                 className="col-span-3"
                             />
@@ -405,9 +253,9 @@ export const columns: ColumnDef<Payment>[] = [
         },
         cell: ({ row }) => (
             <div>
-                <div className="font-medium">{row.original.firstName + " " + row.original.lastName}</div>
+                <div className="font-medium">{row.original.username}</div>
                 <div className="lowercase text-muted-foreground">
-                    {row.getValue("email")}
+                    {row.original.username?.includes("+") ? "WhatsApp" : (row.original.username?.includes("instagram") ? "Instagram" : "SMS")}
                 </div>
             </div>
         ),
@@ -422,20 +270,11 @@ export const columns: ColumnDef<Payment>[] = [
         ),
     },
     {
-        accessorKey: "locationsOfInterest",
-        header: "Locations of Interest",
+        accessorKey: "agent",
+        header: "Agent",
         cell: ({ row }) => (
-            <div className="flex flex-wrap space-x-2">
-                {
-                    (row.original.locationsOfInterest || []).slice(0, 2)
-                        .map((location, index) => (
-                            <Badge key={index} className="capitalize" variant="outline">
-                                {location}
-                            </Badge>
-                        ))}
-                {row.original.locationsOfInterest?.length > 2 && (
-                    <Badge variant="outline">+{row.original.locationsOfInterest.length - 2}</Badge>
-                )}
+            <div className="">
+                {row.original.agent}
             </div>
         ),
     },
@@ -444,9 +283,9 @@ export const columns: ColumnDef<Payment>[] = [
         enableHiding: false,
         cell: ActionCell,
     },
-];
+]
 
-const Registers = () => {
+const Messages = () => {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
@@ -463,7 +302,7 @@ const Registers = () => {
     }, []);
 
     const { interval } = useInterval();
-    const getRegisters = api.post.getRegisters.useQuery(
+    const getMessages = api.post.getMessages.useQuery(
         {},
         {
             refetchInterval: interval,
@@ -471,7 +310,7 @@ const Registers = () => {
     )
 
     const table = useReactTable({
-        data: getRegisters.data ?? data,
+        data: getMessages.data ?? data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -556,16 +395,14 @@ const Registers = () => {
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                     >
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <TableCell key={cell.id}>
-                                                    {flexRender(
-                                                        cell.column.columnDef.cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </TableCell>
-                                            )
-                                        })}
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
                                     </TableRow>
                                 ))
                             ) : (
@@ -592,6 +429,7 @@ const Registers = () => {
                             size="sm"
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
+                            className="select-none"
                         >
                             Previous
                         </Button>
@@ -600,6 +438,7 @@ const Registers = () => {
                             size="sm"
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
+                            className="select-none"
                         >
                             Next
                         </Button>
@@ -610,4 +449,4 @@ const Registers = () => {
     )
 }
 
-export default Registers;
+export default Messages;

@@ -905,4 +905,20 @@ export const postRouter = createTRPCRouter({
 
       return percentValue; // percentage
     }),
+
+  getMessages: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+        // where('initialMessage', '==', false),
+      );
+      const querySnapshot = await getDocs(q);
+      const messages = [];
+      querySnapshot.forEach((doc) => {
+        messages.push(doc.data());
+      });
+      return messages;
+    }),
 });

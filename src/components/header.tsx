@@ -44,10 +44,10 @@ const Header = () => {
                         Registers
                     </Link>
                     <Link
-                        href="/products"
-                        className={cn("text-muted-foreground transition-colors hover:text-foreground", router.pathname === "/products" ? "text-foreground" : "text-muted-foreground")}
+                        href="/messages"
+                        className={cn("text-muted-foreground transition-colors hover:text-foreground", router.pathname === "/messages" ? "text-foreground" : "text-muted-foreground")}
                     >
-                        Products
+                        Messages
                     </Link>
                     <Link
                         href="/customers"
@@ -95,10 +95,10 @@ const Header = () => {
                                 Registers
                             </Link>
                             <Link
-                                href="/products"
-                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/products" ? "text-foreground" : "text-muted-foreground")}
+                                href="/messages"
+                                className={cn("text-muted-foreground hover:text-foreground", router.pathname === "/messages" ? "text-foreground" : "text-muted-foreground")}
                             >
-                                Products
+                                Messages
                             </Link>
                             <Link
                                 href="/customers"

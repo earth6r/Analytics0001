@@ -5,6 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/utils/api";
 import MessagesStatCards from "@/components/messages-stats-cards";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 const Messages = () => {
     const { interval } = useInterval();
@@ -28,13 +31,21 @@ const Messages = () => {
                 <NumberOfMessagesChart />
                 {/* TODO: make this its own component */}
                 <Card className="w-full lg:w-2/5 mt-6 lg:mt-0 shadow h-[450px]">
-                    <CardHeader>
-                        <CardTitle>Recent Messages</CardTitle>
-                        <div>
-                            {(getMessagesCountThisMonth.isLoading || getMessagesCountThisMonth.isError) ? <Skeleton className="w-full h-5" /> : <CardDescription>
-                                {`There are ${getMessagesCountThisMonth.data ?? 0} messages this month`}
-                            </CardDescription>}
+                    <CardHeader className="flex flex-row items-center">
+                        <div className="grid gap-2">
+                            <CardTitle>Recent Messages</CardTitle>
+                            <div>
+                                {(getMessagesCountThisMonth.isLoading || getMessagesCountThisMonth.isError) ? <Skeleton className="w-full h-5" /> : <CardDescription>
+                                    {`There are ${getMessagesCountThisMonth.data ?? 0} messages this month`}
+                                </CardDescription>}
+                            </div>
                         </div>
+                        <Button asChild size="sm" className="ml-auto gap-1">
+                            <Link href="/messages">
+                                View All
+                                <ArrowUpRight className="h-4 w-4" />
+                            </Link>
+                        </Button>
                     </CardHeader>
                     <CardContent>
                         {(recentMessages.isLoading || recentMessages.isError) ?
