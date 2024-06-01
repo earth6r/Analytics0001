@@ -5,19 +5,19 @@ import CumulativeMessages from "@/components/dashboard/messages/cumulative-messa
 import MessagesByWeek from "./messages-by-week";
 
 const Messages = () => {
-    return (
-        <div>
-            <MessagesStatCards />
-            <div className="flex flex-col lg:flex-row items-center p-6 lg:space-x-6">
-                <NumberOfMessagesChart />
-                <RecentMessages />
-            </div>
-            <div className="flex flex-col lg:flex-row items-center px-6 pb-6 lg:space-x-6">
-                <CumulativeMessages />
-                <MessagesByWeek />
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <MessagesStatCards />
+      <div className="flex flex-col items-center p-6 lg:flex-row lg:space-x-6">
+        <NumberOfMessagesChart />
+        <RecentMessages />
+      </div>
+      <div className="flex flex-col items-center px-6 pb-6 lg:flex-row lg:space-x-6">
+        <CumulativeMessages />
+        <MessagesByWeek />
+      </div>
+    </div>
+  );
 };
 
 export default Messages;

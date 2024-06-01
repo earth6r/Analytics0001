@@ -1,5 +1,3 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 
-export const registerRouter = createTRPCRouter({
-
-});
+export const registerRouter = createTRPCRouter({});
