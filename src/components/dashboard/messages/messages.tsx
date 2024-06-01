@@ -8,6 +8,38 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import NumberOfMessagesChart from "@/components/dashboard/messages/number-of-messages-chart";
 import MessageItem from "@/components/dashboard/messages/message-item";
+import { Line, LineChart, ResponsiveContainer } from "recharts";
+
+const data = [
+    {
+        name: 'Page A',
+        pv: 2400,
+    },
+    {
+        name: 'Page B',
+        pv: 1398,
+    },
+    {
+        name: 'Page C',
+        pv: 9800,
+    },
+    {
+        name: 'Page D',
+        pv: 3908,
+    },
+    {
+        name: 'Page E',
+        pv: 4800,
+    },
+    {
+        name: 'Page F',
+        pv: 3800,
+    },
+    {
+        name: 'Page G',
+        pv: 4300,
+    },
+];
 
 const Messages = () => {
     const { interval } = useInterval();
@@ -63,6 +95,25 @@ const Messages = () => {
                             </div>
                         }
                     </CardContent>
+                </Card>
+            </div>
+            <div className="flex flex-col lg:flex-row items-center px-6 pb-6 lg:space-x-6">
+                <Card className="w-full lg:w-2/5 mt-6 lg:mt-0 shadow h-[450px]">
+                    <CardHeader className="flex flex-row items-center">
+                        <div className="grid gap-2">
+                            <CardTitle>Cumulative Messages</CardTitle>
+                            <div>
+                                <CardDescription>
+                                    Cumulative messages over time
+                                </CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <ResponsiveContainer height={350} className="p-4">
+                        <LineChart width={300} height={50} data={data}>
+                            <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
+                        </LineChart>
+                    </ResponsiveContainer>
                 </Card>
             </div>
         </div>
