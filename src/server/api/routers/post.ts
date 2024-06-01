@@ -991,4 +991,54 @@ export const postRouter = createTRPCRouter({
     }
   ),
 
+  getMessagesByWeek: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+      );
+      const querySnapshot = await getDocs(q);
+      const messages = [];
+      querySnapshot.forEach((doc) => {
+        const message = doc.data();
+        message.createdAt = new Date(message.createdAt);
+        messages.push(message);
+      });
+
+      const data = {};
+      for (let i = 0; i < messages.length; i++) {
+        const message = messages[i];
+
+        const date = message.createdAt;
+
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const week = Math.floor(date.getDate() / 7) + 1;
+
+        const key = `${year}-${month}-${week}`;
+
+        console.log(key, date, data)
+        if (!data[key]) {
+          data[key] = 1;
+        } else {
+          data[key]++;
+        }
+      }
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          name: key,
+          pv: data[key],
+        });
+      }
+
+      formattedData.sort((a, b) => {
+        return new Date(a.name) - new Date(b.name);
+      });
+
+      return formattedData;
+    }),
+
 });

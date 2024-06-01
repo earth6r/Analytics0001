@@ -6,6 +6,7 @@ import ProfileForm from "@/components/settings/profile-form";
 import SettingsTab from "@/components/settings/settings-tab";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
+import NotificationForm from "@/components/settings/notification-form";
 
 const Settings = () => {
     const [selectedSettingsTab, setSelectedSettingsTab] = useState("profile");
@@ -63,9 +64,7 @@ const Settings = () => {
                                 <h2 className="text-2xl mt-6">Notifications</h2>
                                 <h3 className="text-md text-muted-foreground font-light mt-2">Configure how you receive notifications.</h3>
                                 <Separator className="mt-6 mb-6" />
-                                <div className="flex flex-row items-center justify-between">
-                                    <p>Coming Soon</p>
-                                </div>
+                                <NotificationForm />
                             </div>
                         )}
                         {selectedSettingsTab === "display" && (
