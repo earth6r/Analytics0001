@@ -932,7 +932,6 @@ export const postRouter = createTRPCRouter({
       const messagesRef = collection(db, 'messages');
       const q = query(
         messagesRef,
-        where('initialMessage', '==', false),
       );
       const querySnapshot = await getDocs(q);
       const messages = [];
