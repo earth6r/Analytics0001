@@ -8,38 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import NumberOfMessagesChart from "@/components/dashboard/messages/number-of-messages-chart";
 import MessageItem from "@/components/dashboard/messages/message-item";
-import { Line, LineChart, ResponsiveContainer } from "recharts";
-
-const data = [
-    {
-        name: 'Page A',
-        pv: 2400,
-    },
-    {
-        name: 'Page B',
-        pv: 1398,
-    },
-    {
-        name: 'Page C',
-        pv: 9800,
-    },
-    {
-        name: 'Page D',
-        pv: 3908,
-    },
-    {
-        name: 'Page E',
-        pv: 4800,
-    },
-    {
-        name: 'Page F',
-        pv: 3800,
-    },
-    {
-        name: 'Page G',
-        pv: 4300,
-    },
-];
+import {
+    Line, LineChart, ResponsiveContainer,
+    CartesianGrid, XAxis, YAxis, Tooltip, Legend
+} from "recharts";
 
 const Messages = () => {
     const { interval } = useInterval();
@@ -50,6 +22,12 @@ const Messages = () => {
         }
     );
     const getMessagesCountThisMonth = api.post.getMessagesThisMonth.useQuery(
+        {},
+        {
+            refetchInterval: interval,
+        }
+    );
+    const cumulativeMessages = api.post.getCumulativeMessages.useQuery(
         {},
         {
             refetchInterval: interval,
@@ -98,7 +76,7 @@ const Messages = () => {
                 </Card>
             </div>
             <div className="flex flex-col lg:flex-row items-center px-6 pb-6 lg:space-x-6">
-                <Card className="w-full lg:w-2/5 mt-6 lg:mt-0 shadow h-[450px]">
+                <Card className="w-full lg:w-2/5 lg:mt-0 shadow h-[450px]">
                     <CardHeader className="flex flex-row items-center">
                         <div className="grid gap-2">
                             <CardTitle>Cumulative Messages</CardTitle>
@@ -109,9 +87,24 @@ const Messages = () => {
                             </div>
                         </div>
                     </CardHeader>
-                    <ResponsiveContainer height={350} className="p-4">
-                        <LineChart width={300} height={50} data={data}>
-                            <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
+                    <ResponsiveContainer height={350} className="p-1">
+                        <LineChart
+                            width={500}
+                            height={300}
+                            data={cumulativeMessages.data}
+                            margin={{
+                                top: 5,
+                                right: 40,
+                                left: -20,
+                                bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
                         </LineChart>
                     </ResponsiveContainer>
                 </Card>

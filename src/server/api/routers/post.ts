@@ -925,4 +925,73 @@ export const postRouter = createTRPCRouter({
       });
       return messages;
     }),
+
+  getCumulativeMessages: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const messagesRef = collection(db, 'messages');
+      const q = query(
+        messagesRef,
+        where('initialMessage', '==', false),
+      );
+      const querySnapshot = await getDocs(q);
+      const messages = [];
+      querySnapshot.forEach((doc) => {
+        const message = doc.data();
+        message.createdAt = new Date(message.createdAt);
+        messages.push(message);
+      });
+
+      const data = {};
+      for (let i = 0; i < messages.length; i++) {
+        const message = messages[i];
+
+        const date = message.createdAt;
+
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const week = Math.floor(date.getDate() / 7) + 1;
+        const day = date.getDate();
+
+        const key = `${year}-${month}-${day}`;
+
+        console.log(key, date, data)
+        if (!data[key]) {
+          data[key] = 1;
+        } else {
+          data[key]++;
+        }
+      }
+
+      // Define the start and end dates
+      const startDate = new Date('2024-05-01');
+      const endDate = new Date();
+      endDate.setHours(0, 0, 0, 0); // Remove time portion for comparison
+
+      // Function to format dates as keys
+      const formatDateKey = (date) => {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        return `${year}-${month}-${day}`;
+      };
+
+      const cumulativeData = [];
+      let cumulativeTotal = 0;
+
+      // Iterate over each day in the range
+      for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+        const key = formatDateKey(date);
+        const dailyCount = data[key] || 0; // Get the message count for the day, or 0 if no messages
+        cumulativeTotal += dailyCount;
+        cumulativeData.push({
+          name: key,
+          pv: cumulativeTotal,
+        });
+      }
+
+      return cumulativeData;
+    }
+  ),
+
 });
