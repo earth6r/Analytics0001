@@ -1018,7 +1018,6 @@ export const postRouter = createTRPCRouter({
 
         const key = `${year}-${month}-${week}`;
 
-        console.log(key, date, data)
         if (!data[key]) {
           data[key] = 1;
         } else {
