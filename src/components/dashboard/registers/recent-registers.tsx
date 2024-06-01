@@ -67,12 +67,12 @@ const RecentRegisters = () => {
                                     {register.type}
                                 </TableCell>
                                 <TableCell className="space-x-2">
-                                    {register.locationsOfInterest.slice(0, 2).map((location, index) => (
+                                    {(register.locationsOfInterest || []).slice(0, 2).map((location, index) => (
                                         <Badge key={index} className="text-xs" variant="outline">
                                             {location}
                                         </Badge>
                                     ))}
-                                    {register.locationsOfInterest.length > 2 && (
+                                    {(register.locationsOfInterest || []).length > 2 && (
                                         <Badge className="text-xs" variant="outline">
                                             +{register.locationsOfInterest.length - 2}
                                         </Badge>

@@ -205,22 +205,6 @@ export const postRouter = createTRPCRouter({
       return percentValue; // percentage
     }),
 
-  getTotalUniqueRegisteredUsersCount: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const querySnapshot = await getDocs(collection(db, 'register'));
-      const emails = new Set();
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (!data.email) {
-          return;
-        }
-        emails.add(data.email.toLowerCase());
-      });
-
-      return emails.size;
-    }),
-
   getTotalUniqueRegisteredUsersCountDelta: publicProcedure.query(
     async () => {
       await authenticate();
@@ -382,321 +366,6 @@ export const postRouter = createTRPCRouter({
       return formattedData;
     }),
 
-  getLocationsOfInterest: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-      querySnapshot.forEach((doc) => {
-        const location = doc.data().locationsOfInterest;
-        if (location && typeof location === "string") {
-          if (!data[location]) {
-            data[location] = 0;
-          }
-          data[location]++;
-        } else if (location && Array.isArray(location)) {
-          location.forEach((loc) => {
-            if (!data[loc]) {
-              data[loc] = 0;
-            }
-            data[loc]++;
-          });
-        }
-      });
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }),
-
-  getDeviceInfoStats: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-      querySnapshot.forEach((doc) => {
-        const userAgent = doc.data().userAgent;
-        if (!userAgent) {
-          return;
-        }
-        const osInfo = extractOsInfo(userAgent);
-        if (!data[osInfo]) {
-          data[osInfo] = 0;
-        }
-        data[osInfo]++;
-      });
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }
-  ),
-
-  getBrowserInfoStats: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-      querySnapshot.forEach((doc) => {
-        const userAgent = doc.data().userAgent;
-        if (!userAgent) {
-          return;
-        }
-        const browserInfo = extractBrowserInfo(userAgent);
-        if (!data[browserInfo]) {
-          data[browserInfo] = 0;
-        }
-        data[browserInfo]++;
-      });
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }),
-
-  getLanguageStats: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-      querySnapshot.forEach((doc) => {
-        const userAgent = doc.data().userAgent;
-        if (!userAgent) {
-          return;
-        }
-        const language = extractLanguage(userAgent);
-        if (!data[language]) {
-          data[language] = 0;
-        }
-        data[language]++;
-      });
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }),
-
-  getIpAddressStats: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-
-      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
-      // const response = await axios.get(api_url);
-      const responseData = {
-        "ip": "0.0.0.0",
-        "network": "0.0.0.0/20",
-        "version": "IPv4",
-        "city": "Toronto",
-        "region": "Ontario",
-        "region_code": "ON",
-        "country": "CA",
-        "country_name": "Canada",
-        "country_code": "CA",
-        "country_code_iso3": "CAN",
-        "country_capital": "Ottawa",
-        "country_tld": ".ca",
-        "continent_code": "NA",
-        "in_eu": false,
-        "postal": "M3C",
-        "latitude": 43.7338,
-        "longitude": -79.3325,
-        "timezone": "America/Toronto",
-        "utc_offset": "-0400",
-        "country_calling_code": "+1",
-        "currency": "CAD",
-        "currency_name": "Dollar",
-        "languages": "en-CA,fr-CA,iu",
-        "country_area": 9984670,
-        "country_population": 37058856,
-        "asn": "AS812",
-        "org": "ROGERS-COMMUNICATIONS"
-      };
-      const promises = querySnapshot.docs.map(async (doc) => {
-        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
-        if (!ipAddress) {
-          return;
-        }
-        const country = responseData.country;
-        if (!data[country]) {
-          data[country] = 0;
-        }
-        data[country]++;
-      });
-
-      await Promise.all(promises);
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }),
-
-  getCityStats: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-      const data = {};
-
-      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
-      // const response = await axios.get(api_url);
-      const responseData = {
-        "ip": "0.0.0.0",
-        "network": "0.0.0.0/20",
-        "version": "IPv4",
-        "city": "Toronto",
-        "region": "Ontario",
-        "region_code": "ON",
-        "country": "CA",
-        "country_name": "Canada",
-        "country_code": "CA",
-        "country_code_iso3": "CAN",
-        "country_capital": "Ottawa",
-        "country_tld": ".ca",
-        "continent_code": "NA",
-        "in_eu": false,
-        "postal": "M3C",
-        "latitude": 43.7338,
-        "longitude": -79.3325,
-        "timezone": "America/Toronto",
-        "utc_offset": "-0400",
-        "country_calling_code": "+1",
-        "currency": "CAD",
-        "currency_name": "Dollar",
-        "languages": "en-CA,fr-CA,iu",
-        "country_area": 9984670,
-        "country_population": 37058856,
-        "asn": "AS812",
-        "org": "ROGERS-COMMUNICATIONS"
-      };
-      const promises = querySnapshot.docs.map(async (doc) => {
-        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
-        if (!ipAddress) {
-          return;
-        }
-        const city = responseData.city;
-        if (!data[city]) {
-          data[city] = 0;
-        }
-        data[city]++;
-      });
-
-      await Promise.all(promises);
-
-      const formattedData = [];
-      for (const key in data) {
-        formattedData.push({
-          [key]: data[key],
-        });
-      }
-
-      const sortedData = formattedData.sort((a, b) => {
-        return Object.values(b)[0] - Object.values(a)[0];
-      });
-
-      return sortedData;
-    }),
-
-  getRecentRegisters: publicProcedure.query(
-    async () => {
-      const limit = 6;
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(
-        registerRef,
-        orderBy('createdAt', 'desc'),
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      const registers = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
-        if (registers.length >= limit) {
-          return;
-        }
-        registers.push(data);
-      });
-
-      return registers;
-    }),
-
-  getRegisters: publicProcedure.query(
-    async () => {
-      await authenticate();
-      const registerRef = collection(db, 'register');
-      const q = query(registerRef);
-      const querySnapshot = await getDocs(q);
-
-      const registers = [];
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
-        registers.push(data);
-      });
-
-      return registers;
-    }),
-
   getMessageGroupsCount: publicProcedure.query(
     async () => {
       await authenticate();
@@ -787,6 +456,347 @@ export const postRouter = createTRPCRouter({
       return percentValue; // percentage
     }),
 
+  // register
+  getLocationsOfInterest: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const location = doc.data().locationsOfInterest;
+        if (location && typeof location === "string") {
+          if (!data[location]) {
+            data[location] = 0;
+          }
+          data[location]++;
+        } else if (location && Array.isArray(location)) {
+          location.forEach((loc) => {
+            if (!data[loc]) {
+              data[loc] = 0;
+            }
+            data[loc]++;
+          });
+        }
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  // register
+  getDeviceInfoStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        if (!userAgent) {
+          return;
+        }
+        const osInfo = extractOsInfo(userAgent);
+        if (!data[osInfo]) {
+          data[osInfo] = 0;
+        }
+        data[osInfo]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }
+  ),
+
+  // register
+  getBrowserInfoStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        if (!userAgent) {
+          return;
+        }
+        const browserInfo = extractBrowserInfo(userAgent);
+        if (!data[browserInfo]) {
+          data[browserInfo] = 0;
+        }
+        data[browserInfo]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  // register
+  getLanguageStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+      querySnapshot.forEach((doc) => {
+        const userAgent = doc.data().userAgent;
+        if (!userAgent) {
+          return;
+        }
+        const language = extractLanguage(userAgent);
+        if (!data[language]) {
+          data[language] = 0;
+        }
+        data[language]++;
+      });
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  // register
+  getIpAddressStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+
+      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
+      // const response = await axios.get(api_url);
+      const responseData = {
+        "ip": "0.0.0.0",
+        "network": "0.0.0.0/20",
+        "version": "IPv4",
+        "city": "Toronto",
+        "region": "Ontario",
+        "region_code": "ON",
+        "country": "CA",
+        "country_name": "Canada",
+        "country_code": "CA",
+        "country_code_iso3": "CAN",
+        "country_capital": "Ottawa",
+        "country_tld": ".ca",
+        "continent_code": "NA",
+        "in_eu": false,
+        "postal": "M3C",
+        "latitude": 43.7338,
+        "longitude": -79.3325,
+        "timezone": "America/Toronto",
+        "utc_offset": "-0400",
+        "country_calling_code": "+1",
+        "currency": "CAD",
+        "currency_name": "Dollar",
+        "languages": "en-CA,fr-CA,iu",
+        "country_area": 9984670,
+        "country_population": 37058856,
+        "asn": "AS812",
+        "org": "ROGERS-COMMUNICATIONS"
+      };
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
+        if (!ipAddress) {
+          return;
+        }
+        const country = responseData.country;
+        if (!data[country]) {
+          data[country] = 0;
+        }
+        data[country]++;
+      });
+
+      await Promise.all(promises);
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  // register
+  getCityStats: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+      const data = {};
+
+      // const api_url = `https://ipapi.co/${ipAddress}/json/`;
+      // const response = await axios.get(api_url);
+      const responseData = {
+        "ip": "0.0.0.0",
+        "network": "0.0.0.0/20",
+        "version": "IPv4",
+        "city": "Toronto",
+        "region": "Ontario",
+        "region_code": "ON",
+        "country": "CA",
+        "country_name": "Canada",
+        "country_code": "CA",
+        "country_code_iso3": "CAN",
+        "country_capital": "Ottawa",
+        "country_tld": ".ca",
+        "continent_code": "NA",
+        "in_eu": false,
+        "postal": "M3C",
+        "latitude": 43.7338,
+        "longitude": -79.3325,
+        "timezone": "America/Toronto",
+        "utc_offset": "-0400",
+        "country_calling_code": "+1",
+        "currency": "CAD",
+        "currency_name": "Dollar",
+        "languages": "en-CA,fr-CA,iu",
+        "country_area": 9984670,
+        "country_population": 37058856,
+        "asn": "AS812",
+        "org": "ROGERS-COMMUNICATIONS"
+      };
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const ipAddress = doc.data()?.ipAddress ?? "0.0.0.0";
+        if (!ipAddress) {
+          return;
+        }
+        const city = responseData.city;
+        if (!data[city]) {
+          data[city] = 0;
+        }
+        data[city]++;
+      });
+
+      await Promise.all(promises);
+
+      const formattedData = [];
+      for (const key in data) {
+        formattedData.push({
+          [key]: data[key],
+        });
+      }
+
+      const sortedData = formattedData.sort((a, b) => {
+        return Object.values(b)[0] - Object.values(a)[0];
+      });
+
+      return sortedData;
+    }),
+
+  // register
+  getRecentRegisters: publicProcedure.query(
+    async () => {
+      const limit = 6;
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(
+        registerRef,
+        orderBy('createdAt', 'desc'),
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const registers = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
+        if (registers.length >= limit) {
+          return;
+        }
+        registers.push(data);
+      });
+
+      return registers;
+    }),
+
+  // register
+  getRegisters: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const registerRef = collection(db, 'register');
+      const q = query(registerRef);
+      const querySnapshot = await getDocs(q);
+
+      const registers = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.locationsOfInterest = typeof data.locationsOfInterest === "string" ? [data.locationsOfInterest] : data.locationsOfInterest;
+        registers.push(data);
+      });
+
+      return registers;
+    }),
+
+  // register
+  getTotalUniqueRegisteredUsersCount: publicProcedure.query(
+    async () => {
+      await authenticate();
+      const querySnapshot = await getDocs(collection(db, 'register'));
+      const emails = new Set();
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (!data.email) {
+          return;
+        }
+        emails.add(data.email.toLowerCase());
+      });
+
+      return emails.size;
+    }),
+
+  // register
   getBuyingTimelineNowCount: publicProcedure.query(
     async () => {
       await authenticate();
@@ -799,6 +809,7 @@ export const postRouter = createTRPCRouter({
       return querySnapshot.size;
     }),
 
+  // register
   getBuyingTimelineNowCountDelta: publicProcedure.query(
     async () => {
       await authenticate();
@@ -828,6 +839,7 @@ export const postRouter = createTRPCRouter({
       return percentValue; // percentage
     }),
 
+  // register
   getBuyingTimelineOneToThreeMonthsCount: publicProcedure.query(
     async () => {
       await authenticate();
@@ -840,6 +852,7 @@ export const postRouter = createTRPCRouter({
       return querySnapshot.size;
     }),
 
+  // register
   getBuyingTimelineOneToThreeMonthsCountDelta: publicProcedure.query(
     async () => {
       await authenticate();
@@ -869,6 +882,7 @@ export const postRouter = createTRPCRouter({
       return percentValue; // percentage
     }),
 
+  // register
   getBuyingTimelineNotSureCount: publicProcedure.query(
     async () => {
       await authenticate();
@@ -881,6 +895,7 @@ export const postRouter = createTRPCRouter({
       return querySnapshot.size;
     }),
 
+  // register
   getBuyingTimelineNotSureCountDelta: publicProcedure.query(
     async () => {
       await authenticate();

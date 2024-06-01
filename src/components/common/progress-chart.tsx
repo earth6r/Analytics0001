@@ -38,7 +38,7 @@ const ProgressChart = (props: ProgressChartProps) => {
 
     return (
         <div className='space-y-3 pl-4 pr-4'>
-            {(data.data)
+            {(data.data || [])
                 .map((item, index) => (
                     <div key={index} className="relative flex items-center justify-between px-4 py-2 rounded-lg bg-transparent">
                         <div className="absolute left-0 top-0 h-full bg-secondary rounded-lg" style={{ width: `${(Object.values(item)[0] / maxValue) * 100}%` }}></div>
