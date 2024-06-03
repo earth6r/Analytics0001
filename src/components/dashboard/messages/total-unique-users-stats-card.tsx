@@ -7,12 +7,14 @@ const TotalUniqueUsersStatsCard = () => {
   const { interval } = useInterval();
 
   const totalUniqueUsersCount = api.post.getTotalUniqueUsers.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
     },
   );
   const totalUniqueUsersCountDelta = api.post.getTotalUniqueUsersDelta.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,

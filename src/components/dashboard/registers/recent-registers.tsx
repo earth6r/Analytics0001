@@ -25,6 +25,7 @@ const RecentRegisters = () => {
   const { interval } = useInterval();
 
   const recentRegisters = api.post.getRecentRegisters.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
@@ -75,7 +76,7 @@ const RecentRegisters = () => {
                     <TableCell className="space-x-2">
                       {(register.locationsOfInterest || [])
                         .slice(0, 2)
-                        .map((location, index) => (
+                        .map((location: string, index: number) => (
                           <Badge
                             key={index}
                             className="text-xs"

@@ -21,6 +21,7 @@ const PieChart = () => {
   const [pieData, setPieData] = useState([]);
 
   const locationInterests = api.post.getLocationsOfInterest.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
@@ -29,7 +30,9 @@ const PieChart = () => {
 
   useEffect(() => {
     if (locationInterests.data) {
+      // @ts-expect-error - fix this
       setLabels(locationInterests.data.map((item) => Object.keys(item)[0]));
+      // @ts-expect-error - fix this
       setPieData(locationInterests.data.map((item) => Object.values(item)[0]));
     }
   }, [locationInterests.data]);

@@ -7,3 +7,5 @@
 - fix all types
 
 - change time to epoch for register and all other time related fields
+- fix `@ts-expect-error - fix this` in all files
+- fix `eslint-disable-next-line @typescript-eslint/no-unsafe-call` in all files

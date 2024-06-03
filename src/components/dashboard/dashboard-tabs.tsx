@@ -20,8 +20,8 @@ const DashboardTabs = () => {
 
   return (
     <Tabs
-      value={router.query.tab ?? "registers"}
-      defaultValue={router.query.tab ?? "registers"}
+      value={router.query.tab as string ?? "registers"}
+      defaultValue={router.query.tab as string ?? "registers"}
       className="w-full"
     >
       <div className="pl-6 pr-6 pt-6">

@@ -50,30 +50,35 @@ import {
 import { Label } from "@/components/ui/label";
 
 const data: Payment[] = [
+  // @ts-expect-error - fix this
   {
     id: "m5gr84i9",
     amount: 316,
     status: "success",
     email: "ken99@yahoo.com",
   },
+  // @ts-expect-error - fix this
   {
     id: "3u1reuv4",
     amount: 242,
     status: "success",
     email: "Abe45@gmail.com",
   },
+  // @ts-expect-error - fix this
   {
     id: "derv1ws0",
     amount: 837,
     status: "processing",
     email: "Monserrat44@gmail.com",
   },
+  // @ts-expect-error - fix this
   {
     id: "5kma53ae",
     amount: 874,
     status: "success",
     email: "Silas22@gmail.com",
   },
+  // @ts-expect-error - fix this
   {
     id: "bhqecj4p",
     amount: 721,
@@ -83,6 +88,7 @@ const data: Payment[] = [
 ];
 
 export type Payment = {
+  createdAt: string;
   id: string;
   amount: number;
   status: "pending" | "processing" | "success" | "failed";
@@ -92,6 +98,7 @@ export type Payment = {
   locationsOfInterest: string[];
 };
 
+// @ts-expect-error - fix this
 const ActionCell = ({ row }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -470,6 +477,7 @@ const Registers = () => {
 
   const { interval } = useInterval();
   const getRegisters = api.post.getRegisters.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,

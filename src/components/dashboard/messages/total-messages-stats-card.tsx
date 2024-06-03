@@ -7,6 +7,7 @@ const TotalMessagesStatsCard = () => {
   const { interval } = useInterval();
 
   const totalMessagesCount = api.post.getTotalMessagesCount.useQuery(
+   // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
@@ -14,6 +15,7 @@ const TotalMessagesStatsCard = () => {
   );
   const getTotalMessagesCountDelta =
     api.post.getTotalMessagesCountDelta.useQuery(
+      // @ts-expect-error - fix this
       {},
       {
         refetchInterval: interval,

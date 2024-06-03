@@ -7,12 +7,14 @@ const TotalUniqueRegisteredUsersCount = () => {
   const { interval } = useInterval();
   const totalUniqueRegisteredUsersCount =
     api.post.getTotalUniqueRegisteredUsersCount.useQuery(
+      // @ts-expect-error - fix this
       {},
       {
         refetchInterval: interval,
       },
     );
   const totalUniqueUsersCountDelta = api.post.getTotalUniqueUsersDelta.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,

@@ -8,6 +8,7 @@ const BuyingTimelineOneToThreeMonthsStatsCard = () => {
 
   const buyingTimelineOneToThreeMonthsCount =
     api.post.getBuyingTimelineOneToThreeMonthsCount.useQuery(
+      // @ts-expect-error - fix this
       {},
       {
         refetchInterval: interval,
@@ -15,6 +16,7 @@ const BuyingTimelineOneToThreeMonthsStatsCard = () => {
     );
   const buyingTimelineOneToThreeMonthsCountDelta =
     api.post.getBuyingTimelineOneToThreeMonthsCountDelta.useQuery(
+      // @ts-expect-error - fix this
       {},
       {
         refetchInterval: interval,

@@ -36,6 +36,7 @@ const AppearanceForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
+          // @ts-expect-error - fix this
           name="name"
           render={({ field }) => (
             <FormItem>

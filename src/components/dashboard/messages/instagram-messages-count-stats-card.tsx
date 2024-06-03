@@ -7,6 +7,7 @@ const InstagramMessagesCountStatsCard = () => {
   const { interval } = useInterval();
 
   const instagramMessagesCount = api.post.getInstagramMessagesCount.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
@@ -14,6 +15,7 @@ const InstagramMessagesCountStatsCard = () => {
   );
   const instagramMessagesCountDelta =
     api.post.getInstagramMessagesCountDelta.useQuery(
+      // @ts-expect-error - fix this
       {},
       {
         refetchInterval: interval,

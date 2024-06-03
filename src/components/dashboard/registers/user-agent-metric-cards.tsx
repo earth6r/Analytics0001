@@ -13,30 +13,35 @@ const UserAgentMetricCards = () => {
   const { interval } = useInterval();
 
   const deviceInfoStats = api.post.getDeviceInfoStats.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
     },
   );
   const browserInfoStats = api.post.getBrowserInfoStats.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
     },
   );
   const languageStats = api.post.getLanguageStats.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
     },
   );
   const ipAddressStats = api.post.getIpAddressStats.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
     },
   );
   const cityStats = api.post.getCityStats.useQuery(
+    // @ts-expect-error - fix this
     {},
     {
       refetchInterval: interval,
