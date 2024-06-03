@@ -193,7 +193,7 @@ const Header = () => {
                     src={
                       profilePictureUrl ?? name
                         ? `https://ui-avatars.com/api/?name=${name}`
-                        : null
+                        : undefined
                     }
                     alt="@user"
                   />
