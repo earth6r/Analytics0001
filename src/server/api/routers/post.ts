@@ -365,13 +365,12 @@ export const postRouter = createTRPCRouter({
       data[monthName]++;
     });
 
-    // @ts-expect-error - fix this
-    const formattedData = [];
+    const formattedData: any[] | PromiseLike<any[]> = [];
     monthNames.forEach((monthName) => {
       formattedData.push({
         name: monthName,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        total: data[monthName] ?? 0,
+        total: (data as { [key: string]: any })[monthName] ?? 0,
       });
     });
 
@@ -477,15 +476,21 @@ export const postRouter = createTRPCRouter({
     querySnapshot.forEach((doc) => {
       const location = doc.data().locationsOfInterest;
       if (location && typeof location === "string") {
+        // @ts-expect-error - fix this
         if (!data[location]) {
+          // @ts-expect-error - fix this
           data[location] = 0;
         }
+        // @ts-expect-error - fix this
         data[location]++;
       } else if (location && Array.isArray(location)) {
         location.forEach((loc) => {
+          // @ts-expect-error - fix this
           if (!data[loc]) {
+            // @ts-expect-error - fix this
             data[loc] = 0;
           }
+          // @ts-expect-error - fix this
           data[loc]++;
         });
       }
@@ -494,6 +499,7 @@ export const postRouter = createTRPCRouter({
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -518,15 +524,19 @@ export const postRouter = createTRPCRouter({
         return;
       }
       const osInfo = extractOsInfo(userAgent);
+      // @ts-expect-error - fix this
       if (!data[osInfo]) {
+        // @ts-expect-error - fix this
         data[osInfo] = 0;
       }
+      // @ts-expect-error - fix this
       data[osInfo]++;
     });
 
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -551,15 +561,19 @@ export const postRouter = createTRPCRouter({
         return;
       }
       const browserInfo = extractBrowserInfo(userAgent);
+      // @ts-expect-error - fix this
       if (!data[browserInfo]) {
+        // @ts-expect-error - fix this
         data[browserInfo] = 0;
       }
+      // @ts-expect-error - fix this
       data[browserInfo]++;
     });
 
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -584,15 +598,19 @@ export const postRouter = createTRPCRouter({
         return;
       }
       const language = extractLanguage(userAgent);
+      // @ts-expect-error - fix this
       if (!data[language]) {
+        // @ts-expect-error - fix this
         data[language] = 0;
       }
+      // @ts-expect-error - fix this
       data[language]++;
     });
 
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -649,9 +667,12 @@ export const postRouter = createTRPCRouter({
         return;
       }
       const country = responseData.country;
+      // @ts-expect-error - fix this
       if (!data[country]) {
+        // @ts-expect-error - fix this
         data[country] = 0;
       }
+      // @ts-expect-error - fix this
       data[country]++;
     });
 
@@ -660,6 +681,7 @@ export const postRouter = createTRPCRouter({
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -716,9 +738,12 @@ export const postRouter = createTRPCRouter({
         return;
       }
       const city = responseData.city;
+      // @ts-expect-error - fix this
       if (!data[city]) {
+        // @ts-expect-error - fix this
         data[city] = 0;
       }
+      // @ts-expect-error - fix this
       data[city]++;
     });
 
@@ -727,6 +752,7 @@ export const postRouter = createTRPCRouter({
     const formattedData = [];
     for (const key in data) {
       formattedData.push({
+        // @ts-expect-error - fix this
         [key]: data[key],
       });
     }
@@ -747,6 +773,7 @@ export const postRouter = createTRPCRouter({
 
     const querySnapshot = await getDocs(q);
 
+    // @ts-expect-error - fix this
     const registers = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
@@ -760,6 +787,7 @@ export const postRouter = createTRPCRouter({
       registers.push(data);
     });
 
+    // @ts-expect-error - fix this
     return registers;
   }),
 
@@ -770,6 +798,7 @@ export const postRouter = createTRPCRouter({
     const q = query(registerRef);
     const querySnapshot = await getDocs(q);
 
+    // @ts-expect-error - fix this
     const registers = [];
 
     querySnapshot.forEach((doc) => {
@@ -781,6 +810,7 @@ export const postRouter = createTRPCRouter({
       registers.push(data);
     });
 
+    // @ts-expect-error - fix this
     return registers;
   }),
 
@@ -936,10 +966,12 @@ export const postRouter = createTRPCRouter({
       // where('initialMessage', '==', false),
     );
     const querySnapshot = await getDocs(q);
+    // @ts-expect-error - fix this
     const messages = [];
     querySnapshot.forEach((doc) => {
       messages.push(doc.data());
     });
+    // @ts-expect-error - fix this
     return messages;
   }),
 
@@ -948,6 +980,7 @@ export const postRouter = createTRPCRouter({
     const messagesRef = collection(db, "messages");
     const q = query(messagesRef);
     const querySnapshot = await getDocs(q);
+    // @ts-expect-error - fix this
     const messages = [];
     querySnapshot.forEach((doc) => {
       const message = doc.data();
@@ -957,6 +990,7 @@ export const postRouter = createTRPCRouter({
 
     const data = {};
     for (let i = 0; i < messages.length; i++) {
+      // @ts-expect-error - fix this
       const message = messages[i];
 
       const date = message.createdAt;
@@ -967,9 +1001,12 @@ export const postRouter = createTRPCRouter({
 
       const key = `${year}-${month}-${day}`;
 
+      // @ts-expect-error - fix this
       if (!data[key]) {
+        // @ts-expect-error - fix this
         data[key] = 1;
       } else {
+        // @ts-expect-error - fix this
         data[key]++;
       }
     }
@@ -980,6 +1017,7 @@ export const postRouter = createTRPCRouter({
     endDate.setHours(0, 0, 0, 0); // Remove time portion for comparison
 
     // Function to format dates as keys
+    // @ts-expect-error - fix this
     const formatDateKey = (date) => {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -997,6 +1035,7 @@ export const postRouter = createTRPCRouter({
       date.setDate(date.getDate() + 1)
     ) {
       const key = formatDateKey(date);
+      // @ts-expect-error - fix this
       const dailyCount = data[key] || 0; // Get the message count for the day, or 0 if no messages
       cumulativeTotal += dailyCount;
       cumulativeData.push({
@@ -1013,6 +1052,7 @@ export const postRouter = createTRPCRouter({
     const messagesRef = collection(db, "messages");
     const q = query(messagesRef);
     const querySnapshot = await getDocs(q);
+    // @ts-expect-error - fix this
     const messages = [];
     querySnapshot.forEach((doc) => {
       const message = doc.data();
@@ -1022,6 +1062,7 @@ export const postRouter = createTRPCRouter({
 
     const data = {};
     for (let i = 0; i < messages.length; i++) {
+      // @ts-expect-error - fix this
       const message = messages[i];
 
       const date = message.createdAt;
@@ -1032,9 +1073,12 @@ export const postRouter = createTRPCRouter({
 
       const key = `${year}-${month}-${week}`;
 
+      // @ts-expect-error - fix this
       if (!data[key]) {
+        // @ts-expect-error - fix this
         data[key] = 1;
       } else {
+        // @ts-expect-error - fix this
         data[key]++;
       }
     }
@@ -1043,11 +1087,13 @@ export const postRouter = createTRPCRouter({
     for (const key in data) {
       formattedData.push({
         name: key,
+        // @ts-expect-error - fix this
         pv: data[key],
       });
     }
 
     formattedData.sort((a, b) => {
+      // @ts-expect-error - fix this
       return new Date(a.name) - new Date(b.name);
     });
 

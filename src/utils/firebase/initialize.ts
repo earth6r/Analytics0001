@@ -2,8 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore/lite";
 
-// Replace this with your own Firebase project's configuration
-const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG as string);
 
 const app = initializeApp(firebaseConfig);
 
