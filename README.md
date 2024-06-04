@@ -13,3 +13,17 @@
 curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com","password":"test@test.com"}' http://localhost:3000/api/login
 
 curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com","password":"test@test.com"}' https://analytics0001.vercel.app/api/login
+
+curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com"}' http://localhost:3000/api/user-existence
+
+curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com"}' https://analytics0001.vercel.app/api/user-existence
+
+
+
+
+REDO LOGIN:
+- three different endpoints
+- 1. for seeing if email exists and to give back a code saying "display_password" or "reset_password"
+- 2. for logging in with email and password
+- 3. for resetting password
+- add api key to all endpoints
