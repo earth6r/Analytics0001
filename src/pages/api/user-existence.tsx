@@ -8,11 +8,12 @@ export const config = {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY as string);
 
-    if (!admin.apps.length)
+    if (!admin.apps.length) {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount),
-            projectId: "homeearthnet",
+            projectId: process.env.PROJECT_ID,
         });
+    }
 
     const { email } = req.body;
 
