@@ -1,5 +1,4 @@
-import admin from 'firebase-admin';
-import { type NextApiRequest, type NextApiResponse } from "next";
+import admin from 'firebase-admin';import { type NextApiRequest, type NextApiResponse } from "next";
 
 export const config = {
     maxDuration: 300,
@@ -39,9 +38,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         // create a new user
-        const response = admin.auth().createUser({
+        const response = await admin.auth().createUser({
             email,
             password,
+        });
+        await admin.database().ref('users').push({
+            email,
+            uid: response.uid,
+
+            // epoch
+            createdAt: parseInt(String(Date.now() / 1000)),
         });
         res.status(200).json({ user: response, code: "success" });
     } catch (error: unknown) {
