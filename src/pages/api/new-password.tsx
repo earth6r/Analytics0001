@@ -1,4 +1,3 @@
-import { whitelistEmail } from '@/lib/constants';
 import admin from 'firebase-admin';
 import { type NextApiRequest, type NextApiResponse } from "next";
 
@@ -26,30 +25,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
     }
 
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     if (!email) {
-        res.status(400).json({ message: "Email is required.", request_password: false, code: "email_required" });
+        res.status(400).json({ message: "Email is required.", code: "email_required" });
+        return;
+    }
+
+    if (!password) {
+        res.status(400).json({ message: "Password is required.", code: "password_required" });
         return;
     }
 
     try {
-        const user = await admin.auth().getUserByEmail(email);
-        res.status(200).json({ user, request_password: false, code: "success" });
+        // create a new user
+        const response = admin.auth().createUser({
+            email,
+            password,
+        });
+        res.status(200).json({ user: response, code: "success" });
     } catch (error: unknown) {
         // @ts-expect-error error is unknown
-        if (error?.code === "auth/user-not-found") {
-            res.status(200).json({ user: null, request_password: whitelistEmail.includes(email), code: "user_not_found" });
-            return;
-        }
-
-        // @ts-expect-error error is unknown
         if (error?.code === "auth/too-many-requests") {
-            res.status(429).json({ user: null, message: "Too many requests.", request_password: false, code: "too_many_requests" });
+            res.status(429).json({ user: null, message: "Too many requests.", code: "too_many_requests" });
             return;
         }
 
-        res.status(500).json({ user: null, message: "Internal server error.", request_password: false, code: "internal_server_error" });
+        res.status(500).json({ user: null, message: "Internal server error.", code: "internal_server_error" });
     }
 };
 
