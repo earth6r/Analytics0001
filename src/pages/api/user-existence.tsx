@@ -1,4 +1,3 @@
-import { FirebaseError } from "firebase/app";
 import admin from 'firebase-admin';
 import { type NextApiRequest, type NextApiResponse } from "next";
 
