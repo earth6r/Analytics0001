@@ -1,11 +1,19 @@
 import admin from 'firebase-admin';
 import { type NextApiRequest, type NextApiResponse } from "next";
+import NextCors from 'nextjs-cors';
 
 export const config = {
     maxDuration: 300,
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    await NextCors(req, res, {
+        // Options
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+        origin: '*', // Update this to your specific origin
+        optionsSuccessStatus: 200,
+    });
+
     const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY as string);
 
     if (!admin.apps.length) {
