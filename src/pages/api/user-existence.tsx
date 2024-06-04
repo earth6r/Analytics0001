@@ -30,11 +30,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const user = await admin.auth().getUserByEmail(email);
         res.status(200).json({ user, request_password: false, code: "success" });
     } catch (error: unknown) {
+        // @ts-expect-error error is unknown
         if (error?.code === "auth/user-not-found") {
             res.status(400).json({ user: null, message: "Wrong password.", request_password: false, code: "wrong_password" });
             return;
         }
 
+        // @ts-expect-error error is unknown
         if (error?.code === "auth/too-many-requests") {
             res.status(429).json({ user: null, message: "Too many requests.", request_password: false, code: "too_many_requests" });
             return;
