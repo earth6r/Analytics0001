@@ -28,7 +28,7 @@ const MessagesByWeek = () => {
     },
   );
   return (
-    <Card className="h-[450px] w-full shadow lg:mt-0 lg:w-3/5">
+    <Card className="h-[450px] w-full mt-6 md:mt-0 shadow lg:mt-0 lg:w-3/5">
       <CardHeader className="flex flex-row items-center">
         <div className="grid gap-2">
           <CardTitle>Messages By Week</CardTitle>
