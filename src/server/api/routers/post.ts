@@ -10,7 +10,6 @@ import {
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
-import axios from "axios";
 
 const monthNames = [
   "Jan",
@@ -766,7 +765,7 @@ export const postRouter = createTRPCRouter({
 
   // register
   getRecentRegisters: publicProcedure.query(async () => {
-    const limit = 6;
+    const limit = 5;
     await authenticate();
     const registerRef = collection(db, "register");
     const q = query(registerRef, orderBy("createdAt", "desc"));

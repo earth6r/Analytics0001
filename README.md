@@ -9,21 +9,22 @@
 - change time to epoch for register and all other time related fields
 - fix `@ts-expect-error - fix this` in all files
 - fix `eslint-disable-next-line @typescript-eslint/no-unsafe-call` in all files
-
-curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com","password":"test@test.com"}' http://localhost:3000/api/login
-
-curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com","password":"test@test.com"}' https://analytics0001.vercel.app/api/login
-
-curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com"}' http://localhost:3000/api/user-existence
-
-curl -X POST -H "Content-Type: application/json" -d '{"email":"test@test.com"}' https://analytics0001.vercel.app/api/user-existence
+- fix up screenshots ui
+- add more fields to register table and messages table
+- fix todo comments in Home0001 repo and Home0001-stats repo
+- add a form field somewhere for creating a user in the firestore database
 
 
+<!-- PROPERTY BUYING PROGRESS STATS -->
+- add question mark tooltip for current fake data
+- add in new tab for buying progress and display stats about it
+    - number of people in the buying process
+    - number of properties purchased
+    - show table of all PROGRESS and all users via email and UID
+    - show table of all DONE and all users via email and UID
+    - table of all users with the most properties purchased
+    - most popular to least popular property type purchased
+    - total $ in deposits
+    - showing pie of all different types of properties purchased
+    - show pie of all different types of properties in progress
 
-
-REDO LOGIN:
-- three different endpoints
-- 1. for seeing if email exists and to give back a code saying "display_password" or "reset_password"
-- 2. for logging in with email and password
-- 3. for resetting password
-- add api key to all endpoints
