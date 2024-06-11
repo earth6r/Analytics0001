@@ -1,21 +1,13 @@
 import Header from "@/components/common/header";
-import Image from "next/image";
+import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
+import CreateUserInDatabaseForm from "@/components/customers/create-user-in-database-form";
 
 const Customers = () => {
   return (
     <div>
       <Header />
       <div className="p-6">
-        <div className="min-h-screen-calc-13vh flex flex-col items-center justify-center rounded-md border">
-          <Image
-            src="/coming-soon.png"
-            className="aspect-square rounded-full object-cover"
-            width={300}
-            height={300}
-            alt="Coming Soon"
-          />
-          <div className="text-5xl">Coming Soon!</div>
-        </div>
+          <CreateCustomerDialog />
       </div>
     </div>
   );

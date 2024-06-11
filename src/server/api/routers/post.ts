@@ -3,10 +3,12 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import {
+  addDoc,
   collection,
   getDocs,
   orderBy,
   query,
+  serverTimestamp,
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
@@ -1098,4 +1100,34 @@ export const postRouter = createTRPCRouter({
 
     return formattedData;
   }),
+
+  createUserInDatabase: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await authenticate();
+
+      const collectionRef = collection(db, "users");
+
+      const queryRef = query(collectionRef, where("email", "==", input.email));
+      const querySnapshot = await getDocs(queryRef);
+      if (querySnapshot.size > 0) {
+        return {
+          error: "user_already_exists",
+        }
+      }
+
+      const userRef = await addDoc(collectionRef, {
+        email: input.email,
+        createdAt: serverTimestamp(),
+      });
+
+      return {
+        ...userRef,
+        error: null,
+      }
+    }),
 });
