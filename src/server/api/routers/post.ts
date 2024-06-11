@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import admin from 'firebase-admin';
 import { db } from "@/utils/firebase/initialize";
 import {
   addDoc,
@@ -1144,6 +1145,32 @@ export const postRouter = createTRPCRouter({
     querySnapshot.forEach((doc) => {
       users.push(doc.data());
     });
+
+    // Parse Firebase configuration from environment variables
+    const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY as string)
+
+    // Check if Firebase Admin SDK is already initialized
+    if (!admin.apps.length) {
+      // Initialize Firebase app with the parsed configuration
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        projectId: process.env.PROJECT_ID,
+      })
+    }
+
+    // @ts-expect-error - fix this
+    for (const user of users) {
+      // const didUserSetPassword = await auth.
+      // query firebase auth to check if a user with this email exists
+      let exists = true;
+
+      try {
+        await admin.auth().getUserByEmail(user.email);
+      } catch (error) {
+        exists = false;
+      }
+      user.setPassword = exists;
+    }
 
     // @ts-expect-error - fix this
     return users;

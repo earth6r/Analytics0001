@@ -25,7 +25,7 @@ const Customers = () => {
           ) : (
             <div>
               {getUsersInDatabase.data?.map((user) => (
-                <div key={user.id} className="flex flex-row items-center space-x-48">
+                <div key={user.id} className="flex flex-row items-center space-x-24">
                   <div>
                     {user.email}
                   </div>
@@ -35,7 +35,10 @@ const Customers = () => {
                     : "No creation date set"}
                   </div>
                   <div>
-                    {user?.userBuyingPropertyType ?? "No property type set"}
+                    has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
+                  </div>
+                  <div>
+                    {user?.userBuyingPropertyType}
                   </div>
                   {/* @ts-expect-error fix this*/}
                   <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} />
