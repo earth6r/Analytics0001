@@ -3,9 +3,22 @@ import CreateCustomerDialog from "@/components/customers/create-customer-dialog"
 import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
+import { useEffect } from "react";
 
 const Customers = () => {
   const { interval } = useInterval();
+
+  useEffect(() => {
+    const authenticatedData = JSON.parse(
+      localStorage.getItem("authenticated") ?? "{}",
+    );
+    if (
+      !authenticatedData.authenticated ||
+      authenticatedData.expires < new Date().getTime()
+    ) {
+      window.location.href = "/";
+    }
+  }, []);
 
   const getUsersInDatabase = api.post.getUsersInDatabase.useQuery(
     undefined, {
