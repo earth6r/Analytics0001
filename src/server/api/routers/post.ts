@@ -9,6 +9,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
@@ -1130,4 +1131,60 @@ export const postRouter = createTRPCRouter({
         error: null,
       }
     }),
+
+  getUsersInDatabase: publicProcedure.query(async () => {
+    await authenticate();
+
+    const collectionRef = collection(db, "users");
+    const queryRef = query(collectionRef);
+    const querySnapshot = await getDocs(queryRef);
+
+    // @ts-expect-error - fix this
+    const users = [];
+    querySnapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+
+    // @ts-expect-error - fix this
+    return users;
+  }),
+
+  setUserBuyingPropertyType: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        propertyType: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await authenticate();
+
+      const collectionRef = collection(db, "users");
+
+      const queryRef = query(collectionRef, where("email", "==", input.email));
+      const querySnapshot = await getDocs(queryRef);
+      if (querySnapshot.size === 0) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      const doc = querySnapshot.docs[0];
+
+      if (!doc) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      // update doc using modular firebase api
+      await updateDoc(doc.ref, {
+        userBuyingPropertyType: input.propertyType,
+      });
+
+      return {
+        error: null,
+      }
+    }),
+
 });

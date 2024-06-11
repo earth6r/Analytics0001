@@ -13,40 +13,34 @@ import { Label } from "@/components/ui/label"
 import { toast } from "../ui/use-toast"
 import { useState } from "react"
 import { api } from "@/utils/api"
+import { BuyingPropertyTypeSelect, validUserBuyingPropertyTypes } from "./buying-property-type-select"
 import Spinner from "../common/spinner"
 
-interface CreateCustomerDialogProps {
+interface SetBuyingPropertyTypeDialogProps {
+    currentValue: string;
+    email: string;
     refetch: () => Promise<void>;
 }
 
-const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
-    const { refetch } = props;
+const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) => {
+    const { currentValue, email, refetch } = props;
+    const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue);
 
-    const [email, setEmail] = useState<string>("");
+    const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
+
     const [isLoading, setIsLoading] = useState(false);
 
-    const createUserInDatabase = api.post.createUserInDatabase.useMutation();
-
     async function onSubmit() {
-        if (!email) {
+        if (!selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)) {
             toast({
-                title: "Email is required",
-                description: "Please enter the email address.",
+                title: "Invalid property type",
+                description: "The property type is not valid.",
             });
             return;
         }
-
-        if (!email.includes("@") || !email.includes(".")) {
-            toast({
-                title: "Invalid email",
-                description: "Please enter a valid email address.",
-            });
-            return;
-        }
-
         try {
             setIsLoading(true);
-            const response = await createUserInDatabase.mutateAsync({ email });
+            const response = await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
             setIsLoading(false);
 
             if (response?.error === "user_already_exists") {
@@ -74,34 +68,28 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">Create Customer</Button>
+                <Button variant="default">Set Buying Property Type</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create Customer</DialogTitle>
+                    <DialogTitle>Set Customer Buying Property Type</DialogTitle>
                     <DialogDescription>
-                        {`This is the email address that will be saved to the database.`}
+                        {`This is the buying property type that will be saved to the database.`}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-7 items-center gap-7">
                         <Label htmlFor="name" className="text-right">
-                            Email
+                            Type
                         </Label>
-                        <Input
-                            id="name"
-                            className="col-span-6"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                        />
+                        <BuyingPropertyTypeSelect selectedItem={selectedItem} setSelectedItem={setSelectedItem} /> 
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button variant="outline" className="w-full" onClick={() => { setEmail(""); }}>Clear</Button>
-                    <Button type="submit" className="w-full" onClick={onSubmit}
-                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".")}
-                    >
-                        {isLoading ? <Spinner /> : "Create Customer"}
+                    <Button type="submit" className="w-full" onClick={onSubmit} disabled={
+                        isLoading || !selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)
+                    }>
+                        {isLoading ? <Spinner /> : "Save changes"}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -109,4 +97,4 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
     )
 }
 
-export default CreateCustomerDialog;
+export default SetBuyingPropertyTypeDialog;
