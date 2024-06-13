@@ -3,7 +3,6 @@ import Registers from "@/components/dashboard/registers/registers";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Messages from "@/components/dashboard/messages/messages";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Emails from "./emails/emails";
 
