@@ -1,15 +1,15 @@
 {
-  "cSpell.words": [
-    "chartjs",
-    "firestore",
-    "hookform",
-    "lucide",
-    "notsure",
-    "Regexes",
-    "SENDGRID",
-    "signin",
-    "tanstack",
-    "Timelinedec",
-    "TRPC"
-  ]
+    "cSpell.words": [
+        "chartjs",
+        "firestore",
+        "hookform",
+        "lucide",
+        "notsure",
+        "Regexes",
+        "SENDGRID",
+        "signin",
+        "tanstack",
+        "Timelinedec",
+        "TRPC"
+    ]
 }

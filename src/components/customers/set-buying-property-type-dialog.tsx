@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -7,14 +7,17 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from "../ui/use-toast"
-import { useState } from "react"
-import { api } from "@/utils/api"
-import { BuyingPropertyTypeSelect, validUserBuyingPropertyTypes } from "./buying-property-type-select"
-import Spinner from "../common/spinner"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "../ui/use-toast";
+import { useState } from "react";
+import { api } from "@/utils/api";
+import {
+    BuyingPropertyTypeSelect,
+    validUserBuyingPropertyTypes,
+} from "./buying-property-type-select";
+import Spinner from "../common/spinner";
 
 interface SetBuyingPropertyTypeDialogProps {
     currentValue: string;
@@ -22,16 +25,24 @@ interface SetBuyingPropertyTypeDialogProps {
     refetch: () => Promise<void>;
 }
 
-const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) => {
+const SetBuyingPropertyTypeDialog = (
+    props: SetBuyingPropertyTypeDialogProps,
+) => {
     const { currentValue, email, refetch } = props;
-    const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue);
+    const [selectedItem, setSelectedItem] = useState<string | undefined>(
+        currentValue,
+    );
 
-    const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
+    const setUserBuyingPropertyType =
+        api.post.setUserBuyingPropertyType.useMutation();
 
     const [isLoading, setIsLoading] = useState(false);
 
     async function onSubmit() {
-        if (!selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)) {
+        if (
+            !selectedItem ||
+            !validUserBuyingPropertyTypes.includes(selectedItem)
+        ) {
             toast({
                 title: "Invalid property type",
                 description: "The property type is not valid.",
@@ -40,7 +51,10 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
         }
         try {
             setIsLoading(true);
-            const response = await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
+            const response = await setUserBuyingPropertyType.mutateAsync({
+                email,
+                propertyType: selectedItem,
+            });
             setIsLoading(false);
 
             if (response?.error === "user_already_exists") {
@@ -53,14 +67,16 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
 
             toast({
                 title: "User created",
-                description: "The user was successfully created in the database.",
+                description:
+                    "The user was successfully created in the database.",
             });
             await refetch();
         } catch (error) {
             setIsLoading(false);
             toast({
                 title: "An error occurred",
-                description: "An error occurred while creating the user in the database.",
+                description:
+                    "An error occurred while creating the user in the database.",
             });
         }
     }
@@ -82,19 +98,29 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
                         <Label htmlFor="name" className="text-right">
                             Type
                         </Label>
-                        <BuyingPropertyTypeSelect selectedItem={selectedItem} setSelectedItem={setSelectedItem} /> 
+                        <BuyingPropertyTypeSelect
+                            selectedItem={selectedItem}
+                            setSelectedItem={setSelectedItem}
+                        />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="submit" className="w-full" onClick={onSubmit} disabled={
-                        isLoading || !selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)
-                    }>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        onClick={onSubmit}
+                        disabled={
+                            isLoading ||
+                            !selectedItem ||
+                            !validUserBuyingPropertyTypes.includes(selectedItem)
+                        }
+                    >
                         {isLoading ? <Spinner /> : "Save changes"}
                     </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default SetBuyingPropertyTypeDialog;

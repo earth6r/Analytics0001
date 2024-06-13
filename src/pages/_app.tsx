@@ -11,21 +11,21 @@ import { IntervalProvider } from "@/contexts/IntervalContext";
 import { ThemeProvider } from "next-themes";
 
 const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
+    Component,
+    pageProps: { session, ...pageProps },
 }) => {
-  return (
-    <SessionProvider session={session}>
-      <main className={GeistSans.className}>
-        <IntervalProvider>
-          <ThemeProvider attribute="class">
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </IntervalProvider>
-        <Toaster />
-      </main>
-    </SessionProvider>
-  );
+    return (
+        <SessionProvider session={session}>
+            <main className={GeistSans.className}>
+                <IntervalProvider>
+                    <ThemeProvider attribute="class">
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </IntervalProvider>
+                <Toaster />
+            </main>
+        </SessionProvider>
+    );
 };
 
 export default api.withTRPC(MyApp);

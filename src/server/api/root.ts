@@ -9,9 +9,9 @@ import { emailRouter } from "@/server/api/routers/email";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
-  register: registerRouter,
-  email: emailRouter,
+    post: postRouter,
+    register: registerRouter,
+    email: emailRouter,
 });
 
 // export type definition of API

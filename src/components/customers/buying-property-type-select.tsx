@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 
 import {
     Select,
@@ -8,27 +8,27 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 export const validUserBuyingPropertyTypes = [
-    'les-2A',
-    'les-2B',
-    'les-2C',
-    'les-2D',
-    'les-3A',
-    'les-3B',
-    'les-3C',
-    'les-3D',
-    'les-4A',
-    'les-4B',
-    'les-4C',
-    'les-4D',
-    'les-5B',
-    'les-6A',
-    'les-6B',
-    'townhouse-6',
-    'townhouse-7',
-]
+    "les-2A",
+    "les-2B",
+    "les-2C",
+    "les-2D",
+    "les-3A",
+    "les-3B",
+    "les-3C",
+    "les-3D",
+    "les-4A",
+    "les-4B",
+    "les-4C",
+    "les-4D",
+    "les-5B",
+    "les-6A",
+    "les-6B",
+    "townhouse-6",
+    "townhouse-7",
+];
 
 interface BuyingPropertyTypeSelectProps {
     selectedItem: string | undefined;
@@ -51,5 +51,5 @@ export function BuyingPropertyTypeSelect(props: BuyingPropertyTypeSelectProps) {
                 ))}
             </SelectContent>
         </Select>
-    )
+    );
 }
