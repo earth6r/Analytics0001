@@ -29,8 +29,11 @@ const Customers = () => {
     <div>
       <Header />
       <div className="p-6">
-        {/* @ts-expect-error fix this*/}
-        <CreateCustomerDialog refetch={getUsersInDatabase.refetch} />
+        <div className="flex flex-row items-center justify-between">
+          <h1 className="text-4xl font-bold">Customers</h1>
+          {/* @ts-expect-error fix this*/}
+          <CreateCustomerDialog refetch={getUsersInDatabase.refetch} />
+        </div>
 
         <div>
           {getUsersInDatabase.isLoading ? (
@@ -38,14 +41,14 @@ const Customers = () => {
           ) : (
             <div>
               {getUsersInDatabase.data?.map((user) => (
-                <div key={user.id} className="flex flex-row items-center space-x-24">
+                <div key={user.id} className="border p-4 mt-4">
                   <div>
                     {user.email}
                   </div>
                   <div>
                     {
-                    user?.createdAt?.seconds ? new Date(user.createdAt.seconds * 1000).toLocaleDateString()
-                    : "No creation date set"}
+                      user?.createdAt?.seconds ? new Date(user.createdAt.seconds * 1000).toLocaleDateString()
+                        : "No creation date set"}
                   </div>
                   <div>
                     has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}

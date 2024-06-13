@@ -74,7 +74,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">Create Customer</Button>
+                <Button variant="default">+</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
