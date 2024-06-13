@@ -29,6 +29,7 @@
     - total $ in deposits
     - showing pie of all different types of properties purchased
     - show pie of all different types of properties in progress
+    - mobile responsive for customers tab
 
 
 
