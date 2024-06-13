@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -7,13 +7,13 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "../ui/use-toast";
-import { useState } from "react";
-import { api } from "@/utils/api";
-import Spinner from "../common/spinner";
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from "../ui/use-toast"
+import { useState } from "react"
+import { api } from "@/utils/api"
+import Spinner from "../common/spinner"
 
 interface CreateCustomerDialogProps {
     refetch: () => Promise<void>;
@@ -59,16 +59,14 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
 
             toast({
                 title: "User created",
-                description:
-                    "The user was successfully created in the database.",
+                description: "The user was successfully created in the database.",
             });
             await refetch();
         } catch (error) {
             setIsLoading(false);
             toast({
                 title: "An error occurred",
-                description:
-                    "An error occurred while creating the user in the database.",
+                description: "An error occurred while creating the user in the database.",
             });
         }
     }
@@ -99,32 +97,16 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={() => {
-                            setEmail("");
-                        }}
-                    >
-                        Clear
-                    </Button>
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        onClick={onSubmit}
-                        disabled={
-                            isLoading ||
-                            !email ||
-                            !email.includes("@") ||
-                            !email.includes(".")
-                        }
+                    <Button variant="outline" className="w-full" onClick={() => { setEmail(""); }}>Clear</Button>
+                    <Button type="submit" className="w-full" onClick={onSubmit}
+                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".")}
                     >
                         {isLoading ? <Spinner /> : "Create Customer"}
                     </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    );
-};
+    )
+}
 
 export default CreateCustomerDialog;

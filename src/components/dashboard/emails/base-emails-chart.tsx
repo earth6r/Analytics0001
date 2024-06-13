@@ -27,9 +27,12 @@ const BaseEmailsChart = (props: BaseEmailsChartProps) => {
     const { interval } = useInterval();
     const { valueKey, label, description } = props;
 
-    const getStats = api.email.getStats.useQuery(undefined, {
-        refetchInterval: interval,
-    });
+    const getStats = api.email.getStats.useQuery(
+        undefined,
+        {
+            refetchInterval: interval,
+        },
+    );
 
     const formattedData = getStats.data?.map((item: any) => {
         return {

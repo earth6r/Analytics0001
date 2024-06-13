@@ -4,45 +4,45 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 
 const ToggleTheme = () => {
-    const { theme, setTheme, resolvedTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-    useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), []);
 
-    // Only run this effect when `theme` or `resolvedTheme` changes
-    useEffect(() => {
-        if (!resolvedTheme) return;
-        document.documentElement.setAttribute("data-theme", resolvedTheme);
-    }, [resolvedTheme]);
+  // Only run this effect when `theme` or `resolvedTheme` changes
+  useEffect(() => {
+    if (!resolvedTheme) return;
+    document.documentElement.setAttribute("data-theme", resolvedTheme);
+  }, [resolvedTheme]);
 
-    if (!mounted) return null; // Don't render the switch server-side
+  if (!mounted) return null; // Don't render the switch server-side
 
-    const isDarkMode = theme === "dark" || resolvedTheme === "dark";
+  const isDarkMode = theme === "dark" || resolvedTheme === "dark";
 
-    const handleToggleTheme = () => {
-        setTheme(isDarkMode ? "light" : "dark");
-    };
+  const handleToggleTheme = () => {
+    setTheme(isDarkMode ? "light" : "dark");
+  };
 
-    return (
-        <div className="flex items-center space-x-2">
-            <Switch
-                defaultChecked={isDarkMode}
-                checked={isDarkMode}
-                onClick={handleToggleTheme}
-            />
-            {theme !== "system" && (
-                <Button
-                    onClick={() => {
-                        setTheme("system");
-                    }}
-                    variant="outline"
-                    type="button"
-                >
-                    Use System
-                </Button>
-            )}
-        </div>
-    );
+  return (
+    <div className="flex items-center space-x-2">
+      <Switch
+        defaultChecked={isDarkMode}
+        checked={isDarkMode}
+        onClick={handleToggleTheme}
+      />
+      {theme !== "system" && (
+        <Button
+          onClick={() => {
+            setTheme("system");
+          }}
+          variant="outline"
+          type="button"
+        >
+          Use System
+        </Button>
+      )}
+    </div>
+  );
 };
 
 export default ToggleTheme;

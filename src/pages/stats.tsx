@@ -5,31 +5,31 @@ import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
 const Stats = () => {
-    useEffect(() => {
-        const authenticatedData = JSON.parse(
-            localStorage.getItem("authenticated") ?? "{}",
-        );
-        if (
-            !authenticatedData.authenticated ||
-            authenticatedData.expires < new Date().getTime()
-        ) {
-            window.location.href = "/";
-        }
-    }, []);
-
-    return (
-        <div>
-            <Header />
-            <div className="flex flex-col items-center justify-between pl-6 pr-6 pt-6 md:flex-row">
-                <h1 className="text-4xl font-bold">Dashboard</h1>
-                <div className="flex flex-row items-center space-x-2">
-                    <DateRangePicker />
-                    <Button className="hidden md:block">Download</Button>
-                </div>
-            </div>
-            <DashboardTabs />
-        </div>
+  useEffect(() => {
+    const authenticatedData = JSON.parse(
+      localStorage.getItem("authenticated") ?? "{}",
     );
+    if (
+      !authenticatedData.authenticated ||
+      authenticatedData.expires < new Date().getTime()
+    ) {
+      window.location.href = "/";
+    }
+  }, []);
+
+  return (
+    <div>
+      <Header />
+      <div className="flex flex-col items-center justify-between pl-6 pr-6 pt-6 md:flex-row">
+        <h1 className="text-4xl font-bold">Dashboard</h1>
+        <div className="flex flex-row items-center space-x-2">
+          <DateRangePicker />
+          <Button className="hidden md:block">Download</Button>
+        </div>
+      </div>
+      <DashboardTabs />
+    </div>
+  );
 };
 
 export default Stats;
