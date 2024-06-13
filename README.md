@@ -14,6 +14,7 @@
 - fix todo comments in Home0001 repo and Home0001-stats repo
 - add a form field somewhere for creating a user in the firestore database
 - fix bug where user not logged in, goes to a page that does not require login and then clicks a tab
+- each tab content under the tabs have different margin tops, fix this
 
 
 <!-- PROPERTY BUYING PROGRESS STATS -->

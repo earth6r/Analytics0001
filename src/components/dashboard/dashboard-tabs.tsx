@@ -4,7 +4,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Messages from "@/components/dashboard/messages/messages";
 import { useRouter } from "next/router";
-import Emails from "./emails/emails";
+import Emails from "@/components/dashboard/emails/emails";
+import CustomersTabContent from "@/components/dashboard/customers/customers-tab-content";
 
 const DashboardTabs = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const DashboardTabs = () => {
       className="w-full"
     >
       <div className="pl-6 pr-6 pt-6">
-        <TabsList className="grid w-full grid-cols-3 md:w-72">
+        <TabsList className="grid w-full grid-cols-4 md:w-96">
           <TabsTrigger
             value="registers"
             className={cn(
@@ -56,6 +57,16 @@ const DashboardTabs = () => {
           >
             Emails
           </TabsTrigger>
+          <TabsTrigger
+            value="customers"
+            className={cn(
+              activeTab === "customers" ? "" : "text-muted-foreground",
+              "cursor-pointer",
+            )}
+            onClick={() => handleSetActiveTab("customers")}
+          >
+            Customers
+          </TabsTrigger>
         </TabsList>
       </div>
       <TabsContent value="registers" className="w-full">
@@ -66,6 +77,9 @@ const DashboardTabs = () => {
       </TabsContent>
       <TabsContent value="emails" className="p-6">
         <Emails />
+      </TabsContent>
+      <TabsContent value="customers" className="p-6">
+        <CustomersTabContent />
       </TabsContent>
     </Tabs>
   );

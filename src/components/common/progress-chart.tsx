@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // TODO: rename data
 interface ProgressChartProps {
   data: any;
+  nameToLabelMapping?: Record<any, string>;
 }
 
 // usage:
@@ -16,7 +17,7 @@ interface ProgressChartProps {
 
 const ProgressChart = (props: ProgressChartProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { data } = props;
+  const { data, nameToLabelMapping = null } = props;
   const [maxValue, setMaxValue] = useState(0);
 
   useEffect(() => {
@@ -55,7 +56,8 @@ const ProgressChart = (props: ProgressChartProps) => {
             }}
           ></div>
           <span className="relative text-foreground">
-            {Object.keys(item)[0]}
+            {/* @ts-expect-error - fix this */}
+            {nameToLabelMapping ? nameToLabelMapping[Object.keys(item)[0]] : Object.keys(item)[0]}
           </span>
           <span className="relative text-foreground">
             {Object.values(item)[0]}

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/utils/api";
+import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 
 const UserAgentMetricCards = () => {
   const { interval } = useInterval();
@@ -80,7 +81,14 @@ const UserAgentMetricCards = () => {
       </Card>
       <Card className="min-h-80 mt-6 md:mt-0 md:w-1/5">
         <CardHeader>
-          <CardTitle>IP Address Stats</CardTitle>
+          <CardTitle className="flex flex-row items-center justify-between">
+            <div>
+              IP Address Stats
+            </div>
+            <div>
+              <CircularQuestionMarkTooltip label="fake data atm" />
+            </div>
+          </CardTitle>
           <CardDescription>Register IP Address Stats</CardDescription>
         </CardHeader>
         <ScrollArea className="flex max-h-48 flex-col">
@@ -89,7 +97,14 @@ const UserAgentMetricCards = () => {
       </Card>
       <Card className="min-h-80 mt-6 md:mt-0 md:w-1/5">
         <CardHeader>
-          <CardTitle>City Stats</CardTitle>
+          <CardTitle className="flex flex-row items-center justify-between">
+            <div>
+              City Stats
+            </div>
+            <div>
+              <CircularQuestionMarkTooltip label="fake data atm" />
+            </div>
+          </CardTitle>
           <CardDescription>Register City Stats</CardDescription>
         </CardHeader>
         <ScrollArea className="flex max-h-48 flex-col">
