@@ -507,6 +507,7 @@ const Registers = () => {
     <div>
       <Header />
       <div className="w-full p-6">
+        <h1 className="text-4xl font-bold">Registers</h1>
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter emails..."
