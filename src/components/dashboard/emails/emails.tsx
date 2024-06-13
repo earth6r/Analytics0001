@@ -11,23 +11,37 @@ import UniqueClicksChart from "@/components/dashboard/emails/unique-clicks-chart
 import UniqueOpensChart from "@/components/dashboard/emails/unique-opens-chart";
 import UnsubscribeDropsChart from "@/components/dashboard/emails/unsubscribe-drops-chart";
 import UnsubscribesChart from "@/components/dashboard/emails/unsubscribes-chart";
+import BaseEmailsChart from "./base-emails-chart";
 
 const Emails = () => {
     return (
         <div className="grid grid-cols-3 gap-6">
-            <DeliveredEmailsChart />
-            <BlockedEmailsChart />
-            <BounceDropsEmailsChart />
-            <EmailClicksChart />
-            <InvalidEmailsChart />
-            <OpenedEmailsChart />
+            {/* <DeliveredEmailsChart /> */}
+            {/* <InvalidEmailsChart /> */}
+            {/* <BlockedEmailsChart /> */}
+            {/* <BounceDropsEmailsChart /> */}
+            {/* <EmailClicksChart /> */}
+            <BaseEmailsChart label="Delivered Emails" description="Delivered emails over time" valueKey="delivered" />
+            <BaseEmailsChart label="Blocked Emails" description="Blocked emails over time" valueKey="blocks" />
+            <BaseEmailsChart label="Bounce Drops Emails" description="Bounce drops emails over time" valueKey="bounce_drops" />
+            <BaseEmailsChart label="Email Clicks" description="Email clicks over time" valueKey="clicks" />
+            <BaseEmailsChart label="Invalid Emails" description="Invalid emails over time" valueKey="invalid_emails" />
+            <BaseEmailsChart label="Opened Emails" description="Opened emails over time" valueKey="opens" />
+            <BaseEmailsChart label="Processed Emails" description="Processed emails over time" valueKey="processed" />
+            <BaseEmailsChart label="Requests" description="Requests over time" valueKey="requests" />
+            <BaseEmailsChart label="Spam Report Drops" description="Spam report drops over time" valueKey="spam_report_drops" />
+            <BaseEmailsChart label="Unique Clicks" description="Unique clicks over time" valueKey="unique_clicks" />
+            <BaseEmailsChart label="Unique Opens" description="Unique opens over time" valueKey="unique_opens" />
+            <BaseEmailsChart label="Unsubscribe Drops" description="Unsubscribe drops over time" valueKey="unsubscribe_drops" />
+            <BaseEmailsChart label="Unsubscribes" description="Unsubscribes over time" valueKey="unsubscribes" />
+            {/* <OpenedEmailsChart />
             <ProcessedEmailsChart />
             <RequestsChart />
             <SpamReportDropsChart />
             <UniqueClicksChart />
             <UniqueOpensChart />
             <UnsubscribeDropsChart />
-            <UnsubscribesChart />
+            <UnsubscribesChart /> */}
         </div>
     );
 };

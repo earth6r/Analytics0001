@@ -17,8 +17,15 @@ import {
 } from "recharts";
 import { api } from "@/utils/api";
 
-const UnsubscribesChart = () => {
+interface BaseEmailsChartProps {
+    label: string;
+    description: string;
+    valueKey: string;
+}
+
+const BaseEmailsChart = (props: BaseEmailsChartProps) => {
     const { interval } = useInterval();
+    const { valueKey, label, description } = props;
 
     const getStats = api.email.getStats.useQuery(
         undefined,
@@ -30,7 +37,7 @@ const UnsubscribesChart = () => {
     const formattedData = getStats.data?.map((item: any) => {
         return {
             name: item.date,
-            ["Unique Clicks"]: item.stats[0].metrics.unsubscribes,
+            [label]: item.stats[0].metrics[valueKey],
         };
     });
 
@@ -38,9 +45,9 @@ const UnsubscribesChart = () => {
         <Card className="h-[450px] w-full shadow">
             <CardHeader className="flex flex-row items-center">
                 <div className="grid gap-2">
-                    <CardTitle>Unsubscribes</CardTitle>
+                    <CardTitle>{label}</CardTitle>
                     <div>
-                        <CardDescription>Unsubscribes over time</CardDescription>
+                        <CardDescription>{description}</CardDescription>
                     </div>
                 </div>
             </CardHeader>
@@ -63,7 +70,7 @@ const UnsubscribesChart = () => {
                     <Legend />
                     <Line
                         type="monotone"
-                        dataKey="Unique Clicks"
+                        dataKey={label}
                         stroke="#8884d8"
                         activeDot={{ r: 8 }}
                     />
@@ -73,4 +80,4 @@ const UnsubscribesChart = () => {
     );
 };
 
-export default UnsubscribesChart;
+export default BaseEmailsChart;

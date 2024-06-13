@@ -30,7 +30,7 @@ const UnsubscribeDropsChart = () => {
     const formattedData = getStats.data?.map((item: any) => {
         return {
             name: item.date,
-            ["Unsubscribe Drops"]: item.stats[0].metrics.deferred,
+            ["Unsubscribe Drops"]: item.stats[0].metrics.unsubscribe_drops,
         };
     });
 
