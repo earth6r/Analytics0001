@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Messages from "@/components/dashboard/messages/messages";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Emails from "./emails/emails";
 
 const DashboardTabs = () => {
   const router = useRouter();
@@ -65,16 +66,7 @@ const DashboardTabs = () => {
         <Messages />
       </TabsContent>
       <TabsContent value="emails" className="p-6">
-        <div className="min-h-screen-calc-35vh flex flex-col items-center justify-center rounded-md border">
-          <Image
-            src="/coming-soon.png"
-            className="aspect-square rounded-full object-cover"
-            width={300}
-            height={300}
-            alt="Coming Soon"
-          />
-          <div className="text-5xl">Coming Soon!</div>
-        </div>
+        <Emails />
       </TabsContent>
     </Tabs>
   );

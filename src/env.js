@@ -26,6 +26,7 @@ export const env = createEnv({
     EMAIL: z.string(),
     PASSWORD: z.string(),
     FIREBASE_CONFIG: z.string(),
+    SENDGRID_API_KEY: z.string(),
   },
 
   /**
@@ -50,6 +51,7 @@ export const env = createEnv({
     EMAIL: process.env.EMAIL,
     PASSWORD: process.env.PASSWORD,
     FIREBASE_CONFIG: process.env.FIREBASE_CONFIG,
+    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

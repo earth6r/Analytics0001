@@ -29,3 +29,9 @@
     - showing pie of all different types of properties purchased
     - show pie of all different types of properties in progress
 
+
+
+# sendgrid stats
+curl -X GET \
+  -H "Authorization: Bearer API_KEY"\
+  "https://api.sendgrid.com/v3/stats?start_date=2024-06-12"
