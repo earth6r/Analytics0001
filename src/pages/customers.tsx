@@ -42,13 +42,15 @@ const Customers = () => {
                 <div>
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5 gap-2">
+                            <div className="grid grid-cols-6 gap-2">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
+                                <div className="font-bold text-xl">Buying Progress</div>
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
+                            <Skeleton className="h-12 w-full" />
                             <Skeleton className="h-12 w-full" />
                             <Skeleton className="h-12 w-full" />
                             <Skeleton className="h-12 w-full" />
@@ -61,11 +63,12 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
+                                <div className="font-bold text-xl">Buying Progress</div>
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
-                                <div key={user.id} className="grid grid-cols-5 gap-2">
+                                <div key={user.id} className="grid grid-cols-6 gap-2">
                                     <div className="flex flex-col justify-center">
                                         {user.email}
                                     </div>
@@ -76,6 +79,9 @@ const Customers = () => {
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
+                                    </div>
+                                    <div className="flex flex-col justify-center">
+                                        {user?.buyingProgress ?? "No value for buying progress"}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}

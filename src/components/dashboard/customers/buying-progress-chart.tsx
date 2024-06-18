@@ -11,7 +11,7 @@ import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// todo move to utils
+// TODO: move to utils
 export const buyingProgressTypeToLabel = {
     "escrow-deposit": "Escrow Deposit",
     "download-documents": "Download Documents",

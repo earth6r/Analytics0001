@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import admin from 'firebase-admin';
+import admin, { firestore } from 'firebase-admin';
 import { db } from "@/utils/firebase/initialize";
 import {
   addDoc,
@@ -14,6 +14,9 @@ import {
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
+import { propertyTypes } from "@/lib/property-types";
+import { buyingProgressStepNumberToLabel } from "./customer";
+import { buyingProgressTypeToLabel } from "@/components/dashboard/customers/buying-progress-chart";
 
 const monthNames = [
   "Jan",
@@ -1143,7 +1146,11 @@ export const postRouter = createTRPCRouter({
     // @ts-expect-error - fix this
     const users = [];
     querySnapshot.forEach((doc) => {
-      users.push(doc.data());
+      const userUID = doc.id;
+      users.push({
+        ...doc.data(),
+        uid: userUID,
+      });
     });
 
     // Parse Firebase configuration from environment variables
@@ -1170,6 +1177,17 @@ export const postRouter = createTRPCRouter({
         exists = false;
       }
       user.setPassword = exists;
+
+      const userBuyingPropertyTypeCollectionRef = collection(db, "usersBuyingProgress");
+      const userBuyingPropertyTypeQueryRef = query(userBuyingPropertyTypeCollectionRef, where("userUID", "==", user.uid));
+      const userBuyingPropertyTypeQuerySnapshot = await getDocs(userBuyingPropertyTypeQueryRef);
+      if (user.email === "testing999@gmail.com") console.log(user.uid);
+      if (userBuyingPropertyTypeQuerySnapshot.size > 0 && userBuyingPropertyTypeQuerySnapshot.docs[0]) {
+        // @ts-expect-error - fix this
+        user.buyingProgress = buyingProgressTypeToLabel[buyingProgressStepNumberToLabel[userBuyingPropertyTypeQuerySnapshot?.docs[0].data().buyingProgress]];
+      } else {
+        user.buyingProgress = null;
+      }
     }
 
     // @ts-expect-error - fix this

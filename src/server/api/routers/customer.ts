@@ -2,7 +2,8 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import { collection, getDocs, query } from "firebase/firestore/lite";
 
-const buyingProgressStepNumberToLabel = {
+// TODO: move to utils
+export const buyingProgressStepNumberToLabel = {
     1: "escrow-deposit",
     2: "download-documents",
     3: "schedule-closing",
