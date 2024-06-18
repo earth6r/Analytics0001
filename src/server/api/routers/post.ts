@@ -1181,7 +1181,7 @@ export const postRouter = createTRPCRouter({
       const userBuyingPropertyTypeCollectionRef = collection(db, "usersBuyingProgress");
       const userBuyingPropertyTypeQueryRef = query(userBuyingPropertyTypeCollectionRef, where("userUID", "==", user.uid));
       const userBuyingPropertyTypeQuerySnapshot = await getDocs(userBuyingPropertyTypeQueryRef);
-      if (user.email === "testing999@gmail.com") console.log(user.uid);
+
       if (userBuyingPropertyTypeQuerySnapshot.size > 0 && userBuyingPropertyTypeQuerySnapshot.docs[0]) {
         // @ts-expect-error - fix this
         user.buyingProgress = buyingProgressTypeToLabel[buyingProgressStepNumberToLabel[userBuyingPropertyTypeQuerySnapshot?.docs[0].data().buyingProgress]];

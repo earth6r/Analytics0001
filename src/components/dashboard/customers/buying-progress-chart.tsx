@@ -10,6 +10,7 @@ import {
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 
 // TODO: move to utils
 export const buyingProgressTypeToLabel = {
@@ -39,7 +40,10 @@ const BuyingProgressChart = () => {
     return (
         <Card className="shadow">
             <CardHeader>
-                <CardTitle>Buying Progress</CardTitle>
+                <div className="flex items-center justify-between">
+                    <CardTitle>Buying Progress</CardTitle>
+                    <CircularQuestionMarkTooltip label="Each value is the user's current step they need to do. Note: Escrow Deposit counts are representative of a user who has not bought a single property yet." />
+                </div>
                 <CardDescription>Customers Buying Progress</CardDescription>
             </CardHeader>
             <ResponsiveContainer height={350}>

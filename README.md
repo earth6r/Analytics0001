@@ -31,6 +31,7 @@
     - show pie of all different types of properties in progress
     - mobile responsive for customers tab
     - stripe data api for all transactions
+    - skeleton for pie charts + anywhere that is missing
 
 
 

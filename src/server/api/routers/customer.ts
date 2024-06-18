@@ -14,14 +14,24 @@ export const buyingProgressStepNumberToLabel = {
 export const customerRouter = createTRPCRouter({
     getBuyingProgressBarChart: publicProcedure
         .query(async () => {
+            const customers = await getDocs(collection(db, "users"));
+            const customerUIDs = customers.docs.map((doc) => doc.id);
+
             const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
             const q = query(usersBuyingProgressRef);
             const querySnapshot = await getDocs(q);
 
             const data = querySnapshot.docs.map((doc) => doc.data());
 
+            for (const item of data) {
+                const customerUID = item.userUID;
+                if (customerUIDs.includes(customerUID)) {
+                    customerUIDs.splice(customerUIDs.indexOf(customerUID), 1);
+                }
+            }
+
             const stepsData = {
-                1: 0,
+                1: customerUIDs.length,
                 2: 0,
                 3: 0,
                 4: 0,
@@ -42,14 +52,24 @@ export const customerRouter = createTRPCRouter({
 
     getBuyingProgressPieChart: publicProcedure
         .query(async () => {
+            const customers = await getDocs(collection(db, "users"));
+            const customerUIDs = customers.docs.map((doc) => doc.id);
+
             const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
             const q = query(usersBuyingProgressRef);
             const querySnapshot = await getDocs(q);
 
             const data = querySnapshot.docs.map((doc) => doc.data());
 
+            for (const item of data) {
+                const customerUID = item.userUID;
+                if (customerUIDs.includes(customerUID)) {
+                    customerUIDs.splice(customerUIDs.indexOf(customerUID), 1);
+                }
+            }
+
             const stepsData = {
-                1: 0,
+                1: customerUIDs.length,
                 2: 0,
                 3: 0,
                 4: 0,

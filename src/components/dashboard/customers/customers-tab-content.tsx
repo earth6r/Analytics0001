@@ -1,3 +1,4 @@
+// import StatCard from "@/components/common/stat-card";
 import BuyingProgressChart from "./buying-progress-chart";
 import BuyingProgressPieChart from "./buying-progress-pie-chart";
 import MostPopularPropertiesInProgress from "./must-popular-properties-in-progress";
@@ -5,6 +6,7 @@ import MostPopularPropertiesInProgress from "./must-popular-properties-in-progre
 const CustomersTabContent = () => {
     return (
         <div>
+            {/* <StatCard title="hi" description="hi" deltaValue={10} /> */}
             <div className="flex flex-row items-start space-x-6 justify-center">
                 <div className="w-full lg:w-2/3">
                     <BuyingProgressChart />

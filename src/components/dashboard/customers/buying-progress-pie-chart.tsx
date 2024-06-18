@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProgressChart from "@/components//common/progress-chart";
 import { buyingProgressTypeToLabel } from "./buying-progress-chart";
+import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -67,7 +68,10 @@ const BuyingProgressPieChart = () => {
   return (
     <Card className="h-[634px] w-full overflow-hidden pb-3 shadow md:w-2/5">
       <CardHeader>
-        <CardTitle>Buying Progress</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Buying Progress</CardTitle>
+          <CircularQuestionMarkTooltip label="Each value is the user's current step they need to do. Note: Escrow Deposit counts are representative of a user who has not bought a single property yet." />
+        </div>
         <CardDescription>Buying progress by step</CardDescription>
       </CardHeader>
       <div className="h-[300px]">
