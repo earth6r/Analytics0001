@@ -20,7 +20,7 @@ const CircularQuestionMarkTooltip = (props: CircularQuestionMarkTooltipProps) =>
                     <CircleHelp className="w-4 h-4" />
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p className="font-normal text-wrap w-96">{label}</p>
+                    <p className="font-normal text-wrap max-w-96">{label}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
