@@ -20,10 +20,13 @@ interface SetBuyingPropertyTypeDialogProps {
     currentValue: string;
     email: string;
     refetch: () => Promise<void>;
+    dialogOpenedByIndex: number | null;
+    setDialogOpenedByIndex: (open: number | null) => void;
+    index: number;
 }
 
 const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) => {
-    const { currentValue, email, refetch } = props;
+    const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
     const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue);
 
     const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
@@ -40,22 +43,14 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
         }
         try {
             setIsLoading(true);
-            const response = await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
-            setIsLoading(false);
-
-            if (response?.error === "user_already_exists") {
-                toast({
-                    title: "User already exists",
-                    description: "The user already exists in the database.",
-                });
-                return;
-            }
-
-            toast({
-                title: "User created",
-                description: "The user was successfully created in the database.",
-            });
+            await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
             await refetch();
+            setIsLoading(false);
+            toast({
+                title: "Property type set",
+                description: "The property type has been set successfully.",
+            });
+            setDialogOpenedByIndex(null);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -66,7 +61,7 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
     }
 
     return (
-        <Dialog>
+        <Dialog open={dialogOpenedByIndex === index} onOpenChange={(open) => setDialogOpenedByIndex(open ? index : null)}>
             <DialogTrigger asChild>
                 <Button variant="default">Set Buying Property Type</Button>
             </DialogTrigger>

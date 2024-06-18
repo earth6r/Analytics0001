@@ -4,7 +4,7 @@ import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-prope
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Customers = () => {
     const { interval } = useInterval();
@@ -25,6 +25,8 @@ const Customers = () => {
         undefined, {
         refetchInterval: interval,
     });
+
+    const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
 
     return (
         <div>
@@ -61,7 +63,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
-                            {getUsersInDatabase.data?.map((user) => (
+                            {getUsersInDatabase.data?.map((user, index) => (
                                 <div key={user.id} className="grid grid-cols-5 gap-2">
                                     <div className="flex flex-col justify-center">
                                         {user.email}
@@ -78,7 +80,7 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     {/* @ts-expect-error fix this*/}
-                                    <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} />
+                                    <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
                                 </div>
                             ))}
                         </div>
