@@ -8,13 +8,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "../ui/use-toast"
 import { useState } from "react"
 import { api } from "@/utils/api"
-import { BuyingPropertyTypeSelect, validUserBuyingPropertyTypes } from "./buying-property-type-select"
+import { BuyingPropertyTypeSelect } from "./buying-property-type-select"
 import Spinner from "../common/spinner"
+import { propertyTypes } from "@/lib/property-types"
 
 interface SetBuyingPropertyTypeDialogProps {
     currentValue: string;
@@ -31,7 +31,7 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
     const [isLoading, setIsLoading] = useState(false);
 
     async function onSubmit() {
-        if (!selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)) {
+        if (!selectedItem || !propertyTypes.includes(selectedItem)) {
             toast({
                 title: "Invalid property type",
                 description: "The property type is not valid.",
@@ -87,7 +87,7 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
                 </div>
                 <DialogFooter>
                     <Button type="submit" className="w-full" onClick={onSubmit} disabled={
-                        isLoading || !selectedItem || !validUserBuyingPropertyTypes.includes(selectedItem)
+                        isLoading || !selectedItem || !propertyTypes.includes(selectedItem)
                     }>
                         {isLoading ? <Spinner /> : "Save changes"}
                     </Button>

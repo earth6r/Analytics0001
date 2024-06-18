@@ -1,0 +1,18 @@
+export const propertyTypes = [
+    'unit-6a',
+    'unit-4c',
+    'unit-3d',
+    'studio-2d',
+    'unit-4d',
+    'unit-5b',
+    'studio-2c',
+    'studio-2b',
+    'studio-max-2a',
+    'unit-6b',
+    'unit-4a',
+    'unit-3c',
+    'unit-3b',
+    'unit-3a',
+    'townhouse-6',
+    'townhouse-7',
+]
