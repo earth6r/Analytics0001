@@ -32,7 +32,7 @@
     - mobile responsive for customers tab
     - stripe data api for all transactions
     - skeleton for pie charts + anywhere that is missing
-
+    - add directory called charts in common for all the common charts components
 
 
 # sendgrid stats
