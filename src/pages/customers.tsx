@@ -46,7 +46,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <div className="font-bold text-xl">Buying Progress</div>
+                                <div className="font-bold text-xl">Buying Step</div>
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
@@ -59,11 +59,11 @@ const Customers = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5 gap-2">
+                            <div className="grid grid-cols-6 gap-2">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <div className="font-bold text-xl">Buying Progress</div>
+                                <div className="font-bold text-xl">Buying Step</div>
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
@@ -81,7 +81,7 @@ const Customers = () => {
                                         has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        {user?.buyingProgress ?? "No value for buying progress"}
+                                        {user?.buyingProgress ?? "Escrow Deposit"}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
