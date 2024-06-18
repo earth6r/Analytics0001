@@ -5,8 +5,8 @@ import { collection, getDocs, query } from "firebase/firestore/lite";
 // TODO: move to utils
 export const buyingProgressStepNumberToLabel = {
     1: "escrow-deposit",
-    2: "download-documents",
-    3: "schedule-closing",
+    2: "schedule-closing",
+    3: "download-documents",
     4: "full-payment",
     5: "completed",
 };
