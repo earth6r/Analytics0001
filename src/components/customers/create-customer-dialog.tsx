@@ -17,10 +17,12 @@ import Spinner from "../common/spinner"
 
 interface CreateCustomerDialogProps {
     refetch: () => Promise<void>;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
 const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
-    const { refetch } = props;
+    const { refetch, open, onOpenChange } = props;
 
     const [email, setEmail] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +49,6 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
         try {
             setIsLoading(true);
             const response = await createUserInDatabase.mutateAsync({ email });
-            setIsLoading(false);
 
             if (response?.error === "user_already_exists") {
                 toast({
@@ -56,12 +57,15 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
                 });
                 return;
             }
+            await refetch();
+
+            setIsLoading(false);
 
             toast({
                 title: "User created",
                 description: "The user was successfully created in the database.",
             });
-            await refetch();
+            onOpenChange(false);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -72,7 +76,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
                 <Button variant="default">+</Button>
             </DialogTrigger>

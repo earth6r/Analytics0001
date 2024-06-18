@@ -27,6 +27,7 @@ const Customers = () => {
     });
 
     const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
+    const [createCustomerDialogOpen, setCreateCustomerDialogOpen] = useState(false);
 
     return (
         <div>
@@ -35,7 +36,7 @@ const Customers = () => {
                 <div className="flex flex-row items-center justify-between pb-4">
                     <h1 className="text-4xl font-bold">Customers</h1>
                     {/* @ts-expect-error fix this*/}
-                    <CreateCustomerDialog refetch={getUsersInDatabase.refetch} />
+                    <CreateCustomerDialog refetch={getUsersInDatabase.refetch} open={createCustomerDialogOpen} onOpenChange={setCreateCustomerDialogOpen} />
                 </div>
 
                 <div>
