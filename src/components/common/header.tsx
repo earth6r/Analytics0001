@@ -214,10 +214,10 @@ const Header = () => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={async () => {
-                  await router.push("/customers");
+                  await router.push("/stats");
                 }}
               >
-                Support
+                Home
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

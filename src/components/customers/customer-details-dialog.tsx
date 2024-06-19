@@ -38,7 +38,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">Details</Button>
+                <Button variant="default">View Details</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

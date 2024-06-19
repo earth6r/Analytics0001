@@ -21,7 +21,7 @@ const BuyingStepTitle = () => {
 const BuyingPropertyTypeTitle = () => {
     return (
         <div className="flex flex-row items-center space-x-2">
-            <div className="font-bold text-xl">Type</div>
+            <div className="font-bold text-xl">Buying Property Type</div>
             <CircularQuestionMarkTooltip label="This is the property type that the customer is interested in buying." />
         </div>
     );
@@ -64,7 +64,7 @@ const Customers = () => {
                 <div>
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-6">
+                            <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
@@ -80,7 +80,7 @@ const Customers = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-6">
+                            <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
@@ -88,7 +88,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
-                                <div key={user.id} className="grid grid-cols-6">
+                                <div key={user.id} className="grid grid-cols-5">
                                     <div className="flex flex-col justify-center">
                                         {user.email}
                                     </div>
@@ -102,8 +102,6 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
-                                        {/* @ts-expect-error fix this*/}
-                                        <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
                                         {/* @ts-expect-error fix this*/}
                                         <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
