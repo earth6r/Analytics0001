@@ -39,8 +39,19 @@ export const customerRouter = createTRPCRouter({
             };
 
             data.forEach((item) => {
-                // @ts-expect-error - fix this
-                stepsData[item.buyingProgress] += 1;
+                if (item.completed) {
+                    stepsData[5] += 1;
+                } else if (item.fullPayment) {
+                    stepsData[4] += 1;
+                } else if (item.downloadDocuments) {
+                    stepsData[3] += 1;
+                } else if (item.scheduleClosing) {
+                    stepsData[2] += 1;
+                } else if (item.escrowDeposit) {
+                    stepsData[1] += 1;
+                } else {
+                    stepsData[1] += 1;
+                }
             });
 
             return Object.entries(stepsData).map(([key, value]) => ({
@@ -77,8 +88,19 @@ export const customerRouter = createTRPCRouter({
             };
 
             data.forEach((item) => {
-                // @ts-expect-error - fix this
-                stepsData[item.buyingProgress] += 1;
+                if (item.completed) {
+                    stepsData[5] += 1;
+                } else if (item.fullPayment) {
+                    stepsData[4] += 1;
+                } else if (item.downloadDocuments) {
+                    stepsData[3] += 1;
+                } else if (item.scheduleClosing) {
+                    stepsData[2] += 1;
+                } else if (item.escrowDeposit) {
+                    stepsData[1] += 1;
+                } else {
+                    stepsData[1] += 1;
+                }
             });
 
             return Object.entries(stepsData).map(([key, value]) => ({

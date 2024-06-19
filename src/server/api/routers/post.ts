@@ -1183,9 +1183,28 @@ export const postRouter = createTRPCRouter({
       const userBuyingPropertyTypeQuerySnapshot = await getDocs(userBuyingPropertyTypeQueryRef);
 
       if (userBuyingPropertyTypeQuerySnapshot.size > 0 && userBuyingPropertyTypeQuerySnapshot.docs[0]) {
-        // @ts-expect-error - fix this
-        user.buyingProgress = buyingProgressTypeToLabel[buyingProgressStepNumberToLabel[userBuyingPropertyTypeQuerySnapshot?.docs[0].data().buyingProgress]];
+        const data = userBuyingPropertyTypeQuerySnapshot?.docs[0].data();
+
+        user.buyingProgress = null;
+
+        if (data.escrowDeposit) {
+          user.buyingProgress = "Escrow Deposit";
+        }
+        if (data.scheduleClosing) {
+          user.buyingProgress = "Schedule Closing";
+        }
+        if (data.downloadDocuments) {
+          user.buyingProgress = "Download Documents";
+        }
+        if (data.fullPayment) {
+          // this value can also be "Completed" but being explicit here
+          user.buyingProgress = "Full Payment";
+        }
+        if (data.completed) {
+          user.buyingProgress = "Completed";
+        }
       } else {
+        // possibly not needed but a safety check
         user.buyingProgress = null;
       }
     }

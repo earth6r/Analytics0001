@@ -1,3 +1,4 @@
+import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
@@ -5,6 +6,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
+
+const BuyingStepTitle = () => {
+    return (
+        <div className="flex flex-row items-center space-x-2">
+            <div className="font-bold text-xl">Buying Step</div>
+            <CircularQuestionMarkTooltip label="This step is what the customer has completed last. The ordered steps include: Escrow Deposit, Schedule Closing, Download Documents, Full Payment, Completed" />
+        </div>
+    );
+}
 
 const Customers = () => {
     const { interval } = useInterval();
@@ -46,7 +56,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <div className="font-bold text-xl">Buying Step</div>
+                                <BuyingStepTitle />
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
@@ -63,7 +73,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <div className="font-bold text-xl">Buying Step</div>
+                                <BuyingStepTitle />
                                 <div className="font-bold text-xl">Buying Property Type</div>
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
