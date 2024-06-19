@@ -1,6 +1,7 @@
 import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
+import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
 import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
@@ -12,6 +13,15 @@ const BuyingStepTitle = () => {
         <div className="flex flex-row items-center space-x-2">
             <div className="font-bold text-xl">Buying Step</div>
             <CircularQuestionMarkTooltip label="This step is what the customer has completed last. The ordered steps include: Escrow Deposit, Schedule Closing, Download Documents, Full Payment, Completed" />
+        </div>
+    );
+}
+
+const BuyingPropertyTypeTitle = () => {
+    return (
+        <div className="flex flex-row items-center space-x-2">
+            <div className="font-bold text-xl">Type</div>
+            <CircularQuestionMarkTooltip label="This is the property type that the customer is interested in buying." />
         </div>
     );
 }
@@ -52,12 +62,11 @@ const Customers = () => {
                 <div>
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-6 gap-2">
+                            <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Email</div>
-                                <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
-                                <div className="font-bold text-xl">Buying Property Type</div>
+                                <BuyingPropertyTypeTitle />
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             <Skeleton className="h-12 w-full" />
@@ -69,23 +78,17 @@ const Customers = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-6 gap-2">
+                            <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Email</div>
-                                <div className="font-bold text-xl">Created At</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
-                                <div className="font-bold text-xl">Buying Property Type</div>
+                                <BuyingPropertyTypeTitle />
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
-                                <div key={user.id} className="grid grid-cols-6 gap-2">
+                                <div key={user.id} className="grid grid-cols-5">
                                     <div className="flex flex-col justify-center">
                                         {user.email}
-                                    </div>
-                                    <div className="flex flex-col justify-center">
-                                        {
-                                            user?.createdAt?.seconds ? new Date(user.createdAt.seconds * 1000).toLocaleDateString()
-                                                : "No creation date set"}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
@@ -96,8 +99,11 @@ const Customers = () => {
                                     <div className="flex flex-col justify-center">
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
-                                    {/* @ts-expect-error fix this*/}
-                                    <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
+                                    <div className="flex flex-row space-x-2">
+                                        {/* @ts-expect-error fix this*/}
+                                        <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
+                                        <CustomerDetailsDialog customerDetails={user} />
+                                    </div>
                                 </div>
                             ))}
                         </div>

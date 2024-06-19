@@ -1186,6 +1186,7 @@ export const postRouter = createTRPCRouter({
         const data = userBuyingPropertyTypeQuerySnapshot?.docs[0].data();
 
         user.buyingProgress = null;
+        user.buyingProgressData = data;
 
         if (data.escrowDeposit) {
           user.buyingProgress = "Escrow Deposit";
