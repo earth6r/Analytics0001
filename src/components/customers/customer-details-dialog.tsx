@@ -53,8 +53,8 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Download Documents" value={JSON.stringify(customerDetails?.buyingProgressData?.downloadDocuments) || "false"} />
                     <DetailItem label="Full Payment" value={JSON.stringify(customerDetails?.buyingProgressData?.fullPayment) || "false"} />
                     <DetailItem label="Completed" value={JSON.stringify(customerDetails?.buyingProgressData?.completed) || "false"} />
-                    <DetailItem label="Property Type" value={customerDetails?.propertyType || "No property type set"} />
-                    <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id"/>
+                    <DetailItem label="Property Type" value={customerDetails?.propertyType || "No property type set"} tooltipLabel="value of the buying progress property type" />
+                    <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id" />
                     <DetailItem label="Created At" value={customerDetails?.createdAt?.seconds ? new Date(customerDetails.createdAt.seconds * 1000).toLocaleDateString()
                         : "No creation date set"} />
                     <DetailItem label="Has Password" value={JSON.stringify(customerDetails?.setPassword) || "false"} />

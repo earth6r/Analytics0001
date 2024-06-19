@@ -91,7 +91,7 @@ const Customers = () => {
                                         {user.email}
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        has password set: {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
+                                        {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {user?.buyingProgress ?? "Escrow Deposit"}
