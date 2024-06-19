@@ -1252,4 +1252,66 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
+  updateBuyingProgressBooleanValues: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        escrowDeposit: z.boolean(),
+        scheduleClosing: z.boolean(),
+        downloadDocuments: z.boolean(),
+        fullPayment: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await authenticate();
+
+      const collectionRef = collection(db, "users");
+
+      const queryRef = query(collectionRef, where("email", "==", input.email));
+      const querySnapshot = await getDocs(queryRef);
+      if (querySnapshot.size === 0) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      const doc = querySnapshot.docs[0];
+
+      if (!doc) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      const buyingProgress = await getDocs(
+        query(collection(db, "usersBuyingProgress"), where("userUID", "==", doc.id)),
+      );
+
+      if (buyingProgress.size === 0) {
+        return {
+          error: "buying_progress_not_found",
+        }
+      }
+
+      const buyingProgressDoc = buyingProgress.docs[0];
+
+      if (!buyingProgressDoc) {
+        return {
+          error: "buying_progress_not_found",
+        }
+      }
+
+      await updateDoc(buyingProgressDoc.ref, {
+        escrowDeposit: input.escrowDeposit,
+        scheduleClosing: input.scheduleClosing,
+        downloadDocuments: input.downloadDocuments,
+        fullPayment: input.fullPayment,
+        completed: input.escrowDeposit && input.scheduleClosing && input.downloadDocuments && input.fullPayment,
+      });
+
+      return {
+        error: null,
+      }
+    }),
+
 });

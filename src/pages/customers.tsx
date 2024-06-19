@@ -3,6 +3,7 @@ import Header from "@/components/common/header";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
 import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
+import UpdateDialog from "@/components/customers/update-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
@@ -46,8 +47,9 @@ const Customers = () => {
         refetchInterval: interval,
     });
 
-    const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
     const [createCustomerDialogOpen, setCreateCustomerDialogOpen] = useState(false);
+    const [updateDialogOpenedByIndex, setUpdateDialogOpenedByIndex] = useState<number | null>(null);
+    const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
 
     return (
         <div>
@@ -62,7 +64,7 @@ const Customers = () => {
                 <div>
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5">
+                            <div className="grid grid-cols-6">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
@@ -78,7 +80,7 @@ const Customers = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5">
+                            <div className="grid grid-cols-6">
                                 <div className="font-bold text-xl">Email</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
@@ -86,7 +88,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
-                                <div key={user.id} className="grid grid-cols-5">
+                                <div key={user.id} className="grid grid-cols-6">
                                     <div className="flex flex-col justify-center">
                                         {user.email}
                                     </div>
@@ -103,6 +105,8 @@ const Customers = () => {
                                         {/* @ts-expect-error fix this*/}
                                         <SetBuyingPropertyTypeDialog currentValue={user?.userBuyingPropertyType} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
+                                        {/* @ts-expect-error fix this*/}
+                                        <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                     </div>
                                 </div>
                             ))}

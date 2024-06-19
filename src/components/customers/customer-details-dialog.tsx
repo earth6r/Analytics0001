@@ -10,8 +10,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
+import { convertDateString } from "@/lib/utils";
 
 interface BuyingProgressDetailsDialog {
     customerDetails: any;
@@ -59,6 +59,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                         : "No creation date set"} />
                     <DetailItem label="Has Password" value={JSON.stringify(customerDetails?.setPassword) || "false"} />
                     <DetailItem label="Last Completed Step" value={customerDetails?.buyingProgress || "Escrow Deposit"} />
+                    <DetailItem label="Scheduled Calendar Date" value={convertDateString(customerDetails?.buyingProgressData?.scheduledCalendarDate) || "Not set"} tooltipLabel={customerDetails?.buyingProgressData?.scheduledCalendarDate} />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
