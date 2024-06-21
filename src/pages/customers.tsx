@@ -1,5 +1,6 @@
 import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
+import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
 import UpdateDialog from "@/components/customers/update-dialog";
@@ -48,7 +49,6 @@ const Customers = () => {
 
     const [createCustomerDialogOpen, setCreateCustomerDialogOpen] = useState(false);
     const [updateDialogOpenedByIndex, setUpdateDialogOpenedByIndex] = useState<number | null>(null);
-    const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
 
     return (
         <div>
@@ -70,12 +70,9 @@ const Customers = () => {
                                 <BuyingPropertyTypeTitle />
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
-                            <Skeleton className="h-12 w-full" />
-                            <Skeleton className="h-12 w-full" />
-                            <Skeleton className="h-12 w-full" />
-                            <Skeleton className="h-12 w-full" />
-                            <Skeleton className="h-12 w-full" />
-                            <Skeleton className="h-12 w-full" />
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <Skeleton key={index} className="h-12 w-full" />
+                            ))}
                         </div>
                     ) : (
                         <div className="space-y-4">
@@ -105,8 +102,8 @@ const Customers = () => {
                                     </div>
                                     <div className="flex flex-row space-x-2">
                                         <CustomerDetailsDialog customerDetails={user} />
-                                        {/* @ts-expect-error fix this*/}
                                         <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
+                                        <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
                                     </div>
                                 </div>
                             ))}

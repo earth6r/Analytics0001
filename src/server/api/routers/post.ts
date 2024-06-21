@@ -1147,8 +1147,12 @@ export const postRouter = createTRPCRouter({
     const users = [];
     querySnapshot.forEach((doc) => {
       const userUID = doc.id;
+      const data = doc.data();
+      if (data?.archived === true) {
+        return;
+      }
       users.push({
-        ...doc.data(),
+        ...data,
         uid: userUID,
       });
     });
@@ -1314,7 +1318,7 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
-    updateUserDetails: publicProcedure
+  updateUserDetails: publicProcedure
     .input(
       z.object({
         email: z.string().email(),

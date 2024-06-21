@@ -21,7 +21,7 @@ import { Input } from "../ui/input"
 interface UpdateDialogProps {
     currentValue: any;
     email: string;
-    refetch: () => Promise<void>;
+    refetch: () => Promise<any>;
     dialogOpenedByIndex: number | null;
     setDialogOpenedByIndex: (open: number | null) => void;
     index: number;

@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
-import { collection, getDocs, query } from "firebase/firestore/lite";
+import { collection, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { z } from "zod";
 
 // TODO: move to utils
 export const buyingProgressStepNumberToLabel = {
@@ -107,5 +108,30 @@ export const customerRouter = createTRPCRouter({
                 // @ts-expect-error - fix this
                 [buyingProgressStepNumberToLabel[key]]: value,
             }));
+        }),
+
+    archiveCustomer: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("email", "==", input.email));
+
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                if (!doc) {
+                    return;
+                }
+                await updateDoc(
+                    doc.ref,
+                {
+                    archived: true,
+                });
+            }
         }),
 });
