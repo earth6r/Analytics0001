@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { api } from "@/utils/api";
 import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import Spinner from "../common/spinner";
 
 interface DeleteCustomerAlertDialog {
     email: string;
@@ -21,18 +23,22 @@ interface DeleteCustomerAlertDialog {
 const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
     const { email, refetch } = props;
 
+    const [loading, setLoading] = useState(false);
+
     const archiveUser = api.customer.archiveCustomer.useMutation();
 
     const handleSubmit = async () => {
+        setLoading(true);
         await archiveUser.mutateAsync({ email });
         await refetch();
+        setLoading(false);
     };
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button variant="destructive">
-                    <Trash2 className="w-4 h-4" />
+                    {loading ? <Spinner /> : <Trash2 className="w-4 h-4" />}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
