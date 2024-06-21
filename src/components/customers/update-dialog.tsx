@@ -35,9 +35,12 @@ const UpdateDialog = (props: UpdateDialogProps) => {
     const [scheduleClosing, setScheduleClosing] = useState<boolean | undefined>(currentValue?.buyingProgressData?.scheduleClosing);
     const [downloadDocuments, setDownloadDocuments] = useState<boolean | undefined>(currentValue?.buyingProgressData?.downloadDocuments);
     const [fullPayment, setFullPayment] = useState<boolean | undefined>(currentValue?.buyingProgressData?.fullPayment);
+    const [firstName, setFirstName] = useState<string | undefined>(currentValue?.firstName);
+    const [lastName, setLastName] = useState<string | undefined>(currentValue?.lastName);
 
     const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
     const updateBuyingProgressBooleanValues = api.post.updateBuyingProgressBooleanValues.useMutation();
+    const updateUserDetails = api.post.updateUserDetails.useMutation();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -66,6 +69,7 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 downloadDocuments,
                 fullPayment,
             });
+            await updateUserDetails.mutateAsync({ email, firstName, lastName });
             await refetch();
             setIsLoading(false);
             toast({
@@ -95,6 +99,26 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="name">
+                            First Name
+                        </Label>
+                        <Input
+                            className="w-[220px]"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="name">
+                            Last Name
+                        </Label>
+                        <Input
+                            className="w-[220px]"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </div>
                     <div className="flex flex-row items-center justify-between">
                         <Label htmlFor="name">
                             Type

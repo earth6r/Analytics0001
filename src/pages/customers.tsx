@@ -65,7 +65,7 @@ const Customers = () => {
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
                             <div className="grid grid-cols-5">
-                                <div className="font-bold text-xl">Email</div>
+                                <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
                                 <BuyingPropertyTypeTitle />
@@ -81,7 +81,7 @@ const Customers = () => {
                     ) : (
                         <div className="space-y-4">
                             <div className="grid grid-cols-5">
-                                <div className="font-bold text-xl">Email</div>
+                                <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingStepTitle />
                                 <BuyingPropertyTypeTitle />
@@ -90,7 +90,10 @@ const Customers = () => {
                             {getUsersInDatabase.data?.map((user, index) => (
                                 <div key={user.id} className="grid grid-cols-5">
                                     <div className="flex flex-col justify-center">
-                                        {user.email}
+                                        <div>
+                                            <div className="text-sm">{user.firstName || "First Name"} {user.lastName || "Last Name"}</div>
+                                            <div className="text-muted-foreground">{user.email}</div>
+                                        </div>
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}

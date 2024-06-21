@@ -1314,4 +1314,44 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
+    updateUserDetails: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        firstName: z.string(),
+        lastName: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await authenticate();
+
+      const collectionRef = collection(db, "users");
+
+      const queryRef = query(collectionRef, where("email", "==", input.email));
+      const querySnapshot = await getDocs(queryRef);
+      if (querySnapshot.size === 0) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      const doc = querySnapshot.docs[0];
+
+      if (!doc) {
+        return {
+          error: "user_not_found",
+        }
+      }
+
+      // update doc using modular firebase api
+      await updateDoc(doc.ref, {
+        firstName: input.firstName,
+        lastName: input.lastName,
+      });
+
+      return {
+        error: null,
+      }
+    }),
+
 });
