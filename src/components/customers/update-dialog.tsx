@@ -53,21 +53,21 @@ const UpdateDialog = (props: UpdateDialogProps) => {
             return;
         }
         try {
-            // if (typeof escrowDeposit !== "boolean" || typeof scheduleClosing !== "boolean" || typeof downloadDocuments !== "boolean" || typeof fullPayment !== "boolean") {
-            //     toast({
-            //         title: "Invalid boolean value(s)",
-            //         description: "The boolean value(s) are not valid.",
-            //     });
-            //     return;
-            // }
+            if (typeof escrowDeposit !== "boolean" || typeof scheduleClosing !== "boolean" || typeof downloadDocuments !== "boolean" || typeof fullPayment !== "boolean") {
+                toast({
+                    title: "This user has not started the buying process yet.",
+                    description: "Once the user makes a deposit, the buying process will start.",
+                });
+                return;
+            }
             setIsLoading(true);
             await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
             await updateBuyingProgressBooleanValues.mutateAsync({
                 email,
-                escrowDeposit: escrowDeposit || false,
-                scheduleClosing: scheduleClosing || false,
-                downloadDocuments: downloadDocuments || false,
-                fullPayment: fullPayment || false,
+                escrowDeposit,
+                scheduleClosing,
+                downloadDocuments,
+                fullPayment,
             });
             await updateUserDetails.mutateAsync({ email, firstName: firstName || "", lastName: lastName || "" });
             await refetch();
