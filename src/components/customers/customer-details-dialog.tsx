@@ -48,6 +48,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="px-1">
+                    <DetailItem label="Customer Name" value={(customerDetails?.firstName || "") + " " + (customerDetails?.lastName || "") || "No name set"} />
                     <DetailItem label="Escrow Deposit" value={JSON.stringify(customerDetails?.buyingProgressData?.escrowDeposit) || "false"} />
                     <DetailItem label="Schedule Closing" value={JSON.stringify(customerDetails?.buyingProgressData?.scheduleClosing) || "false"} />
                     <DetailItem label="Download Documents" value={JSON.stringify(customerDetails?.buyingProgressData?.downloadDocuments) || "false"} />

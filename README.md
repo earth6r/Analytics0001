@@ -34,6 +34,7 @@
     - skeleton for pie charts + anywhere that is missing
     - add directory called charts in common for all the common charts components
     - since the steps structure for buying a property now reflects steps they completed, change the language tone to reflect this
+    - speed up the firestore queries
 
 
 # sendgrid stats
