@@ -35,7 +35,7 @@
     - add directory called charts in common for all the common charts components
     - since the steps structure for buying a property now reflects steps they completed, change the language tone to reflect this
     - speed up the firestore queries
-
+    - @funguy123 would you be open for us to migrate to postgres in the near future? we're starting to get data relations and its slowing down the queries?
 
 # sendgrid stats
 curl -X GET \

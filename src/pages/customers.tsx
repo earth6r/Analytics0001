@@ -2,7 +2,6 @@ import CircularQuestionMarkTooltip from "@/components/common/circular-question-m
 import Header from "@/components/common/header";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
-import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
 import UpdateDialog from "@/components/customers/update-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
