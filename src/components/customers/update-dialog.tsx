@@ -69,7 +69,7 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 downloadDocuments,
                 fullPayment,
             });
-            await updateUserDetails.mutateAsync({ email, firstName, lastName });
+            await updateUserDetails.mutateAsync({ email, firstName: firstName || "", lastName: lastName || "" });
             await refetch();
             setIsLoading(false);
             toast({
