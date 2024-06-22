@@ -33,7 +33,9 @@ const NotificationForm = () => {
     }
   }, []);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(
+    // data: z.infer<typeof FormSchema>
+  ) {
     toast({
       title: "Notifications Updated",
       description: "Your preferences has been updated successfully.",
@@ -47,7 +49,9 @@ const NotificationForm = () => {
           control={form.control}
           // @ts-expect-error - fix this
           name="name"
-          render={({ field }) => (
+          render={({
+            // field
+          }) => (
             <FormItem>
               <FormLabel>Toast Message</FormLabel>
               <FormDescription>
