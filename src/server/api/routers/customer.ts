@@ -182,4 +182,37 @@ export const customerRouter = createTRPCRouter({
                 console.error(`No user found with email ${input.email}`);
             }
         }),
+
+    getTotalDeposits: publicProcedure
+        .query(async () => {
+            const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
+            const q = query(usersBuyingProgressRef, where("escrowDeposit", "==", true));
+            const querySnapshot = await getDocs(q);
+
+            return querySnapshot.size * 1000;
+        }),
+
+    getNumberOfCustomers: publicProcedure
+        .query(async () => {
+            const customers = await getDocs(collection(db, "users"));
+            return customers.size;
+        }),
+
+    getNumberOfPropertiesInProgress: publicProcedure
+        .query(async () => {
+            const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
+            const q = query(usersBuyingProgressRef, where("completed", "==", false));
+            const querySnapshot = await getDocs(q);
+
+            return querySnapshot.size;
+        }),
+
+    getNumberOfSoldProperties: publicProcedure
+        .query(async () => {
+            const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
+            const q = query(usersBuyingProgressRef, where("completed", "==", true));
+            const querySnapshot = await getDocs(q);
+
+            return querySnapshot.size;
+        }),
 });

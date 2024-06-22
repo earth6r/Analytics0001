@@ -8,7 +8,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface StatCardProps {
-  title: string;
+  title: string | undefined;
   description: string;
   deltaValue: number;
   icon?: React.ReactNode;
