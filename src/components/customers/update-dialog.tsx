@@ -101,32 +101,6 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 <div className="grid gap-4 py-4">
                     <div className="flex flex-row items-center justify-between">
                         <Label htmlFor="name">
-                            First Name
-                        </Label>
-                        <Input
-                            className="w-[220px]"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="name">
-                            Last Name
-                        </Label>
-                        <Input
-                            className="w-[220px]"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="name">
-                            Type
-                        </Label>
-                        <BuyingPropertyTypeSelect selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="name">
                             Escrow Deposit
                         </Label>
                         <TrueFalseSelect selectedItem={escrowDeposit} setSelectedItem={setEscrowDeposit} />

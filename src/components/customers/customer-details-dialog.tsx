@@ -12,13 +12,17 @@ import {
 import { Label } from "@/components/ui/label"
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
 import { convertDateString } from "@/lib/utils";
+import CopyTooltip from "./copy-tooltip";
+import { useState } from "react";
 
 interface BuyingProgressDetailsDialog {
     customerDetails: any;
 }
 
-const DetailItem = (props: { label: string, value: string, tooltipLabel?: string }) => {
-    const { label, value, tooltipLabel = null } = props;
+const DetailItem = (props: { label: string, value: string, tooltipLabel?: string, copyable?: boolean }) => {
+    const { label, value, tooltipLabel = null, copyable = false } = props;
+
+    const [copied, setCopied] = useState<boolean>(false);
 
     return (
         <div className="flex flex-row justify-between">
@@ -26,7 +30,17 @@ const DetailItem = (props: { label: string, value: string, tooltipLabel?: string
                 <Label>{label}</Label>
                 {tooltipLabel && <CircularQuestionMarkTooltip label={tooltipLabel} />}
             </div>
-            <div>{value}</div>
+            {copyable ? <CopyTooltip copied={copied}>
+                <div className="truncate max-w-48 text-blue-400 cursor-pointer" onClick={
+                    () => {
+                        navigator.clipboard.writeText(value);
+                        setCopied(true);
+                        setTimeout(() => {
+                            setCopied(false);
+                        }, 2000);
+                    }
+                }>{label}</div>
+            </CopyTooltip> : <div className="truncate max-w-48">{value}</div>}
         </div>
     )
 
@@ -56,7 +70,8 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Download Documents" value={JSON.stringify(customerDetails?.buyingProgressData?.downloadDocuments) || "false"} />
                     <DetailItem label="Full Payment" value={JSON.stringify(customerDetails?.buyingProgressData?.fullPayment) || "false"} />
                     <DetailItem label="Completed" value={JSON.stringify(customerDetails?.buyingProgressData?.completed) || "false"} />
-                    <DetailItem label="Property Type" value={customerDetails?.propertyType || "No property type set"} tooltipLabel="value of the buying progress property type" />
+                    <DetailItem label="User Property Type" value={customerDetails?.propertyType || "No property type set"} tooltipLabel="Value of the user's set property type" />
+                    <DetailItem label="Property Type" value={customerDetails?.buyingProgressData?.propertyType || "No property type set"} tooltipLabel="Value of the buying progress property type" />
                     <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id" />
                     <DetailItem label="Created At" value={customerDetails?.createdAt?.seconds ? new Date(customerDetails.createdAt.seconds * 1000).toLocaleDateString()
                         : "No creation date set"} />
@@ -64,6 +79,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Last Completed Step" value={customerDetails?.buyingProgress || "Escrow Deposit"} />
                     <DetailItem label="Scheduled Calendar Date" value={convertDateString(customerDetails?.buyingProgressData?.scheduledCalendarDate) || "Not set"} tooltipLabel={customerDetails?.buyingProgressData?.scheduledCalendarDate} />
                     <DetailItem label="Number of Buying Progress" value={customerDetails?.buyingProgressCount} tooltipLabel="This is the count of users who are currently in or completed a purchase of a property. The user must complete a deposit before it is counted. A value of 0 may prevent updates from being made." />
+                    <DetailItem label="Buying Progress IDs" value={customerDetails?.buyingProgressIds} tooltipLabel="Database IDs" copyable />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
