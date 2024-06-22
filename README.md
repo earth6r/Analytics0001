@@ -68,6 +68,8 @@ UI:
     - make the progress bar charts end lower i.e. less padding at the bottom
     - context for the date range selection
     - use select-none as many places as possible
+    - themes needs to be consistent with recharts colors and pie chart colors and where ever else colors are used/needed
+    - make toasts match theme
 
 BACKEND:
     - need to filter out users who are archived: true

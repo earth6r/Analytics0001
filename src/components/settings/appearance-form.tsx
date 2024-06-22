@@ -53,6 +53,52 @@ const AppearanceForm = () => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          // @ts-expect-error - fix this
+          name="name"
+          render={({ }) => (
+            <FormItem>
+              <FormLabel>Color</FormLabel>
+              <div>
+                <Button className="bg-black" onClick={
+                  () => {
+                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
+                  }
+                }>Zinc</Button>
+                <Button className="bg-red-500" onClick={
+                  () => {
+                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
+                    document.body.classList.add('theme-red');
+                  }
+                }>Red</Button>
+                <Button className="bg-blue-500" onClick={
+                  () => {
+                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
+                    document.body.classList.add('theme-blue');
+                  }
+                }>Blue</Button>
+                <Button className="bg-green-500" onClick={
+                  () => {
+                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
+                    document.body.classList.add('theme-green');
+                  }
+                }>Green</Button>
+                <Button className="bg-orange-500" onClick={
+                  () => {
+                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
+                    document.body.classList.add('theme-orange');
+                  }
+                }>Orange</Button>
+              </div>
+              <FormDescription>
+                Select the color for the dashboard.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit">Update Preferences</Button>
       </form>
     </Form>
