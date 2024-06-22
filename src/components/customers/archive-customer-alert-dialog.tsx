@@ -18,11 +18,10 @@ import Spinner from "../common/spinner";
 interface DeleteCustomerAlertDialog {
     email: string;
     refetch: () => Promise<any>;
-    trigger: React.ReactNode;
 }
 
 const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
-    const { email, refetch, trigger } = props;
+    const { email, refetch } = props;
 
     const [loading, setLoading] = useState(false);
 
@@ -37,8 +36,10 @@ const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger asChild className="hover:bg-red-500">
-                {trigger}
+            <AlertDialogTrigger asChild>
+                <Button variant="destructive">
+                    {loading ? <Spinner /> : <Trash2 className="w-4 h-4" />}
+                </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

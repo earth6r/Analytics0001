@@ -9,29 +9,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Ellipsis } from "lucide-react";
-import UpdateUserDetailsDialog from "@/components/customers/update-user-details-dialog";
-import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
-import UpdateBuyingProgressDialog from "@/components/customers/update-buying-progress-dialog";
-import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
-import { useState } from "react";
 
-interface ActionDropdownProps {
-    user: any;
-    refetch: () => Promise<any>;
-    dialogOpenedByIndex: number | null;
-    setDialogOpenedByIndex: (open: number | null) => void;
-    index: number;
-    updateDialogOpenedByIndex: number | null;
-    setUpdateDialogOpenedByIndex: (open: number | null) => void;
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-}
-
-const ActionDropdown = (props: ActionDropdownProps) => {
-    const { user, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index, updateDialogOpenedByIndex, setUpdateDialogOpenedByIndex, open, onOpenChange } = props;
-
+const ActionDropdown = () => {
     return (
-        <DropdownMenu open={open} onOpenChange={onOpenChange}>
+        <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline">
                     <Ellipsis className="h-4 w-4" />
@@ -41,30 +22,15 @@ const ActionDropdown = (props: ActionDropdownProps) => {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <CustomerDetailsDialog customerDetails={user} trigger={
-                        <DropdownMenuItem onClick={
-                            () => {
-                                setDialogOpenedByIndex(index);
-                            }
-                        }>
-                            View Details
-                        </DropdownMenuItem>
-                    } />
-                    <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} trigger={
-                        <DropdownMenuItem>
-                            Update Customer Details
-                        </DropdownMenuItem>
-                    } />
-                    <UpdateBuyingProgressDialog currentValue={user} email={user.email} refetch={refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} trigger={
-                        <DropdownMenuItem>
-                            Update Buying Progress
-                        </DropdownMenuItem>
-                    } />
-                    <ArchiveCustomerAlertDialog email={user.email} refetch={refetch} trigger={
-                        <DropdownMenuItem>
-                            Archive Customer
-                        </DropdownMenuItem>
-                    } />
+                    <DropdownMenuItem>
+                        View Details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Update Customer Details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Archive Customer Details
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

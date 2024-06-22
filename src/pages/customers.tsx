@@ -52,7 +52,6 @@ const Customers = () => {
     const [createCustomerDialogOpen, setCreateCustomerDialogOpen] = useState(false);
     const [updateDialogOpenedByIndex, setUpdateDialogOpenedByIndex] = useState<number | null>(null);
     const [dialogOpenedByIndex, setDialogOpenedByIndex] = useState<number | null>(null);
-    const [actionDialogOpenedByIndex, setActionDialogOpenedByIndex] = useState<number | null>(null);
 
     return (
         <div>
@@ -104,21 +103,11 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
-                                        <ActionDropdown
-                                            open={actionDialogOpenedByIndex === index}
-                                            onOpenChange={(open) => setActionDialogOpenedByIndex(open ? index : null)}
-                                            user={user}
-                                            refetch={getUsersInDatabase.refetch}
-                                            dialogOpenedByIndex={dialogOpenedByIndex}
-                                            setDialogOpenedByIndex={setDialogOpenedByIndex}
-                                            index={index}
-                                            updateDialogOpenedByIndex={updateDialogOpenedByIndex}
-                                            setUpdateDialogOpenedByIndex={setUpdateDialogOpenedByIndex}
-                                        />
-                                        {/* <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
+                                        <ActionDropdown />
+                                        <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
                                         <UpdateBuyingProgressDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
-                                        <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} /> */}
+                                        <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
                                     </div>
                                 </div>
                             ))}

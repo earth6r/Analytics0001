@@ -24,11 +24,10 @@ interface UpdateUserDetailsDialogProps {
     dialogOpenedByIndex: number | null;
     setDialogOpenedByIndex: (open: number | null) => void;
     index: number;
-    trigger: React.ReactNode;
 }
 
 const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
-    const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index, trigger } = props;
+    const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
 
     const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
     const updateUserDetails = api.post.updateUserDetails.useMutation();
@@ -69,7 +68,7 @@ const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
     return (
         <Dialog open={dialogOpenedByIndex === index} onOpenChange={(open) => setDialogOpenedByIndex(open ? index : null)}>
             <DialogTrigger asChild>
-                {trigger}
+                <Button variant="default">Update User Details</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
