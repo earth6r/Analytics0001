@@ -101,6 +101,7 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
+                                        {/* @ts-expect-error TODO: fix */}
                                         <SetBuyingPropertyTypeDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} />
                                         <CustomerDetailsDialog customerDetails={user} />
                                         <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
