@@ -69,7 +69,7 @@ const PasswordInput = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 space-y-6 mt-6">
         <FormField
           control={form.control}
           name="password"
