@@ -17,15 +17,13 @@ const RecentMessages = () => {
   const { interval } = useInterval();
 
   const recentMessages = api.post.getRecentMessages.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },
   );
   const getMessagesCountThisMonth = api.post.getMessagesThisMonth.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

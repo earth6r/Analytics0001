@@ -7,16 +7,14 @@ const UnansweredMessageStatsCard = () => {
   const { interval } = useInterval();
 
   const unansweredMessagesCount = api.post.getUnansweredMessagesCount.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },
   );
   const unansweredMessagesCountDelta =
     api.post.getUnansweredMessagesCountDelta.useQuery(
-      // @ts-expect-error - fix this
-      {},
+      undefined,
       {
         refetchInterval: interval,
       },

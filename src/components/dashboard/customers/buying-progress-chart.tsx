@@ -42,7 +42,7 @@ const BuyingProgressChart = () => {
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle>Buying Progress</CardTitle>
-                    <CircularQuestionMarkTooltip label="Each value is the user's current step they need to do. Note: Escrow Deposit counts are representative of a user who has not bought a single property yet." />
+                    <CircularQuestionMarkTooltip label="Each value is the user's current step they have completed." />
                 </div>
                 <CardDescription>Customers Buying Progress</CardDescription>
             </CardHeader>

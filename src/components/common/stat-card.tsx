@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface StatCardProps {
   title: string | undefined;
   description: string;
-  deltaValue: number;
+  deltaValue: number | undefined;
   icon?: React.ReactNode;
 }
 

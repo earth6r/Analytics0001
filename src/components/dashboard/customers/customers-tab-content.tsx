@@ -2,11 +2,9 @@ import StatCard from "@/components/common/stat-card";
 import BuyingProgressChart from "./buying-progress-chart";
 import BuyingProgressPieChart from "./buying-progress-pie-chart";
 import MostPopularPropertiesInProgress from "./must-popular-properties-in-progress";
-import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 import { DollarSign, Hash, Loader, HomeIcon } from "lucide-react";
-import Spinner from "@/components/common/spinner";
 
 const CustomersTabContent = () => {
     const { interval } = useInterval();

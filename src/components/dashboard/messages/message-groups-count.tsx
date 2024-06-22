@@ -7,15 +7,13 @@ const MessageGroupCountsStatsCard = () => {
   const { interval } = useInterval();
 
   const messageGroupsCount = api.post.getMessageGroupsCount.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },
   );
   const messageGroupsCountDelta = api.post.getMessageGroupsCountDelta.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

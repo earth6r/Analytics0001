@@ -21,8 +21,7 @@ const CumulativeMessages = () => {
   const { interval } = useInterval();
 
   const cumulativeMessages = api.post.getCumulativeMessages.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

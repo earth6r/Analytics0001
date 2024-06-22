@@ -7,16 +7,14 @@ const BuyingTimelineNowStatsCard = () => {
   const { interval } = useInterval();
 
   const buyingTimelineNowCount = api.post.getBuyingTimelineNowCount.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },
   );
   const buyingTimelineNowCountDelta =
     api.post.getBuyingTimelineNowCountDelta.useQuery(
-      // @ts-expect-error - fix this
-      {},
+      undefined,
       {
         refetchInterval: interval,
       },

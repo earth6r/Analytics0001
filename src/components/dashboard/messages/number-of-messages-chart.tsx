@@ -15,8 +15,7 @@ const NumberOfMessagesChart = () => {
   const { interval } = useInterval();
   const getMessagesForTheYearGroupedCount =
     api.post.getMessagesForTheYearGroupedCount.useQuery(
-      // @ts-expect-error - fix this
-      {},
+      undefined,
       {
         refetchInterval: interval,
       },

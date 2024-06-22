@@ -9,7 +9,6 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { propertyTypes } from "@/lib/property-types"
 import { api } from "@/utils/api"
 import { useState } from "react"
 import Spinner from "../common/spinner"

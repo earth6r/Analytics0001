@@ -24,7 +24,9 @@ const AppearanceForm = () => {
     defaultValues: {},
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(
+    // data: z.infer<typeof FormSchema>
+  ) {
     toast({
       title: "Appearance Updated",
       description: "Your preferences has been updated successfully.",
@@ -38,7 +40,7 @@ const AppearanceForm = () => {
           control={form.control}
           // @ts-expect-error - fix this
           name="name"
-          render={({ field }) => (
+          render={({ }) => (
             <FormItem>
               <FormLabel>Theme</FormLabel>
               <div>

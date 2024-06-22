@@ -6,7 +6,6 @@ import CustomerDetailsDialog from "@/components/customers/customer-details-dialo
 import SimulateStripeSuccessfulDepositAlertDialog from "@/components/customers/simulate-stripe-successful-deposit-alert-dialog";
 import UpdateBuyingProgressDialog from "@/components/customers/update-buying-progress-dialog";
 import UpdateUserDetailsDialog from "@/components/customers/update-user-details-dialog";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
@@ -37,9 +36,11 @@ const Customers = () => {
     }, []);
 
     const getUsersInDatabase = api.post.getUsersInDatabase.useQuery(
-        undefined, {
-        refetchInterval: interval,
-    });
+        undefined,
+        {
+            refetchInterval: interval,
+        }
+    );
 
     const [createCustomerDialogOpen, setCreateCustomerDialogOpen] = useState(false);
     const [updateDialogOpenedByIndex, setUpdateDialogOpenedByIndex] = useState<number | null>(null);

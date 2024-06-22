@@ -477,8 +477,7 @@ const Registers = () => {
 
   const { interval } = useInterval();
   const getRegisters = api.post.getRegisters.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

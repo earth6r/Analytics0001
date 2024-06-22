@@ -21,8 +21,7 @@ const MessagesByWeek = () => {
   const { interval } = useInterval();
 
   const messagesByWeek = api.post.getMessagesByWeek.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

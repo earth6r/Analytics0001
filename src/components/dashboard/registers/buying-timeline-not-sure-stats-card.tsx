@@ -8,16 +8,14 @@ const BuyingTimelineNotSureStatsCard = () => {
 
   const buyingTimelineNowCount =
     api.post.getBuyingTimelineNotSureCount.useQuery(
-      // @ts-expect-error - fix this
-      {},
+      undefined,
       {
         refetchInterval: interval,
       },
     );
   const buyingTimelineNowCountDelta =
     api.post.getBuyingTimelineNotSureCountDelta.useQuery(
-      // @ts-expect-error - fix this
-      {},
+      undefined,
       {
         refetchInterval: interval,
       },

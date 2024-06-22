@@ -317,8 +317,7 @@ const Messages = () => {
 
   const { interval } = useInterval();
   const getMessages = api.post.getMessages.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

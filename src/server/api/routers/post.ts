@@ -14,9 +14,6 @@ import {
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
-import { propertyTypes } from "@/lib/property-types";
-import { buyingProgressStepNumberToLabel } from "./customer";
-import { buyingProgressTypeToLabel } from "@/components/dashboard/customers/buying-progress-chart";
 
 const monthNames = [
   "Jan",

@@ -21,8 +21,7 @@ const PieChart = () => {
   const [pieData, setPieData] = useState([]);
 
   const locationInterests = api.post.getLocationsOfInterest.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

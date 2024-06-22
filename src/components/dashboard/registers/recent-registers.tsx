@@ -25,8 +25,7 @@ const RecentRegisters = () => {
   const { interval } = useInterval();
 
   const recentRegisters = api.post.getRecentRegisters.useQuery(
-    // @ts-expect-error - fix this
-    {},
+    undefined,
     {
       refetchInterval: interval,
     },

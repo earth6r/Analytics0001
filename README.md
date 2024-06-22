@@ -52,6 +52,10 @@
     - need to choose a consistent date i.e. utc time or something (use EPOCH everywhere)
     - archive customer color looks bad in dark mode ✅
     - deposits over time chart 🔄
+    - buying progress pie chart with cumulative (i.e. a user who completed everything will still be a count for each item)
+    - buying progress bar chart with cumulative (i.e. a user who completed everything will still be a count for each item)
+    - number of customers chart over time (non-cumulative)
+    - number of customers chart over time (cumulative)
 
 # sendgrid stats
 curl -X GET \
