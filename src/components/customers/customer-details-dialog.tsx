@@ -44,7 +44,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Buying Progress Details</DialogTitle>
+                    <DialogTitle>Customer Details</DialogTitle>
                     <DialogDescription>
                         {`This is the buying progress details for the customer from the database.`}
                     </DialogDescription>
@@ -58,7 +58,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Download Documents" value={JSON.stringify(customerDetails?.buyingProgressData?.downloadDocuments) || "false"} />
                     <DetailItem label="Full Payment" value={JSON.stringify(customerDetails?.buyingProgressData?.fullPayment) || "false"} />
                     <DetailItem label="Completed" value={JSON.stringify(customerDetails?.buyingProgressData?.completed) || "false"} />
-                    <DetailItem label="User Property Type" value={customerDetails?.propertyType || "No property type set"} tooltipLabel="Value of the user's set property type" />
+                    <DetailItem label="User Property Type" value={customerDetails?.userBuyingPropertyType || "No property type set"} tooltipLabel="Value of the user's set property type" />
                     <DetailItem label="Property Type" value={customerDetails?.buyingProgressData?.propertyType || "No property type set"} tooltipLabel="Value of the buying progress property type" />
                     <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id" copyable />
                     <DetailItem label="Created At" value={customerDetails?.createdAt?.seconds ? new Date(customerDetails.createdAt.seconds * 1000).toLocaleDateString()
