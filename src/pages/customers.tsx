@@ -3,6 +3,7 @@ import Header from "@/components/common/header";
 import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
+import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
 import UpdateDialog from "@/components/customers/update-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
@@ -56,7 +57,6 @@ const Customers = () => {
             <div className="p-6">
                 <div className="flex flex-row items-center justify-between pb-4">
                     <h1 className="text-4xl font-bold">Customers</h1>
-                    {/* @ts-expect-error fix this*/}
                     <CreateCustomerDialog refetch={getUsersInDatabase.refetch} open={createCustomerDialogOpen} onOpenChange={setCreateCustomerDialogOpen} />
                 </div>
 
@@ -101,6 +101,7 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
+                                        <SetBuyingPropertyTypeDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} />
                                         <CustomerDetailsDialog customerDetails={user} />
                                         <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />

@@ -1186,6 +1186,8 @@ export const postRouter = createTRPCRouter({
       const userBuyingPropertyTypeQueryRef = query(userBuyingPropertyTypeCollectionRef, where("userUID", "==", user.uid));
       const userBuyingPropertyTypeQuerySnapshot = await getDocs(userBuyingPropertyTypeQueryRef);
 
+      user.buyingProgressCount = userBuyingPropertyTypeQuerySnapshot.size;
+
       if (userBuyingPropertyTypeQuerySnapshot.size > 0 && userBuyingPropertyTypeQuerySnapshot.docs[0]) {
         const data = userBuyingPropertyTypeQuerySnapshot?.docs[0].data();
 

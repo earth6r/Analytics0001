@@ -36,6 +36,8 @@
     - since the steps structure for buying a property now reflects steps they completed, change the language tone to reflect this
     - speed up the firestore queries
     - @funguy123 would you be open for us to migrate to postgres in the near future? we're starting to get data relations and its slowing down the queries?
+    - error handle creating customers with the same email
+    - fix the case where a new user cannot update a property type
 
 # sendgrid stats
 curl -X GET \

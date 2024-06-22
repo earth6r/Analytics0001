@@ -63,6 +63,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Has Password" value={JSON.stringify(customerDetails?.setPassword) || "false"} />
                     <DetailItem label="Last Completed Step" value={customerDetails?.buyingProgress || "Escrow Deposit"} />
                     <DetailItem label="Scheduled Calendar Date" value={convertDateString(customerDetails?.buyingProgressData?.scheduledCalendarDate) || "Not set"} tooltipLabel={customerDetails?.buyingProgressData?.scheduledCalendarDate} />
+                    <DetailItem label="Number of Buying Progress" value={customerDetails?.buyingProgressCount} tooltipLabel="This is the count of users who are currently in or completed a purchase of a property. The user must complete a deposit before it is counted. A value of 0 may prevent updates from being made." />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>

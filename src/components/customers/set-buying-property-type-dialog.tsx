@@ -19,7 +19,7 @@ import { propertyTypes } from "@/lib/property-types"
 interface SetBuyingPropertyTypeDialogProps {
     currentValue: string;
     email: string;
-    refetch: () => Promise<void>;
+    refetch: () => Promise<any>;
     dialogOpenedByIndex: number | null;
     setDialogOpenedByIndex: (open: number | null) => void;
     index: number;

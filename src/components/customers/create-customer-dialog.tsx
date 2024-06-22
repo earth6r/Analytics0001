@@ -16,7 +16,7 @@ import { api } from "@/utils/api"
 import Spinner from "../common/spinner"
 
 interface CreateCustomerDialogProps {
-    refetch: () => Promise<void>;
+    refetch: () => Promise<any>;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
