@@ -4,8 +4,8 @@ import ActionDropdown from "@/components/customers/action-dropdown";
 import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
-import SetBuyingPropertyTypeDialog from "@/components/customers/set-buying-property-type-dialog";
-import UpdateDialog from "@/components/customers/update-dialog";
+import UpdateBuyingProgressDialog from "@/components/customers/update-buying-progress-dialog";
+import UpdateUserDetailsDialog from "@/components/customers/update-user-details-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
@@ -104,9 +104,9 @@ const Customers = () => {
                                     </div>
                                     <div className="flex flex-row space-x-2">
                                         <ActionDropdown />
-                                        <SetBuyingPropertyTypeDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
+                                        <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
-                                        <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
+                                        <UpdateBuyingProgressDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
                                         <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
                                     </div>
                                 </div>

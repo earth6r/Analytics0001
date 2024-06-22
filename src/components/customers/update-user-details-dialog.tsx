@@ -12,12 +12,12 @@ import { Label } from "@/components/ui/label"
 import { toast } from "../ui/use-toast"
 import { useState } from "react"
 import { api } from "@/utils/api"
-import { BuyingPropertyTypeSelect } from "./buying-property-type-select"
-import Spinner from "../common/spinner"
+import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
+import Spinner from "@/components/common/spinner"
 import { propertyTypes } from "@/lib/property-types"
-import { Input } from "../ui/input"
+import { Input } from "@/components/ui/input"
 
-interface SetBuyingPropertyTypeDialogProps {
+interface UpdateUserDetailsDialogProps {
     currentValue: any;
     email: string;
     refetch: () => Promise<any>;
@@ -26,7 +26,7 @@ interface SetBuyingPropertyTypeDialogProps {
     index: number;
 }
 
-const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) => {
+const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
     const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
 
     const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
@@ -117,4 +117,4 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
     )
 }
 
-export default SetBuyingPropertyTypeDialog;
+export default UpdateUserDetailsDialog;

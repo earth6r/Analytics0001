@@ -9,14 +9,13 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { toast } from "../ui/use-toast"
-import { useState } from "react"
-import { api } from "@/utils/api"
-import { BuyingPropertyTypeSelect } from "./buying-property-type-select"
-import Spinner from "../common/spinner"
 import { propertyTypes } from "@/lib/property-types"
-import { TrueFalseSelect } from "./true-false-select"
+import { api } from "@/utils/api"
+import { useState } from "react"
+import Spinner from "../common/spinner"
 import { Input } from "../ui/input"
+import { toast } from "../ui/use-toast"
+import { TrueFalseSelect } from "./true-false-select"
 
 interface UpdateDialogProps {
     currentValue: any;
@@ -27,31 +26,19 @@ interface UpdateDialogProps {
     index: number;
 }
 
-const UpdateDialog = (props: UpdateDialogProps) => {
+const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
     const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
 
-    const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue?.userBuyingPropertyType);
     const [escrowDeposit, setEscrowDeposit] = useState<boolean | undefined>(currentValue?.buyingProgressData?.escrowDeposit);
     const [scheduleClosing, setScheduleClosing] = useState<boolean | undefined>(currentValue?.buyingProgressData?.scheduleClosing);
     const [downloadDocuments, setDownloadDocuments] = useState<boolean | undefined>(currentValue?.buyingProgressData?.downloadDocuments);
     const [fullPayment, setFullPayment] = useState<boolean | undefined>(currentValue?.buyingProgressData?.fullPayment);
-    const [firstName, setFirstName] = useState<string | undefined>(currentValue?.firstName);
-    const [lastName, setLastName] = useState<string | undefined>(currentValue?.lastName);
 
-    const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
     const updateBuyingProgressBooleanValues = api.post.updateBuyingProgressBooleanValues.useMutation();
-    const updateUserDetails = api.post.updateUserDetails.useMutation();
 
     const [isLoading, setIsLoading] = useState(false);
 
     async function onSubmit() {
-        if (!selectedItem || !propertyTypes.includes(selectedItem)) {
-            toast({
-                title: "Invalid property type",
-                description: "The property type is not valid.",
-            });
-            return;
-        }
         try {
             if (typeof escrowDeposit !== "boolean" || typeof scheduleClosing !== "boolean" || typeof downloadDocuments !== "boolean" || typeof fullPayment !== "boolean") {
                 toast({
@@ -61,7 +48,6 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 return;
             }
             setIsLoading(true);
-            await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
             await updateBuyingProgressBooleanValues.mutateAsync({
                 email,
                 escrowDeposit,
@@ -69,7 +55,6 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 downloadDocuments,
                 fullPayment,
             });
-            await updateUserDetails.mutateAsync({ email, firstName: firstName || "", lastName: lastName || "" });
             await refetch();
             setIsLoading(false);
             toast({
@@ -137,7 +122,7 @@ const UpdateDialog = (props: UpdateDialogProps) => {
                 </div>
                 <DialogFooter>
                     <Button type="submit" className="w-full" onClick={onSubmit} disabled={
-                        isLoading || !selectedItem || !propertyTypes.includes(selectedItem)
+                        isLoading
                     }>
                         {isLoading ? <Spinner /> : "Save changes"}
                     </Button>
@@ -147,4 +132,4 @@ const UpdateDialog = (props: UpdateDialogProps) => {
     )
 }
 
-export default UpdateDialog;
+export default UpdateBuyingProgressDialog;
