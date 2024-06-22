@@ -14,6 +14,7 @@
     "tailwindcss",
     "tanstack",
     "Timelinedec",
-    "TRPC"
+    "TRPC",
+    "unclickable"
   ]
 }
