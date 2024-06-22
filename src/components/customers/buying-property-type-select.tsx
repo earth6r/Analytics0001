@@ -12,7 +12,7 @@ import { propertyTypes } from "@/lib/property-types";
 interface BuyingPropertyTypeSelectProps {
     selectedItem: string | null | undefined;
     setSelectedItem: (selectedItem: string | undefined) => void;
-    className: string;
+    className?: string;
 }
 
 export function BuyingPropertyTypeSelect(props: BuyingPropertyTypeSelectProps) {
