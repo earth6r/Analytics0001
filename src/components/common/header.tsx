@@ -207,17 +207,17 @@ const Header = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={async () => {
-                  await router.push("/settings");
-                }}
-              >
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={async () => {
                   await router.push("/stats");
                 }}
               >
                 Home
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async () => {
+                  await router.push("/settings");
+                }}
+              >
+                Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
