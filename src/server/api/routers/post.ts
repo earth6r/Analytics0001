@@ -1110,6 +1110,9 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
+        firstName: z.string(),
+        lastName: z.string(),
+        propertyType: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -1128,6 +1131,9 @@ export const postRouter = createTRPCRouter({
       const userRef = await addDoc(collectionRef, {
         email: input.email,
         createdAt: serverTimestamp(),
+        firstName: input.firstName,
+        lastName: input.lastName,
+        userBuyingPropertyType: input.propertyType,
       });
 
       return {

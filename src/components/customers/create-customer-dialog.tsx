@@ -13,7 +13,8 @@ import { Label } from "@/components/ui/label"
 import { toast } from "../ui/use-toast"
 import { useState } from "react"
 import { api } from "@/utils/api"
-import Spinner from "../common/spinner"
+import Spinner from "@/components/common/spinner"
+import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
 
 interface CreateCustomerDialogProps {
     refetch: () => Promise<any>;
@@ -25,6 +26,9 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
     const { refetch, open, onOpenChange } = props;
 
     const [email, setEmail] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
 
     const createUserInDatabase = api.post.createUserInDatabase.useMutation();
@@ -46,9 +50,33 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             return;
         }
 
+        if (!firstName) {
+            toast({
+                title: "First Name is required",
+                description: "Please enter the first name.",
+            });
+            return;
+        }
+
+        if (!lastName) {
+            toast({
+                title: "Last Name is required",
+                description: "Please enter the last name.",
+            });
+            return;
+        }
+
+        if (!propertyType) {
+            toast({
+                title: "Property Type is required",
+                description: "Please enter the property type.",
+            });
+            return;
+        }
+
         try {
             setIsLoading(true);
-            const response = await createUserInDatabase.mutateAsync({ email });
+            const response = await createUserInDatabase.mutateAsync({ email, firstName, lastName, propertyType });
 
             if (response?.error === "user_already_exists") {
                 toast({
@@ -58,6 +86,11 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
                 return;
             }
             await refetch();
+
+            setEmail("");
+            setFirstName("");
+            setLastName("");
+            setPropertyType(null);
 
             setIsLoading(false);
 
@@ -88,22 +121,55 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-7 items-center gap-7">
-                        <Label htmlFor="name" className="text-right">
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="email">
                             Email
                         </Label>
                         <Input
-                            id="name"
-                            className="col-span-6"
+                            id="email"
+                            className="w-[250px]"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
                         />
                     </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="firstName">
+                            First Name
+                        </Label>
+                        <Input
+                            id="firstName"
+                            className="w-[250px]"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstName}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="lastName">
+                            Last Name
+                        </Label>
+                        <Input
+                            id="lastName"
+                            className="w-[250px]"
+                            onChange={(e) => setLastName(e.target.value)}
+                            value={lastName}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="propertyType">
+                            Property Type
+                        </Label>
+                        <BuyingPropertyTypeSelect className="w-[250px]" selectedItem={propertyType} setSelectedItem={setPropertyType} />
+                    </div>
                 </div>
                 <DialogFooter>
-                    <Button variant="outline" className="w-full" onClick={() => { setEmail(""); }}>Clear</Button>
+                    <Button variant="outline" className="w-full" onClick={() => {
+                        setEmail("");
+                        setFirstName("");
+                        setLastName("");
+                        setPropertyType(null);
+                    }}>Clear</Button>
                     <Button type="submit" className="w-full" onClick={onSubmit}
-                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".")}
+                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !firstName || !lastName || !propertyType}
                     >
                         {isLoading ? <Spinner /> : "Create Customer"}
                     </Button>

@@ -38,11 +38,13 @@
     - error handle creating customers with the same email
     - fix the case where a new user cannot update a property type
     - simulate deposit button
-    - display all buyingProgress UID's
+    - display all buyingProgress UID's ✅
     - create customer dialog needs a dropdown of property type
     - the messages table: when clicking the action button and viewing the info, then closing the dialog, the screen becomes unclickable
     - the registers table: when clicking the action button and viewing the info, then closing the dialog, the screen becomes unclickable
     - change message and register view dialog to be similar ui to the customer view dialog
+    - remove labels for forms where unnecessary
+    - when clicking clear for create customer, it will not clear the property type
 
 # sendgrid stats
 curl -X GET \
