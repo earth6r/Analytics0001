@@ -45,6 +45,11 @@
     - change message and register view dialog to be similar ui to the customer view dialog
     - remove labels for forms where unnecessary
     - when clicking clear for create customer, it will not clear the property type
+    - add toasts to all submit buttons and loadings if not already there
+    - add some color to toasts i.e. red background or something for errors and green for success
+    - restrict toasts being shown if notifications settings have been set to false
+    - if there is no buyingProgress, customer UID will show not set but it should show regardless 🔄
+    - need to choose a consistent date i.e. utc time or something (use EPOCH everywhere)
 
 # sendgrid stats
 curl -X GET \

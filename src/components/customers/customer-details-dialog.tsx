@@ -27,7 +27,7 @@ const DetailItem = (props: { label: string, value: string, tooltipLabel?: string
                 <Label>{label}</Label>
                 {tooltipLabel && <CircularQuestionMarkTooltip label={tooltipLabel} />}
             </div>
-            {copyable ? <CopyTooltip label={label} />
+            {copyable ? <CopyTooltip value={value} />
                 : <div className="truncate max-w-48">{value}</div>}
         </div>
     )
@@ -60,7 +60,7 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Completed" value={JSON.stringify(customerDetails?.buyingProgressData?.completed) || "false"} />
                     <DetailItem label="User Property Type" value={customerDetails?.propertyType || "No property type set"} tooltipLabel="Value of the user's set property type" />
                     <DetailItem label="Property Type" value={customerDetails?.buyingProgressData?.propertyType || "No property type set"} tooltipLabel="Value of the buying progress property type" />
-                    <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id" />
+                    <DetailItem label="Customer UID" value={customerDetails?.buyingProgressData?.userUID || "No customer UID set"} tooltipLabel="Database Id" copyable />
                     <DetailItem label="Created At" value={customerDetails?.createdAt?.seconds ? new Date(customerDetails.createdAt.seconds * 1000).toLocaleDateString()
                         : "No creation date set"} />
                     <DetailItem label="Has Password" value={JSON.stringify(customerDetails?.setPassword) || "false"} />

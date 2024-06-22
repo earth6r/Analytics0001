@@ -3,8 +3,10 @@ import Header from "@/components/common/header";
 import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
+import SimulateStripeSuccessfulDepositAlertDialog from "@/components/customers/simulate-stripe-successful-deposit-alert-dialog";
 import UpdateBuyingProgressDialog from "@/components/customers/update-buying-progress-dialog";
 import UpdateUserDetailsDialog from "@/components/customers/update-user-details-dialog";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
@@ -55,7 +57,7 @@ const Customers = () => {
                 <div>
                     {getUsersInDatabase.isLoading ? (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5">
+                            <div className="grid grid-cols-6">
                                 <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingPropertyTypeTitle />
@@ -67,7 +69,7 @@ const Customers = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-5">
+                            <div className="grid grid-cols-6">
                                 <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 {/* <BuyingStepTitle /> */}
@@ -75,7 +77,7 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
-                                <div key={user.id} className="grid grid-cols-5">
+                                <div key={user.id} className="grid grid-cols-6">
                                     <div className="flex flex-col justify-center">
                                         <div>
                                             <div className="text-sm">{user.firstName || "First Name"} {user.lastName || "Last Name"}</div>
@@ -89,9 +91,10 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
-                                        <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
+                                        <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <UpdateBuyingProgressDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
+                                        <SimulateStripeSuccessfulDepositAlertDialog user={user} refetch={getUsersInDatabase.refetch} />
                                         <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
                                     </div>
                                 </div>

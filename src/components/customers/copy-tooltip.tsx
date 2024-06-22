@@ -3,11 +3,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useState } from "react";
 
 interface CopyTooltip {
-    label: string;
+    value: string;
 }
 
 const CopyTooltip = (props: CopyTooltip) => {
-    const { label } = props;
+    const { value } = props;
 
     const [copied, setCopied] = useState<boolean>(false);
     const [tooltipOpened, setTooltipOpened] = useState<boolean>(false);
@@ -18,14 +18,14 @@ const CopyTooltip = (props: CopyTooltip) => {
                 <TooltipTrigger asChild>
                     <div className="truncate max-w-48 hover:text-blue-400 cursor-pointer" onClick={
                         () => {
-                            navigator.clipboard.writeText(label);
+                            navigator.clipboard.writeText(value);
                             setCopied(true);
                             setTimeout(() => {
                                 setCopied(false);
                             }, 2000);
                         }
                     } onMouseEnter={() => setTooltipOpened(true)}
-                        onMouseLeave={() => setTooltipOpened(false)}>{label}</div>
+                        onMouseLeave={() => setTooltipOpened(false)}>{value}</div>
                 </TooltipTrigger>
                 <TooltipContent>
                     <p className="font-normal text-wrap max-w-96">{

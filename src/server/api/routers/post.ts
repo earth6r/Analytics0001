@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import admin, { firestore } from 'firebase-admin';
+import admin from 'firebase-admin';
 import { db } from "@/utils/firebase/initialize";
 import {
   addDoc,

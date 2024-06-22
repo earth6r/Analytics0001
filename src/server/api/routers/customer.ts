@@ -1,7 +1,8 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
-import { collection, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { addDoc, collection, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
+import admin from 'firebase-admin';
 
 // TODO: move to utils
 export const buyingProgressStepNumberToLabel = {
@@ -129,9 +130,56 @@ export const customerRouter = createTRPCRouter({
                 }
                 await updateDoc(
                     doc.ref,
-                {
-                    archived: true,
+                    {
+                        archived: true,
+                    });
+            }
+        }),
+
+    simulateStripeSuccessfulDeposit: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            // TODO: move this to utils + everywhere else using similar code
+            if (!admin.apps.length) {
+                // Initialize Firebase app with the parsed configuration
+                const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY as string);
+                admin.initializeApp({
+                    credential: admin.credential.cert(serviceAccount),
+                    projectId: process.env.PROJECT_ID,
+                })
+            }
+
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("email", "==", input.email));
+
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                if (!doc) {
+                    return;
+                }
+
+                const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
+
+                addDoc(usersBuyingProgressRef, {
+                    userUID: doc.id,
+                    paymentIntent: JSON.stringify({}),
+                    scheduleClosing: false,
+                    escrowDeposit: true,
+                    fullPayment: false,
+                    downloadDocuments: false,
+                    completed: false,
+                    createdAt: new Date().getTime(),
+                    propertyType: doc.data().userBuyingPropertyType,
+                    simulatedDeposit: true,
                 });
+            } else {
+                console.error(`No user found with email ${input.email}`);
             }
         }),
 });
