@@ -14,14 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-import ToggleTheme from "@/components/settings/toggle-theme";
 import { cn } from "@/lib/utils";
 import useColor from "@/hooks/use-color";
+import { Switch } from "../ui/switch";
 
 const FormSchema = z.object({});
 
 const AppearanceForm = () => {
-  const { color, setColor } = useColor();
+  const { color, setColor, theme, setTheme } = useColor();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -47,8 +47,22 @@ const AppearanceForm = () => {
           render={({ }) => (
             <FormItem>
               <FormLabel>Theme</FormLabel>
-              <div>
-                <ToggleTheme />
+              <div className="flex flex-row items-center space-x-2">
+                <Switch
+                  checked={theme === "dark"}
+                  onClick={() => {
+                    setTheme(theme === "dark" ? "light" : "dark");
+                  }}
+                />
+                {theme !== "system" && <Button
+                  onClick={() => {
+                    setTheme("system");
+                  }}
+                  variant="outline"
+                  type="button"
+                >
+                  Use System
+                </Button>}
               </div>
               <FormDescription>
                 Select the theme for the dashboard.
@@ -66,40 +80,40 @@ const AppearanceForm = () => {
             <FormItem>
               <FormLabel>Color</FormLabel>
               <div className="flex flex-row items-center space-x-4">
-                <div className={cn(color === "default" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
-                  <Button className="bg-black" onClick={
+                <div className={cn(color === "default" && "border-2 border-black dark:border-white rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-black hover:bg-slate-600 dark:bg-white dark:hover:bg-slate-300" onClick={
                     () => {
                       setColor('default')
                     }
-                  }>Zinc</Button>
+                  } />
                 </div>
-                <div className={cn(color === "red" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
-                  <Button className="bg-red-500" onClick={
+                <div className={cn(color === "red" && "border-2 border-red-500 rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-red-500 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-700" onClick={
                     () => {
                       setColor('red')
                     }
-                  }>Red</Button>
+                  } />
                 </div>
-                <div className={cn(color === "blue" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
-                  <Button className="bg-blue-500" onClick={
+                <div className={cn(color === "blue" && "border-2 border-blue-500 rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-blue-500 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-700" onClick={
                     () => {
                       setColor('blue')
                     }
-                  }>Blue</Button>
+                  } />
                 </div>
-                <div className={cn(color === "green" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
-                  <Button className="bg-green-500" onClick={
+                <div className={cn(color === "green" && "border-2 border-green-500 rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-green-500 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-700" onClick={
                     () => {
                       setColor('green')
                     }
-                  }>Green</Button>
+                  } />
                 </div>
-                <div className={cn(color === "orange" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
-                  <Button className="bg-orange-500" onClick={
+                <div className={cn(color === "orange" && "border-2 border-orange-500 rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-orange-500 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-700" onClick={
                     () => {
                       setColor('orange')
                     }
-                  }>Orange</Button>
+                  } />
                 </div>
               </div>
               <FormDescription>

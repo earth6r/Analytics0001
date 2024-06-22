@@ -92,7 +92,7 @@ const Settings = () => {
                 <h2 className="mt-6 text-2xl">Appearance</h2>
                 <h3 className="text-md mt-2 font-light text-muted-foreground">
                   Customize the appearance of the app. Automatically switch
-                  between day and night themes.
+                  between day and night themes and different primary colors.
                 </h3>
                 <Separator className="mb-6 mt-6" />
                 <AppearanceForm />

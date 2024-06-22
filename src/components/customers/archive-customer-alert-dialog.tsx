@@ -50,7 +50,7 @@ const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+                    <AlertDialogAction className="bg-red-500 hover:bg-red-600" onClick={handleSubmit}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
