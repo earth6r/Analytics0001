@@ -338,7 +338,7 @@ export const postRouter = createTRPCRouter({
       }
     });
 
-    return querySnapshot.size;
+    return count;
   }),
 
   getMessagesForTheYearGroupedCount: publicProcedure.query(async () => {
