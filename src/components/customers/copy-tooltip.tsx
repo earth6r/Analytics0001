@@ -1,17 +1,31 @@
 import { CircleCheck } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useEffect, useState } from "react";
 
 interface CopyTooltip {
     children: React.ReactNode;
     copied: boolean;
+    tooltipOpened: boolean;
+    setTooltipOpened: (open: boolean) => void;
 }
 
 const CopyTooltip = (props: CopyTooltip) => {
-    const { children, copied } = props;
+    const { children, copied, tooltipOpened, setTooltipOpened } = props;
+
+    useEffect(() => {
+        if (copied) {
+            setTooltipOpened(true);
+            const timer = setTimeout(() => {
+                setTooltipOpened(false);
+            }, 2000); // Adjust the duration as needed
+
+            return () => clearTimeout(timer);
+        }
+    }, [copied, setTooltipOpened]);
 
     return (
         <TooltipProvider delayDuration={0}>
-            <Tooltip {...(copied ? { open: true } : {})}>
+            <Tooltip open={tooltipOpened}>
                 <TooltipTrigger asChild>
                     {children}
                 </TooltipTrigger>
