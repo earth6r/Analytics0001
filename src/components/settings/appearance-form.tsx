@@ -15,10 +15,14 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import ToggleTheme from "@/components/settings/toggle-theme";
+import { cn } from "@/lib/utils";
+import useColor from "@/hooks/use-color";
 
 const FormSchema = z.object({});
 
 const AppearanceForm = () => {
+  const { color, setColor } = useColor();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {},
@@ -61,36 +65,42 @@ const AppearanceForm = () => {
           render={({ }) => (
             <FormItem>
               <FormLabel>Color</FormLabel>
-              <div>
-                <Button className="bg-black" onClick={
-                  () => {
-                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
-                  }
-                }>Zinc</Button>
-                <Button className="bg-red-500" onClick={
-                  () => {
-                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
-                    document.body.classList.add('theme-red');
-                  }
-                }>Red</Button>
-                <Button className="bg-blue-500" onClick={
-                  () => {
-                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
-                    document.body.classList.add('theme-blue');
-                  }
-                }>Blue</Button>
-                <Button className="bg-green-500" onClick={
-                  () => {
-                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
-                    document.body.classList.add('theme-green');
-                  }
-                }>Green</Button>
-                <Button className="bg-orange-500" onClick={
-                  () => {
-                    document.body.classList.remove('theme-red', 'theme-red', 'theme-blue', 'theme-green', 'theme-orange');
-                    document.body.classList.add('theme-orange');
-                  }
-                }>Orange</Button>
+              <div className="flex flex-row items-center space-x-4">
+                <div className={cn(color === "default" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-black" onClick={
+                    () => {
+                      setColor('default')
+                    }
+                  }>Zinc</Button>
+                </div>
+                <div className={cn(color === "red" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-red-500" onClick={
+                    () => {
+                      setColor('red')
+                    }
+                  }>Red</Button>
+                </div>
+                <div className={cn(color === "blue" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-blue-500" onClick={
+                    () => {
+                      setColor('blue')
+                    }
+                  }>Blue</Button>
+                </div>
+                <div className={cn(color === "green" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-green-500" onClick={
+                    () => {
+                      setColor('green')
+                    }
+                  }>Green</Button>
+                </div>
+                <div className={cn(color === "orange" && "border-2 border-black rounded-lg p-[1px] min-w-fit inline-block")}>
+                  <Button className="bg-orange-500" onClick={
+                    () => {
+                      setColor('orange')
+                    }
+                  }>Orange</Button>
+                </div>
               </div>
               <FormDescription>
                 Select the color for the dashboard.
@@ -101,7 +111,7 @@ const AppearanceForm = () => {
         />
         <Button type="submit">Update Preferences</Button>
       </form>
-    </Form>
+    </Form >
   );
 };
 
