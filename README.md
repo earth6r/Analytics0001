@@ -57,6 +57,7 @@
     - number of customers chart over time (non-cumulative)
     - number of customers chart over time (cumulative)
     - messages grouped by day of the week bar chart of 7 days of the week on x axios and count on y axios
+    - lease popular properties in progress
 
 # sendgrid stats
 curl -X GET \
