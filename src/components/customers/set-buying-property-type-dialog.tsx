@@ -15,9 +15,10 @@ import { api } from "@/utils/api"
 import { BuyingPropertyTypeSelect } from "./buying-property-type-select"
 import Spinner from "../common/spinner"
 import { propertyTypes } from "@/lib/property-types"
+import { Input } from "../ui/input"
 
 interface SetBuyingPropertyTypeDialogProps {
-    currentValue: string;
+    currentValue: any;
     email: string;
     refetch: () => Promise<any>;
     dialogOpenedByIndex: number | null;
@@ -27,11 +28,14 @@ interface SetBuyingPropertyTypeDialogProps {
 
 const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) => {
     const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
-    const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue);
 
     const setUserBuyingPropertyType = api.post.setUserBuyingPropertyType.useMutation();
+    const updateUserDetails = api.post.updateUserDetails.useMutation();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<string | undefined>(currentValue?.userBuyingPropertyType);
+    const [firstName, setFirstName] = useState<string>(currentValue?.firstName || "");
+    const [lastName, setLastName] = useState<string>(currentValue?.lastName || "");
 
     async function onSubmit() {
         if (!selectedItem || !propertyTypes.includes(selectedItem)) {
@@ -44,6 +48,7 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
         try {
             setIsLoading(true);
             await setUserBuyingPropertyType.mutateAsync({ email, propertyType: selectedItem });
+            await updateUserDetails.mutateAsync({ email, firstName, lastName });
             await refetch();
             setIsLoading(false);
             toast({
@@ -63,21 +68,41 @@ const SetBuyingPropertyTypeDialog = (props: SetBuyingPropertyTypeDialogProps) =>
     return (
         <Dialog open={dialogOpenedByIndex === index} onOpenChange={(open) => setDialogOpenedByIndex(open ? index : null)}>
             <DialogTrigger asChild>
-                <Button variant="default">Set Buying Property Type</Button>
+                <Button variant="default">Update User Details</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Set Customer Buying Property Type</DialogTitle>
+                    <DialogTitle>Update User Details</DialogTitle>
                     <DialogDescription>
-                        {`This is the buying property type that will be saved to the database.`}
+                        {`This is the user's details that will be saved to the database.`}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-7 items-center gap-7">
-                        <Label htmlFor="name" className="text-right">
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="name">
+                            First Name
+                        </Label>
+                        <Input
+                            className="w-[290px]"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="name">
+                            Last Name
+                        </Label>
+                        <Input
+                            className="w-[290px]"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="name" className="">
                             Type
                         </Label>
-                        <BuyingPropertyTypeSelect selectedItem={selectedItem} setSelectedItem={setSelectedItem} /> 
+                        <BuyingPropertyTypeSelect selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
                     </div>
                 </div>
                 <DialogFooter>

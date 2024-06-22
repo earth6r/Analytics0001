@@ -16,7 +16,6 @@
 - fix bug where user not logged in, goes to a page that does not require login and then clicks a tab
 - each tab content under the tabs have different margin tops, fix this
 
-
 <!-- PROPERTY BUYING PROGRESS STATS -->
 - add question mark tooltip for current fake data
 - add in new tab for buying progress and display stats about it
@@ -39,6 +38,8 @@
     - error handle creating customers with the same email
     - fix the case where a new user cannot update a property type
     - simulate deposit button
+    - display all buyingProgress UID's
+    - create customer dialog needs a dropdown of property type
 
 # sendgrid stats
 curl -X GET \

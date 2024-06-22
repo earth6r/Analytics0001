@@ -1,5 +1,6 @@
 import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
+import ActionDropdown from "@/components/customers/action-dropdown";
 import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
@@ -102,6 +103,7 @@ const Customers = () => {
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
                                     </div>
                                     <div className="flex flex-row space-x-2">
+                                        <ActionDropdown />
                                         <SetBuyingPropertyTypeDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <CustomerDetailsDialog customerDetails={user} />
                                         <UpdateDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />

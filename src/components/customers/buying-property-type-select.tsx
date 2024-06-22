@@ -19,7 +19,7 @@ export function BuyingPropertyTypeSelect(props: BuyingPropertyTypeSelectProps) {
 
     return (
         <Select value={selectedItem} onValueChange={setSelectedItem}>
-            <SelectTrigger className="w-[220px]">
+            <SelectTrigger className="w-[290px]">
                 <SelectValue placeholder="Select a property type" />
             </SelectTrigger>
             <SelectContent>

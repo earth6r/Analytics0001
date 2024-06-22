@@ -89,7 +89,7 @@ const UpdateDialog = (props: UpdateDialogProps) => {
     return (
         <Dialog open={dialogOpenedByIndex === index} onOpenChange={(open) => setDialogOpenedByIndex(open ? index : null)}>
             <DialogTrigger asChild>
-                <Button variant="default">Update Details</Button>
+                <Button variant="default">Update Buying Progress Details</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
