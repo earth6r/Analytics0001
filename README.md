@@ -56,6 +56,7 @@
     - buying progress bar chart with cumulative (i.e. a user who completed everything will still be a count for each item)
     - number of customers chart over time (non-cumulative)
     - number of customers chart over time (cumulative)
+    - messages grouped by day of the week bar chart of 7 days of the week on x axios and count on y axios
 
 # sendgrid stats
 curl -X GET \
