@@ -24,10 +24,11 @@ interface UpdateDialogProps {
     dialogOpenedByIndex: number | null;
     setDialogOpenedByIndex: (open: number | null) => void;
     index: number;
+    trigger: React.ReactNode;
 }
 
 const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
-    const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index } = props;
+    const { currentValue, email, refetch, dialogOpenedByIndex, setDialogOpenedByIndex, index, trigger } = props;
 
     const [escrowDeposit, setEscrowDeposit] = useState<boolean | undefined>(currentValue?.buyingProgressData?.escrowDeposit);
     const [scheduleClosing, setScheduleClosing] = useState<boolean | undefined>(currentValue?.buyingProgressData?.scheduleClosing);
@@ -74,7 +75,7 @@ const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
     return (
         <Dialog open={dialogOpenedByIndex === index} onOpenChange={(open) => setDialogOpenedByIndex(open ? index : null)}>
             <DialogTrigger asChild>
-                <Button variant="default">Update Buying Progress Details</Button>
+                {trigger}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

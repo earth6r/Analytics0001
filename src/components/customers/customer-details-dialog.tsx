@@ -16,6 +16,7 @@ import CopyTooltip from "./copy-tooltip";
 
 interface BuyingProgressDetailsDialog {
     customerDetails: any;
+    trigger: React.ReactNode;
 }
 
 const DetailItem = (props: { label: string, value: string, tooltipLabel?: string, copyable?: boolean }) => {
@@ -35,12 +36,12 @@ const DetailItem = (props: { label: string, value: string, tooltipLabel?: string
 }
 
 const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
-    const { customerDetails } = props;
+    const { customerDetails, trigger } = props;
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="default">View Details</Button>
+                {trigger}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
