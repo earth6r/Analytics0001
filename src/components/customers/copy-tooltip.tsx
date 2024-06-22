@@ -16,7 +16,7 @@ const CopyTooltip = (props: CopyTooltip) => {
         <TooltipProvider delayDuration={0}>
             <Tooltip open={tooltipOpened}>
                 <TooltipTrigger asChild>
-                    <div className="truncate max-w-48 text-blue-400 cursor-pointer" onClick={
+                    <div className="truncate max-w-48 hover:text-blue-400 cursor-pointer" onClick={
                         () => {
                             navigator.clipboard.writeText(label);
                             setCopied(true);
