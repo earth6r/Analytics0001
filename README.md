@@ -50,6 +50,7 @@
     - restrict toasts being shown if notifications settings have been set to false
     - if there is no buyingProgress, customer UID will show not set but it should show regardless 🔄
     - need to choose a consistent date i.e. utc time or something (use EPOCH everywhere)
+    - archive customer color looks bad in dark mode 🔄
 
 # sendgrid stats
 curl -X GET \
