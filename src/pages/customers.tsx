@@ -10,15 +10,6 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
 
-const BuyingStepTitle = () => {
-    return (
-        <div className="flex flex-row items-center space-x-2">
-            <div className="font-bold text-xl">Buying Step</div>
-            <CircularQuestionMarkTooltip label="This step is what the customer has completed last. The ordered steps include: Escrow Deposit, Schedule Closing, Download Documents, Full Payment, Completed" />
-        </div>
-    );
-}
-
 const BuyingPropertyTypeTitle = () => {
     return (
         <div className="flex flex-row items-center space-x-2">
@@ -67,7 +58,6 @@ const Customers = () => {
                             <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <BuyingStepTitle />
                                 <BuyingPropertyTypeTitle />
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
@@ -80,7 +70,7 @@ const Customers = () => {
                             <div className="grid grid-cols-5">
                                 <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
-                                <BuyingStepTitle />
+                                {/* <BuyingStepTitle /> */}
                                 <BuyingPropertyTypeTitle />
                                 <div className="font-bold text-xl">Actions</div>
                             </div>
@@ -94,9 +84,6 @@ const Customers = () => {
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {JSON.stringify(user?.setPassword) ?? "No value for setPassword"}
-                                    </div>
-                                    <div className="flex flex-col justify-center">
-                                        {user?.buyingProgress ?? "Escrow Deposit"}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         {user?.userBuyingPropertyType ?? "No value for buying property type"}
