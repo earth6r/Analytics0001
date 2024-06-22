@@ -1,33 +1,31 @@
 import { CircleCheck } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { useEffect, useState } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 interface CopyTooltip {
-    children: React.ReactNode;
-    copied: boolean;
-    tooltipOpened: boolean;
-    setTooltipOpened: (open: boolean) => void;
+    label: string;
 }
 
 const CopyTooltip = (props: CopyTooltip) => {
-    const { children, copied, tooltipOpened, setTooltipOpened } = props;
+    const { label } = props;
 
-    useEffect(() => {
-        if (copied) {
-            setTooltipOpened(true);
-            const timer = setTimeout(() => {
-                setTooltipOpened(false);
-            }, 2000); // Adjust the duration as needed
-
-            return () => clearTimeout(timer);
-        }
-    }, [copied, setTooltipOpened]);
+    const [copied, setCopied] = useState<boolean>(false);
+    const [tooltipOpened, setTooltipOpened] = useState<boolean>(false);
 
     return (
         <TooltipProvider delayDuration={0}>
             <Tooltip open={tooltipOpened}>
                 <TooltipTrigger asChild>
-                    {children}
+                    <div className="truncate max-w-48 text-blue-400 cursor-pointer" onClick={
+                        () => {
+                            navigator.clipboard.writeText(label);
+                            setCopied(true);
+                            setTimeout(() => {
+                                setCopied(false);
+                            }, 2000);
+                        }
+                    } onMouseEnter={() => setTooltipOpened(true)}
+                        onMouseLeave={() => setTooltipOpened(false)}>{label}</div>
                 </TooltipTrigger>
                 <TooltipContent>
                     <p className="font-normal text-wrap max-w-96">{

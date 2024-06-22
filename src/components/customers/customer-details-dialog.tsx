@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label"
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
 import { convertDateString } from "@/lib/utils";
 import CopyTooltip from "./copy-tooltip";
-import { useEffect, useState } from "react";
 
 interface BuyingProgressDetailsDialog {
     customerDetails: any;
@@ -22,27 +21,14 @@ interface BuyingProgressDetailsDialog {
 const DetailItem = (props: { label: string, value: string, tooltipLabel?: string, copyable?: boolean }) => {
     const { label, value, tooltipLabel = null, copyable = false } = props;
 
-    const [copied, setCopied] = useState<boolean>(false);
-    const [tooltipOpened, setTooltipOpened] = useState<boolean>(false);
-
     return (
         <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center space-x-2">
                 <Label>{label}</Label>
                 {tooltipLabel && <CircularQuestionMarkTooltip label={tooltipLabel} />}
             </div>
-            {copyable ? <CopyTooltip copied={copied} tooltipOpened={tooltipOpened} setTooltipOpened={setTooltipOpened}>
-                <div className="truncate max-w-48 text-blue-400 cursor-pointer" onClick={
-                    () => {
-                        navigator.clipboard.writeText(value);
-                        setCopied(true);
-                        setTimeout(() => {
-                            setCopied(false);
-                        }, 2000);
-                    }
-                } onMouseEnter={() => setTooltipOpened(true)}
-                onMouseLeave={() => setTooltipOpened(false)}>{label}</div>
-            </CopyTooltip> : <div className="truncate max-w-48">{value}</div>}
+            {copyable ? <CopyTooltip label={label} />
+                : <div className="truncate max-w-48">{value}</div>}
         </div>
     )
 
