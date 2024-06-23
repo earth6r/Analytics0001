@@ -12,11 +12,14 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProgressChart from "@/components//common/progress-chart";
+import useColor from "@/hooks/use-color";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = () => {
   const { interval } = useInterval();
+  const { pieColors } = useColor();
+
   const [labels, setLabels] = useState([]);
   const [pieData, setPieData] = useState([]);
 
@@ -42,22 +45,8 @@ const PieChart = () => {
       {
         label: "Property Interests",
         data: pieData,
-        backgroundColor: [
-          "rgba(25, 25, 112, 1)", // midnight blue
-          "rgba(0, 0, 255, 1)", // blue
-          "rgba(70, 130, 180, 1)", // steel blue
-          "rgba(135, 206, 235, 1)", // sky blue
-          "rgba(240, 248, 255, 1)", // alice blue
-          "rgba(70, 130, 180, 1)", // steel blue
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        backgroundColor: pieColors,
+        borderColor: pieColors,
         borderWidth: 1,
       },
     ],

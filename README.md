@@ -83,6 +83,7 @@ TODAY TODO:
 - don't show toast if notifications disabled ✅
 - change colors of charts to match theme
 - add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
+- reset settings button (delete all local storage)
 
 # sendgrid stats
 curl -X GET \
