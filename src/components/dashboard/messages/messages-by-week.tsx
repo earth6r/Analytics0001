@@ -16,9 +16,11 @@ import {
   YAxis,
 } from "recharts";
 import { api } from "@/utils/api";
+import useColor from "@/hooks/use-color";
 
 const MessagesByWeek = () => {
   const { interval } = useInterval();
+  const { chartColor } = useColor();
 
   const messagesByWeek = api.post.getMessagesByWeek.useQuery(
     undefined,
@@ -56,7 +58,7 @@ const MessagesByWeek = () => {
           <Line
             type="monotone"
             dataKey="pv"
-            stroke="#8884d8"
+            stroke={chartColor}
             activeDot={{ r: 8 }}
           />
         </LineChart>

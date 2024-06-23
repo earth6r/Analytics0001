@@ -80,8 +80,9 @@ FEATURES:
 
 TODAY TODO:
 - ui for toast success/error ✅
-- don't show toast if notifications disabled
+- don't show toast if notifications disabled ✅
 - change colors of charts to match theme
+- add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
 
 # sendgrid stats
 curl -X GET \

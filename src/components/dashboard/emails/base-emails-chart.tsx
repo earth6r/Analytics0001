@@ -16,6 +16,7 @@ import {
     YAxis,
 } from "recharts";
 import { api } from "@/utils/api";
+import useColor from "@/hooks/use-color";
 
 interface BaseEmailsChartProps {
     label: string;
@@ -24,8 +25,10 @@ interface BaseEmailsChartProps {
 }
 
 const BaseEmailsChart = (props: BaseEmailsChartProps) => {
-    const { interval } = useInterval();
     const { valueKey, label, description } = props;
+
+    const { interval } = useInterval();
+    const { chartColor } = useColor();
 
     const getStats = api.email.getStats.useQuery(
         undefined,
@@ -71,7 +74,7 @@ const BaseEmailsChart = (props: BaseEmailsChartProps) => {
                     <Line
                         type="monotone"
                         dataKey={label}
-                        stroke="#8884d8"
+                        stroke={chartColor}
                         activeDot={{ r: 8 }}
                     />
                 </LineChart>

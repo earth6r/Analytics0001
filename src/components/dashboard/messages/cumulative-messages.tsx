@@ -16,9 +16,11 @@ import {
   YAxis,
 } from "recharts";
 import { api } from "@/utils/api";
+import useColor from "@/hooks/use-color";
 
 const CumulativeMessages = () => {
   const { interval } = useInterval();
+  const { chartColor } = useColor();
 
   const cumulativeMessages = api.post.getCumulativeMessages.useQuery(
     undefined,
@@ -57,7 +59,7 @@ const CumulativeMessages = () => {
           <Line
             type="monotone"
             dataKey="pv"
-            stroke="#8884d8"
+            stroke={chartColor}
             activeDot={{ r: 8 }}
           />
         </LineChart>

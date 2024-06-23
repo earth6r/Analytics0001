@@ -42,7 +42,7 @@ const useColor = () => {
         loadTheme();
     }, []);
 
-    return { color: _color, setColor, theme: _theme, setTheme };
+    return { color: _color, setColor, theme: _theme, setTheme, chartColor: _color === 'default' ? (_theme === "dark" ? "white": "dark") : _color};
 };
 
 export default useColor;
