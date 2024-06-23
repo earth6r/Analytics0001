@@ -79,7 +79,7 @@ FEATURES:
         1. Display all errors in a table
 
 TODAY TODO:
-- ui for toast success/error
+- ui for toast success/error ✅
 - don't show toast if notifications disabled
 - change colors of charts to match theme
 

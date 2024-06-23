@@ -138,6 +138,10 @@ function dispatch(action: Action) {
 type Toast = Omit<ToasterToast, "id">;
 
 function toast({ ...props }: Toast) {
+  const disableToast = localStorage.getItem("toast") === "false";
+  if (disableToast) {
+    return;
+  }
   const id = genId();
 
   const update = (props: ToasterToast) =>
