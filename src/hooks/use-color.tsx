@@ -93,8 +93,6 @@ const useColor = () => {
         loadTheme();
     }, []);
 
-    console.log(pieColors[_color])
-
     return {
         color: _color, setColor, theme: _theme, setTheme, chartColor: _color === 'default' ? (_theme === "dark" ? "white" : "dark") : _color, pieColors: _color === 'default' ? pieColors[
             _theme === 'dark' ? 'white' : 'black'
