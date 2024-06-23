@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import Spinner from "@/components/common/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,7 +20,7 @@ import { toast } from "@/components/ui/use-toast";
 import { api } from "@/utils/api";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useRouter } from "next/router";
-import Spinner from "@/components/common/spinner";
+import { toastErrorStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({
   password: z.string().min(2, {
@@ -63,6 +64,7 @@ const PasswordInput = () => {
             <Button variant="outline">Looking for our main page?</Button>
           </ToastAction>
         ),
+        className: toastErrorStyle,
       });
     }
   }

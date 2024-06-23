@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
 import { useInterval } from "@/contexts/IntervalContext";
+import { useEffect } from "react";
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({
   interval: z.string().min(1, {
@@ -46,6 +47,7 @@ const DisplayForm = () => {
       toast({
         title: "Invalid Interval",
         description: "Interval must be a number.",
+        className: toastErrorStyle,
       });
       return;
     }
@@ -55,6 +57,7 @@ const DisplayForm = () => {
     toast({
       title: "Interval Updated",
       description: "Interval has been updated successfully.",
+      className: toastSuccessStyle,
     });
   }
 

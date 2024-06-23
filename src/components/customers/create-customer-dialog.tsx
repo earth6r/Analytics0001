@@ -1,3 +1,5 @@
+import Spinner from "@/components/common/spinner"
+import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -10,11 +12,10 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "../ui/use-toast"
-import { useState } from "react"
 import { api } from "@/utils/api"
-import Spinner from "@/components/common/spinner"
-import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
+import { useState } from "react"
+import { toast } from "../ui/use-toast"
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 
 interface CreateCustomerDialogProps {
     refetch: () => Promise<any>;
@@ -38,6 +39,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "Email is required",
                 description: "Please enter the email address.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -46,6 +48,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "Invalid email",
                 description: "Please enter a valid email address.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -54,6 +57,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "First Name is required",
                 description: "Please enter the first name.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -62,6 +66,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "Last Name is required",
                 description: "Please enter the last name.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -70,6 +75,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "Property Type is required",
                 description: "Please enter the property type.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -79,9 +85,17 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             const response = await createUserInDatabase.mutateAsync({ email, firstName, lastName, propertyType });
 
             if (response?.error === "user_already_exists") {
+                // TODO: make this a helper
+                setEmail("");
+                setFirstName("");
+                setLastName("");
+                setPropertyType(null);
+                setIsLoading(false);
+
                 toast({
                     title: "User already exists",
                     description: "The user already exists in the database.",
+                    className: toastErrorStyle,
                 });
                 return;
             }
@@ -97,6 +111,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "User created",
                 description: "The user was successfully created in the database.",
+                className: toastSuccessStyle,
             });
             onOpenChange(false);
         } catch (error) {
@@ -104,6 +119,7 @@ const CreateCustomerDialog = (props: CreateCustomerDialogProps) => {
             toast({
                 title: "An error occurred",
                 description: "An error occurred while creating the user in the database.",
+                className: toastErrorStyle,
             });
         }
     }

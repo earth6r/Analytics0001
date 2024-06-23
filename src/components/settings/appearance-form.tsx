@@ -14,9 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
 import useColor from "@/hooks/use-color";
+import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
+import { toastSuccessStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({});
 
@@ -34,6 +35,7 @@ const AppearanceForm = () => {
     toast({
       title: "Appearance Updated",
       description: "Your preferences has been updated successfully.",
+      className: toastSuccessStyle,
     });
   }
 

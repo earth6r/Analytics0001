@@ -13,13 +13,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
 import { Switch } from "@/components/ui/switch";
+import { toast } from "@/components/ui/use-toast";
+import useColor from "@/hooks/use-color";
 import { useEffect, useState } from "react";
+import { toastDefaultStyle, toastSuccessStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({});
 
 const NotificationForm = () => {
+  const { color } = useColor();
+
   const [toastEnabled, setToastEnabled] = useState(true);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -39,6 +43,7 @@ const NotificationForm = () => {
     toast({
       title: "Notifications Updated",
       description: "Your preferences has been updated successfully.",
+      className: toastSuccessStyle,
     });
   }
 
@@ -67,6 +72,7 @@ const NotificationForm = () => {
                   toast({
                     title: "Toast Message",
                     description: `This is a toast message. You will ${newToastState ? "keep seeing these." : "no longer see these again."}`,
+                    className: toastDefaultStyle(color),
                   });
                 }}
               />

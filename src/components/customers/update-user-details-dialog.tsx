@@ -1,3 +1,5 @@
+import Spinner from "@/components/common/spinner"
+import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -8,14 +10,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { toast } from "../ui/use-toast"
-import { useState } from "react"
-import { api } from "@/utils/api"
-import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
-import Spinner from "@/components/common/spinner"
-import { propertyTypes } from "@/lib/property-types"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { propertyTypes } from "@/lib/property-types"
+import { api } from "@/utils/api"
+import { useState } from "react"
+import { toast } from "../ui/use-toast"
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 
 interface UpdateUserDetailsDialogProps {
     currentValue: any;
@@ -42,6 +43,7 @@ const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
             toast({
                 title: "Invalid property type",
                 description: "The property type is not valid.",
+                className: toastErrorStyle,
             });
             return;
         }
@@ -54,6 +56,7 @@ const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
             toast({
                 title: "Property type set",
                 description: "The property type has been set successfully.",
+                className: toastSuccessStyle,
             });
             setDialogOpenedByIndex(null);
         } catch (error) {
@@ -61,6 +64,7 @@ const UpdateUserDetailsDialog = (props: UpdateUserDetailsDialogProps) => {
             toast({
                 title: "An error occurred",
                 description: "An error occurred while creating the user in the database.",
+                className: toastErrorStyle,
             });
         }
     }

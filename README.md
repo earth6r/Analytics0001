@@ -78,6 +78,11 @@ FEATURES:
     - make an error system to track errors and save it to the database, errors come from Home0001 (already created endpoint in Home0001 repo)
         1. Display all errors in a table
 
+TODAY TODO:
+- ui for toast success/error
+- don't show toast if notifications disabled
+- change colors of charts to match theme
+
 # sendgrid stats
 curl -X GET \
   -H "Authorization: Bearer API_KEY"\

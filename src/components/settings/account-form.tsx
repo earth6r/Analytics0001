@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
+import { toastSuccessStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -45,6 +46,7 @@ const AccountForm = () => {
     toast({
       title: "Name Updated",
       description: "Your name has been updated successfully.",
+      className: toastSuccessStyle,
     });
   }
 

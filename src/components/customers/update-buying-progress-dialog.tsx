@@ -15,6 +15,7 @@ import Spinner from "../common/spinner"
 import { Input } from "../ui/input"
 import { toast } from "../ui/use-toast"
 import { TrueFalseSelect } from "./true-false-select"
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 
 interface UpdateDialogProps {
     currentValue: any;
@@ -43,6 +44,7 @@ const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
                 toast({
                     title: "This user has not started the buying process yet.",
                     description: "Once the user makes a deposit, the buying process will start.",
+                    className: toastErrorStyle,
                 });
                 return;
             }
@@ -59,6 +61,7 @@ const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
             toast({
                 title: "Property type set",
                 description: "The property type has been set successfully.",
+                className: toastSuccessStyle,
             });
             setDialogOpenedByIndex(null);
         } catch (error) {
@@ -66,6 +69,7 @@ const UpdateBuyingProgressDialog = (props: UpdateDialogProps) => {
             toast({
                 title: "An error occurred",
                 description: "An error occurred while creating the user in the database.",
+                className: toastErrorStyle,
             });
         }
     }

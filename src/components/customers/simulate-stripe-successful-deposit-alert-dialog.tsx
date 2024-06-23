@@ -8,12 +8,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "../ui/button";
+} from "@/components/ui/alert-dialog";
 import { api } from "@/utils/api";
-import { toast } from "../ui/use-toast";
 import { useState } from "react";
 import Spinner from "../common/spinner";
+import { Button } from "../ui/button";
+import { toast } from "../ui/use-toast";
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles";
 
 interface SimulateStripeSuccessfulDepositAlertDialogProps {
     user: any;
@@ -32,6 +33,7 @@ const SimulateStripeSuccessfulDepositAlertDialog = (props: SimulateStripeSuccess
             toast({
                 title: "Error",
                 description: "No user found",
+                className: toastErrorStyle,
             })
             return;
         }
@@ -40,6 +42,7 @@ const SimulateStripeSuccessfulDepositAlertDialog = (props: SimulateStripeSuccess
             toast({
                 title: "Error",
                 description: "No email found for user",
+                className: toastErrorStyle,
             })
             return;
         }
@@ -48,6 +51,7 @@ const SimulateStripeSuccessfulDepositAlertDialog = (props: SimulateStripeSuccess
             toast({
                 title: "Error",
                 description: "No userBuyingPropertyType not set for user",
+                className: toastErrorStyle,
             })
             return;
         }
@@ -56,6 +60,7 @@ const SimulateStripeSuccessfulDepositAlertDialog = (props: SimulateStripeSuccess
             toast({
                 title: "Error",
                 description: "User has already made a deposit",
+                className: toastErrorStyle,
             })
             return;
         }
@@ -68,6 +73,7 @@ const SimulateStripeSuccessfulDepositAlertDialog = (props: SimulateStripeSuccess
         toast({
             title: "Success",
             description: "Successfully simulated a successful deposit from Stripe for the customer",
+            className: toastSuccessStyle,
         })
     }
 
