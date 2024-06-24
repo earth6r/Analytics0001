@@ -87,6 +87,7 @@ PREVIOUSLY DONE:
 TODAY TODO:
 - add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
 - reset settings button (delete all local storage) - "Other" tab
+- index db based on existing queries being used
 
 # sendgrid stats
 curl -X GET \
