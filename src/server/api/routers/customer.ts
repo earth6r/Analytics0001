@@ -1,8 +1,8 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
-import { addDoc, collection, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
-import { z } from "zod";
 import admin from 'firebase-admin';
+import { addDoc, collection, deleteDoc, getDocs, query, where } from "firebase/firestore/lite";
+import { z } from "zod";
 
 // TODO: move to utils
 export const buyingProgressStepNumberToLabel = {
@@ -111,7 +111,7 @@ export const customerRouter = createTRPCRouter({
             }));
         }),
 
-    archiveCustomer: publicProcedure
+    deleteCustomer: publicProcedure
         .input(
             z.object({
                 email: z.string(),
@@ -121,18 +121,30 @@ export const customerRouter = createTRPCRouter({
             const usersRef = collection(db, "users");
             const q = query(usersRef, where("email", "==", input.email));
 
-            const querySnapshot = await getDocs(q);
+            const usersQuerySnapshot = await getDocs(q);
 
-            if (!querySnapshot.empty) {
-                const doc = querySnapshot.docs[0];
+            if (!usersQuerySnapshot.empty) {
+                const doc = usersQuerySnapshot.docs[0];
                 if (!doc) {
                     return;
                 }
-                await updateDoc(
-                    doc.ref,
-                    {
-                        archived: true,
+
+                const usersBuyingProgressRef = collection(db, "usersBuyingProgress");
+                const q = query(usersBuyingProgressRef, where("userUID", "==", doc.id));
+                const querySnapshot: any = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const docs = querySnapshot.docs;
+                    if (!docs) {
+                        return;
+                    }
+
+                    docs.forEach(async (doc: any) => {
+                        await deleteDoc(doc.ref);
                     });
+                }
+
+                await deleteDoc(doc.ref);
             }
         }),
 

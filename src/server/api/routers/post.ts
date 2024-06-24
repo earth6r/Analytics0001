@@ -1151,9 +1151,6 @@ export const postRouter = createTRPCRouter({
     querySnapshot.forEach((doc) => {
       const userUID = doc.id;
       const data = doc.data();
-      if (data?.archived === true) {
-        return;
-      }
       users.push({
         ...data,
         uid: userUID,

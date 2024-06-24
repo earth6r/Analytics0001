@@ -8,8 +8,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -20,16 +20,16 @@ interface DeleteCustomerAlertDialog {
     refetch: () => Promise<any>;
 }
 
-const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
+const DeleteCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
     const { email, refetch } = props;
 
     const [loading, setLoading] = useState(false);
 
-    const archiveUser = api.customer.archiveCustomer.useMutation();
+    const deleteCustomer = api.customer.deleteCustomer.useMutation();
 
     const handleSubmit = async () => {
         setLoading(true);
-        await archiveUser.mutateAsync({ email });
+        await deleteCustomer.mutateAsync({ email });
         await refetch();
         setLoading(false);
     };
@@ -43,9 +43,9 @@ const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Archive Customer?</AlertDialogTitle>
+                    <AlertDialogTitle>Delete Customer?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This will archive the customer and can be restored later. Contact support if you need to restore the customer.
+                        This will delete the customer and cannot be restored later.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -57,4 +57,4 @@ const ArchiveCustomerAlertDialog = (props: DeleteCustomerAlertDialog) => {
     )
 }
 
-export default ArchiveCustomerAlertDialog;
+export default DeleteCustomerAlertDialog;

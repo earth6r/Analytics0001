@@ -1,6 +1,6 @@
 import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
-import ArchiveCustomerAlertDialog from "@/components/customers/archive-customer-alert-dialog";
+import DeleteCustomerAlertDialog from "@/components/customers/delete-customer-alert-dialog";
 import CreateCustomerDialog from "@/components/customers/create-customer-dialog";
 import CustomerDetailsDialog from "@/components/customers/customer-details-dialog";
 import SimulateStripeSuccessfulDepositAlertDialog from "@/components/customers/simulate-stripe-successful-deposit-alert-dialog";
@@ -96,7 +96,7 @@ const Customers = () => {
                                         <UpdateUserDetailsDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={updateDialogOpenedByIndex} setDialogOpenedByIndex={setUpdateDialogOpenedByIndex} index={index} />
                                         <UpdateBuyingProgressDialog currentValue={user} email={user.email} refetch={getUsersInDatabase.refetch} dialogOpenedByIndex={dialogOpenedByIndex} setDialogOpenedByIndex={setDialogOpenedByIndex} index={index} />
                                         <SimulateStripeSuccessfulDepositAlertDialog user={user} refetch={getUsersInDatabase.refetch} />
-                                        <ArchiveCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
+                                        <DeleteCustomerAlertDialog email={user.email} refetch={getUsersInDatabase.refetch} />
                                     </div>
                                 </div>
                             ))}

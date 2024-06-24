@@ -78,10 +78,13 @@ FEATURES:
     - make an error system to track errors and save it to the database, errors come from Home0001 (already created endpoint in Home0001 repo)
         1. Display all errors in a table
 
-TODAY TODO:
+PREVIOUSLY DONE:
 - ui for toast success/error ✅
 - don't show toast if notifications disabled ✅
 - change colors of charts to match theme ✅
+- delete user permanently (delete all references as well) ✅
+
+TODAY TODO:
 - add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
 - reset settings button (delete all local storage) - "Other" tab
 
