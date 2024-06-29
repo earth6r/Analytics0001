@@ -90,7 +90,7 @@ TODAY TODO:
 - reset settings button (delete all local storage) - "Other" tab
 - index db based on existing queries being used
 - move components into index.tsx files in each directory
-- use progress bar
+- use progress bar somewhere maybe buying progress for each user with 5 steps so any step is considered 20% of the progress
 - add in email field for login so users can start saving settings to db
 - change local storage settings to firestore
 - restrict which emails can be used to login

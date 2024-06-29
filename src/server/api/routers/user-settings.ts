@@ -29,7 +29,7 @@ export const userSettingsRouter = createTRPCRouter({
                 // update existing userSettings
                 const doc = querySnapshot.docs[0];
                 await updateDoc(doc.ref, {
-                    profilePicture: url,
+                    profilePictureUrl: url,
                 });
             }
         }),
