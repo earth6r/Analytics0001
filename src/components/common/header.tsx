@@ -15,17 +15,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
   const router = useRouter();
 
-  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
-    null,
-  );
+  const { profilePictureUrl } = useUser();
+
   const [name, setName] = useState<string | null>(null);
 
   useEffect(() => {
-    setProfilePictureUrl(localStorage.getItem("profilePictureUrl"));
     setName(localStorage.getItem("name"));
   }, []);
 
@@ -191,9 +190,9 @@ const Header = () => {
                 <Avatar className="h-10 w-10">
                   <AvatarImage
                     src={
-                      profilePictureUrl ?? name
+                      profilePictureUrl ?? (name
                         ? `https://ui-avatars.com/api/?name=${name}`
-                        : undefined
+                        : undefined)
                     }
                     alt="@user"
                   />

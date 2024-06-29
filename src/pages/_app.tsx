@@ -8,8 +8,8 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { IntervalProvider } from "@/contexts/IntervalContext";
+import { UserProvider } from "@/contexts/UserContext";
 import { ThemeProvider } from "next-themes";
-import { useEffect } from "react";
 import useColor from "@/hooks/use-color";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -22,11 +22,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <main className={GeistSans.className}>
-        <IntervalProvider>
-          <ThemeProvider attribute="class">
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </IntervalProvider>
+        <UserProvider>
+          <IntervalProvider>
+            <ThemeProvider attribute="class">
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </IntervalProvider>
+        </UserProvider>
         <Toaster />
       </main>
     </SessionProvider>

@@ -17,7 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
-import { toastSuccessStyle } from "@/lib/toast-styles";
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles";
+import { api } from "@/utils/api";
+import { useUser } from "@/contexts/UserContext";
+import Spinner from "../common/spinner";
 
 const FormSchema = z.object({
   profilePictureUrl: z.string().min(2, {
@@ -26,22 +29,42 @@ const FormSchema = z.object({
 });
 
 const ProfileForm = () => {
+  const { email, profilePictureUrl, refetchProfilePictureUrl } = useUser();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      profilePictureUrl: "",
+      profilePictureUrl: profilePictureUrl ?? "",
     },
   });
 
-  useEffect(() => {
-    const profilePictureUrl = localStorage.getItem("profilePictureUrl") ?? "";
-    form.setValue("profilePictureUrl", profilePictureUrl);
-  }, [form]);
+  const updateUserProfilePicture = api.userSettings.updateUserProfilePicture.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  // useEffect to update the form value when the profilePictureUrl changes or is fetched
+  useEffect(() => {
+    if (profilePictureUrl) {
+      form.setValue("profilePictureUrl", profilePictureUrl);
+    }
+  }, [form, profilePictureUrl]);
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     const { profilePictureUrl } = data;
 
-    localStorage.setItem("profilePictureUrl", profilePictureUrl);
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please log in to update your profile.",
+        className: toastErrorStyle,
+      })
+      return;
+    }
+
+    await updateUserProfilePicture.mutateAsync({
+      url: profilePictureUrl,
+      email: email,
+    });
+
+    await refetchProfilePictureUrl();
 
     toast({
       title: "Profile Updated",
@@ -72,7 +95,9 @@ const ProfileForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Update Profile</Button>
+        <Button type="submit" className="w-32">
+          {form.formState.isSubmitting ? <Spinner /> : "Update Profile"}
+          </Button>
       </form>
     </Form>
   );

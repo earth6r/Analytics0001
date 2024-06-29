@@ -83,6 +83,7 @@ PREVIOUSLY DONE:
 - don't show toast if notifications disabled ✅
 - change colors of charts to match theme ✅
 - delete user permanently (delete all references as well) ✅
+- profile picture url saved and retrieved from db and displayed in the header ✅
 
 TODAY TODO:
 - add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
@@ -92,6 +93,8 @@ TODAY TODO:
 - use progress bar
 - add in email field for login so users can start saving settings to db
 - change local storage settings to firestore
+- restrict which emails can be used to login
+- tooltip on colors
 
 # sendgrid stats
 curl -X GET \

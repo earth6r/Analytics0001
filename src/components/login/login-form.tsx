@@ -21,6 +21,7 @@ import { api } from "@/utils/api";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useRouter } from "next/router";
 import { toastErrorStyle } from "@/lib/toast-styles";
+import { useUser } from "@/contexts/UserContext";
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -33,6 +34,8 @@ const FormSchema = z.object({
 
 const LoginForm = () => {
   const router = useRouter();
+
+  const { setEmail } = useUser();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -51,6 +54,7 @@ const LoginForm = () => {
     });
 
     if (response.valid) {
+      setEmail(data.email);
       const authenticatedData = {
         authenticated: "true",
         expires: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
