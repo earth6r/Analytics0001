@@ -23,17 +23,21 @@ import { useRouter } from "next/router";
 import { toastErrorStyle } from "@/lib/toast-styles";
 
 const FormSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
   password: z.string().min(2, {
     message: "Password must be at least 2 characters.",
   }),
 });
 
-const PasswordInput = () => {
+const LoginForm = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      email: "",
       password: "",
     },
   });
@@ -42,6 +46,7 @@ const PasswordInput = () => {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const response = await validatePassword.mutateAsync({
+      email: data.email,
       password: data.password,
     });
 
@@ -74,6 +79,22 @@ const PasswordInput = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 space-y-6 mt-6">
         <FormField
           control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="!Ex@m413!12E" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is a given email that you can use to sign in.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
@@ -96,4 +117,4 @@ const PasswordInput = () => {
   );
 };
 
-export default PasswordInput;
+export default LoginForm;

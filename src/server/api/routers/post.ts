@@ -83,13 +83,21 @@ const authenticate = async () => {
 
 export const postRouter = createTRPCRouter({
   validatePassword: publicProcedure
-    .input(z.object({ password: z.string().min(2) }))
+    .input(z.object({ password: z.string(), email: z.string() }))
     .mutation(async ({ input }) => {
+      const email = input.email;
       const isAuthorized = input.password === process.env.PASSWORD;
 
       if (isAuthorized) {
         // @ts-expect-error - fix this
         await signIn(process.env.EMAIL, process.env.PASSWORD);
+        const userLogin = {
+          email: email,
+          timestamp: new Date().getTime(),
+          login_type: 'stats_page',
+          url: 'https://www.analytics.home0001.com',
+        };
+        await addDoc(collection(db, "login_history"), userLogin);
       }
       return {
         valid: isAuthorized,

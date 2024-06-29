@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import PasswordInput from "@/components/login/password-input";
+import LoginForm from "@/components/login/login-form";
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
           </div>
         </div>
         <p className="text-5xl uppercase text-start font-bold">Home0001 Analytics Dashboard</p>
-        <PasswordInput />
+        <LoginForm />
       </main>
     </>
   );
