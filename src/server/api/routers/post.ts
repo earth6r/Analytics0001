@@ -14,6 +14,7 @@ import {
   where,
 } from "firebase/firestore/lite";
 import signIn from "@/utils/firebase/signin";
+import axios from "axios";
 
 const monthNames = [
   "Jan",
@@ -83,19 +84,43 @@ const authenticate = async () => {
 
 export const postRouter = createTRPCRouter({
   validatePassword: publicProcedure
-    .input(z.object({ password: z.string(), email: z.string() }))
+    .input(z.object({ password: z.string(), email: z.string(), ipAddress: z.string(), userAgent: z.string() }))
     .mutation(async ({ input }) => {
       const email = input.email;
       const isAuthorized = input.password === process.env.PASSWORD;
 
+
+
       if (isAuthorized) {
         // @ts-expect-error - fix this
         await signIn(process.env.EMAIL, process.env.PASSWORD);
+
+        const ipAddress = input.ipAddress;
+        let ipAddressMetadata = null
+        let response
+
+        if (ipAddress) {
+          try {
+            response = await axios.get(`http://ip-api.com/json/${ipAddress}`)
+          } catch (error) {
+            // Log the error to the console for debugging
+            // eslint-disable-next-line no-console
+            console.error('Error getting IP address metadata:', error)
+          }
+
+          if (response && response.status >= 200 && response.status < 300) {
+            ipAddressMetadata = response.data
+          }
+        }
+
         const userLogin = {
           email: email,
           timestamp: new Date().getTime(),
           login_type: 'stats_page',
           url: 'https://www.analytics.home0001.com',
+          userAgent: input.userAgent,
+          ipAddress: ipAddress,
+          ipAddressMetadata: ipAddressMetadata,
         };
         await addDoc(collection(db, "login_history"), userLogin);
       }

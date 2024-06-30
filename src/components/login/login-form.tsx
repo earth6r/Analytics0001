@@ -48,9 +48,20 @@ const LoginForm = () => {
   const validatePassword = api.post.validatePassword.useMutation();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    let ipAddress = null;
+
+    try {
+      const ipAddressResponse = await fetch("https://api.ipify.org?format=json");
+      const ipAddressData = await ipAddressResponse.json();
+      ipAddress = ipAddressData.ip;
+    } catch (error) {
+      console.error(error);
+    }
     const response = await validatePassword.mutateAsync({
       email: data.email,
       password: data.password,
+      userAgent: navigator.userAgent,
+      ipAddress: ipAddress,
     });
 
     if (response.valid) {
