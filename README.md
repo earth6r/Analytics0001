@@ -84,6 +84,7 @@ PREVIOUSLY DONE:
 - change colors of charts to match theme ✅
 - delete user permanently (delete all references as well) ✅
 - profile picture url saved and retrieved from db and displayed in the header ✅
+- add in email field for login so users can start saving settings to db ✅
 
 TODAY TODO:
 - add color blind message and maybe a color blind mode to update toast success/error classNames to be bg instead of border
@@ -91,10 +92,11 @@ TODAY TODO:
 - index db based on existing queries being used
 - move components into index.tsx files in each directory
 - use progress bar somewhere maybe buying progress for each user with 5 steps so any step is considered 20% of the progress
-- add in email field for login so users can start saving settings to db
 - change local storage settings to firestore
 - restrict which emails can be used to login
 - tooltip on colors
+- user profiling page (you can see a user and all the data tied to that user from register, to messages, to buying progress to booked phone calls and property tours, login history, etc)
+- a page for login history for both websites
 
 # sendgrid stats
 curl -X GET \
