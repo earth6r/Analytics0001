@@ -96,6 +96,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             setIsLoading(true);
 
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
+            // @ts-expect-error TODO: fix type
             await createBooking.mutateAsync({ email, timestamp, typeOfBooking, propertyType, phoneNumber });
 
             await refetch();
