@@ -32,6 +32,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
     const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState<string>("");
 
     const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
     const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
@@ -82,11 +83,20 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             return;
         }
 
+        if (!phoneNumber) {
+            toast({
+                title: "Phone Number is required",
+                description: "Please enter the phone number.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
         try {
             setIsLoading(true);
 
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
-            await createBooking.mutateAsync({ email, timestamp, typeOfBooking, propertyType });
+            await createBooking.mutateAsync({ email, timestamp, typeOfBooking, propertyType, phoneNumber });
 
             await refetch();
 
@@ -149,6 +159,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         />
                     </div>
                     <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="phoneNumber">
+                            Phone Number
+                        </Label>
+                        <Input
+                            id="phoneNumber"
+                            className="w-[250px]"
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={phoneNumber}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
                         <Label htmlFor="typeOfBooking">
                             Type of Booking
                         </Label>
@@ -169,7 +190,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setPropertyType(null);
                     }}>Clear</Button>
                     <Button type="submit" className="w-full" onClick={onSubmit}
-                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType)}>
+                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber}>
                         {isLoading ? <Spinner /> : "Create Booking"}
                     </Button>
                 </DialogFooter>
