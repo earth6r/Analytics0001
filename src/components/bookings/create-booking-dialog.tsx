@@ -101,6 +101,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             await refetch();
 
             setEmail("");
+            setPhoneNumber("");
             setTimestamp("");
             setTypeOfBooking(undefined);
             setPropertyType(null);
@@ -184,10 +185,12 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     </div>
                 </div>
                 <DialogFooter>
-                    {/* TODO: fix clear button to function properly */}
                     <Button variant="outline" className="w-full" onClick={() => {
                         setEmail("");
                         setPropertyType(null);
+                        setTimestamp("");
+                        setTypeOfBooking(undefined);
+                        setPhoneNumber("");
                     }}>Clear</Button>
                     <Button type="submit" className="w-full" onClick={onSubmit}
                         disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber}>
