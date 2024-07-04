@@ -1,0 +1,181 @@
+import Spinner from "@/components/common/spinner"
+import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { api } from "@/utils/api"
+import { useState } from "react"
+import { toast } from "../ui/use-toast"
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
+import { TypeOfBookingSelect } from "./type-of-booking-select"
+
+interface CreateBookingDialogProps {
+    refetch: () => Promise<any>;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+}
+
+const CreateBookingDialog = (props: CreateBookingDialogProps) => {
+    const { refetch, open, onOpenChange } = props;
+
+    const [email, setEmail] = useState<string>("");
+    const [timestamp, setTimestamp] = useState<string>("");
+    const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
+    const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
+    const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
+
+    async function onSubmit() {
+        if (!email) {
+            toast({
+                title: "Email is required",
+                description: "Please enter the email address.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            toast({
+                title: "Invalid email",
+                description: "Please enter a valid email address.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!timestamp) {
+            toast({
+                title: "Timestamp is required",
+                description: "Please enter the timestamp.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!typeOfBooking) {
+            toast({
+                title: "Type of Booking is required",
+                description: "Please select the type of booking.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (typeOfBooking === "propertyTour" && !propertyType) {
+            toast({
+                title: "Property Type is required",
+                description: "Please enter the property type.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+
+            const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
+            await createBooking.mutateAsync({ email, timestamp, typeOfBooking, propertyType });
+
+            await refetch();
+
+            setEmail("");
+            setTimestamp("");
+            setTypeOfBooking(undefined);
+            setPropertyType(null);
+
+            setIsLoading(false);
+
+            toast({
+                title: "Booking created",
+                description: "The booking was successfully created in the database.",
+                className: toastSuccessStyle,
+            });
+            onOpenChange(false);
+        } catch (error) {
+            setIsLoading(false);
+            toast({
+                title: "An error occurred",
+                description: "An error occurred while creating a booking in the database.",
+                className: toastErrorStyle,
+            });
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogTrigger asChild>
+                <Button variant="default">+</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Create Booking</DialogTitle>
+                    <DialogDescription>
+                        {`Create a new booking in the database.`}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="email">
+                            Email
+                        </Label>
+                        <Input
+                            id="email"
+                            className="w-[250px]"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="timestamp">
+                            Timestamp
+                        </Label>
+                        <Input
+                            id="timestamp"
+                            className="w-[250px]"
+                            onChange={(e) => setTimestamp(e.target.value)}
+                            value={timestamp}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="typeOfBooking">
+                            Type of Booking
+                        </Label>
+                        {/* @ts-expect-error TODO: fix type */}
+                        <TypeOfBookingSelect className="w-[250px]" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="propertyType">
+                            Property Type
+                        </Label>
+                        <BuyingPropertyTypeSelect className="w-[250px]" selectedItem={propertyType} setSelectedItem={setPropertyType} />
+                    </div>
+                </div>
+                <DialogFooter>
+                    {/* TODO: fix clear button to function properly */}
+                    <Button variant="outline" className="w-full" onClick={() => {
+                        setEmail("");
+                        setPropertyType(null);
+                    }}>Clear</Button>
+                    <Button type="submit" className="w-full" onClick={onSubmit}
+                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType)}>
+                        {isLoading ? <Spinner /> : "Create Booking"}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+export default CreateBookingDialog;

@@ -97,6 +97,7 @@ TODAY TODO:
 - tooltip on colors
 - user profiling page (you can see a user and all the data tied to that user from register, to messages, to buying progress to booked phone calls and property tours, login history, etc)
 - a page for login history for both websites
+- error handle create booking where the user does not exist in the users db
 
 # sendgrid stats
 curl -X GET \

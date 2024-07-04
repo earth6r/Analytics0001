@@ -84,6 +84,17 @@ const Header = () => {
             Customers
           </Link>
           <Link
+            href="/bookings"
+            className={cn(
+              "text-muted-foreground transition-colors hover:text-foreground",
+              router.pathname === "/bookings"
+                ? "text-foreground"
+                : "text-muted-foreground",
+            )}
+          >
+            Bookings
+          </Link>
+          <Link
             href="/settings"
             className={cn(
               "transition-colors hover:text-foreground",
@@ -158,6 +169,17 @@ const Header = () => {
                 )}
               >
                 Customers
+              </Link>
+              <Link
+                href="/bookings"
+                className={cn(
+                  "text-muted-foreground hover:text-foreground",
+                  router.pathname === "/bookings"
+                    ? "text-foreground"
+                    : "text-muted-foreground",
+                )}
+              >
+                Bookings
               </Link>
               <Link
                 href="/settings"
