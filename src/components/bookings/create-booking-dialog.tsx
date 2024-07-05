@@ -95,9 +95,21 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         try {
             setIsLoading(true);
 
+            const formattedTimestamp = new Date(timestamp).getTime().toString();
+
+            if (isNaN(Number(formattedTimestamp))) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "Please enter a valid timestamp.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
             // @ts-expect-error TODO: fix type
-            await createBooking.mutateAsync({ email, timestamp, typeOfBooking, propertyType, phoneNumber });
+            await createBooking.mutateAsync({ email, timestamp: formattedTimestamp, typeOfBooking, propertyType, phoneNumber });
 
             await refetch();
 
@@ -153,11 +165,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         <Label htmlFor="timestamp">
                             Timestamp
                         </Label>
+                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
                         <Input
                             id="timestamp"
                             className="w-[250px]"
                             onChange={(e) => setTimestamp(e.target.value)}
                             value={timestamp}
+                            placeholder="YYYY-MM-DD HH:MM:SS"
                         />
                     </div>
                     <div className="flex flex-row items-center justify-between">
@@ -179,6 +194,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         <TypeOfBookingSelect className="w-[250px]" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                     </div>
                     <div className="flex flex-row items-center justify-between">
+                        {/* TODO: disable if type is phone call booking */}
                         <Label htmlFor="propertyType">
                             Property Type
                         </Label>
@@ -193,6 +209,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setTypeOfBooking(undefined);
                         setPhoneNumber("");
                     }}>Clear</Button>
+                    {/* TODO: hover on button for error messages of reason it is disabled, immediate tooltip */}
                     <Button type="submit" className="w-full" onClick={onSubmit}
                         disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber}>
                         {isLoading ? <Spinner /> : "Create Booking"}
