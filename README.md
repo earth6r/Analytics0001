@@ -98,6 +98,11 @@ TODAY TODO:
 - user profiling page (you can see a user and all the data tied to that user from register, to messages, to buying progress to booked phone calls and property tours, login history, etc)
 - a page for login history for both websites
 - error handle create booking where the user does not exist in the users db
+- error handle update profile url with a preview dialog (add spinner if image is loading)
+- add placeholders for create booking form
+- make interval "Not Set" if no interval is set and change to saving the value in the db
+- make all tables mobile responsive
+- make all tables custom to allow for view details dialog
 
 # sendgrid stats
 curl -X GET \
