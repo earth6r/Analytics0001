@@ -17,6 +17,7 @@ import { useState } from "react"
 import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { TypeOfBookingSelect } from "./type-of-booking-select"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 interface CreateBookingDialogProps {
     refetch: () => Promise<any>;
@@ -137,6 +138,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         }
     }
 
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber;
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
@@ -206,14 +209,33 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setEmail("");
                         setPropertyType(null);
                         setTimestamp("");
-                        setTypeOfBooking(undefined);
+                        setTypeOfBooking(null);
                         setPhoneNumber("");
                     }}>Clear</Button>
-                    {/* TODO: hover on button for error messages of reason it is disabled, immediate tooltip */}
-                    <Button type="submit" className="w-full" onClick={onSubmit}
-                        disabled={isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber}>
-                        {isLoading ? <Spinner /> : "Create Booking"}
-                    </Button>
+                    <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                            <TooltipTrigger className="w-full">
+                                <Button type="submit" className="w-full" onClick={onSubmit}
+                                    disabled={disabled}>
+                                    {isLoading ? <Spinner /> : "Create Booking"}
+                                </Button>
+                            </TooltipTrigger>
+                            {disabled && <TooltipContent>
+                                <div className="space-y-1">
+                                    <div className="font-medium">{`Please fill in all the required fields:`}</div>
+                                    <div>{!email && `The email is required.`}</div>
+                                    <div>{email && (!email.includes("@") || !email.includes(".")) && "The email is invalid. Requires a `.` and a `@`"}</div>
+                                    <div>{!timestamp && `The timestamp is required.`}</div>
+                                    <div>{timestamp && isNaN(Number(new Date(timestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
+                                    <div>{timestamp && timestamp.length !== 19 && `The timestamp must be of length 19.`}</div>
+                                    <div>{!phoneNumber && `The phone number is required.`}</div>
+                                    <div>{!typeOfBooking
+                                        && `The type of booking is required.`}</div>
+                                    <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div>
+                                </div>
+                            </TooltipContent>}
+                        </Tooltip>
+                    </TooltipProvider>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

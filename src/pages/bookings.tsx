@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { ArrowUpDownIcon } from "lucide-react";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const Bookings = () => {
