@@ -103,6 +103,8 @@ TODAY TODO:
 - make interval "Not Set" if no interval is set and change to saving the value in the db
 - make all tables mobile responsive
 - make all tables custom to allow for view details dialog
+- display `no interval` in the display settings only if it is already a defined interval
+- add router.query for each settings tab
 
 # sendgrid stats
 curl -X GET \
