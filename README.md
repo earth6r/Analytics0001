@@ -107,6 +107,8 @@ TODAY TODO:
 - add router.query for each settings tab
 - style up user page
 - add view user details link button in the view details dialog in customers page
+- make this the user page: https://v0.dev/r/03u3lG5pfiI
+- add duration for phone call booking and property tour booking
 
 
 
