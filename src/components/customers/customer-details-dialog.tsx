@@ -18,7 +18,8 @@ interface BuyingProgressDetailsDialog {
     customerDetails: any;
 }
 
-const DetailItem = (props: { label: string, value: string, tooltipLabel?: string, copyable?: boolean }) => {
+// TODO: make this a reusable component in a different file
+export const DetailItem = (props: { label: string, value: string, tooltipLabel?: string, copyable?: boolean }) => {
     const { label, value, tooltipLabel = null, copyable = false } = props;
 
     return (

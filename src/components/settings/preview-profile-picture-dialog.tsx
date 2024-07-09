@@ -48,7 +48,7 @@ const PreviewProfilePictureDialog = (props: PreviewProfilePictureDialogProps) =>
                     />
                     {!imageLoaded && <Skeleton className="w-[200px] h-[200px]" />}
                 </div>
-                <DialogFooter className="w-full">
+                <DialogFooter>
                     <DialogClose className="w-full">
                         <Button variant="default" className="w-full">Close</Button>
                     </DialogClose>

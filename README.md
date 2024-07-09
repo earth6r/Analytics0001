@@ -106,6 +106,11 @@ TODAY TODO:
 - display `no interval` in the display settings only if it is already a defined interval
 - add router.query for each settings tab
 
+
+
+NOTES:
+- cannot tie instagram and other messaging platforms to a user unless they type in the exact phone number and the have booked at least one phone call
+
 # sendgrid stats
 curl -X GET \
   -H "Authorization: Bearer API_KEY"\

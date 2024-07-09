@@ -1,8 +1,10 @@
 import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
+import ViewBookingDetailsDialog from "@/components/bookings/view-booking-details-dialog";
 import Header from "@/components/common/header";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
+import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { ArrowUpDownIcon } from "lucide-react";
 import React, { useEffect } from "react";
@@ -76,7 +78,7 @@ const Bookings = () => {
                 />
 
                 <div className="mt-4">
-                    <div className="grid grid-cols-5 gap-4 font-semibold">
+                    <div className="grid grid-cols-6 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Email
@@ -170,12 +172,13 @@ const Bookings = () => {
                         </div>
                     ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
-                            <div key={booking.id} className="grid grid-cols-5 gap-4">
+                            <div key={booking.id} className="grid grid-cols-6 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
                                 <div>{booking.type || "No Type Provided"}</div>
-                                <div>{booking.timestamp || "No Timestamp Provided"}</div>
+                                <div>{formatTimestamp(booking.timestamp) || "No Timestamp Provided"}</div>
                                 <div>{booking.property || "No Property Type Provided"}</div>
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
+                                <ViewBookingDetailsDialog booking={booking} />
                             </div>
                         ))}
                     </div>}

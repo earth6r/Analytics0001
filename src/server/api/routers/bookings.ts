@@ -29,6 +29,7 @@ export const bookingsRouter = createTRPCRouter({
                 bookings.push(data);
             });
 
+            // TODO: make this reusable
             if (!admin.apps.length) {
                 // Initialize Firebase app with the parsed configuration
                 const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY as string);
