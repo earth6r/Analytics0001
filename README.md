@@ -105,6 +105,7 @@ TODAY TODO:
 - make all tables custom to allow for view details dialog
 - display `no interval` in the display settings only if it is already a defined interval
 - add router.query for each settings tab
+- style up user page
 
 
 
