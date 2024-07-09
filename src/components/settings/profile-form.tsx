@@ -21,6 +21,7 @@ import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles";
 import { api } from "@/utils/api";
 import { useUser } from "@/contexts/UserContext";
 import Spinner from "../common/spinner";
+import PreviewProfilePictureDialog from "./preview-profile-picture-dialog";
 
 const FormSchema = z.object({
   profilePictureUrl: z.string().min(2, {
@@ -89,7 +90,10 @@ const ProfileForm = () => {
                 />
               </FormControl>
               <FormDescription>
-                This is your public avatar image.
+                This is your public avatar image. View the preview{" "}
+                <PreviewProfilePictureDialog pictureUrl={
+                  field.value
+                } />
               </FormDescription>
               <FormMessage />
             </FormItem>

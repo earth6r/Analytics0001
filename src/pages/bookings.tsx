@@ -1,6 +1,7 @@
 import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
 import Header from "@/components/common/header";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { ArrowUpDownIcon } from "lucide-react";
@@ -35,20 +36,6 @@ const Bookings = () => {
             setSortedData(sortedBookingsData);
         }
     }, [getBookings.data, sortOrder, sortKey]);
-
-    // useEffect(() => {
-    //     alert("called")
-    //     if (sortedData) {
-    //         const filteredData = sortedData.filter((booking: any) => {
-    //             return booking.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //                 booking.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //                 booking.timestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    //                 (!booking?.property || booking?.property?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    //                 booking.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase());
-    //         });
-    //         setSortedData(filteredData);
-    //     }
-    // }, [searchQuery, sortedData]);
 
     return (
         <div>
@@ -173,7 +160,15 @@ const Bookings = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2 mt-4  ">
+                    {getBookings.isLoading ? (
+                        <div className="space-y-2 mt-4">
+                            <Skeleton className="h-8" />
+                            <Skeleton className="h-8" />
+                            <Skeleton className="h-8" />
+                            <Skeleton className="h-8" />
+                            <Skeleton className="h-8" />
+                        </div>
+                    ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-5 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
@@ -183,7 +178,7 @@ const Bookings = () => {
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
                             </div>
                         ))}
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

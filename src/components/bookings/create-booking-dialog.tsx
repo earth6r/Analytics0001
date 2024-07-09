@@ -211,7 +211,9 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setTimestamp("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
-                    }}>Clear</Button>
+                    }} disabled={
+                        isLoading || (!email && !timestamp && !phoneNumber && !typeOfBooking && !propertyType)
+                    }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger className="w-full">

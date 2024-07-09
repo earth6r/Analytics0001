@@ -71,7 +71,7 @@ const Settings = () => {
               <div>
                 <h2 className="text-2xl">Profile</h2>
                 <h3 className="text-md mt-2 font-light text-muted-foreground">
-                  This is how others will see your sight.
+                  This is how others will see you.
                 </h3>
                 <Separator className="mb-6 mt-6" />
                 <ProfileForm />
