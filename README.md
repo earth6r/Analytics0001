@@ -106,6 +106,7 @@ TODAY TODO:
 - display `no interval` in the display settings only if it is already a defined interval
 - add router.query for each settings tab
 - style up user page
+- add view user details link button in the view details dialog in customers page
 
 
 

@@ -81,6 +81,12 @@ const User = () => {
                     {/* @ts-expect-error TODO: fix type */}
                     messages: {JSON.stringify(getUserDetails.data?.messages, null, 2)}
                 </div>
+                <div>
+                    {/* @ts-expect-error TODO: fix type */}
+                    register: {JSON.stringify(getUserDetails.data?.register, null, 2)}
+                </div>
+
+                {/* TODO: add some linking i.e. register property of interest <=> user Property buying progress property type (there's a difference and stats about how many users have same vs different properties from register to userbuyingprogress)*/}
 
                 <div>
                     {getUserDetails.isLoading && <Skeleton className="h-10" />}

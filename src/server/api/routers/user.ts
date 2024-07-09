@@ -96,6 +96,18 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             userData.messages = messages.filter((message) => userPhoneNumbers.includes(message.username) || userPhoneNumbers.includes(message?.to));
 
+            // register
+            const registerRef = db.collection('register').where('email', '==', email).get();
+            // @ts-expect-error TODO: fix this
+            const register = [];
+            (await registerRef).forEach((doc) => {
+                const data = doc.data();
+                register.push(data);
+            });
+
+            // @ts-expect-error TODO: fix this
+            userData.register = register;
+
             return userData;
         }),
 });
