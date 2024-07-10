@@ -2,6 +2,7 @@ import CircularQuestionMarkTooltip from "@/components/common/circular-question-m
 import Header from "@/components/common/header";
 import Spinner from "@/components/common/spinner";
 import { Skeleton } from "@/components/ui/skeleton";
+import UserProfileCard from "@/components/user/user-profile-card";
 import { useInterval } from "@/contexts/IntervalContext";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
@@ -51,6 +52,14 @@ const User = () => {
                     {JSON.stringify(getUserDetails.data, null, 2)}
                 </div> */}
 
+                <UserProfileCard
+                    uid={getUserDetails.data?.UID}
+                    email={getUserDetails.data?.user?.email}
+                    firstName={getUserDetails.data?.user?.firstName}
+                    lastName={getUserDetails.data?.user?.lastName}
+                    createdAt={getUserDetails.data?.user?.createdAt?._seconds}
+                />
+
                 <div>
                     Email: {getUserDetails.data?.user?.email}
                 </div>
@@ -69,22 +78,36 @@ const User = () => {
                 <div>
                     UID: {getUserDetails.data?.UID}
                 </div>
+
+                <hr className="my-4" />
+
                 <div>
                     {/* @ts-expect-error TODO: fix type */}
                     phoneCallBookings: {JSON.stringify(getUserDetails.data?.phoneCallBookings, null, 2)}
                 </div>
+
+                <hr className="my-4" />
+
                 <div>
                     {/* @ts-expect-error TODO: fix type */}
                     buyingProgress: {JSON.stringify(getUserDetails.data?.buyingProgress, null, 2)}
                 </div>
+
+                <hr className="my-4" />
+
                 <div>
                     {/* @ts-expect-error TODO: fix type */}
                     messages: {JSON.stringify(getUserDetails.data?.messages, null, 2)}
                 </div>
+
+                <hr className="my-4" />
+
                 <div>
                     {/* @ts-expect-error TODO: fix type */}
                     register: {JSON.stringify(getUserDetails.data?.register, null, 2)}
                 </div>
+
+                <hr className="my-4" />
 
                 {/* TODO: add some linking i.e. register property of interest <=> user Property buying progress property type (there's a difference and stats about how many users have same vs different properties from register to userbuyingprogress)*/}
 
