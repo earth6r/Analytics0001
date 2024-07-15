@@ -58,6 +58,7 @@ const User = () => {
                     firstName={getUserDetails.data?.user?.firstName}
                     lastName={getUserDetails.data?.user?.lastName}
                     createdAt={getUserDetails.data?.user?.createdAt?._seconds}
+                    propertyType={getUserDetails.data?.user?.userBuyingPropertyType}
                 />
 
                 <div>

@@ -110,6 +110,7 @@ TODAY TODO:
 - make this the user page: https://v0.dev/r/03u3lG5pfiI
 - add duration for phone call booking and property tour booking
 - validate url profile picture
+- display errors firestore to the dashboard
 
 
 NOTES:

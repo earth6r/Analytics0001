@@ -15,10 +15,11 @@ interface UserProfileCardProps {
     firstName: string;
     lastName: string;
     createdAt: string;
+    propertyType: string;
 }
 
 const UserProfileCard = (props: UserProfileCardProps) => {
-    const { uid, email, firstName, lastName, createdAt } = props;
+    const { uid, email, firstName, lastName, createdAt, propertyType } = props;
 
     return (
         <Card className="w-max">
@@ -32,12 +33,12 @@ const UserProfileCard = (props: UserProfileCardProps) => {
             <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <h1 className="text-muted-foreground font-light text-sm">First Name</h1>
-                        <div>{firstName}</div>
+                        <h1 className="text-muted-foreground font-light text-sm">Full Name</h1>
+                        <div>{firstName + " " + lastName}</div>
                     </div>
                     <div>
-                        <h1 className="text-muted-foreground font-light text-sm">Last Name</h1>
-                        <div>{lastName}</div>
+                        <h1 className="text-muted-foreground font-light text-sm">Property Type</h1>
+                        <div>{propertyType}</div>
                     </div>
                     <div>
                         <h1 className="text-muted-foreground font-light text-sm">Email</h1>
