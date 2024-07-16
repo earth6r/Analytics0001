@@ -13,6 +13,9 @@ import { Label } from "@/components/ui/label"
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
 import { convertDateString } from "@/lib/utils";
 import CopyTooltip from "./copy-tooltip";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Spinner from "../common/spinner";
 
 interface BuyingProgressDetailsDialog {
     customerDetails: any;
@@ -37,6 +40,16 @@ export const DetailItem = (props: { label: string, value: string, tooltipLabel?:
 
 const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
     const { customerDetails } = props;
+
+    const router = useRouter();
+
+    const [routeLoading, setRouteLoading] = useState(false);
+
+    const handleClick = async () => {
+        setRouteLoading(true);
+        await router.push(`/user?email=${customerDetails.email}`);
+        setRouteLoading(false);
+    };
 
     return (
         <Dialog>
@@ -69,6 +82,10 @@ const CustomerDetailsDialog = (props: BuyingProgressDetailsDialog) => {
                     <DetailItem label="Scheduled Calendar Date" value={convertDateString(customerDetails?.buyingProgressData?.scheduledCalendarDate) || "Not set"} tooltipLabel={customerDetails?.buyingProgressData?.scheduledCalendarDate} />
                     <DetailItem label="Number of Buying Progress" value={customerDetails?.buyingProgressCount} tooltipLabel="This is the count of users who are currently in or completed a purchase of a property. The user must complete a deposit before it is counted. A value of 0 may prevent updates from being made." />
                     <DetailItem label="Buying Progress IDs" value={customerDetails?.buyingProgressIds} tooltipLabel="Database IDs" copyable />
+
+                    {customerDetails?.email && <div className="flex flex-row items-center justify-center mt-2">
+                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-400 hover:text-blue-500 cursor-pointer">View User Details</div>}
+                    </div>}
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
