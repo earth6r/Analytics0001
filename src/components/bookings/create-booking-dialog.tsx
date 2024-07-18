@@ -30,10 +30,15 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
     const [email, setEmail] = useState<string>("");
     const [timestamp, setTimestamp] = useState<string>("");
+    const [startTimestamp, setStartTimestamp] = useState<string>("");
+    const [endTimestamp, setEndTimestamp] = useState<string>("");
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
     const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState<string>("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [notes, setNotes] = useState("");
 
     const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
     const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
@@ -116,7 +121,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setEmail("");
             setPhoneNumber("");
-            setTimestamp("");
+            setStartTimestamp("");
+            setEndTimestamp("");
             setTypeOfBooking(undefined);
             setPropertyType(null);
 
@@ -165,15 +171,51 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         />
                     </div>
                     <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="firstName">
+                            First Name
+                        </Label>
+                        <Input
+                            id="firstName"
+                            className="w-[250px]"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstName}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="lastName">
+                            Last Name
+                        </Label>
+                        <Input
+                            id="lastName"
+                            className="w-[250px]"
+                            onChange={(e) => setLastName(e.target.value)}
+                            value={lastName}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
                         <Label htmlFor="timestamp">
-                            Timestamp
+                            Start Timestamp
                         </Label>
                         {/* TODO: think about whether there should be a date picker input and a time picker input */}
                         {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
                         <Input
-                            id="timestamp"
+                            id="startTimestamp"
                             className="w-[250px]"
-                            onChange={(e) => setTimestamp(e.target.value)}
+                            onChange={(e) => setStartTimestamp(e.target.value)}
+                            value={timestamp}
+                            placeholder="YYYY-MM-DD HH:MM:SS"
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="timestamp">
+                            End Timestamp
+                        </Label>
+                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                        <Input
+                            id="endTimestamp"
+                            className="w-[250px]"
+                            onChange={(e) => setEndTimestamp(e.target.value)}
                             value={timestamp}
                             placeholder="YYYY-MM-DD HH:MM:SS"
                         />
@@ -197,6 +239,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         <TypeOfBookingSelect className="w-[250px]" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                     </div>
                     <div className="flex flex-row items-center justify-between">
+                        <Label htmlFor="notes">
+                            Notes
+                        </Label>
+                        <Input
+                            id="notes"
+                            className="w-[250px]"
+                            onChange={(e) => setNotes(e.target.value)}
+                            value={notes}
+                        />
+                    </div>
+                    <div className="flex flex-row items-center justify-between">
                         {/* TODO: disable if type is phone call booking */}
                         <Label htmlFor="propertyType">
                             Property Type
@@ -208,7 +261,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     <Button variant="outline" className="w-full" onClick={() => {
                         setEmail("");
                         setPropertyType(null);
-                        setTimestamp("");
+                        setStartTimestamp("");
+                        setEndTimestamp("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
