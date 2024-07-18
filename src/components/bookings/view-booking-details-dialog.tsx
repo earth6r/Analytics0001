@@ -48,7 +48,8 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                         booking?.email || "No email set"
                     } />
                     <DetailItem label="Type" value={booking?.type || "No type set"} />
-                    <DetailItem label="Timestamp" value={formatTimestamp(booking.timestamp) || "No timestamp set"} />
+                    <DetailItem label="Start Timestamp" value={formatTimestamp(booking.startTimestamp) || "No Start Timestamp set"} />
+                    <DetailItem label="End Timestamp" value={formatTimestamp(booking.endTimestamp) || "No End Timestamp set"} />
                     <DetailItem label="Property" value={booking?.property || "No property set"} />
                     <DetailItem label="Phone Number" value={booking?.phoneNumber || "No phone number set"} />
 

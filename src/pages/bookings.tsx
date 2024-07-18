@@ -14,7 +14,7 @@ const Bookings = () => {
     const [open, setOpen] = useState(false);
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-    const [sortKey, setSortKey] = useState<"email" | "type" | "timestamp" | "property" | "phoneNumber">("timestamp");
+    const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
 
 
@@ -69,7 +69,8 @@ const Bookings = () => {
                         const filteredData = sortedData.filter((booking: any) => {
                             return booking.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                 booking.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                booking.timestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                booking.startTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                booking.endTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                 (booking?.property?.toLowerCase()?.includes(searchQuery.toLowerCase())) ||
                                 booking.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase());
                         });
@@ -113,14 +114,14 @@ const Bookings = () => {
                         </div>
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
-                                Timestamp
+                                Start Timestamp
                             </h1>
                             <div className="hover:cursor-pointer hover:bg-gray-100 p-2 rounded-lg" onClick={
                                 () => {
-                                    if (sortKey === "timestamp") {
+                                    if (sortKey === "startTimestamp") {
                                         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
                                     } else {
-                                        setSortKey("timestamp");
+                                        setSortKey("startTimestamp");
                                     }
                                 }
                             }>
@@ -175,7 +176,7 @@ const Bookings = () => {
                             <div key={booking.id} className="grid grid-cols-6 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
                                 <div>{booking.type || "No Type Provided"}</div>
-                                <div>{formatTimestamp(booking.timestamp) || "No Timestamp Provided"}</div>
+                                <div>{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 <div>{booking.property || "No Property Type Provided"}</div>
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
                                 <ViewBookingDetailsDialog booking={booking} />

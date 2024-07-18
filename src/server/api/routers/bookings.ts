@@ -39,17 +39,17 @@ export const bookingsRouter = createTRPCRouter({
                 })
             }
 
-            for (const booking of bookings) {
-                const userRef = collection(db, 'users');
-                const d = doc(userRef, booking.userUID);
-                const user = await getDoc(d);
+            // for (const booking of bookings) {
+            //     const userRef = collection(db, 'users');
+            //     const d = doc(userRef, booking.userUID);
+            //     const user = await getDoc(d);
 
-                if (!user.exists()) {
-                    throw new Error('User not found');
-                }
+            //     if (!user.exists()) {
+            //         throw new Error('User not found');
+            //     }
 
-                booking.email = user.data().email;
-            }
+            //     booking.email = user.data().email;
+            // }
 
             // sort by timestamp
             bookings.sort((a, b) => {

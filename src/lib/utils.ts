@@ -31,6 +31,10 @@ export function convertDateString(dateString: string | null) {
 }
 
 export function formatTimestamp(timestampStr: string, threeDigits = true) {
+  if (!timestampStr) {
+    return null;
+  }
+
   let date;
   if (threeDigits) {
     date = new Date(Number(timestampStr));
