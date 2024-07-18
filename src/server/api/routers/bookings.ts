@@ -1,12 +1,12 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import admin from 'firebase-admin';
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore/lite";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
 
 // Set configuration options for the API route
 export const config = {
-  maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
+    maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
 export const bookingsRouter = createTRPCRouter({
@@ -17,6 +17,7 @@ export const bookingsRouter = createTRPCRouter({
             const bookings: any[] = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
+                data.uid = doc.id;
                 data.type = 'Phone Call';
                 bookings.push(data);
             });
@@ -25,6 +26,7 @@ export const bookingsRouter = createTRPCRouter({
             const querySnapshot2 = await getDocs(propertyTourBookingsRef);
             querySnapshot2.forEach((doc) => {
                 const data = doc.data();
+                data.uid = doc.id;
                 data.type = 'Property Tour';
                 bookings.push(data);
             });
@@ -111,4 +113,26 @@ export const bookingsRouter = createTRPCRouter({
                 status: 'success',
             };
         }),
+
+    updateAdditionalNotes: publicProcedure
+        .input(
+            z.object({
+                uid: z.string(),
+                bookingType: z.string(),
+                additionalNotes: z.string(),
+            })
+        )
+        .mutation(
+            async ({ input }) => {
+                const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+                const tableRef = collection(db, tableNameRef);
+
+                const d = doc(tableRef, input.uid);
+
+                await updateDoc(d, {
+                    additionalNotes: input.additionalNotes
+                })
+            }
+        )
 });
