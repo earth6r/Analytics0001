@@ -62,11 +62,12 @@ const Bookings = () => {
             <div className="p-6">
                 <div className="flex flex-row items-center justify-between">
                     <h1 className="text-4xl font-bold">Bookings</h1>
-                    <CreateBookingDialog
+                    {/* TODO: uncomment after fixing this */}
+                    {/* <CreateBookingDialog
                         open={open}
                         onOpenChange={setOpen}
                         refetch={getBookings.refetch}
-                    />
+                    /> */}
                 </div>
 
                 <Input
