@@ -237,7 +237,11 @@ const Bookings = () => {
                                     </div>
                                     <div className="px-6 pb-6 flex flex-row items-center justify-between mt-10 space-x-2">
                                         <div className="flex flex-row items-center justify-center space-x-4">
-                                            <Button variant="outline" className="w-full">
+                                            <Button variant="outline" className="w-full" onClick={
+                                                () => {
+                                                    window.location.href = `tel:${booking.phoneNumber}`;
+                                                }
+                                            }>
                                                 <PhoneIcon className="w-5 h-5 mr-2" />
                                                 Call now
                                             </Button>
