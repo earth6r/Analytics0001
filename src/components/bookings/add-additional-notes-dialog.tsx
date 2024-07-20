@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import Spinner from "../common/spinner";
 import { NotebookPen } from "lucide-react";
-import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { api } from "@/utils/api";
 
 interface AddAdditionalNotesDialogProps {
@@ -57,20 +57,19 @@ const AddAdditionalNotesDialog = (props: AddAdditionalNotesDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div>
-                    <Input
+                    <Textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        type="text"
                         placeholder="Add additional notes..."
-                        className="w-full"
+                        className="w-full h-[400px] resize-none"
                     />
                 </div>
-                <DialogFooter>
+                <DialogFooter className="flex flex-row items-center justify-between space-x-4">
                     <DialogClose className="w-full">
-                        <Button className="w-full" variant="outline">Close</Button>
+                        <Button className="w-full" variant="outline">Cancel</Button>
                     </DialogClose>
                     <Button className="w-full" disabled={
-                        (notes === "" && !booking.additionalNotes) || loading
+                        (notes === "" && !booking.additionalNotes) || loading || notes === booking.additionalNotes
                     } onClick={handleClick}>
                         {loading ? <Spinner /> : "Save"}
                     </Button>
