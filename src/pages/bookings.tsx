@@ -1,5 +1,6 @@
 import AddAdditionalNotesDialog from "@/components/bookings/add-additional-notes-dialog";
 import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
+import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 import ViewBookingDetailsDialog from "@/components/bookings/view-booking-details-dialog";
 import Header from "@/components/common/header";
 import { Button } from "@/components/ui/button";
@@ -96,7 +97,7 @@ const Bookings = () => {
                     }}
                 />
 
-                <div className="mt-4 hidden xl:block">
+                <div className="mt-4 hidden xl:block overflow-y-scroll">
                     <div className="grid grid-cols-7 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
@@ -132,7 +133,7 @@ const Bookings = () => {
                         </div>
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
-                                Start Timestamp
+                                Meeting Time
                             </h1>
                             <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
                                 () => {
@@ -202,6 +203,7 @@ const Bookings = () => {
                                 <div className="flex flex-row items-center space-x-2">
                                     <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
                                     <ViewBookingDetailsDialog booking={booking} />
+                                    <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
                             </div>
                         ))}

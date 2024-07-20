@@ -1,7 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import admin from 'firebase-admin';
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
 
 // Set configuration options for the API route
@@ -134,5 +134,20 @@ export const bookingsRouter = createTRPCRouter({
                     additionalNotes: input.additionalNotes
                 })
             }
-        )
+        ),
+
+    deleteBooking: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            bookingType: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            await deleteDoc(d);
+        }),
 });

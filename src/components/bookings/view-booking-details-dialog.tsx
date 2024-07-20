@@ -46,7 +46,7 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                 <div className="px-1">
                     <DetailItem label="Email" value={
                         booking?.email || "No email set"
-                    } />
+                    } copyable />
                     {/* <DetailItem label="UID" value={booking?.uid} copyable /> */}
                     <DetailItem label="Type" value={booking?.type || "No type set"} />
                     <DetailItem label="Meeting Time" value={formatTimestamp(booking.startTimestamp) || "No Meeting Time set"} />
@@ -54,7 +54,7 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                     {/* endTimestamp - startTimestamp value in seconds with 3 zeros extra in the epoch. need to divide by 60 to get minutes and 1000 to get the actual epoch value */}
                     <DetailItem label="Duration" value={(booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes"|| "No duration set"} />
                     <DetailItem label="Property" value={booking?.property || "No property set"} />
-                    <DetailItem label="Phone Number" value={booking?.phoneNumber || "No phone number set"} />
+                    <DetailItem label="Phone Number" value={booking?.phoneNumber || "No phone number set"} copyable />
                     <DetailItem label="First Name" value={booking?.firstName || "No first name set"} />
                     <DetailItem label="Last Name" value={booking?.lastName || "No last name set"} />
                     <DetailItem label="Customer Questions" value={booking?.notes || "No notes set"} tooltipLabel={booking?.notes}/>

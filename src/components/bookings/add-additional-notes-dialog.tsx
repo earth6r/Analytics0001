@@ -45,8 +45,8 @@ const AddAdditionalNotesDialog = (props: AddAdditionalNotesDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
-                <Button className="w-10 p-0">
-                    <NotebookPen className="w-5 h-5" />
+                <Button className="px-3">
+                    <NotebookPen className="" />
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
