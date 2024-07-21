@@ -30,7 +30,6 @@ const formatTimestampBookingCard = (timestamp: number) => {
 
 
 const Bookings = () => {
-    const [open, setOpen] = useState(false);
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
@@ -186,11 +185,11 @@ const Bookings = () => {
 
                     {getBookings.isLoading ? (
                         <div className="space-y-2 mt-4">
-                            <Skeleton className="h-8" />
-                            <Skeleton className="h-8" />
-                            <Skeleton className="h-8" />
-                            <Skeleton className="h-8" />
-                            <Skeleton className="h-8" />
+                            <Skeleton className="h-12" />
+                            <Skeleton className="h-12" />
+                            <Skeleton className="h-12" />
+                            <Skeleton className="h-12" />
+                            <Skeleton className="h-12" />
                         </div>
                     ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
