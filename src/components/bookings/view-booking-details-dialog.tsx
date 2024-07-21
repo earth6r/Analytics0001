@@ -13,6 +13,7 @@ import { DetailItem } from "../customers/customer-details-dialog";
 import { formatTimestamp } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Spinner from "../common/spinner";
 // import Spinner from "../common/spinner";
 
 interface ViewBookingDetailsDialogProps {
@@ -27,7 +28,7 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
 
     const handleClick = async () => {
         setRouteLoading(true);
-        await router.push(`/user?email=${booking.email}`);
+        await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`);
         setRouteLoading(false);
     };
 
@@ -58,11 +59,14 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                     <DetailItem label="First Name" value={booking?.firstName || "No first name set"} />
                     <DetailItem label="Last Name" value={booking?.lastName || "No last name set"} />
                     <DetailItem label="Customer Questions" value={booking?.notes || "No notes set"} tooltipLabel={booking?.notes}/>
-                    <DetailItem label="Home0001 Notes" value={booking?.additionalNotes || "No additional notes set"} tooltipLabel={booking?.additionalNotes}/>
+                    <DetailItem label="Call Notes" value={booking?.additionalNotes || "No additional notes set"} tooltipLabel={booking?.additionalNotes}/>
 
                     {/* {booking?.email && <div className="flex flex-row items-center justify-center mt-2">
                         {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-400 hover:text-blue-500 cursor-pointer">View User Details</div>}
                     </div>} */}
+                    {booking?.email && <div className="flex flex-row items-center justify-center mt-2">
+                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-400 hover:text-blue-500 cursor-pointer">View Full Details</div>}
+                    </div>}
                 </div>
                 <DialogFooter>
                     <DialogClose className="w-full">

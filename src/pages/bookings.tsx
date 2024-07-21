@@ -1,6 +1,7 @@
 import AddAdditionalNotesDialog from "@/components/bookings/add-additional-notes-dialog";
-import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
+// import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
 import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
+import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
 import ViewBookingDetailsDialog from "@/components/bookings/view-booking-details-dialog";
 import Header from "@/components/common/header";
 import { Button } from "@/components/ui/button";
@@ -115,7 +116,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Type of Booking
                             </h1>
@@ -130,7 +131,7 @@ const Bookings = () => {
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Meeting Time
@@ -148,7 +149,7 @@ const Bookings = () => {
                             </div>
                         </div>
                         {/* <div>Property Type</div> */}
-                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Property Type
                             </h1>
@@ -163,7 +164,7 @@ const Bookings = () => {
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Phone Number
@@ -180,7 +181,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        <div>Additional Notes</div>
+                        <div className="col-span-3">Call Notes</div>
                     </div>
 
                     {getBookings.isLoading ? (
@@ -195,11 +196,16 @@ const Bookings = () => {
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-7 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
-                                <div>{booking.type || "No Type Provided"}</div>
+                                {/* <div>{booking.type || "No Type Provided"}</div> */}
                                 <div>{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
-                                <div>{booking.property || "No Property Type Provided"}</div>
+                                {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
-                                <div>{booking?.additionalNotes || "No Additional Notes Provided"}</div>
+                                {/* <pre className="col-span-3">
+                                    {booking?.additionalNotes || "No Additional Notes Provided"}
+                                </pre> */}
+                                <div className="col-span-1">
+                                    <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
+                                </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
                                     <ViewBookingDetailsDialog booking={booking} />
