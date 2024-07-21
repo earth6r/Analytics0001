@@ -111,6 +111,7 @@ TODAY TODO:
 - add duration for phone call booking and property tour booking
 - validate url profile picture
 - display errors firestore to the dashboard
+- fix "use system theme" to work once clicked and not needing a refresh
 
 
 NOTES:
