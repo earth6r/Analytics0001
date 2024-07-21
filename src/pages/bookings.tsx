@@ -116,7 +116,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Type of Booking
                             </h1>
@@ -131,7 +131,7 @@ const Bookings = () => {
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
-                        </div> */}
+                        </div>
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Meeting Time
@@ -196,7 +196,7 @@ const Bookings = () => {
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-7 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
-                                {/* <div>{booking.type || "No Type Provided"}</div> */}
+                                <div>{booking.type || "No Type Provided"}</div>
                                 <div>{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
