@@ -99,7 +99,7 @@ const Bookings = () => {
                 />
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
-                    <div className="grid grid-cols-7 gap-4 font-semibold">
+                    <div className="grid grid-cols-8 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Email
@@ -132,7 +132,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
                                 Meeting Time
                             </h1>
@@ -194,10 +194,10 @@ const Bookings = () => {
                         </div>
                     ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
-                            <div key={booking.id} className="grid grid-cols-7 gap-4">
+                            <div key={booking.id} className="grid grid-cols-8 gap-4">
                                 <div>{booking.email || "No Email Provided"}</div>
                                 <div>{booking.type || "No Type Provided"}</div>
-                                <div>{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
+                                <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
                                 {/* <pre className="col-span-3">

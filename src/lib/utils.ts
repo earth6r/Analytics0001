@@ -45,20 +45,21 @@ export function formatTimestamp(timestampStr, threeDigits = true) {
   // Convert date to EST timezone
   const estOffset = -5 * 60 * 60 * 1000; // EST offset in milliseconds
   const estDate = new Date(date.getTime() + estOffset);
-  const options = {
-    weekday: 'long',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-    timeZone: 'America/New_York'
-  };
 
-  // Format date
-  const formatter = new Intl.DateTimeFormat('en-US', options);
-  const formattedDate = formatter.format(estDate);
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const monthsOfYear = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
-  // Add EST timezone to the formatted date
-  return formattedDate.replace('AM', 'AM EST').replace('PM', 'PM EST');
+  const dayOfWeek = daysOfWeek[estDate.getUTCDay()];
+  const month = monthsOfYear[estDate.getUTCMonth()];
+  const day = estDate.getUTCDate().toString().padStart(2, '0');
+  const hours = estDate.getUTCHours();
+  const minutes = estDate.getUTCMinutes().toString().padStart(2, '0');
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
+
+  return `${dayOfWeek}, ${month} ${day} ${formattedHours}:${minutes} ${period} EST`;
 }
+
