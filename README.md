@@ -112,6 +112,7 @@ TODAY TODO:
 - validate url profile picture
 - display errors firestore to the dashboard
 - fix "use system theme" to work once clicked and not needing a refresh
+- fix search in bookings page
 
 
 NOTES:
