@@ -30,7 +30,7 @@ export function convertDateString(dateString: string | null) {
   return formattedDate;
 }
 
-export function formatTimestamp(timestampStr, threeDigits = true) {
+export function formatTimestamp(timestampStr: string, threeDigits: boolean = true) {
   if (!timestampStr) {
     return null;
   }
