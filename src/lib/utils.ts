@@ -47,7 +47,7 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
   const day = date.toLocaleString('en-US', { day: '2-digit', timeZone: 'UTC' });
   const hours = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[0];
-  const minutes = date.toLocaleString('en-US', { minute: '2-digit', timeZone: 'UTC' });
+  const minutes = date.toLocaleString('en-US', { minute: '2-digit', timeZone: 'UTC' }).padStart(2, '0');
   const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[1];
 
   return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} UTC`;
