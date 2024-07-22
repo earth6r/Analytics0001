@@ -1,16 +1,13 @@
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import CopyTooltip from "../customers/copy-tooltip"
-import { UserIcon } from "lucide-react";
 import { formatTimestamp } from "@/lib/utils";
 
 interface UserProfileCardProps {
-    uid: string;
     email: string;
     firstName: string;
     lastName: string;
@@ -19,16 +16,12 @@ interface UserProfileCardProps {
 }
 
 const UserProfileCard = (props: UserProfileCardProps) => {
-    const { uid, email, firstName, lastName, createdAt, propertyType } = props;
+    const { email, firstName, lastName, createdAt, propertyType } = props;
 
     return (
-        <Card className="w-max">
+        <Card className="w-max mt-4">
             <CardHeader>
                 <CardTitle>User Profile</CardTitle>
-                <CardDescription className="flex flex-row items-center">
-                    <UserIcon className="h-6 w-6 text-muted-foreground" />
-                    <CopyTooltip value={uid} />
-                </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 gap-4">

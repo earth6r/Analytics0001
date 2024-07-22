@@ -79,11 +79,9 @@ const User = () => {
             <div className="p-6">
                 <div className="flex flex-row items-center space-x-2">
                     <h1 className="text-4xl font-bold">User Details</h1>
-                    <CircularQuestionMarkTooltip label="secret page for now" />
                 </div>
 
                 <UserProfileCard
-                    uid={getUserDetails.data?.UID}
                     email={getUserDetails.data?.user?.email}
                     firstName={getUserDetails.data?.user?.firstName}
                     lastName={getUserDetails.data?.user?.lastName}
@@ -97,11 +95,6 @@ const User = () => {
                     {/* @ts-expect-error TODO: fix type */}
                     phoneCallBookings: {JSON.stringify(getUserDetails.data?.phoneCallBookings, null, 2)}
                 </div>
-
-                <hr className="my-4" />
-
-                {/* @ts-expect-error TODO: fix type */}
-                <div>{getUserDetails.data?.phoneCallBookings.length}</div>
 
                 <div>
                     {
@@ -120,50 +113,51 @@ const User = () => {
 
                 <hr className="my-4" />
 
-                <div className="border rounded-lg shadow p-6">
-                    <div className="flex flex-row items-center justify-between">
-                        {/* @ts-expect-error TODO: fix type */}
-                        <h1 className="text-4xl font-bold">Phone Call Bookings ({getUserDetails.data?.buyingProgress.length})</h1>
-                        <Button variant="outline" className="">
-                            <PlusIcon className="w-5 h-5 mr-2" />
-                            <h1>Add New Booking</h1>
-                            {/* TODO: disable email field and make it readonly with default of email */}
-                        </Button>
-                    </div>
+                {getUserDetails.data?.phoneCallBookings && getUserDetails.data?.phoneCallBookings.length > 0 &&
+                    <div className="border rounded-lg shadow p-6">
+                        <div className="flex flex-row items-center justify-between">
+                            {/* @ts-expect-error TODO: fix type */}
+                            <h1 className="text-4xl font-bold">Phone Call Bookings ({getUserDetails.data?.buyingProgress.length})</h1>
+                            <Button variant="outline" className="">
+                                <PlusIcon className="w-5 h-5 mr-2" />
+                                <h1>Add New Booking</h1>
+                                {/* TODO: disable email field and make it readonly with default of email */}
+                            </Button>
+                        </div>
 
-                    <div className="grid grid-cols-3 gap-6 mt-4">
-                        <BookingCard />
-                        <BookingCard />
-                        <BookingCard />
-                    </div>
+                        <div className="grid grid-cols-3 gap-6 mt-4">
+                            <BookingCard />
+                            <BookingCard />
+                            <BookingCard />
+                        </div>
+                    </div>}
 
-                    <div className="border rounded-xl p-4">
-                        {
-                            // @ts-expect-error TODO: fix type
-                            getUserDetails.data?.buyingProgress.map(
-                                (progress: any, index: number) => (
-                                    <div key={index} className="">
-                                        <div>
-                                            <div>Property Type: {progress.propertyType || "-"}</div>
-                                            <div>Escrow Deposit: {typeof progress.escrowDeposit === "boolean" ? JSON.stringify(progress.escrowDeposit) : "-"}</div>
-                                            <div>Full Payment: {typeof progress.fullPayment === "boolean" ? JSON.stringify(progress.fullPayment) : "-"}</div>
-                                            <div>Schedule Closing: {typeof progress.scheduleClosing === "boolean" ? JSON.stringify(progress.scheduleClosing) : "-"}</div>
-                                            <div>Completed: {typeof progress.completed === "boolean" ? JSON.stringify(progress.completed) : "-"}</div>
-                                            <div>Download Documents: {typeof progress.downloadDocuments === "boolean" ? JSON.stringify(progress.downloadDocuments) : "-"}</div>
-                                            <div>Created At: {progress.createdAt?._seconds || "-"}</div>
-                                            <div>Scheduled Calendar Date: {progress?.scheduledCalendarDate || "-"}</div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <div>Payment Intent:</div>
-                                                <CopyTooltip value={progress?.paymentIntent || "-"} />
-                                            </div>
+                <div className="border rounded-xl p-4">
+                    {
+                        // @ts-expect-error TODO: fix type
+                        getUserDetails.data?.buyingProgress.map(
+                            (progress: any, index: number) => (
+                                <div key={index} className="">
+                                    <div>
+                                        <div>Property Type: {progress.propertyType || "-"}</div>
+                                        <div>Escrow Deposit: {typeof progress.escrowDeposit === "boolean" ? JSON.stringify(progress.escrowDeposit) : "-"}</div>
+                                        <div>Full Payment: {typeof progress.fullPayment === "boolean" ? JSON.stringify(progress.fullPayment) : "-"}</div>
+                                        <div>Schedule Closing: {typeof progress.scheduleClosing === "boolean" ? JSON.stringify(progress.scheduleClosing) : "-"}</div>
+                                        <div>Completed: {typeof progress.completed === "boolean" ? JSON.stringify(progress.completed) : "-"}</div>
+                                        <div>Download Documents: {typeof progress.downloadDocuments === "boolean" ? JSON.stringify(progress.downloadDocuments) : "-"}</div>
+                                        <div>Created At: {progress.createdAt?._seconds || "-"}</div>
+                                        <div>Scheduled Calendar Date: {progress?.scheduledCalendarDate || "-"}</div>
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <div>Payment Intent:</div>
+                                            <CopyTooltip value={progress?.paymentIntent || "-"} />
                                         </div>
-                                        {/* @ts-expect-error TODO: fix type */}
-                                        {index !== getUserDetails.data?.buyingProgress.length - 1 && <hr className="my-4" />}
                                     </div>
-                                )
+                                    {/* @ts-expect-error TODO: fix type */}
+                                    {index !== getUserDetails.data?.buyingProgress.length - 1 && <hr className="my-4" />}
+                                </div>
                             )
-                        }
-                    </div>
+                        )
+                    }
                 </div>
 
                 <hr className="my-4" />
