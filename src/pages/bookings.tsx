@@ -15,20 +15,6 @@ import { ArrowUpDownIcon, PhoneIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-const formatTimestampBookingCard = (timestamp: number) => {
-    const date = new Date(timestamp);
-    const month = date.toLocaleString("default", { month: "long" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    return `${month} ${day}, ${year} - ${formattedHours}:${formattedMinutes} ${ampm}`;
-};
-
-
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -229,7 +215,7 @@ const Bookings = () => {
                                             {booking.type === "Property Tour" ? "Property Tour" : "Call"} with {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
                                         </CardTitle>
                                         <CardDescription>
-                                            {formatTimestampBookingCard(booking.startTimestamp)}
+                                            {formatTimestamp(booking.startTimestamp)}
                                         </CardDescription>
                                     </CardHeader>
                                     <div className="flex flex-row items-center justify-between px-6">

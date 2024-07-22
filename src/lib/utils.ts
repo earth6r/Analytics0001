@@ -42,24 +42,13 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
     date = new Date(Number(timestampStr) * 1000);
   }
 
-  // Convert date to EST timezone
-  const estOffset = -5 * 60 * 60 * 1000; // EST offset in milliseconds
-  const estDate = new Date(date.getTime() + estOffset);
+  // Convert date to UTC and format components
+  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  const day = date.toLocaleString('en-US', { day: '2-digit', timeZone: 'UTC' });
+  const hours = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[0];
+  const minutes = date.toLocaleString('en-US', { minute: '2-digit', timeZone: 'UTC' });
+  const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[1];
 
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const monthsOfYear = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const dayOfWeek = daysOfWeek[estDate.getUTCDay()];
-  const month = monthsOfYear[estDate.getUTCMonth()];
-  const day = estDate.getUTCDate().toString().padStart(2, '0');
-  const hours = estDate.getUTCHours();
-  const minutes = estDate.getUTCMinutes().toString().padStart(2, '0');
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-
-  return `${dayOfWeek}, ${month} ${day} ${formattedHours}:${minutes} ${period} EST`;
+  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} UTC`;
 }
-
