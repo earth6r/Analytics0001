@@ -55,6 +55,10 @@
     - validate image url for booking details page
     - make booking details create potential customer data dialog to only undisable save if changes are made than the previous save i.e. use a form (useForm)
     - delete image from booking details dialog
+    - add skeleton for profile picture in booking details dialog
+    - add skeleton for profile picture in booking details page on top right
+    - add default profile picture if no profile picture is set or decide to hide it (currently hiding it)
+    - TODO: fix drag and drop on file input for booking details dialog
 
 CHARTS:
     - deposits over time chart 🔄

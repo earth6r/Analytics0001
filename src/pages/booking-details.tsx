@@ -51,7 +51,14 @@ const BookingDetails = () => {
                     <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     <div className="flex flex-row items-center space-x-2">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
-                        {getPotentialCustomerDetails.data?.imageUrl && <Image src={getPotentialCustomerDetails.data?.imageUrl} alt="User Profile Picture" width={50} height={50} className="rounded-full w-10 h-10" />}
+                        {getPotentialCustomerDetails.data?.imageUrl && <div className="relative w-10 h-10">
+                            <Image
+                                src={getPotentialCustomerDetails.data?.imageUrl}
+                                alt="User Profile Picture"
+                                layout="fill"
+                                className="rounded-full object-cover"
+                            />
+                        </div>}
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

@@ -94,6 +94,15 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 return;
             }
 
+            if (!selectedFile.type.startsWith('image/')) {
+                toast({
+                    title: "Invalid file type",
+                    description: "Please select an image file.",
+                    className: toastErrorStyle,
+                });
+                return;
+            }
+
             // @ts-expect-error TODO: fix this
             setFile(URL.createObjectURL(selectedFile));
 
@@ -138,7 +147,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 </DialogHeader>
                 <div>
                     {file || imageUrl ? <div className="flex items-center justify-center">
-                        <Image src={file || imageUrl} alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" />
+                        <Image src={file || imageUrl} alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" width={384} height={192} />
                     </div> :
                         <div
                             className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
