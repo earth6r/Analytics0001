@@ -43,6 +43,11 @@ export const userRouter = createTRPCRouter({
                 "user": user.docs[0].data(),
                 // @ts-expect-error TODO: fix this
                 "UID": user.docs[0].id,
+                "phoneCallBookings": [],
+                "propertyTourBookings": [],
+                "buyingProgress": [],
+                "messages": [],
+                "register": [],
             }
 
             // usersBookPhoneCall
