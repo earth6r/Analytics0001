@@ -9,7 +9,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
-import { formatTimestamp } from "@/lib/utils";
+import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { ArrowUpDownIcon, PhoneIcon } from "lucide-react";
 import { useRouter } from "next/router";
@@ -31,6 +31,7 @@ const Bookings = () => {
             refetchInterval: interval,
         }
     );
+    const completeBooking = api.bookings.completeBooking.useMutation();
 
     useEffect(() => {
         if (getBookings.data) {
@@ -87,7 +88,7 @@ const Bookings = () => {
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
                     <div className="grid grid-cols-8 gap-4 font-semibold">
-                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
                                 Email
                             </h1>
@@ -103,7 +104,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="flex flex-row items-center justify-start space-x-2 select-none">
+                        {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Type of Booking
                             </h1>
@@ -118,7 +119,7 @@ const Bookings = () => {
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
                                 Meeting Time
@@ -182,8 +183,8 @@ const Bookings = () => {
                     ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-8 gap-4">
-                                <div>{booking.email || "No Email Provided"}</div>
-                                <div>{booking.type || "No Type Provided"}</div>
+                                <div className="col-span-2">{booking.email || "No Email Provided"}</div>
+                                {/* <div>{booking.type || "No Type Provided"}</div> */}
                                 <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                                 <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
@@ -201,6 +202,22 @@ const Bookings = () => {
                                     }>
                                         View Full Details
                                     </Button>
+                                    <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
+                                        <Button
+                                            className="min-w-48"
+                                            disabled={booking?.completed || false}
+                                            onClick={
+                                                async () => {
+                                                    await completeBooking.mutateAsync({
+                                                        uid: booking.uid,
+                                                        bookingType: booking.type,
+                                                    });
+                                                    await getBookings.refetch();
+                                                }
+                                            }>
+                                            {booking?.completed ? "Completed" : "Mark as Completed"}
+                                        </Button>
+                                    </div>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
                             </div>

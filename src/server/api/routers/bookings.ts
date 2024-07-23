@@ -172,4 +172,21 @@ export const bookingsRouter = createTRPCRouter({
 
             return booking.data();
         }),
+
+    completeBooking: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            bookingType: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            await updateDoc(d, {
+                completed: true
+            });
+        }),
 });
