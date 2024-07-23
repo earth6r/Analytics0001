@@ -204,6 +204,7 @@ const Bookings = () => {
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                                        // @ts-expect-error TODO: fix this
                                         notesOpens[booking.uid] || false
                                     } onOpenChange={
                                         (open: boolean) => {
@@ -259,6 +260,8 @@ const Bookings = () => {
                                     getBookings={getBookings}
                                     setMarkCompletedDialogOpen={setMarkCompletedDialogOpen}
                                     setUidForPostNotes={setUidForPostNotes}
+                                    notesOpens={notesOpens}
+                                    setNotesOpens={setNotesOpens}
                                 />
                             ))}
                         </div>
@@ -275,10 +278,12 @@ interface BookingCardProps {
     getBookings: any;
     setMarkCompletedDialogOpen: any;
     setUidForPostNotes: any;
+    notesOpens: any;
+    setNotesOpens: any;
 }
 
 const BookingCard = (props: BookingCardProps) => {
-    const { booking, completeBooking, getBookings, setMarkCompletedDialogOpen, setUidForPostNotes } = props;
+    const { booking, completeBooking, getBookings, setMarkCompletedDialogOpen, setUidForPostNotes, notesOpens, setNotesOpens } = props;
 
     const router = useRouter();
     const [markingCompleted, setMarkingCompleted] = useState(false);
@@ -313,7 +318,16 @@ const BookingCard = (props: BookingCardProps) => {
                     View Full Details
                 </Button>
                 <div className="flex flex-row items-center justify-between">
-                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
+                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                        notesOpens[booking.uid] || false
+                    } onOpenChange={
+                        (open: boolean) => {
+                            setNotesOpens({
+                                ...notesOpens,
+                                [booking.uid]: open,
+                            });
+                        }
+                    } />
                 </div>
             </div>
             <div className="px-6 pb-6 mt-2">
