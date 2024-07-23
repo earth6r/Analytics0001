@@ -60,6 +60,7 @@
     - add default profile picture if no profile picture is set or decide to hide it (currently hiding it)
     - TODO: fix drag and drop on file input for booking details dialog
     - any data in booking details page, should also be shown in user page (but this will not show unless the potential customer becomes a user - ties their email)
+    - add spinners/skeletons to drag and drop or upload file by clicking when file is loading after selecting/dropping
 
 CHARTS:
     - deposits over time chart 🔄
