@@ -1,4 +1,3 @@
-import CircularQuestionMarkTooltip from "@/components/common/circular-question-mark-tooltip";
 import Header from "@/components/common/header";
 import Spinner from "@/components/common/spinner";
 import CopyTooltip from "@/components/customers/copy-tooltip";
@@ -92,13 +91,11 @@ const User = () => {
                 <hr className="my-4" />
 
                 <div>
-                    {/* @ts-expect-error TODO: fix type */}
                     phoneCallBookings: {JSON.stringify(getUserDetails.data?.phoneCallBookings, null, 2)}
                 </div>
 
                 <div>
                     {
-                        // @ts-expect-error TODO: fix type
                         getUserDetails.data?.phoneCallBookings.map(
                             (booking: any, index: number) => (
                                 <div key={index}>
@@ -116,7 +113,6 @@ const User = () => {
                 {getUserDetails.data?.phoneCallBookings && getUserDetails.data?.phoneCallBookings.length > 0 &&
                     <div className="border rounded-lg shadow p-6">
                         <div className="flex flex-row items-center justify-between">
-                            {/* @ts-expect-error TODO: fix type */}
                             <h1 className="text-4xl font-bold">Phone Call Bookings ({getUserDetails.data?.buyingProgress.length})</h1>
                             <Button variant="outline" className="">
                                 <PlusIcon className="w-5 h-5 mr-2" />
@@ -134,7 +130,6 @@ const User = () => {
 
                 <div className="border rounded-xl p-4">
                     {
-                        // @ts-expect-error TODO: fix type
                         getUserDetails.data?.buyingProgress.map(
                             (progress: any, index: number) => (
                                 <div key={index} className="">
@@ -152,7 +147,6 @@ const User = () => {
                                             <CopyTooltip value={progress?.paymentIntent || "-"} />
                                         </div>
                                     </div>
-                                    {/* @ts-expect-error TODO: fix type */}
                                     {index !== getUserDetails.data?.buyingProgress.length - 1 && <hr className="my-4" />}
                                 </div>
                             )
@@ -163,20 +157,18 @@ const User = () => {
                 <hr className="my-4" />
 
                 <div>
-                    {/* @ts-expect-error TODO: fix type */}
                     messages: {JSON.stringify(getUserDetails.data?.messages, null, 2)}
                 </div>
 
                 <hr className="my-4" />
 
                 <div>
-                    {/* @ts-expect-error TODO: fix type */}
                     register: {JSON.stringify(getUserDetails.data?.register, null, 2)}
                 </div>
 
                 <hr className="my-4" />
 
-                {/* TODO: add some linking i.e. register property of interest <=> user Property buying progress property type (there's a difference and stats about how many users have same vs different properties from register to userbuyingprogress)*/}
+                {/* TODO: add some linking i.e. register property of interest <=> user Property buying progress property type (there's a difference and stats about how many users have same vs different properties from register to user buying progress)*/}
 
                 <div>
                     {getUserDetails.isLoading && <Skeleton className="h-10" />}

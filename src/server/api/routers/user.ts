@@ -2,7 +2,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 import admin from 'firebase-admin';
 import { put } from '@vercel/blob';
-import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { db } from "@/utils/firebase/initialize";
 
 // Set configuration options for the API route
@@ -180,6 +180,7 @@ export const userRouter = createTRPCRouter({
                 });
             } else {
                 const firstDoc = querySnapshot.docs[0];
+                // @ts-expect-error TODO: fix this
                 await updateDoc(doc(potentialCustomerRef, firstDoc.id), {
                     imageUrl,
                 });
@@ -208,6 +209,8 @@ export const userRouter = createTRPCRouter({
             }
 
             const doc = querySnapshot.docs[0];
+
+            // @ts-expect-error TODO: fix this
             return doc.data();
         }),
 });
