@@ -59,6 +59,7 @@
     - add skeleton for profile picture in booking details page on top right
     - add default profile picture if no profile picture is set or decide to hide it (currently hiding it)
     - TODO: fix drag and drop on file input for booking details dialog
+    - any data in booking details page, should also be shown in user page (but this will not show unless the potential customer becomes a user - ties their email)
 
 CHARTS:
     - deposits over time chart 🔄
