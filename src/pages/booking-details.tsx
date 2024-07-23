@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import Image from "next/image";
 
+const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
+
 const BookingDetails = () => {
     const router = useRouter();
 
@@ -102,11 +104,11 @@ const BookingDetails = () => {
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <RocketIcon className="w-4 h-4" />
-                                    <div className="max-w-56 truncate text-blue-400" onClick={
+                                    <div className="max-w-max truncate text-blue-400" onClick={
                                         () => {
-                                            window.open("https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09", "_blank")
+                                            window.open(ZOOM_URL, "_blank")
                                         }
-                                    }>{"https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09"}</div>
+                                    }>{ZOOM_URL}</div>
                                 </div>
                             </div>
                         </CardContent>
