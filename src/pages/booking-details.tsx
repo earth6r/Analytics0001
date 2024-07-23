@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { Calendar, Mail, Phone, RocketIcon, Timer } from "lucide-react";
+import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, Timer } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import Image from "next/image";
@@ -50,7 +50,10 @@ const BookingDetails = () => {
             <Header />
             <div className="p-6">
                 <div className="flex flex-row items-center justify-between">
-                    <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                    <div className="flex flex-row items-center space-x-2">
+                        <ArrowLeftCircleIcon className="w-6 h-6 cursor-pointer" onClick={() => router.back()} />
+                        <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                    </div>
                     <div className="flex flex-row items-center space-x-2">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
                         {getPotentialCustomerDetails.data?.imageUrl && <div className="relative w-10 h-10">
