@@ -2,7 +2,6 @@ import AddAdditionalNotesDialog from "@/components/bookings/add-additional-notes
 // import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
 import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
-import ViewBookingDetailsDialog from "@/components/bookings/view-booking-details-dialog";
 import Header from "@/components/common/header";
 import Spinner from "@/components/common/spinner";
 import { Button } from "@/components/ui/button";
@@ -12,16 +11,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, PhoneIcon } from "lucide-react";
+import { ArrowUpDownIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import MarkCompletedPostNotesAlertDialog from "@/components/bookings/mark-completed-post-notes-alert-dialog";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const [markCompletedDialogOpen, setMarkCompletedDialogOpen] = useState(false);
+    const [notesOpens, setNotesOpens] = useState({});
+    const [uidForPostNotes, setUidForPostNotes] = useState("");
 
     const router = useRouter();
 
@@ -87,6 +91,8 @@ const Bookings = () => {
                         setSortedData(filteredData);
                     }}
                 />
+
+                <MarkCompletedPostNotesAlertDialog open={markCompletedDialogOpen} onOpenChange={setMarkCompletedDialogOpen} uid={uidForPostNotes} setNotesOpens={setNotesOpens} notesOpens={notesOpens} />
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
                     <div className="grid grid-cols-8 gap-4 font-semibold">
@@ -197,7 +203,16 @@ const Bookings = () => {
                                     <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
-                                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
+                                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                                        notesOpens[booking.uid] || false
+                                    } onOpenChange={
+                                        (open: boolean) => {
+                                            setNotesOpens({
+                                                ...notesOpens,
+                                                [booking.uid]: open,
+                                            });
+                                        }
+                                    } />
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
@@ -215,6 +230,8 @@ const Bookings = () => {
                                                         bookingType: booking.type,
                                                     });
                                                     await getBookings.refetch();
+                                                    setMarkCompletedDialogOpen(true);
+                                                    setUidForPostNotes(booking.uid);
                                                 }
                                             }>
                                             {booking?.completed ? "Completed" : "Mark as Completed"}
@@ -233,13 +250,15 @@ const Bookings = () => {
                             <Skeleton className="h-24" />
                         </div>
                     ) : (
-                        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-0">
+                        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             {sortedData?.map((booking: any, index) => (
                                 <BookingCard
                                     key={index}
                                     booking={booking}
                                     completeBooking={completeBooking}
                                     getBookings={getBookings}
+                                    setMarkCompletedDialogOpen={setMarkCompletedDialogOpen}
+                                    setUidForPostNotes={setUidForPostNotes}
                                 />
                             ))}
                         </div>
@@ -254,16 +273,18 @@ interface BookingCardProps {
     booking: any;
     completeBooking: any;
     getBookings: any;
+    setMarkCompletedDialogOpen: any;
+    setUidForPostNotes: any;
 }
 
 const BookingCard = (props: BookingCardProps) => {
-    const { booking, completeBooking, getBookings } = props;
+    const { booking, completeBooking, getBookings, setMarkCompletedDialogOpen, setUidForPostNotes } = props;
 
     const router = useRouter();
     const [markingCompleted, setMarkingCompleted] = useState(false);
 
     return (
-        <Card key={booking.id} className={cn(booking?.completed ? "opacity-50" : "")}>
+        <Card key={booking.id} className={cn(booking?.completed ? "opacity-50 cursor-not-allowed" : "")}>
             <CardHeader>
                 <CardTitle className="truncate max-w-64">
                     {booking.type === "Property Tour" ? "Property Tour" : "Call"} with {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
@@ -309,6 +330,8 @@ const BookingCard = (props: BookingCardProps) => {
                                 });
                                 await getBookings.refetch();
                                 setMarkingCompleted(false);
+                                setMarkCompletedDialogOpen(true);
+                                setUidForPostNotes(booking.uid);
                             }
                         }>
                         {markingCompleted ? <Spinner /> : "Mark as Completed"}

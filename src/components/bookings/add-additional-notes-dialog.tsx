@@ -18,12 +18,12 @@ import { api } from "@/utils/api";
 interface AddAdditionalNotesDialogProps {
     booking: any;
     refetch: () => Promise<any>;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
 const AddAdditionalNotesDialog = (props: AddAdditionalNotesDialogProps) => {
-    const { booking, refetch } = props;
-
-    const [open, onOpenChange] = useState(false);
+    const { booking, refetch, open, onOpenChange } = props;
 
     const [notes, setNotes] = useState(booking.additionalNotes || "");
     const [loading, setLoading] = useState(false);
