@@ -89,7 +89,6 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
         }
     }
 
-    const [file, setFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState('');
     const [profileNotes, setProfileNotes] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
@@ -104,9 +103,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
         setIsDisabled(_disabled);
     }, [imageUrl, profileNotes, potentialCustomerData]);
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e?.target?.files?.[0];
-
+    const handleUrlUpload = async (selectedFile: File | undefined) => {
         if (selectedFile) {
             if (selectedFile?.size > MAX_FILE_SIZE) {
                 toast({
@@ -126,30 +123,29 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 return;
             }
 
-            // @ts-expect-error TODO: fix this
-            setFile(URL.createObjectURL(selectedFile));
-
             const base64String = await toBase64(selectedFile);
             const response = await uploadFileAndGetUrl.mutateAsync({
                 fileBase64: base64String,
             });
             if (response?.url) {
                 setImageUrl(response.url);
-                setFile(null);
             }
         }
     };
 
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const droppedFile = e.dataTransfer.files[0];
-        if (droppedFile) {
-            // @ts-expect-error TODO: fix this
-            setFile(URL.createObjectURL(droppedFile));
-        }
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e?.target?.files?.[0];
+
+        await handleUrlUpload(selectedFile);
     };
 
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const selectedFile = e.dataTransfer.files[0];
+        await handleUrlUpload(selectedFile);
+    };
+
+    const handleDragOver = async (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
     };
 
@@ -174,7 +170,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div>
-                    {file || imageUrl ? <div className="flex items-center justify-center">
+                    {imageUrl ? <div className="flex items-center justify-center">
                         <Image src={
                             validateUrl(imageUrl) ? imageUrl : ""
                         } alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" width={384} height={192} />
@@ -222,7 +218,6 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 </div>
                 <DialogFooter>
                     <Button variant="outline" className="w-full" onClick={() => {
-                        setFile(null);
                         setImageUrl("");
                         setProfileNotes("");
                     }} disabled={isDisabled}>Clear</Button>

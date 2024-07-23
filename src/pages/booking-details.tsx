@@ -127,6 +127,7 @@ const BookingDetails = () => {
                         </pre>
                     </CardContent>
                 </Card>
+
                 <Card className="mt-6">
                     <CardHeader>
                         <CardTitle>Call Notes</CardTitle>
@@ -137,6 +138,20 @@ const BookingDetails = () => {
                     <CardContent className="max-w-max overflow-x-scroll">
                         <pre>
                             {bookingDetails.data?.additionalNotes || "-"}
+                        </pre>
+                    </CardContent>
+                </Card>
+
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Profile Notes</CardTitle>
+                        <CardDescription>
+                            Information about the call set by Home0001.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="max-w-max overflow-x-scroll">
+                        <pre>
+                            {getPotentialCustomerDetails.data?.profileNotes || "-"}
                         </pre>
                     </CardContent>
                 </Card>
