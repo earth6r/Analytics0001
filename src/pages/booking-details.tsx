@@ -6,6 +6,8 @@ import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { Calendar, Mail, Phone, RocketIcon, Timer } from "lucide-react";
 import { useRouter } from "next/router";
+import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
+import Image from "next/image";
 
 const BookingDetails = () => {
     const router = useRouter();
@@ -32,11 +34,26 @@ const BookingDetails = () => {
         }
     );
 
+    const getPotentialCustomerDetails = api.user.getPotentialCustomerDetails.useQuery(
+        {
+            email: email as string,
+        },
+        {
+            enabled: !!email,
+        }
+    );
+
     return (
         <div>
             <Header />
             <div className="p-6">
-                <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                <div className="flex flex-row items-center justify-between">
+                    <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                    <div className="flex flex-row items-center space-x-2">
+                        <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
+                        {getPotentialCustomerDetails.data?.imageUrl && <Image src={getPotentialCustomerDetails.data?.imageUrl} alt="User Profile Picture" width={50} height={50} className="rounded-full w-10 h-10" />}
+                    </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <Card className="w-full">
                         <CardHeader>

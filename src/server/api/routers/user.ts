@@ -1,6 +1,9 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 import admin from 'firebase-admin';
+import { put } from '@vercel/blob';
+import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { db } from "@/utils/firebase/initialize";
 
 // Set configuration options for the API route
 export const config = {
@@ -109,5 +112,97 @@ export const userRouter = createTRPCRouter({
             userData.register = register;
 
             return userData;
+        }),
+
+    uploadFileAndGetUrl: publicProcedure
+        .input(z.object({
+            fileBase64: z.string(),
+        }))
+        .mutation(async ({ input }): Promise<{ url: string; }> => {
+            console.log("input", input);
+
+            // Split the input to separate the metadata from the actual Base64 data
+            const matches = input.fileBase64.match(/^data:(.*);base64,(.*)$/);
+            if (!matches || matches.length !== 3) {
+                throw new Error("Invalid input string");
+            }
+
+            // Extract the Base64 data (without the metadata)
+            const base64Data = matches[2];
+            const contentType = matches[1]; // This could be useful if you need to set the content type
+
+            // Convert Base64 string to a Buffer
+            // @ts-expect-error Buffer type error TODO: fix
+            const fileBuffer = Buffer.from(base64Data, 'base64');
+
+            // Now you have a binary representation of the image in fileBuffer
+            // Depending on how your storage's put method works, you might need a Blob or Stream.
+            // If put method accepts a Buffer directly, you can proceed as follows:
+
+            // Assuming `put` function accepts filename, data (as Buffer), and options
+            const filename = `image_${Date.now()}`; // Generate a filename; adjust as needed
+            const { url } = await put(filename, fileBuffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN,
+                contentType: contentType, // Optionally set the content type
+            });
+
+            return { url };
+        }),
+
+    savePotentialCustomerDetails: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                imageUrl: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, imageUrl } = input;
+
+            const potentialCustomerRef = collection(db, 'potentialCustomers');
+
+            // Query to find the document with the specified email
+            const potentialCustomerQuery = query(potentialCustomerRef, where('email', '==', email));
+
+            // Execute the query
+            const querySnapshot = await getDocs(potentialCustomerQuery);
+
+            if (querySnapshot.empty) {
+                await addDoc(potentialCustomerRef, {
+                    email,
+                    imageUrl,
+                });
+            } else {
+                const firstDoc = querySnapshot.docs[0];
+                await updateDoc(doc(potentialCustomerRef, firstDoc.id), {
+                    imageUrl,
+                });
+            }
+        }),
+
+    getPotentialCustomerDetails: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+            }),
+        )
+        .query(async ({ input }) => {
+            const { email } = input;
+
+            const potentialCustomerRef = collection(db, 'potentialCustomers');
+
+            // Query to find the document with the specified email
+            const potentialCustomerQuery = query(potentialCustomerRef, where('email', '==', email));
+
+            // Execute the query
+            const querySnapshot = await getDocs(potentialCustomerQuery);
+
+            if (querySnapshot.empty) {
+                return null;
+            }
+
+            const doc = querySnapshot.docs[0];
+            return doc.data();
         }),
 });

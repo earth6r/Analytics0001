@@ -51,6 +51,10 @@
     - if there is no buyingProgress, customer UID will show not set but it should show regardless ✅
     - need to choose a consistent date i.e. utc time or something (use EPOCH everywhere)
     - archive customer color looks bad in dark mode ✅
+    - booking details page needs skeletons when loading instead of showing undefined undefined
+    - validate image url for booking details page
+    - make booking details create potential customer data dialog to only undisable save if changes are made than the previous save i.e. use a form (useForm)
+    - delete image from booking details dialog
 
 CHARTS:
     - deposits over time chart 🔄

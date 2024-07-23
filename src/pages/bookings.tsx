@@ -12,6 +12,7 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { ArrowUpDownIcon, PhoneIcon } from "lucide-react";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ const Bookings = () => {
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
 
+    const router = useRouter();
 
     const { interval } = useInterval();
     const getBookings = api.bookings.getBookings.useQuery(
@@ -193,7 +195,12 @@ const Bookings = () => {
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
-                                    <ViewBookingDetailsDialog booking={booking} />
+                                    {/* <ViewBookingDetailsDialog booking={booking} /> */}
+                                    <Button variant="default" onClick={
+                                        async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
+                                    }>
+                                        View Full Details
+                                    </Button>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
                             </div>
