@@ -160,10 +160,11 @@ export const userRouter = createTRPCRouter({
             z.object({
                 email: z.string(),
                 imageUrl: z.string(),
+                profileNotes: z.string(),
             }),
         )
         .mutation(async ({ input }) => {
-            const { email, imageUrl } = input;
+            const { email, imageUrl, profileNotes } = input;
 
             const potentialCustomerRef = collection(db, 'potentialCustomers');
 
@@ -177,12 +178,14 @@ export const userRouter = createTRPCRouter({
                 await addDoc(potentialCustomerRef, {
                     email,
                     imageUrl,
+                    profileNotes,
                 });
             } else {
                 const firstDoc = querySnapshot.docs[0];
                 // @ts-expect-error TODO: fix this
                 await updateDoc(doc(potentialCustomerRef, firstDoc.id), {
                     imageUrl,
+                    profileNotes,
                 });
             }
         }),

@@ -17,6 +17,7 @@ import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import Image from "next/image";
+import { Textarea } from "../ui/textarea"
 
 interface AddImageToUserDialogProps {
     refetch: () => Promise<any>;
@@ -33,6 +34,16 @@ const toBase64 = (file: File): Promise<string> => new Promise((resolve, reject) 
     reader.readAsDataURL(file);
 });
 
+const validateUrl = (url: string) => {
+    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    return !!pattern.test(url);
+};
+
 const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     const { refetch, email, potentialCustomerData } = props;
 
@@ -44,7 +55,8 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
 
     useEffect(() => {
         if (potentialCustomerData) {
-            setImageUrl(potentialCustomerData.imageUrl);
+            setImageUrl(potentialCustomerData?.imageUrl || '');
+            setProfileNotes(potentialCustomerData?.profileNotes || '');
         }
     }, [potentialCustomerData]);
 
@@ -55,6 +67,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
             await savePotentialCustomerDetails.mutateAsync({
                 email,
                 imageUrl,
+                profileNotes,
             });
             await refetch();
 
@@ -78,8 +91,18 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
 
     const [file, setFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState('');
+    const [profileNotes, setProfileNotes] = useState('');
+    const [isDisabled, setIsDisabled] = useState(false);
 
-    const disabled = imageUrl === "";
+    useEffect(() => {
+        const emptyForm = imageUrl === "" && profileNotes === "";
+        const imageUrlEqual = imageUrl === potentialCustomerData?.imageUrl;
+        const profileNotesEqual = profileNotes === potentialCustomerData?.profileNotes;
+        const formValuesEqual = imageUrlEqual && profileNotesEqual;
+        const isValidUrl = imageUrl && validateUrl(imageUrl);
+        const _disabled = emptyForm || formValuesEqual || !isValidUrl;
+        setIsDisabled(_disabled);
+    }, [imageUrl, profileNotes, potentialCustomerData]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e?.target?.files?.[0];
@@ -112,6 +135,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
             });
             if (response?.url) {
                 setImageUrl(response.url);
+                setFile(null);
             }
         }
     };
@@ -133,6 +157,10 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
         setImageUrl(e.target.value);
     };
 
+    const handleProfileNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setProfileNotes(e.target.value);
+    };
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -147,7 +175,9 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 </DialogHeader>
                 <div>
                     {file || imageUrl ? <div className="flex items-center justify-center">
-                        <Image src={imageUrl} alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" width={384} height={192} />
+                        <Image src={
+                            validateUrl(imageUrl) ? imageUrl : ""
+                        } alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" width={384} height={192} />
                     </div> :
                         <div
                             className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
@@ -178,22 +208,33 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                             onChange={handleImageUrlChange}
                             placeholder="URL"
                         />
+                        {!validateUrl(imageUrl) && imageUrl !== "" && <div className="text-red-500 text-sm mt-1">Invalid URL</div>}
+                    </div>
+                    <div className="mt-4">
+                        <Label>Profile Notes</Label>
+                        <Textarea
+                            className="mt-2 resize-none h-48"
+                            value={profileNotes}
+                            onChange={handleProfileNotesChange}
+                            placeholder="Profile Notes"
+                        />
                     </div>
                 </div>
                 <DialogFooter>
                     <Button variant="outline" className="w-full" onClick={() => {
                         setFile(null);
                         setImageUrl("");
-                    }} disabled={disabled}>Clear</Button>
+                        setProfileNotes("");
+                    }} disabled={isDisabled}>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger className="w-full">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
-                                    disabled={disabled}>
+                                    disabled={isDisabled}>
                                     {isLoading ? <Spinner /> : "Save"}
                                 </Button>
                             </TooltipTrigger>
-                            {disabled && <TooltipContent>
+                            {isDisabled && <TooltipContent>
                                 <div className="space-y-1">
                                     <div>
                                         {imageUrl === "" && `The image URL is required. Please upload an image or provide a URL.`}

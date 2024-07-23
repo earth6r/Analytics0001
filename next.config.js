@@ -39,6 +39,11 @@ const config = {
                 hostname: "xytqn69rqj5z5bea.public.blob.vercel-storage.com",
                 pathname: "**",
             },
+            {
+                protocol: "https",
+                hostname: "**",
+                pathname: "**",
+            },
         ],
     },
 };

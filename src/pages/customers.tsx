@@ -62,7 +62,6 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Customer</div>
                                 <div className="font-bold text-xl">Password Set</div>
                                 <BuyingPropertyTypeTitle />
-                                <div className="font-bold text-xl">Actions</div>
                             </div>
                             {Array.from({ length: 10 }).map((_, index) => (
                                 <Skeleton key={index} className="h-12 w-full" />
@@ -75,7 +74,6 @@ const Customers = () => {
                                 <div className="font-bold text-xl">Password Set</div>
                                 {/* <BuyingStepTitle /> */}
                                 <BuyingPropertyTypeTitle />
-                                <div className="font-bold text-xl">Actions</div>
                             </div>
                             {getUsersInDatabase.data?.map((user, index) => (
                                 <div key={user.id} className="grid grid-cols-6">
