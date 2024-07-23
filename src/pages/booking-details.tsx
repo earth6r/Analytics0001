@@ -100,6 +100,14 @@ const BookingDetails = () => {
                                     <div className="font-semibold">Duration</div>
                                     <div>{(bookingDetails.data?.endTimestamp - bookingDetails.data?.startTimestamp) / (60 * 1000) + " minutes"}</div>
                                 </div>
+                                <div className="flex flex-row items-center space-x-2">
+                                    <RocketIcon className="w-4 h-4" />
+                                    <div className="max-w-56 truncate text-blue-400" onClick={
+                                        () => {
+                                            window.open("https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09", "_blank")
+                                        }
+                                    }>{"https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09"}</div>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

@@ -229,11 +229,11 @@ const Bookings = () => {
 
                 <div className="mt-4 block xl:hidden">
                     {getBookings.isLoading ? (
-                        <div className="space-y-2 mt-4">
+                        <div className="space-y-2">
                             <Skeleton className="h-24" />
                         </div>
                     ) : (
-                        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-0">
                             {sortedData?.map((booking: any, index) => (
                                 <BookingCard
                                     key={index}
@@ -282,24 +282,25 @@ const BookingCard = (props: BookingCardProps) => {
                     <div className="max-w-48 truncate">{(booking?.firstName + " " + booking?.lastName)}</div>
                 </div>
             </div>
-            <div className="px-6 pb-6 flex flex-row items-center justify-between mt-10 space-x-2">
-                <div className="flex flex-row items-center justify-center space-x-4">
-                    {/* <Button variant="outline" className="w-full" onClick={
-                () => {
-                    window.location.href = `tel:${booking.phoneNumber}`;
-                }
-            }>
-                <PhoneIcon className="w-5 h-5 mr-2" />
-                Call now
-            </Button> */}
-                    {/* <ViewBookingDetailsDialog booking={booking} /> */}
-                    <Button variant="default" onClick={
+            <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
+                <Button
+                    variant="default"
+                    className="w-full"
+                    onClick={
                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
                     }>
-                        View Full Details
-                    </Button>
-                    {!booking?.completed && (
-                        <Button variant="default" onClick={
+                    View Full Details
+                </Button>
+                <div className="flex flex-row items-center justify-between">
+                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
+                </div>
+            </div>
+            <div className="px-6 pb-6 mt-2">
+                {!booking?.completed ? (
+                    <Button
+                        variant="default"
+                        className="w-full"
+                        onClick={
                             async () => {
                                 setMarkingCompleted(true);
                                 await completeBooking.mutateAsync({
@@ -310,13 +311,16 @@ const BookingCard = (props: BookingCardProps) => {
                                 setMarkingCompleted(false);
                             }
                         }>
-                            {markingCompleted ? <Spinner /> : "Mark as Completed"}
-                        </Button>
-                    )}
-                </div>
-                <div className="flex flex-row items-center justify-between">
-                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} />
-                </div>
+                        {markingCompleted ? <Spinner /> : "Mark as Completed"}
+                    </Button>
+                ) : (
+                    <Button
+                        variant="default"
+                        className="w-full"
+                    >
+                        Completed
+                    </Button>
+                )}
             </div>
         </Card>
     );
