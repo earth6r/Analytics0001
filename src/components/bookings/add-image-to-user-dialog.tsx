@@ -153,6 +153,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                             className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
                             onDrop={handleDrop}
                             onDragOver={handleDragOver}
+                            // @ts-expect-error TODO: fix this
                             onClick={() => document.getElementById('fileInput').click()}
                         >
                             <input
