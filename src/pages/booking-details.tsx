@@ -359,8 +359,8 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                     </div>
                     <div className="flex flex-row items-center space-x-2">
                         {typeof registerData?.locationsOfInterest === "object" &&
-                            registerData?.locationsOfInterest?.map((location: string) => (
-                                <Badge key={location}>{location}</Badge>
+                            registerData?.locationsOfInterest?.map((location: string, index: number) => (
+                                <Badge key={index}>{location}</Badge>
                             ))}
                         {typeof registerData?.locationsOfInterest === "string" &&
                             <Badge>{registerData?.locationsOfInterest}</Badge>}
