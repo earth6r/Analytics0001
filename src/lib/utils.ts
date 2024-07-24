@@ -50,6 +50,12 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   const minutes = date.toLocaleString('en-US', { minute: '2-digit' }).padStart(2, '0');
   const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true }).split(' ')[1];
 
-  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period}`;
+  // EST, PST, etc.
+  const timezoneAbbreviation = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+    .formatToParts(date)
+    .find(part => part.type === 'timeZoneName')
+    ?.value.match(/\b[A-Z]{3,4}\b/)?.[0] || '';
+
+  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
 }
 

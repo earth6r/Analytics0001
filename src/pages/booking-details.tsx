@@ -53,7 +53,7 @@ const BookingDetails = () => {
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
                         <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.back()} />
-                        <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                        <h1 className="text-3xl font-bold truncate max-w-64">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
@@ -207,12 +207,31 @@ const formatDisplayText = (...args: string[]) => {
     return displayText;
 };
 
+const formatBuyingTime = (buyingTime: string) => {
+    if (!buyingTime) {
+        return null;
+    }
+
+    switch (buyingTime) {
+        case "1to3mos":
+            return "1 to 3 months";
+        case "notsure":
+            return "Not Sure";
+        case "3to6mos":
+            return "3 to 6 months";
+        case "6to12mos":
+            return "6 to 12 months";
+        default:
+            return buyingTime;
+    }
+}
+
 const RegisterDetails = (props: RegisterDetailsProps) => {
     const { registerDetails } = props;
 
     if (registerDetails.isLoading) {
         return (
-            <Skeleton className="w-full h-96" />
+            <Skeleton className="w-full h-40" />
         );
     }
 
@@ -342,7 +361,7 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                 </div> */}
 
                 <div>
-                    Buying Timeline: {registerData?.buyingTimelinedec2023 || "-"}
+                    Buying Timeline: {formatBuyingTime(registerData?.buyingTimelinedec2023) || "-"}
                 </div>
 
                 {/* <div>
