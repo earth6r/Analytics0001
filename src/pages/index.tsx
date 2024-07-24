@@ -16,7 +16,7 @@ export default function Home() {
             {/* <AuthShowcase /> */}
           </div>
         </div>
-        <p className="text-5xl uppercase text-start font-bold">Home0001 Analytics Dashboard</p>
+        <p className="text-5xl uppercase text-center font-bold">Home0001 Analytics Dashboard</p>
         <LoginForm />
       </main>
     </>

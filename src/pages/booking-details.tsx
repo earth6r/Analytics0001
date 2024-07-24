@@ -8,6 +8,7 @@ import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, Timer } from "l
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -51,7 +52,7 @@ const BookingDetails = () => {
             <div className="p-6">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                        <ArrowLeftCircleIcon className="w-6 h-6 cursor-pointer" onClick={() => router.back()} />
+                        <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.back()} />
                         <h1 className="text-3xl font-bold">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2">
@@ -66,6 +67,19 @@ const BookingDetails = () => {
                         </div>}
                     </div>
                 </div>
+
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Register Details</CardTitle>
+                        <CardDescription>
+                            {`Details about the potential customer's register details.`}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <RegisterDetails registerDetails={registerDetails} />
+                    </CardContent>
+                </Card>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <Card className="w-full">
                         <CardHeader>
@@ -117,6 +131,7 @@ const BookingDetails = () => {
                         </CardContent>
                     </Card>
                 </div>
+
                 <Card className="mt-6">
                     <CardHeader>
                         <CardTitle>Customer Questions</CardTitle>
@@ -158,18 +173,6 @@ const BookingDetails = () => {
                         </pre>
                     </CardContent>
                 </Card>
-
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Register Details</CardTitle>
-                        <CardDescription>
-                            {`Details about the potential customer's register details.`}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <RegisterDetails registerDetails={registerDetails} />
-                    </CardContent>
-                </Card>
             </div>
         </div>
     );
@@ -178,6 +181,25 @@ const BookingDetails = () => {
 interface RegisterDetailsProps {
     registerDetails: any;
 }
+
+const formatDisplayText = (...args: string[]) => {
+    let displayText = "";
+
+    args.forEach((arg, index) => {
+        if (arg) {
+            displayText += arg;
+            if (index !== args.length - 1) {
+                displayText += ", ";
+            }
+        }
+    });
+
+    if (displayText.endsWith(", ")) {
+        displayText = displayText.slice(0, -2);
+    }
+
+    return displayText;
+};
 
 const RegisterDetails = (props: RegisterDetailsProps) => {
     const { registerDetails } = props;
@@ -207,52 +229,53 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                     There are multiple register details for this email. Showing the latest one.
                 </AlertDescription>
             </Alert>}
-            <div>
-                <div>
+            <div className="space-y-2">
+                {/* <div>
                     First Name: {registerData.firstName || "-"}
                 </div>
 
                 <div>
                     Last Name: {registerData.lastName || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     City: {registerData.city || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Bedroom Preference: {registerData.bedroomPreference || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     IP Address: {registerData.ipAddress.ip || "-"}
                 </div>
 
                 <div>
                     ZIP: {registerData.ipAddress.ipInfo.zip || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Country: {registerData.ipAddress.ipInfo.country || "-"}
-                </div>
+                </div> */}
 
                 <div>
-                    City: {registerData.ipAddress.ipInfo.city || "-"}
+                    IP Location: {registerData?.ipAddress?.ipInfo?.city && registerData?.ipAddress?.ipInfo?.regionName && registerData?.ipAddress?.ipInfo?.country &&
+                        (registerData?.ipAddress?.ipInfo?.city + ", " + registerData.ipAddress?.ipInfo?.regionName + ", " + registerData?.ipAddress?.ipInfo?.country) || "-"}
                 </div>
 
-                <div>
+                {/* <div>
                     Organization of IP Address: {registerData.ipAddress.ipInfo.org || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Timezone: {registerData.ipAddress.ipInfo.timezone || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Region Name: {registerData.ipAddress.ipInfo.regionName || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     ISP: {registerData.ipAddress.ipInfo.isp || "-"}
                 </div>
 
@@ -262,79 +285,98 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
 
                 <div>
                     Latitude: {registerData.ipAddress.ipInfo.lat || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     AS: {registerData.ipAddress.ipInfo.as || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Country Code: {registerData.ipAddress.ipInfo.countryCode || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Region: {registerData.ipAddress.ipInfo.region || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     User Agent: {registerData.userAgent || "-"}
-                </div>
-
+                </div> */}
+                {/*
                 <div>
                     Source: {registerData.source || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Medium: {registerData.medium || "-"}
                 </div>
 
                 <div>
                     Content: {registerData.content || "-"}
-                </div>
+                </div> */}
 
                 <div>
+                    Ad Source: {formatDisplayText(registerData?.medium, registerData?.content) || "-"}
+                </div>
+
+                {/* <div>
                     Routes: {registerData.routes || "-"}
-                </div>
+                </div> */}
 
                 <div>
-                    Created At: {registerData.createdAt || "-"}
+                    Created At: {
+                        registerData?.createdAt ? new Date(
+                            registerData?.createdAt * 1000
+                        ).toLocaleString() : "-"
+                    }
                 </div>
-
+                {/*
                 <div>
                     HUTK: {registerData.hutk || "-"}
-                </div>
+                </div> */}
 
                 <div>
-                    Buying Timeline December 2023: {registerData.buyingTimelinedec2023 || "-"}
+                    Buying Timeline: {registerData?.buyingTimelinedec2023 || "-"}
                 </div>
 
-                <div>
+                {/* <div>
                     Else: {registerData.Else || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Campaign: {registerData.campaign || "-"}
+                </div> */}
+
+                <div className="flex flex-row items-center space-x-2">
+                    <div>
+                        Locations of Interest:
+                    </div>
+                    <div className="flex flex-row items-center space-x-2">
+                        {typeof registerData?.locationsOfInterest === "object" &&
+                            registerData?.locationsOfInterest?.map((location: string) => (
+                                <Badge key={location} className="mr-2">{location}</Badge>
+                            ))}
+                        {typeof registerData?.locationsOfInterest === "string" &&
+                            <Badge>{registerData?.locationsOfInterest}</Badge>}
+                        {registerData?.city && <Badge>{registerData.city}</Badge>}
+                    </div>
                 </div>
 
-                <div>
-                    Locations of Interest: {registerData.locationsOfInterest || "-"}
-                </div>
-
-                <div>
+                {/* <div>
                     Ad Set: {registerData.adSet || "-"}
-                </div>
+                </div> */}
 
                 <div>
-                    Page: {registerData.page || "-"}
+                    {/* Page: {registerData.page || "-"} */}
                 </div>
 
-                <div>
+                {/* <div>
                     Email: {registerData.email || "-"}
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                     Full Query: {registerData.fullQuery || "-"}
-                </div>
+                </div> */}
             </div>
         </div>
     );
