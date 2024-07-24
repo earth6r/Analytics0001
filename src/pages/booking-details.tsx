@@ -53,11 +53,11 @@ const BookingDetails = () => {
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
                         <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.back()} />
-                        <h1 className="text-3xl font-bold truncate max-w-64">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-64">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
-                        {<div className="relative w-10 h-10">
+                        {<div className="relative w-10 h-10 hidden md:block">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage
                                     src={
@@ -83,6 +83,20 @@ const BookingDetails = () => {
                     </CardHeader>
                     <CardContent>
                         <RegisterDetails registerDetails={registerDetails} />
+                    </CardContent>
+                </Card>
+
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Profile Notes</CardTitle>
+                        <CardDescription>
+                            Information about the call set by Home0001.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="max-w-max overflow-x-scroll">
+                        <pre>
+                            {getPotentialCustomerDetails.data?.profileNotes || "-"}
+                        </pre>
                     </CardContent>
                 </Card>
 
@@ -154,28 +168,14 @@ const BookingDetails = () => {
 
                 <Card className="mt-6">
                     <CardHeader>
-                        <CardTitle>Call Notes</CardTitle>
+                        <CardTitle>Meeting Notes</CardTitle>
                         <CardDescription>
-                            Information about the call set by Home0001.
+                            Meeting notes about the booking.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="max-w-max overflow-x-scroll">
                         <pre>
                             {bookingDetails.data?.additionalNotes || "-"}
-                        </pre>
-                    </CardContent>
-                </Card>
-
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Profile Notes</CardTitle>
-                        <CardDescription>
-                            Information about the call set by Home0001.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="max-w-max overflow-x-scroll">
-                        <pre>
-                            {getPotentialCustomerDetails.data?.profileNotes || "-"}
                         </pre>
                     </CardContent>
                 </Card>
@@ -349,10 +349,10 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                 </div> */}
 
                 <div>
-                    Created At: {
+                    Sign Up Date: {
                         registerData?.createdAt ? new Date(
                             registerData?.createdAt * 1000
-                        ).toLocaleString() : "-"
+                        ).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "-"
                     }
                 </div>
                 {/*

@@ -202,7 +202,7 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div>
-                        <div className="col-span-3">Call Notes</div>
+                        <div className="col-span-3">Meeting Notes</div>
                     </div>
 
                     {getBookings.isLoading ? (
@@ -228,7 +228,7 @@ const Bookings = () => {
                                     <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
-                                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                                    {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                                         // @ts-expect-error TODO: fix this
                                         notesOpens[booking.uid] || false
                                     } onOpenChange={
@@ -238,7 +238,7 @@ const Bookings = () => {
                                                 [booking.uid]: open,
                                             });
                                         }
-                                    } />
+                                    } /> */}
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
@@ -322,7 +322,7 @@ const BookingCard = (props: BookingCardProps) => {
                 </Button>
                 <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                 <div className="flex flex-row items-center justify-between">
-                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                    {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                         notesOpens[booking.uid] || false
                     } onOpenChange={
                         (open: boolean) => {
@@ -331,7 +331,7 @@ const BookingCard = (props: BookingCardProps) => {
                                 [booking.uid]: open,
                             });
                         }
-                    } />
+                    } /> */}
                 </div>
             </div>
             <div className={cn("px-6 mt-2", booking?.completed ? "pb-4" : "pb-6")}>

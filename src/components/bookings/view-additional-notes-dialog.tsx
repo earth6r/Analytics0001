@@ -30,9 +30,9 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Additional Notes</DialogTitle>
+                    <DialogTitle>Meeting Notes</DialogTitle>
                     <DialogDescription>
-                        View additional notes for the booking.
+                        Meeting notes for the booking.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">

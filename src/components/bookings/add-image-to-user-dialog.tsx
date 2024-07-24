@@ -163,25 +163,29 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default">+ Add Details</Button>
+                <Button variant="default">
+                    <span>+</span>
+                    <span className="hidden md:block">Add Details</span>
+                </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] md:max-w-[600px] p-6">
                 <DialogHeader>
                     <DialogTitle>Add Details to Potential Customer</DialogTitle>
                     <DialogDescription>
                         Add details to the potential customer.
                     </DialogDescription>
                 </DialogHeader>
-                <div>
-                    {imageUrl ? <div className="flex items-center justify-center">
-                        <Image src={
-                            validateUrl(imageUrl) ? imageUrl : ""
-                        } alt="Preview" className={cn("object-cover max-w-96 max-h-48 rounded-lg", imageLoaded ? "opacity-100" : "opacity-0 absolute")} width={384} height={192}
-                            onLoad={() => {
-                                setImageLoaded(true);
-                            }}
+                <div className="max-h-96 overflow-y-scroll p-2">
+                    {imageUrl ? <div className="relative flex items-center justify-center h-48">
+                        <Image
+                            src={validateUrl(imageUrl) ? imageUrl : ""}
+                            alt="Preview"
+                            className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
+                            layout="fill"
+                            objectFit="cover"
+                            onLoad={() => setImageLoaded(true)}
                         />
-                        {!imageLoaded && <Skeleton className="w-96 h-48 rounded-lg" />}
+                        {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
                     </div> :
                         <div
                             className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
