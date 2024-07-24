@@ -250,7 +250,7 @@ const Bookings = () => {
                                         View Full Details
                                     </Button>
                                     <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
-                                    <MarkCompletedPostNotesDialog booking={booking} />
+                                    <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                                     </div>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
