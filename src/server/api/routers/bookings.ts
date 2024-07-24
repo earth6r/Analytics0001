@@ -177,6 +177,7 @@ export const bookingsRouter = createTRPCRouter({
         .input(z.object({
             uid: z.string(),
             bookingType: z.string(),
+            postNotes: z.string(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
@@ -185,8 +186,19 @@ export const bookingsRouter = createTRPCRouter({
 
             const d = doc(tableRef, input.uid);
 
+            const currentDoc = await getDoc(d);
+
+            if (!currentDoc.exists()) {
+                throw new Error('Booking not found');
+            }
+
+            const additionalNotes = currentDoc.data().additionalNotes;
+
+            const fullNotes = `${additionalNotes}\n\nPost Meeting Notes: \n${input.postNotes}`;
+
             await updateDoc(d, {
-                completed: true
+                completed: true,
+                additionalNotes: fullNotes,
             });
         }),
 });

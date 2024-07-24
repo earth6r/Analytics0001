@@ -7,11 +7,10 @@ import { api } from "@/utils/api";
 import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, Timer } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
+export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
 const BookingDetails = () => {
     const router = useRouter();
@@ -361,7 +360,7 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                     <div className="flex flex-row items-center space-x-2">
                         {typeof registerData?.locationsOfInterest === "object" &&
                             registerData?.locationsOfInterest?.map((location: string) => (
-                                <Badge key={location} className="mr-2">{location}</Badge>
+                                <Badge key={location}>{location}</Badge>
                             ))}
                         {typeof registerData?.locationsOfInterest === "string" &&
                             <Badge>{registerData?.locationsOfInterest}</Badge>}

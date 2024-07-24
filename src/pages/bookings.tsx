@@ -11,17 +11,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon } from "lucide-react";
+import { ArrowUpDownIcon, X } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import MarkCompletedPostNotesAlertDialog from "@/components/bookings/mark-completed-post-notes-alert-dialog";
+import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
+import { ZOOM_URL } from "./booking-details";
+import { Badge } from "@/components/ui/badge";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
 
     const [markCompletedDialogOpen, setMarkCompletedDialogOpen] = useState(false);
     const [notesOpens, setNotesOpens] = useState({});
@@ -40,16 +43,21 @@ const Bookings = () => {
 
     useEffect(() => {
         if (getBookings.data) {
-            const sortedBookingsData = getBookings.data.sort((a: any, b: any) => {
+            let sortedBookingsData = getBookings.data.sort((a: any, b: any) => {
                 if (sortOrder === "asc") {
                     return a[sortKey] > b[sortKey] ? 1 : -1;
                 } else {
                     return a[sortKey] < b[sortKey] ? 1 : -1;
                 }
             });
+
+            if (filterCompleted) {
+                sortedBookingsData = sortedBookingsData.filter((booking: any) => !booking?.completed);
+            }
+
             setSortedData(sortedBookingsData);
         }
-    }, [getBookings.data, sortOrder, sortKey]);
+    }, [getBookings.data, sortOrder, sortKey, filterCompleted]);
 
     return (
         <div>
@@ -65,34 +73,55 @@ const Bookings = () => {
                     /> */}
                 </div>
 
-                <Input
-                    placeholder="Search bookings..."
-                    className="mt-4 w-full md:w-1/4"
-                    value={searchQuery}
-                    disabled // TODO: remove this after fixing search
-                    onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        const searchQuery = e.target.value;
+                <div className="flex flex-col items-start justify-start w-full">
+                    <div className="flex flex-row items-center space-x-2 mt-4 w-full">
+                        <Input
+                            placeholder="Search bookings..."
+                            className="w-full md:w-1/2 lg:w-1/4"
+                            value={searchQuery}
+                            disabled // TODO: remove this after fixing search
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                const searchQuery = e.target.value;
 
-                        if (!searchQuery) {
-                            // @ts-expect-error TODO: fix type
-                            setSortedData(getBookings.data);
-                            return;
-                        }
+                                if (!searchQuery) {
+                                    // @ts-expect-error TODO: fix type
+                                    setSortedData(getBookings.data);
+                                    return;
+                                }
 
-                        const filteredData = sortedData.filter((booking: any) => {
-                            return booking.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                booking.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                booking.startTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                booking.endTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                (booking?.property?.toLowerCase()?.includes(searchQuery.toLowerCase())) ||
-                                booking.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase());
-                        });
-                        setSortedData(filteredData);
-                    }}
-                />
-
-                <MarkCompletedPostNotesAlertDialog open={markCompletedDialogOpen} onOpenChange={setMarkCompletedDialogOpen} uid={uidForPostNotes} setNotesOpens={setNotesOpens} notesOpens={notesOpens} />
+                                const filteredData = sortedData.filter((booking: any) => {
+                                    return booking.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        booking.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        booking.startTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        booking.endTimestamp.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        (booking?.property?.toLowerCase()?.includes(searchQuery.toLowerCase())) ||
+                                        booking.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase());
+                                });
+                                setSortedData(filteredData);
+                            }}
+                        />
+                        {!filterCompleted && <Button className="" onClick={
+                            () => setFilterCompleted(true)
+                        }>
+                            Filter Completed
+                        </Button>}
+                    </div>
+                    <div className="flex flex-row items-center space-x-2 mt-2">
+                        {filterCompleted && (
+                            <Badge
+                                className="cursor-pointer"
+                                onClick={
+                                    () => setFilterCompleted(false)
+                                }>
+                                <div className="flex flex-row items-center space-x-2">
+                                    <h1>Filter Completed</h1>
+                                    <X className="w-4 h-4" />
+                                </div>
+                            </Badge>
+                        )}
+                    </div>
+                </div>
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
                     <div className="grid grid-cols-8 gap-4 font-semibold">
@@ -221,22 +250,7 @@ const Bookings = () => {
                                         View Full Details
                                     </Button>
                                     <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
-                                        <Button
-                                            className="min-w-48"
-                                            disabled={booking?.completed || false}
-                                            onClick={
-                                                async () => {
-                                                    await completeBooking.mutateAsync({
-                                                        uid: booking.uid,
-                                                        bookingType: booking.type,
-                                                    });
-                                                    await getBookings.refetch();
-                                                    setMarkCompletedDialogOpen(true);
-                                                    setUidForPostNotes(booking.uid);
-                                                }
-                                            }>
-                                            {booking?.completed ? "Completed" : "Mark as Completed"}
-                                        </Button>
+                                    <MarkCompletedPostNotesDialog booking={booking} />
                                     </div>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
@@ -256,10 +270,7 @@ const Bookings = () => {
                                 <BookingCard
                                     key={index}
                                     booking={booking}
-                                    completeBooking={completeBooking}
                                     getBookings={getBookings}
-                                    setMarkCompletedDialogOpen={setMarkCompletedDialogOpen}
-                                    setUidForPostNotes={setUidForPostNotes}
                                     notesOpens={notesOpens}
                                     setNotesOpens={setNotesOpens}
                                 />
@@ -274,25 +285,21 @@ const Bookings = () => {
 
 interface BookingCardProps {
     booking: any;
-    completeBooking: any;
     getBookings: any;
-    setMarkCompletedDialogOpen: any;
-    setUidForPostNotes: any;
     notesOpens: any;
     setNotesOpens: any;
 }
 
 const BookingCard = (props: BookingCardProps) => {
-    const { booking, completeBooking, getBookings, setMarkCompletedDialogOpen, setUidForPostNotes, notesOpens, setNotesOpens } = props;
+    const { booking, getBookings, notesOpens, setNotesOpens } = props;
 
     const router = useRouter();
-    const [markingCompleted, setMarkingCompleted] = useState(false);
 
     return (
-        <Card key={booking.id} className={cn(booking?.completed ? "opacity-50 cursor-not-allowed" : "")}>
+        <Card key={booking.id} className={cn(booking?.completed ? "opacity-50 cursor-not-allowed select-none" : "")}>
             <CardHeader>
                 <CardTitle className="truncate max-w-64">
-                    {booking.type === "Property Tour" ? "Property Tour" : "Call"} with {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
+                    {booking?.firstName || "No First Name Provided"} {booking?.lastName || "No Last Name Provided"}
                 </CardTitle>
                 <CardDescription>
                     {formatTimestamp(booking.startTimestamp)}
@@ -300,12 +307,12 @@ const BookingCard = (props: BookingCardProps) => {
             </CardHeader>
             <div className="flex flex-row items-center justify-between px-6">
                 <div className="">
-                    <h1 className="text-muted-foreground font-light">Duration</h1>
-                    <div className="">{(booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes" || "No duration set"}</div>
+                    <h1 className="text-muted-foreground font-light">Join Meeting</h1>
+                    <div className={cn("text-blue-400 truncate max-w-48", !booking?.completed && "cursor-pointer hover:text-blue-500")}>{ZOOM_URL}</div>
                 </div>
                 <div className="">
-                    <h1 className="text-muted-foreground font-light">Scheduled By</h1>
-                    <div className="max-w-48 truncate">{(booking?.firstName + " " + booking?.lastName)}</div>
+                    <h1 className="text-muted-foreground font-light">Status</h1>
+                    <div className="">{(booking?.completed ? "completed" : "scheduled")}</div>
                 </div>
             </div>
             <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
@@ -330,33 +337,9 @@ const BookingCard = (props: BookingCardProps) => {
                     } />
                 </div>
             </div>
-            <div className="px-6 pb-6 mt-2">
-                {!booking?.completed ? (
-                    <Button
-                        variant="default"
-                        className="w-full"
-                        onClick={
-                            async () => {
-                                setMarkingCompleted(true);
-                                await completeBooking.mutateAsync({
-                                    uid: booking.uid,
-                                    bookingType: booking.type,
-                                });
-                                await getBookings.refetch();
-                                setMarkingCompleted(false);
-                                setMarkCompletedDialogOpen(true);
-                                setUidForPostNotes(booking.uid);
-                            }
-                        }>
-                        {markingCompleted ? <Spinner /> : "Mark as Completed"}
-                    </Button>
-                ) : (
-                    <Button
-                        variant="default"
-                        className="w-full"
-                    >
-                        Completed
-                    </Button>
+            <div className={cn("px-6 mt-2", booking?.completed ? "pb-4" : "pb-6")}>
+                {!booking?.completed && (
+                    <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                 )}
             </div>
         </Card>
