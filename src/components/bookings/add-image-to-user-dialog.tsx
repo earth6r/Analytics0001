@@ -18,6 +18,8 @@ import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import Image from "next/image";
 import { Textarea } from "../ui/textarea"
+import { cn } from "@/lib/utils"
+import { Skeleton } from "../ui/skeleton"
 
 interface AddImageToUserDialogProps {
     refetch: () => Promise<any>;
@@ -92,6 +94,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     const [imageUrl, setImageUrl] = useState('');
     const [profileNotes, setProfileNotes] = useState('');
     const [isDisabled, setIsDisabled] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
         const emptyForm = imageUrl === "" && profileNotes === "";
@@ -173,7 +176,12 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                     {imageUrl ? <div className="flex items-center justify-center">
                         <Image src={
                             validateUrl(imageUrl) ? imageUrl : ""
-                        } alt="Preview" className="object-cover max-w-96 max-h-48 rounded-lg" width={384} height={192} />
+                        } alt="Preview" className={cn("object-cover max-w-96 max-h-48 rounded-lg", imageLoaded ? "opacity-100" : "opacity-0 absolute")} width={384} height={192}
+                            onLoad={() => {
+                                setImageLoaded(true);
+                            }}
+                        />
+                        {!imageLoaded && <Skeleton className="w-96 h-48 rounded-lg" />}
                     </div> :
                         <div
                             className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
