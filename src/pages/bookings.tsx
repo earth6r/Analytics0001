@@ -243,7 +243,7 @@ const Bookings = () => {
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
                                     }>
-                                        View Full Details
+                                    Profile
                                     </Button>
                                     <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -318,7 +318,7 @@ const BookingCard = (props: BookingCardProps) => {
                     onClick={
                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
                     }>
-                    View Full Details
+                    Profile
                 </Button>
                 <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                 <div className="flex flex-row items-center justify-between">

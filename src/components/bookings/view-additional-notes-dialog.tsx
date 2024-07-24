@@ -24,7 +24,7 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
                 <Button className="space-x-2" variant="default">
                     <Notebook className="w-4 h-4" />
                     <div>
-                        View
+                        Meeting Notes
                     </div>
                 </Button>
             </DialogTrigger>

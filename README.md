@@ -65,6 +65,7 @@
     - fix the issue of loading the old user when a new email is entered i.e. jessica gnail keep sshowing with new emails not existing
     - remove profile image
     - fix search in bookings page
+    - see if i can combine the card vs table for bookings into one code using sm/md/lg/xl to stop duplicate code
 
 CHARTS:
     - deposits over time chart 🔄
