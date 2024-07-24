@@ -44,7 +44,6 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                     <Label htmlFor="post-notes">Post Meeting Notes</Label>
                     <Textarea
                         id="post-notes"
-                        placeholder="Add notes about the meeting you had with this potential customer."
                         rows={4}
                         value={postNotes}
                         onChange={(e) => setPostNotes(e.target.value)}
