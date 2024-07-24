@@ -3,7 +3,6 @@ import AddAdditionalNotesDialog from "@/components/bookings/add-additional-notes
 import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
 import Header from "@/components/common/header";
-import Spinner from "@/components/common/spinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,9 +25,7 @@ const Bookings = () => {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
 
-    const [markCompletedDialogOpen, setMarkCompletedDialogOpen] = useState(false);
     const [notesOpens, setNotesOpens] = useState({});
-    const [uidForPostNotes, setUidForPostNotes] = useState("");
 
     const router = useRouter();
 
@@ -39,7 +36,6 @@ const Bookings = () => {
             refetchInterval: interval,
         }
     );
-    const completeBooking = api.bookings.completeBooking.useMutation();
 
     useEffect(() => {
         if (getBookings.data) {
@@ -250,7 +246,7 @@ const Bookings = () => {
                                         View Full Details
                                     </Button>
                                     <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
-                                    <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
+                                        <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                                     </div>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                                 </div>
