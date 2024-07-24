@@ -37,18 +37,19 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
 
   let date;
   if (threeDigits) {
-    date = new Date(Number(timestampStr));
+    date = new Date(Date.UTC(Number(timestampStr)));
   } else {
-    date = new Date(Number(timestampStr) * 1000);
+    date = new Date(Date.UTC(Number(timestampStr) * 1000));
   }
 
-  // Convert date to UTC and format components
-  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
-  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
-  const day = date.toLocaleString('en-US', { day: '2-digit', timeZone: 'UTC' });
-  const hours = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[0];
-  const minutes = date.toLocaleString('en-US', { minute: '2-digit', timeZone: 'UTC' }).padStart(2, '0');
-  const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true, timeZone: 'UTC' }).split(' ')[1];
+  // Convert date to local time and format components
+  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long' });
+  const month = date.toLocaleString('en-US', { month: 'long' });
+  const day = date.toLocaleString('en-US', { day: '2-digit' });
+  const hours = date.toLocaleString('en-US', { hour: 'numeric', hour12: true }).split(' ')[0];
+  const minutes = date.toLocaleString('en-US', { minute: '2-digit' }).padStart(2, '0');
+  const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true }).split(' ')[1];
 
-  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} UTC`;
+  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period}`;
 }
+
