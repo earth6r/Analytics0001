@@ -324,6 +324,7 @@ const BookingCard = (props: BookingCardProps) => {
                     }>
                     View Full Details
                 </Button>
+                <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                 <div className="flex flex-row items-center justify-between">
                     <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                         notesOpens[booking.uid] || false
