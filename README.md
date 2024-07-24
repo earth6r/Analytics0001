@@ -64,6 +64,7 @@
     - add filter completed to query parameter
     - fix the issue of loading the old user when a new email is entered i.e. jessica gnail keep sshowing with new emails not existing
     - remove profile image
+    - fix search in bookings page
 
 CHARTS:
     - deposits over time chart 🔄
