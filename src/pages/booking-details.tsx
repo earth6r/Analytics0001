@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -57,13 +58,19 @@ const BookingDetails = () => {
                     </div>
                     <div className="flex flex-row items-center space-x-2">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
-                        {getPotentialCustomerDetails.data?.imageUrl && <div className="relative w-10 h-10">
-                            <Image
-                                src={getPotentialCustomerDetails.data?.imageUrl}
-                                alt="User Profile Picture"
-                                layout="fill"
-                                className="rounded-full object-cover"
-                            />
+                        {<div className="relative w-10 h-10">
+                            <Avatar className="h-10 w-10">
+                                <AvatarImage
+                                    src={
+                                        getPotentialCustomerDetails.data?.imageUrl ?? (bookingDetails.data?.firstName && bookingDetails.data?.lastName
+                                            ? `https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`
+                                            : undefined)
+                                    }
+                                    alt="@user"
+                                    className="object-cover"
+                                />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
                         </div>}
                     </div>
                 </div>
