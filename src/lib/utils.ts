@@ -37,9 +37,9 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
 
   let date;
   if (threeDigits) {
-    date = new Date(Date.UTC(Number(timestampStr)));
+    date = new Date(Number(timestampStr));
   } else {
-    date = new Date(Date.UTC(Number(timestampStr) * 1000));
+    date = new Date(Number(timestampStr) * 1000);
   }
 
   // Convert date to local time and format components
