@@ -61,6 +61,9 @@
     - TODO: fix drag and drop on file input for booking details dialog
     - any data in booking details page, should also be shown in user page (but this will not show unless the potential customer becomes a user - ties their email)
     - add spinners/skeletons to drag and drop or upload file by clicking when file is loading after selecting/dropping
+    - add filter completed to query parameter
+    - fix the issue of loading the old user when a new email is entered i.e. jessica gnail keep sshowing with new emails not existing
+    - remove profile image
 
 CHARTS:
     - deposits over time chart 🔄
