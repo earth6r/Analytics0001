@@ -13,6 +13,7 @@ import { Textarea } from "../ui/textarea"
 import { useState } from "react";
 import { api } from "@/utils/api";
 import Spinner from "../common/spinner";
+import { Check } from "lucide-react";
 
 interface MarkCompletedPostNotesDialogProps {
     booking: any;
@@ -31,7 +32,10 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className="w-full">Mark As Completed</Button>
+                <Button variant="default" className="w-full space-x-2">
+                    <Check className="w-4 h-4" />
+                    <span>Mark As Completed</span>
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -61,7 +65,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             setLoading(false);
                         }
                     }
-                    disabled={loading || !postNotes}
+                        disabled={loading || !postNotes}
                     >
                         {loading ? <Spinner /> : "Save changes"}
                     </Button>

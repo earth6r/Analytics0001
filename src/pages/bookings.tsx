@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, X } from "lucide-react";
+import { ArrowUpDownIcon, User, X } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -100,7 +100,7 @@ const Bookings = () => {
                         {!filterCompleted && <Button className="" onClick={
                             () => setFilterCompleted(true)
                         }>
-                            Filter Completed
+                            Hide Completed
                         </Button>}
                     </div>
                     <div className="flex flex-row items-center space-x-2 mt-2">
@@ -111,7 +111,7 @@ const Bookings = () => {
                                     () => setFilterCompleted(false)
                                 }>
                                 <div className="flex flex-row items-center space-x-2">
-                                    <h1>Filter Completed</h1>
+                                    <h1>Hide Completed</h1>
                                     <X className="w-4 h-4" />
                                 </div>
                             </Badge>
@@ -242,8 +242,9 @@ const Bookings = () => {
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
-                                    }>
-                                    Profile
+                                    } className="space-x-2">
+                                        <User className="w-4 h-4" />
+                                        <span>Profile</span>
                                     </Button>
                                     <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -267,8 +268,6 @@ const Bookings = () => {
                                     key={index}
                                     booking={booking}
                                     getBookings={getBookings}
-                                    notesOpens={notesOpens}
-                                    setNotesOpens={setNotesOpens}
                                 />
                             ))}
                         </div>
@@ -282,12 +281,10 @@ const Bookings = () => {
 interface BookingCardProps {
     booking: any;
     getBookings: any;
-    notesOpens: any;
-    setNotesOpens: any;
 }
 
 const BookingCard = (props: BookingCardProps) => {
-    const { booking, getBookings, notesOpens, setNotesOpens } = props;
+    const { booking, getBookings } = props;
 
     const router = useRouter();
 
@@ -312,17 +309,20 @@ const BookingCard = (props: BookingCardProps) => {
                 </div>
             </div>
             <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
+                <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
                 <Button
                     variant="default"
-                    className="w-full"
+                    className="w-full space-x-2"
                     onClick={
                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
                     }>
-                    Profile
+                    <User className="w-4 h-4" />
+                    <div>
+                        Profile
+                    </div>
                 </Button>
-                <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
-                <div className="flex flex-row items-center justify-between">
-                    {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                {/* <div className="flex flex-row items-center justify-between">
+                    <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                         notesOpens[booking.uid] || false
                     } onOpenChange={
                         (open: boolean) => {
@@ -331,8 +331,8 @@ const BookingCard = (props: BookingCardProps) => {
                                 [booking.uid]: open,
                             });
                         }
-                    } /> */}
-                </div>
+                    } />
+                </div> */}
             </div>
             <div className={cn("px-6 mt-2", booking?.completed ? "pb-4" : "pb-6")}>
                 {!booking?.completed && (
