@@ -225,7 +225,7 @@ const Bookings = () => {
                                     {booking?.additionalNotes || "No Additional Notes Provided"}
                                 </pre> */}
                                 <div className="col-span-1">
-                                    <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
+                                    <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
@@ -309,7 +309,7 @@ const BookingCard = (props: BookingCardProps) => {
                 </div>
             </div>
             <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
-                <ViewAdditionalNotesDialog notes={booking?.additionalNotes} />
+                <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
                 <Button
                     variant="default"
                     className="w-full space-x-2"
