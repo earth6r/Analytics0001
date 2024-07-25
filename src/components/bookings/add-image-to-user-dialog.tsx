@@ -188,7 +188,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                         {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
                     </div> :
                         <div
-                            className="rounded-lg border border-black border-dashed h-48 flex items-center justify-center cursor-pointer"
+                            className="rounded-lg border border-muted-foreground border-dashed h-48 flex items-center justify-center cursor-pointer"
                             onDrop={handleDrop}
                             onDragOver={handleDragOver}
                             // @ts-expect-error TODO: fix this
@@ -205,7 +205,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                                 <div className="font-bold text-4xl">
                                     + Add Image
                                 </div>
-                                <div className="text-muted-foreground">Drop a file here to upload, or click here to browse</div>
+                                <div className="text-muted-foreground text-center">Drop a file here to upload, or click here to browse</div>
                             </div>
                         </div>}
                     <div className="mt-4">
