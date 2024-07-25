@@ -111,7 +111,7 @@ const Bookings = () => {
                                     () => setFilterCompleted(false)
                                 }>
                                 <div className="flex flex-row items-center space-x-2">
-                                    <h1>Hide Completed</h1>
+                                    <h1>Complete</h1>
                                     <X className="w-4 h-4" />
                                 </div>
                             </Badge>
