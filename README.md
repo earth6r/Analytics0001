@@ -66,6 +66,8 @@
     - remove profile image
     - fix search in bookings page
     - see if i can combine the card vs table for bookings into one code using sm/md/lg/xl to stop duplicate code
+    - fix save tooltip values on errors
+    - add details save and clear are not disabled when no changes have been made
 
 CHARTS:
     - deposits over time chart 🔄
