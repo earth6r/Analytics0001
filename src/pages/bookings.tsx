@@ -1,5 +1,4 @@
-import AddAdditionalNotesDialog from "@/components/bookings/add-additional-notes-dialog";
-// import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
+import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
 import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
 import Header from "@/components/common/header";
@@ -17,6 +16,7 @@ import { useState } from "react";
 import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
 import { ZOOM_URL } from "./booking-details";
 import { Badge } from "@/components/ui/badge";
+import StatusSelect from "@/components/bookings/status-select";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
@@ -25,7 +25,7 @@ const Bookings = () => {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
 
-    const [notesOpens, setNotesOpens] = useState({});
+    const [open, setOpen] = useState(false);
 
     const router = useRouter();
 
@@ -48,7 +48,7 @@ const Bookings = () => {
             });
 
             if (filterCompleted) {
-                sortedBookingsData = sortedBookingsData.filter((booking: any) => !booking?.completed);
+                sortedBookingsData = sortedBookingsData.filter((booking: any) => booking?.status !== "completed");
             }
 
             setSortedData(sortedBookingsData);
@@ -62,18 +62,18 @@ const Bookings = () => {
                 <div className="flex flex-row items-center justify-between">
                     <h1 className="text-4xl font-bold">Bookings</h1>
                     {/* TODO: uncomment after fixing this */}
-                    {/* <CreateBookingDialog
+                    <CreateBookingDialog
                         open={open}
                         onOpenChange={setOpen}
                         refetch={getBookings.refetch}
-                    /> */}
+                    />
                 </div>
 
                 <div className="flex flex-col items-start justify-start w-full">
                     <div className="flex flex-row items-center space-x-2 mt-4 w-full">
                         <Input
                             placeholder="Search bookings..."
-                            className="w-full md:w-1/2 lg:w-1/4"
+                            className="w-full lg:w-1/4"
                             value={searchQuery}
                             disabled // TODO: remove this after fixing search
                             onChange={(e) => {
@@ -242,11 +242,11 @@ const Bookings = () => {
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
-                                    } className="space-x-2">
+                                    } className="space-x-2 select-none">
                                         <User className="w-4 h-4" />
                                         <span>Profile</span>
                                     </Button>
-                                    <div className={cn(booking?.completed ? "cursor-not-allowed" : "")}>
+                                    <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                                     </div>
                                     <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
@@ -287,9 +287,11 @@ const BookingCard = (props: BookingCardProps) => {
     const { booking, getBookings } = props;
 
     const router = useRouter();
+    const [statusLoading, setStatusLoading] = useState<boolean>(false);
+    const updateBooking = api.bookings.updateBookingStatus.useMutation();
 
     return (
-        <Card key={booking.id} className={cn(booking?.completed ? "opacity-50 cursor-not-allowed select-none" : "")}>
+        <Card key={booking.id} className={cn(booking?.status === "completed" ? "opacity-50 cursor-not-allowed select-none" : "")}>
             <CardHeader>
                 <CardTitle className="truncate max-w-64">
                     {booking?.firstName || "No First Name Provided"} {booking?.lastName || "No Last Name Provided"}
@@ -301,11 +303,31 @@ const BookingCard = (props: BookingCardProps) => {
             <div className="flex flex-row items-center justify-between px-6">
                 <div className="">
                     <h1 className="text-muted-foreground font-light">Join Meeting</h1>
-                    <div className={cn("text-blue-400 truncate max-w-48", !booking?.completed && "cursor-pointer hover:text-blue-500")}>{ZOOM_URL}</div>
+                    <div className={cn("text-blue-400 truncate max-w-48", booking?.status === "completed" && "cursor-pointer hover:text-blue-500")} onClick={
+                        () => {
+                            if (booking?.status === "completed")
+                                window.open(ZOOM_URL, "_blank")
+                        }
+                    }
+                    >{ZOOM_URL}</div>
                 </div>
                 <div className="">
                     <h1 className="text-muted-foreground font-light">Status</h1>
-                    <div className="">{(booking?.completed ? "completed" : "scheduled")}</div>
+                    {/* <div className="">{(booking?.completed ? "completed" : "scheduled")}</div> */}
+                    <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
+                        async (value: string) => {
+                            setStatusLoading(true);
+                            await updateBooking.mutateAsync({
+                                uid: booking.uid,
+                                status: value,
+                                bookingType: booking.type,
+                            });
+                            await getBookings.refetch();
+                            setStatusLoading(false);
+                        }
+                    }
+                        loading={statusLoading}
+                    />
                 </div>
             </div>
             <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
@@ -334,8 +356,8 @@ const BookingCard = (props: BookingCardProps) => {
                     } />
                 </div> */}
             </div>
-            <div className={cn("px-6 mt-2", booking?.completed ? "pb-4" : "pb-6")}>
-                {!booking?.completed && (
+            <div className={cn("px-6 mt-2", booking?.status === "completed" ? "pb-4" : "pb-6")}>
+                {booking?.status !== "completed" && (
                     <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                 )}
             </div>

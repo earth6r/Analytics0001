@@ -155,7 +155,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 <DialogHeader>
                     <DialogTitle>Create Booking</DialogTitle>
                     <DialogDescription>
-                        {`Create a new booking in the database.`}
+                        Create a new booking in the database. This will not send a Google Calendar invite.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -240,7 +240,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     </div>
                     <div className="flex flex-row items-center justify-between">
                         <Label htmlFor="notes">
-                            Notes
+                            Customer Questions
                         </Label>
                         <Input
                             id="notes"

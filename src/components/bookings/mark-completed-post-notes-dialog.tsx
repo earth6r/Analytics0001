@@ -32,7 +32,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className="w-full space-x-2">
+                <Button variant="default" className="w-full space-x-2 select-none">
                     <Check className="w-4 h-4" />
                     <span>Mark As Completed</span>
                 </Button>

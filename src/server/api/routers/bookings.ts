@@ -201,4 +201,22 @@ export const bookingsRouter = createTRPCRouter({
                 additionalNotes: fullNotes,
             });
         }),
+
+    updateBookingStatus: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            bookingType: z.string(),
+            status: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            await updateDoc(d, {
+                status: input.status,
+            });
+        }),
 });
