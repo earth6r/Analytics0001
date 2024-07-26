@@ -168,67 +168,69 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                     <span className="hidden md:block">Add Details</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] md:max-w-[600px] p-6">
+            <DialogContent className="sm:max-w-[425px] md:max-w-[600px] px-0">
                 <DialogHeader>
                     <DialogTitle>Add Details to Potential Customer</DialogTitle>
                     <DialogDescription>
                         Add details to the potential customer.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="max-h-96 overflow-y-scroll p-2">
-                    {imageUrl ? <div className="relative flex items-center justify-center h-48">
-                        <Image
-                            src={validateUrl(imageUrl) ? imageUrl : ""}
-                            alt="Preview"
-                            className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
-                            layout="fill"
-                            objectFit="cover"
-                            onLoad={() => setImageLoaded(true)}
-                        />
-                        {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
-                    </div> :
-                        <div
-                            className="rounded-lg border border-muted-foreground border-dashed h-48 flex items-center justify-center cursor-pointer"
-                            onDrop={handleDrop}
-                            onDragOver={handleDragOver}
-                            // @ts-expect-error TODO: fix this
-                            onClick={() => document.getElementById('fileInput').click()}
-                        >
-                            <input
-                                type="file"
-                                id="fileInput"
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                                onChange={handleFileChange}
+                <div className="max-h-96 overflow-y-scroll">
+                    <div className="px-6">
+                        {imageUrl ? <div className="relative flex items-center justify-center h-48">
+                            <Image
+                                src={validateUrl(imageUrl) ? imageUrl : ""}
+                                alt="Preview"
+                                className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
+                                layout="fill"
+                                objectFit="cover"
+                                onLoad={() => setImageLoaded(true)}
                             />
-                            <div className="flex flex-col items-center justify-center">
-                                <div className="font-bold text-4xl">
-                                    + Add Image
+                            {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
+                        </div> :
+                            <div
+                                className="rounded-lg border border-muted-foreground border-dashed h-48 flex items-center justify-center cursor-pointer"
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                                // @ts-expect-error TODO: fix this
+                                onClick={() => document.getElementById('fileInput').click()}
+                            >
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange}
+                                />
+                                <div className="flex flex-col items-center justify-center">
+                                    <div className="font-bold text-4xl">
+                                        + Add Image
+                                    </div>
+                                    <div className="text-muted-foreground text-center">Drop a file here to upload, or click here to browse</div>
                                 </div>
-                                <div className="text-muted-foreground text-center">Drop a file here to upload, or click here to browse</div>
-                            </div>
-                        </div>}
-                    <div className="mt-4">
-                        <Label>Image URL</Label>
-                        <Input
-                            className="mt-2"
-                            value={imageUrl}
-                            onChange={handleImageUrlChange}
-                            placeholder="URL"
-                        />
-                        {!validateUrl(imageUrl) && imageUrl !== "" && <div className="text-red-500 text-sm mt-1">Invalid URL</div>}
-                    </div>
-                    <div className="mt-4">
-                        <Label>Profile Notes</Label>
-                        <Textarea
-                            className="mt-2 resize-none h-48"
-                            value={profileNotes}
-                            onChange={handleProfileNotesChange}
-                            placeholder="Profile Notes"
-                        />
+                            </div>}
+                        <div className="mt-4">
+                            <Label>Image URL</Label>
+                            <Input
+                                className="mt-2"
+                                value={imageUrl}
+                                onChange={handleImageUrlChange}
+                                placeholder="URL"
+                            />
+                            {!validateUrl(imageUrl) && imageUrl !== "" && <div className="text-red-500 text-sm mt-1">Invalid URL</div>}
+                        </div>
+                        <div className="mt-4">
+                            <Label>Profile Notes</Label>
+                            <Textarea
+                                className="mt-2 resize-none h-48"
+                                value={profileNotes}
+                                onChange={handleProfileNotesChange}
+                                placeholder="Profile Notes"
+                            />
+                        </div>
                     </div>
                 </div>
-                <DialogFooter>
+                <DialogFooter className="w-full flex flex-row items-center space-x-2 px-6">
                     <Button variant="outline" className="w-full" onClick={() => {
                         setImageUrl("");
                         setProfileNotes("");
