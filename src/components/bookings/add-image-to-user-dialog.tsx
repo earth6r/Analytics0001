@@ -169,7 +169,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] md:max-w-[600px] px-0">
-                <DialogHeader>
+                <DialogHeader className="px-6">
                     <DialogTitle>Add Details to Potential Customer</DialogTitle>
                     <DialogDescription>
                         Add details to the potential customer.

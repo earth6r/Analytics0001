@@ -221,67 +221,69 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             <DialogTrigger asChild>
                 <Button variant="default">+</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
+            <DialogContent className="sm:max-w-[425px] p-0">
+                <DialogHeader className="px-6 pt-6">
                     <DialogTitle>Create Booking</DialogTitle>
                     <DialogDescription>
                         Create a new booking in the database. This will not send a Google Calendar invite.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
+                <div className="max-h-96 overflow-y-scroll">
+                    <div className="grid gap-4 px-6 pt-2">
 
-                    <Input
-                        id="email"
-                        placeholder="Email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                    />
-                    <Input
-                        id="firstName"
-                        placeholder="First Name"
-                        onChange={(e) => setFirstName(e.target.value)}
-                        value={firstName}
-                    />
-                    <Input
-                        id="lastName"
-                        placeholder="Last Name"
-                        onChange={(e) => setLastName(e.target.value)}
-                        value={lastName}
-                    />
-                    {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                    {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                    <Input
-                        id="startTimestamp"
-                        placeholder="Start Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
-                        onChange={(e) => setStartTimestamp(e.target.value)}
-                        value={startTimestamp}
-                    />
-                    {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                    {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                    <Input
-                        id="endTimestamp"
-                        placeholder="End Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
-                        onChange={(e) => setEndTimestamp(e.target.value)}
-                        value={endTimestamp}
-                    />
-                    <Input
-                        id="phoneNumber"
-                        placeholder="Phone Number"
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        value={phoneNumber}
-                    />
-                    {/* @ts-expect-error TODO: fix type */}
-                    <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
-                    <Input
-                        id="notes"
-                        placeholder="Notes"
-                        onChange={(e) => setNotes(e.target.value)}
-                        value={notes}
-                    />
-                    {/* TODO: disable if type is phone call booking */}
-                    <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} />
+                        <Input
+                            id="email"
+                            placeholder="Email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                        />
+                        <Input
+                            id="firstName"
+                            placeholder="First Name"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstName}
+                        />
+                        <Input
+                            id="lastName"
+                            placeholder="Last Name"
+                            onChange={(e) => setLastName(e.target.value)}
+                            value={lastName}
+                        />
+                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                        <Input
+                            id="startTimestamp"
+                            placeholder="Start Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
+                            onChange={(e) => setStartTimestamp(e.target.value)}
+                            value={startTimestamp}
+                        />
+                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                        <Input
+                            id="endTimestamp"
+                            placeholder="End Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
+                            onChange={(e) => setEndTimestamp(e.target.value)}
+                            value={endTimestamp}
+                        />
+                        <Input
+                            id="phoneNumber"
+                            placeholder="Phone Number"
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={phoneNumber}
+                        />
+                        {/* @ts-expect-error TODO: fix type */}
+                        <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
+                        <Input
+                            id="notes"
+                            placeholder="Notes"
+                            onChange={(e) => setNotes(e.target.value)}
+                            value={notes}
+                        />
+                        {/* TODO: disable if type is phone call booking */}
+                        <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} />
+                    </div>
                 </div>
-                <DialogFooter>
+                <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
                     <Button variant="outline" className="w-full" onClick={() => {
                         setEmail("");
                         setPropertyType(null);
