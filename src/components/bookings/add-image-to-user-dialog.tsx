@@ -176,7 +176,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
-                    <div className="px-6">
+                    <div className="px-6 pb-2">
                         {imageUrl ? <div className="relative flex items-center justify-center h-48">
                             <Image
                                 src={validateUrl(imageUrl) ? imageUrl : ""}
