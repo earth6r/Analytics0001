@@ -229,8 +229,10 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div> */}
                         </div>
-                        <div>Status</div>
-                        <div className="col-span-3">Meeting Notes</div>
+                        <div className="select-none">
+                            Status
+                        </div>
+                        <div className="col-span-3 select-none">Meeting Notes</div>
                     </div>
 
                     {getBookings.isLoading ? (
