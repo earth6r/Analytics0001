@@ -17,6 +17,7 @@ import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-p
 import { ZOOM_URL } from "./booking-details";
 import { Badge } from "@/components/ui/badge";
 import StatusSelect from "@/components/bookings/status-select";
+import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
@@ -24,6 +25,13 @@ const Bookings = () => {
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
+    const [filterStatus, setFilterStatus] = useState<string[]>([
+        "completed",
+        "scheduled",
+        "cancelled",
+        "noshow",
+        "confirmed",
+    ]);
     const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});
 
     const [open, setOpen] = useState(false);
@@ -49,13 +57,16 @@ const Bookings = () => {
                 }
             });
 
-            if (filterCompleted) {
-                sortedBookingsData = sortedBookingsData.filter((booking: any) => booking?.status !== "completed");
-            }
+            sortedBookingsData = sortedBookingsData.filter((booking: any) => {
+                if (filterStatus.includes(booking?.status || "scheduled")) {
+                    return true;
+                }
+                return false;
+            });
 
             setSortedData(sortedBookingsData);
         }
-    }, [getBookings.data, sortOrder, sortKey, filterCompleted]);
+    }, [getBookings.data, sortOrder, sortKey, filterStatus]);
 
     return (
         <div>
@@ -99,24 +110,38 @@ const Bookings = () => {
                                 setSortedData(filteredData);
                             }}
                         />
-                        {!filterCompleted && <Button className="" onClick={
-                            () => setFilterCompleted(true)
-                        }>
-                            Hide Completed
-                        </Button>}
+                        <FilterStatusMultiSelect
+                            values={filterStatus}
+                            addValue={(value: string) => {
+                                setFilterStatus([...filterStatus, value]);
+                            }}
+                            removeValue={(value: string) => {
+                                setFilterStatus(filterStatus.filter((status) => status !== value));
+                            }}
+                        />
                     </div>
-                    <div className="flex flex-row items-center space-x-2 mt-2">
-                        {filterCompleted && (
-                            <Badge
-                                className="cursor-pointer"
-                                onClick={
-                                    () => setFilterCompleted(false)
-                                }>
-                                <div className="flex flex-row items-center space-x-2">
-                                    <h1>Complete</h1>
-                                    <X className="w-4 h-4" />
-                                </div>
-                            </Badge>
+                    <div className="flex flex-row items-center">
+                        {filterStatus.length > 0 && (
+                            <div className="flex flex-row items-center flex-wrap">
+                                {filterStatus.map((status) => (
+                                    <div key={status} className="p-1">
+                                        <Badge
+                                            className="cursor-pointer select-none"
+                                            onClick={
+                                                () => {
+                                                    setFilterStatus(filterStatus.filter((s) => s !== status));
+                                                }
+                                            }>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    {status}
+                                                </h1>
+                                                <X className="w-4 h-4" />
+                                            </div>
+                                        </Badge>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>
