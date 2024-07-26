@@ -37,8 +37,10 @@ const Option = (props: OptionProps) => {
                 <div className={cn(selected ? "block" : "invisible")}>
                     <Check className="w-4 h-4" />
                 </div>
-                <div>
-                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                <div className="flex flex-row items-center space-x-1">
+                    {value.split("-").map((word, index) => (
+                        <h1 key={index} className="capitalize">{word}</h1>
+                    ))}
                 </div>
             </div>
         </div>
