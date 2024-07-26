@@ -18,10 +18,11 @@ import { useState } from "react";
 interface DeleteBookingAlertDialogProps {
     booking: any;
     refetch: () => Promise<any>;
+    triggerOverride?: any;
 }
 
 const DeleteBookingAlertDialog = (props: DeleteBookingAlertDialogProps) => {
-    const { booking, refetch } = props;
+    const { booking, refetch, triggerOverride } = props;
 
     const deleteBooking = api.bookings.deleteBooking.useMutation();
 
@@ -31,16 +32,20 @@ const DeleteBookingAlertDialog = (props: DeleteBookingAlertDialogProps) => {
 
     return (
         <AlertDialog open={open} onOpenChange={onOpenChange}>
-            <AlertDialogTrigger asChild>
-                <Button className="bg-red-500 hover:bg-red-600">
+            <AlertDialogTrigger
+                disabled={booking?.status === "completed"}
+            >
+                {triggerOverride ? triggerOverride : <Button className="bg-red-500 hover:bg-red-600"
+                    disabled={booking?.status === "completed"}
+                >
                     <Trash2 className="w-5 h-5" />
-                </Button>
+                </Button>}
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the booking.
+                        This action cannot be undone. This will permanently delete the booking. This should only be done for bookings created by mistake.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

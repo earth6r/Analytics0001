@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useInterval } from "@/contexts/IntervalContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, User, X } from "lucide-react";
+import { ArrowUpDownIcon, Trash2, User, X } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -24,6 +24,7 @@ const Bookings = () => {
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
+    const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});
 
     const [open, setOpen] = useState(false);
 
@@ -36,6 +37,7 @@ const Bookings = () => {
             refetchInterval: interval,
         }
     );
+    const updateBookingStatus = api.bookings.updateBookingStatus.useMutation();
 
     useEffect(() => {
         if (getBookings.data) {
@@ -120,7 +122,7 @@ const Bookings = () => {
                 </div>
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
-                    <div className="grid grid-cols-8 gap-4 font-semibold">
+                    <div className="grid grid-cols-9 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
                                 Email
@@ -190,7 +192,7 @@ const Bookings = () => {
                             <h1>
                                 Phone Number
                             </h1>
-                            <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
+                            {/* <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
                                 () => {
                                     if (sortKey === "phoneNumber") {
                                         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -200,8 +202,9 @@ const Bookings = () => {
                                 }
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
-                            </div>
+                            </div> */}
                         </div>
+                        <div>Status</div>
                         <div className="col-span-3">Meeting Notes</div>
                     </div>
 
@@ -215,7 +218,7 @@ const Bookings = () => {
                         </div>
                     ) : <div className="space-y-2 mt-4">
                         {sortedData?.map((booking: any) => (
-                            <div key={booking.id} className="grid grid-cols-8 gap-4">
+                            <div key={booking.id} className="grid grid-cols-9 gap-4">
                                 <div className="col-span-2">{booking.email || "No Email Provided"}</div>
                                 {/* <div>{booking.type || "No Type Provided"}</div> */}
                                 <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
@@ -224,6 +227,26 @@ const Bookings = () => {
                                 {/* <pre className="col-span-3">
                                     {booking?.additionalNotes || "No Additional Notes Provided"}
                                 </pre> */}
+                                <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
+                                    async (value: string) => {
+                                        setLoadingsForStatuses({
+                                            ...loadingsForStatuses,
+                                            [booking.uid]: true,
+                                        });
+                                        await updateBookingStatus.mutateAsync({
+                                            uid: booking.uid,
+                                            status: value,
+                                            bookingType: booking.type,
+                                        });
+                                        await getBookings.refetch();
+                                        setLoadingsForStatuses({
+                                            ...loadingsForStatuses,
+                                            [booking.uid]: false,
+                                        });
+                                    }
+                                }
+                                    loading={loadingsForStatuses[booking.uid] || false}
+                                />
                                 <div className="col-span-1">
                                     <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
                                 </div>
@@ -293,8 +316,15 @@ const BookingCard = (props: BookingCardProps) => {
     return (
         <Card key={booking.id} className={cn(booking?.status === "completed" ? "opacity-50 cursor-not-allowed select-none" : "")}>
             <CardHeader>
-                <CardTitle className="truncate max-w-64">
-                    {booking?.firstName || "No First Name Provided"} {booking?.lastName || "No Last Name Provided"}
+                <CardTitle className="flex flex-row items-center justify-between">
+                    <div className="truncate max-w-64">
+                        {booking?.firstName || "No First Name Provided"} {booking?.lastName || "No Last Name Provided"}
+                    </div>
+                    <div>
+                        <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} triggerOverride={
+                            <Trash2 className="w-4 h-4" />
+                        } />
+                    </div>
                 </CardTitle>
                 <CardDescription>
                     {formatTimestamp(booking.startTimestamp)}
