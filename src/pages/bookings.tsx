@@ -360,9 +360,9 @@ const BookingCard = (props: BookingCardProps) => {
             <div className="flex flex-row items-center justify-between px-6">
                 <div className="">
                     <h1 className="text-muted-foreground font-light">Join Meeting</h1>
-                    <div className={cn("text-blue-400 truncate max-w-48", booking?.status === "completed" && "cursor-pointer hover:text-blue-500")} onClick={
+                    <div className={cn("text-blue-400 truncate max-w-32 md:max-w-48", booking?.status === "completed" && "cursor-pointer hover:text-blue-500")} onClick={
                         () => {
-                            if (booking?.status === "completed")
+                            if (booking?.status !== "completed")
                                 window.open(ZOOM_URL, "_blank")
                         }
                     }
