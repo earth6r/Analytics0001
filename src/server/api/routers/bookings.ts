@@ -64,8 +64,10 @@ export const bookingsRouter = createTRPCRouter({
     createPhoneBooking: publicProcedure
         .input(z.object({
             email: z.string(),
-            timestamp: z.string(),
+            startTimestamp: z.string(),
+            endTimestamp: z.string(),
             phoneNumber: z.string(),
+            notes: z.string(),
         }))
         .mutation(async ({ input }) => {
 
@@ -78,8 +80,10 @@ export const bookingsRouter = createTRPCRouter({
 
             await addDoc(collection(db, 'usersBookPhoneCall'), {
                 userUID: user.docs[0].id,
-                timestamp: input.timestamp,
+                startTimestamp: input.startTimestamp,
+                endTimestamp: input.endTimestamp,
                 phoneNumber: input.phoneNumber,
+                notes: input.notes,
             });
 
             return {
@@ -90,10 +94,12 @@ export const bookingsRouter = createTRPCRouter({
     createPropertyTourBooking: publicProcedure
         .input(z.object({
             email: z.string(),
-            timestamp: z.string(),
+            startTimestamp: z.string(),
+            endTimestamp: z.string(),
             typeOfBooking: z.string(),
             propertyType: z.string(),
             phoneNumber: z.string(),
+            notes: z.string(),
         }))
         .mutation(async ({ input }) => {
             const user = await getDocs(query(collection(db, 'users'), where('email', '==', input.email)));
@@ -105,8 +111,10 @@ export const bookingsRouter = createTRPCRouter({
             await addDoc(collection(db, 'usersBookPropertyTour'), {
                 userUID: user.docs[0].id,
                 property: input.propertyType,
-                timestamp: input.timestamp,
+                startTimestamp: input.startTimestamp,
+                endTimestamp: input.endTimestamp,
                 phoneNumber: input.phoneNumber,
+                notes: input.notes,
             });
 
             return {

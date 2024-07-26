@@ -18,6 +18,7 @@ import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { TypeOfBookingSelect } from "./type-of-booking-select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+// import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
     refetch: () => Promise<any>;
@@ -29,7 +30,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const { refetch, open, onOpenChange } = props;
 
     const [email, setEmail] = useState<string>("");
-    const [timestamp, setTimestamp] = useState<string>("");
     const [startTimestamp, setStartTimestamp] = useState<string>("");
     const [endTimestamp, setEndTimestamp] = useState<string>("");
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
@@ -39,6 +39,15 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [notes, setNotes] = useState("");
+
+    // const form = useForm({
+    //     defaultValues: {
+    //         email: "",
+    //         startTimestamp: "",
+    //         endTimestamp: "",
+    //         typeOf
+    //     }
+    // })
 
     const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
     const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
@@ -62,9 +71,18 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             return;
         }
 
-        if (!timestamp) {
+        if (!startTimestamp) {
             toast({
-                title: "Timestamp is required",
+                title: "Start Timestamp is required",
+                description: "Please enter the timestamp.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!endTimestamp) {
+            toast({
+                title: "End Timestamp is required",
                 description: "Please enter the timestamp.",
                 className: toastErrorStyle,
             });
@@ -101,9 +119,40 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         try {
             setIsLoading(true);
 
-            const formattedTimestamp = new Date(timestamp).getTime().toString();
+            const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
+            const formattedEndTimestamp = new Date(endTimestamp).getTime().toString();
 
-            if (isNaN(Number(formattedTimestamp))) {
+            if (isNaN(Number(formattedStartTimestamp))) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "Please enter a valid timestamp.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            if (formattedStartTimestamp.length !== 19) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "Please enter a valid timestamp.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            if (isNaN(Number(formattedEndTimestamp))) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "Please enter a valid timestamp.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            if (formattedEndTimestamp.length !== 19) {
                 toast({
                     title: "Invalid timestamp",
                     description: "Please enter a valid timestamp.",
@@ -115,7 +164,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
             // @ts-expect-error TODO: fix type
-            await createBooking.mutateAsync({ email, timestamp: formattedTimestamp, typeOfBooking, propertyType, phoneNumber });
+            await createBooking.mutateAsync({ email, startTimestamp: formattedStartTimestamp, endTimestamp: formattedEndTimestamp, typeOfBooking, propertyType, phoneNumber, notes });
 
             await refetch();
 
@@ -144,7 +193,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         }
     }
 
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !timestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber;
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startTimestamp || !endTimestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -159,103 +208,57 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="email">
-                            Email
-                        </Label>
-                        <Input
-                            id="email"
-                            className="w-[250px]"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="firstName">
-                            First Name
-                        </Label>
-                        <Input
-                            id="firstName"
-                            className="w-[250px]"
-                            onChange={(e) => setFirstName(e.target.value)}
-                            value={firstName}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="lastName">
-                            Last Name
-                        </Label>
-                        <Input
-                            id="lastName"
-                            className="w-[250px]"
-                            onChange={(e) => setLastName(e.target.value)}
-                            value={lastName}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="timestamp">
-                            Start Timestamp
-                        </Label>
-                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                        <Input
-                            id="startTimestamp"
-                            className="w-[250px]"
-                            onChange={(e) => setStartTimestamp(e.target.value)}
-                            value={timestamp}
-                            placeholder="YYYY-MM-DD HH:MM:SS"
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="timestamp">
-                            End Timestamp
-                        </Label>
-                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                        <Input
-                            id="endTimestamp"
-                            className="w-[250px]"
-                            onChange={(e) => setEndTimestamp(e.target.value)}
-                            value={timestamp}
-                            placeholder="YYYY-MM-DD HH:MM:SS"
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="phoneNumber">
-                            Phone Number
-                        </Label>
-                        <Input
-                            id="phoneNumber"
-                            className="w-[250px]"
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            value={phoneNumber}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="typeOfBooking">
-                            Type of Booking
-                        </Label>
-                        {/* @ts-expect-error TODO: fix type */}
-                        <TypeOfBookingSelect className="w-[250px]" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        <Label htmlFor="notes">
-                            Customer Questions
-                        </Label>
-                        <Input
-                            id="notes"
-                            className="w-[250px]"
-                            onChange={(e) => setNotes(e.target.value)}
-                            value={notes}
-                        />
-                    </div>
-                    <div className="flex flex-row items-center justify-between">
-                        {/* TODO: disable if type is phone call booking */}
-                        <Label htmlFor="propertyType">
-                            Property Type
-                        </Label>
-                        <BuyingPropertyTypeSelect className="w-[250px]" selectedItem={propertyType} setSelectedItem={setPropertyType} />
-                    </div>
+
+                    <Input
+                        id="email"
+                        placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                    />
+                    <Input
+                        id="firstName"
+                        placeholder="First Name"
+                        onChange={(e) => setFirstName(e.target.value)}
+                        value={firstName}
+                    />
+                    <Input
+                        id="lastName"
+                        placeholder="Last Name"
+                        onChange={(e) => setLastName(e.target.value)}
+                        value={lastName}
+                    />
+                    {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                    {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                    <Input
+                        id="startTimestamp"
+                        placeholder="Start Timestamp YYYY-MM-DD HH:MM:SS"
+                        onChange={(e) => setStartTimestamp(e.target.value)}
+                        value={startTimestamp}
+                    />
+                    {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                    {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                    <Input
+                        id="endTimestamp"
+                        placeholder="End Timestamp YYYY-MM-DD HH:MM:SS"
+                        onChange={(e) => setEndTimestamp(e.target.value)}
+                        value={endTimestamp}
+                    />
+                    <Input
+                        id="phoneNumber"
+                        placeholder="Phone Number"
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        value={phoneNumber}
+                    />
+                    {/* @ts-expect-error TODO: fix type */}
+                    <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
+                    <Input
+                        id="notes"
+                        placeholder="Notes"
+                        onChange={(e) => setNotes(e.target.value)}
+                        value={notes}
+                    />
+                    {/* TODO: disable if type is phone call booking */}
+                    <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" className="w-full" onClick={() => {
@@ -266,7 +269,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !timestamp && !phoneNumber && !typeOfBooking && !propertyType)
+                        isLoading || (!email && !startTimestamp && !endTimestamp && !phoneNumber && !typeOfBooking && !propertyType)
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
@@ -281,9 +284,11 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div className="font-medium">{`Please fill in all the required fields:`}</div>
                                     <div>{!email && `The email is required.`}</div>
                                     <div>{email && (!email.includes("@") || !email.includes(".")) && "The email is invalid. Requires a `.` and a `@`"}</div>
-                                    <div>{!timestamp && `The timestamp is required.`}</div>
-                                    <div>{timestamp && isNaN(Number(new Date(timestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
-                                    <div>{timestamp && timestamp.length !== 19 && `The timestamp must be of length 19.`}</div>
+                                    <div>{!startTimestamp && `The start timestamp is required.`}</div>
+                                    <div>{startTimestamp && isNaN(Number(new Date(startTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
+                                    <div>{startTimestamp && startTimestamp.length !== 19 && `The timestamp must be of length 19.`}</div>
+                                    <div>{!endTimestamp && `The end timestamp is required.`}</div>
+                                    <div>{endTimestamp && isNaN(Number(new Date(endTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
                                     <div>{!phoneNumber && `The phone number is required.`}</div>
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
