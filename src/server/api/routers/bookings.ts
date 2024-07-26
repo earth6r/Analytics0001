@@ -64,22 +64,18 @@ export const bookingsRouter = createTRPCRouter({
     createPhoneBooking: publicProcedure
         .input(z.object({
             email: z.string(),
+            firstName: z.string(),
+            lastName: z.string(),
             startTimestamp: z.string(),
             endTimestamp: z.string(),
             phoneNumber: z.string(),
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-
-            // translate above using modular firebase api
-            const user = await getDocs(query(collection(db, 'users'), where('email', '==', input.email)));
-
-            if (user.empty || user.docs.length === 0 || !user?.docs[0]?.id) {
-                throw new Error('User not found');
-            }
-
             await addDoc(collection(db, 'usersBookPhoneCall'), {
-                userUID: user.docs[0].id,
+                email: input.email,
+                firstName: input.firstName,
+                lastName: input.lastName,
                 startTimestamp: input.startTimestamp,
                 endTimestamp: input.endTimestamp,
                 phoneNumber: input.phoneNumber,
@@ -94,6 +90,8 @@ export const bookingsRouter = createTRPCRouter({
     createPropertyTourBooking: publicProcedure
         .input(z.object({
             email: z.string(),
+            firstName: z.string(),
+            lastName: z.string(),
             startTimestamp: z.string(),
             endTimestamp: z.string(),
             typeOfBooking: z.string(),
@@ -102,14 +100,10 @@ export const bookingsRouter = createTRPCRouter({
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-            const user = await getDocs(query(collection(db, 'users'), where('email', '==', input.email)));
-
-            if (user.empty || user.docs.length === 0 || !user?.docs[0]?.id) {
-                throw new Error('User not found');
-            }
-
             await addDoc(collection(db, 'usersBookPropertyTour'), {
-                userUID: user.docs[0].id,
+                email: input.email,
+                firstName: input.firstName,
+                lastName: input.lastName,
                 property: input.propertyType,
                 startTimestamp: input.startTimestamp,
                 endTimestamp: input.endTimestamp,

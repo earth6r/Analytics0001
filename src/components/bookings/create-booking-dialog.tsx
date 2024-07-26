@@ -71,6 +71,24 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             return;
         }
 
+        if (!firstName) {
+            toast({
+                title: "First Name is required",
+                description: "Please enter the first name.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!lastName) {
+            toast({
+                title: "Last Name is required",
+                description: "Please enter the last name.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
         if (!startTimestamp) {
             toast({
                 title: "Start Timestamp is required",
@@ -125,17 +143,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             if (isNaN(Number(formattedStartTimestamp))) {
                 toast({
                     title: "Invalid timestamp",
-                    description: "Please enter a valid timestamp.",
+                    description: "Please enter a valid start timestamp.",
                     className: toastErrorStyle,
                 });
                 setIsLoading(false);
                 return;
             }
 
-            if (formattedStartTimestamp.length !== 19) {
+            if (startTimestamp.length !== 19) {
                 toast({
                     title: "Invalid timestamp",
-                    description: "Please enter a valid timestamp.",
+                    description: `Please enter a valid start timestamp. Length must be 19. Got ${formattedStartTimestamp.length}.`,
                     className: toastErrorStyle,
                 });
                 setIsLoading(false);
@@ -145,17 +163,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             if (isNaN(Number(formattedEndTimestamp))) {
                 toast({
                     title: "Invalid timestamp",
-                    description: "Please enter a valid timestamp.",
+                    description: "Please enter a valid end timestamp.",
                     className: toastErrorStyle,
                 });
                 setIsLoading(false);
                 return;
             }
 
-            if (formattedEndTimestamp.length !== 19) {
+            if (endTimestamp.length !== 19) {
                 toast({
                     title: "Invalid timestamp",
-                    description: "Please enter a valid timestamp.",
+                    description: `Please enter a valid end timestamp. Length must be 19. Got ${formattedEndTimestamp.length}.`,
                     className: toastErrorStyle,
                 });
                 setIsLoading(false);
@@ -164,11 +182,13 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
             // @ts-expect-error TODO: fix type
-            await createBooking.mutateAsync({ email, startTimestamp: formattedStartTimestamp, endTimestamp: formattedEndTimestamp, typeOfBooking, propertyType, phoneNumber, notes });
+            await createBooking.mutateAsync({ email, startTimestamp: formattedStartTimestamp, endTimestamp: formattedEndTimestamp, typeOfBooking, propertyType, phoneNumber, notes, firstName, lastName });
 
             await refetch();
 
             setEmail("");
+            setFirstName("");
+            setLastName("");
             setPhoneNumber("");
             setStartTimestamp("");
             setEndTimestamp("");
@@ -193,7 +213,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         }
     }
 
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startTimestamp || !endTimestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber;
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startTimestamp || !endTimestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber || !firstName || !lastName;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -293,6 +313,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
                                     <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div>
+                                    <div>{!firstName && `The first name is required.`}</div>
+                                    <div>{!lastName && `The last name is required.`}</div>
                                 </div>
                             </TooltipContent>}
                         </Tooltip>
