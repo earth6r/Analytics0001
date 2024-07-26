@@ -213,6 +213,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         }
     }
 
+    // TODO: disabled for timestamp 19 len and Nan timestamp
     const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startTimestamp || !endTimestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber || !firstName || !lastName;
 
     return (
@@ -251,7 +252,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
                     <Input
                         id="startTimestamp"
-                        placeholder="Start Timestamp YYYY-MM-DD HH:MM:SS"
+                        placeholder="Start Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
                         onChange={(e) => setStartTimestamp(e.target.value)}
                         value={startTimestamp}
                     />
@@ -259,7 +260,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
                     <Input
                         id="endTimestamp"
-                        placeholder="End Timestamp YYYY-MM-DD HH:MM:SS"
+                        placeholder="End Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
                         onChange={(e) => setEndTimestamp(e.target.value)}
                         value={endTimestamp}
                     />
