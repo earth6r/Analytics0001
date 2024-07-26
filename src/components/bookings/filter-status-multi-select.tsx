@@ -31,7 +31,7 @@ const Option = (props: OptionProps) => {
                     }
                 }
             }
-            className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg select-none"
+            className="px-4 py-4 md:py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg select-none"
         >
             <div className="flex flex-row items-center space-x-2">
                 <div className={cn(selected ? "block" : "invisible")}>
