@@ -99,7 +99,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="!Ex@m413!12E" {...field} />
+                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} />
               </FormControl>
               <FormDescription>
                 This is a given email that you can use to sign in.
@@ -115,7 +115,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="!Ex@m413!12E" {...field} />
+                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} />
               </FormControl>
               <FormDescription>
                 This is a given password that you can use to sign in.

@@ -94,7 +94,7 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
                             }
                         }
                     }
-                    disabled={booking?.status === "completed"}
+                    disabled={booking?.status === "completed" || loading}
                     >
                         {!loading && (editMode ? <Save className="w-4 h-4" /> : <Pencil className="w-4 h-4" />)}
                         <span>
