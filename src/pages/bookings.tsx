@@ -24,12 +24,11 @@ const Bookings = () => {
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [filterCompleted, setFilterCompleted] = useState<boolean>(false);
     const [filterStatus, setFilterStatus] = useState<string[]>([
         "completed",
         "scheduled",
         "cancelled",
-        "noshow",
+        "no-show",
         "confirmed",
     ]);
     const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});

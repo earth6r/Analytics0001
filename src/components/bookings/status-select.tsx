@@ -32,7 +32,7 @@ const StatusSelect = (props: StatusSelectProps) => {
                     <SelectItem value="scheduled">Scheduled</SelectItem>
                     <SelectItem value="confirmed">Confirmed</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="noshow">No Show</SelectItem>
+                    <SelectItem value="no-show">No Show</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
                 </SelectGroup>
             </SelectContent>
