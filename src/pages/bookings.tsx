@@ -272,6 +272,7 @@ const Bookings = () => {
                                     }
                                 }
                                     loading={loadingsForStatuses[booking.uid] || false}
+                                    booking={booking}
                                 />
                                 <div className="col-span-1">
                                     <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
@@ -291,9 +292,9 @@ const Bookings = () => {
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
                                     <Button variant="default" onClick={
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
-                                    } className="space-x-2 select-none">
+                                    } className="flex flex-row items-center space-x-2">
                                         <User className="w-4 h-4" />
-                                        <span className="select-none">Profile</span>
+                                        <div className="select-none">Profile</div>
                                     </Button>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -359,7 +360,7 @@ const BookingCard = (props: BookingCardProps) => {
             <div className="flex flex-row items-center justify-between px-6">
                 <div className="">
                     <h1 className="text-muted-foreground font-light">Join Meeting</h1>
-                    <div className={cn("text-blue-400 truncate max-w-32 md:max-w-48", booking?.status === "completed" && "cursor-pointer hover:text-blue-500")} onClick={
+                    <div className={cn("text-blue-400 truncate max-w-32 md:max-w-48", booking?.status === "completed" ? "hover:text-blue-500" : "cursor-pointer")} onClick={
                         () => {
                             if (booking?.status !== "completed")
                                 window.open(ZOOM_URL, "_blank")
@@ -383,6 +384,7 @@ const BookingCard = (props: BookingCardProps) => {
                         }
                     }
                         loading={statusLoading}
+                        booking={booking}
                     />
                 </div>
             </div>
