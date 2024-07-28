@@ -273,7 +273,11 @@ export const errorRouter = createTRPCRouter({
             const count = await getDocs(query(errorRef, where('errorType', '==', data?.errorType))).then((snapshot) => snapshot.size);
 
             return {
-                ...data,
+                errorType: data?.errorType,
+                error: data?.error,
+                resolved: data?.resolved,
+                statusCode: data?.statusCode,
+                createdAt: data?.createdAt,
                 count,
             };
         }),
