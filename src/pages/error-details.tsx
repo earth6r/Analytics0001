@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/utils/api";
 import { ArrowLeftCircleIcon } from "lucide-react";
 import { useRouter } from "next/router"
-import { useEffect } from "react";
 
 const ErrorDetails = () => {
     const router = useRouter();
