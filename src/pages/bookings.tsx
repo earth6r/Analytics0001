@@ -293,7 +293,7 @@ const Bookings = () => {
                                         async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
                                     } className="space-x-2 select-none">
                                         <User className="w-4 h-4" />
-                                        <span>Profile</span>
+                                        <span className="select-none">Profile</span>
                                     </Button>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
