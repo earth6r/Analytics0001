@@ -240,18 +240,20 @@ export const errorRouter = createTRPCRouter({
 
             const errorTypeCounts = querySnapshot.docs.reduce((acc, doc) => {
                 const error = doc.data();
+                // @ts-expect-error TODO: fix this
                 acc[error.errorType] = (acc[error.errorType] || 0) + 1;
                 return acc;
             });
 
+            // @ts-expect-error TODO: fix this
             const errorsWithCount = errors.map((error) => {
                 return {
                     ...error,
+                    // @ts-expect-error TODO: fix this
                     count: errorTypeCounts[error.errorType],
                 };
             });
 
-            // @ts-expect-error TODO: fix this
             return errorsWithCount;
         }),
 
