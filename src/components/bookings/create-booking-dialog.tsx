@@ -229,8 +229,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
-                    <div className="grid gap-4 px-6 pt-2">
-
+                    <div className="grid gap-4 px-6 py-2">
                         <Input
                             id="email"
                             placeholder="Email"

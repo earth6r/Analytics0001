@@ -21,7 +21,7 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
         // @ts-expect-error NOTE: This needs a null value because clear form will not work otherwise in create customer dialog
         <Select value={selectedItem} onValueChange={setSelectedItem}>
             <SelectTrigger className={className}>
-                <SelectValue placeholder="Select a property type" />
+                <SelectValue placeholder="Select a booking type" />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="propertyTour">
