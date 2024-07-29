@@ -139,3 +139,45 @@ NOTES:
 curl -X GET \
   -H "Authorization: Bearer API_KEY"\
   "https://api.sendgrid.com/v3/stats?start_date=2024-06-12"
+
+
+
+
+
+
+
+
+
+TODO:
+- see what kinds of data can be extracted from errors like sentry stats
+  - errors from around the world (i.e. by ip address/user agent)
+  - number of times the error occurred
+  - charts for each error that happened over time (with filtering)
+  - chart for all errors over time (with filtering)
+- error tracking for new FE functions
+- do we track errors in BE endpoints as well?
+- showing status indicators in cards
+- showing + button with creating bookings
+- test out mobile analytics site fully
+- error email should give a link to the error (maybe a page for each error) + add uid to error email
+- fix email charts showing white on white
+- decide if i need to do clear or close for all dialogs/forms, ask gpt, claude, and research google for best practices
+- all badges with no functionality should not show a hover effect
+- a login stats page that uses the login history table data
+- use interval in all use queries
+- error handle all routes not logged in
+- add local and staging and prod column to error table, maybe other tables as well
+- change button component to take loading and always disable when loading
+
+BOOKINGS:
+- fix the search bar for bookings page
+- display zoom link in desktop mode
+- make sure to use locale and convert to utc for start and end timestamp for create booking in analytics then can remove UTC from placeholder
+- test select on mobile for filter status
+- autoFocus{false} on all inputs
+- clear on create booking removes placeholder for select
+
+  HARD:
+  - join meeting url needs to be flexible length up to 1/2 of width
+  - remove the border of select status dropdown and filter status multi select dropdown which happens after closing (a focus of thin border)
+  
