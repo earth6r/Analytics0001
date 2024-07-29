@@ -1,5 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
+import axios from "axios";
 import admin from 'firebase-admin';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
@@ -72,7 +73,7 @@ export const bookingsRouter = createTRPCRouter({
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-            await addDoc(collection(db, 'usersBookPhoneCall'), {
+            await axios.post("https://home0001.com/api/book-phone-call", {
                 email: input.email,
                 firstName: input.firstName,
                 lastName: input.lastName,
@@ -80,7 +81,7 @@ export const bookingsRouter = createTRPCRouter({
                 endTimestamp: input.endTimestamp,
                 phoneNumber: input.phoneNumber,
                 notes: input.notes,
-            });
+            })
 
             return {
                 status: 'success',
@@ -100,16 +101,17 @@ export const bookingsRouter = createTRPCRouter({
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-            await addDoc(collection(db, 'usersBookPropertyTour'), {
+            await axios.post("https://home0001.com/api/book-property-tour", {
                 email: input.email,
                 firstName: input.firstName,
                 lastName: input.lastName,
-                property: input.propertyType,
                 startTimestamp: input.startTimestamp,
                 endTimestamp: input.endTimestamp,
+                typeOfBooking: input.typeOfBooking,
+                propertyType: input.propertyType,
                 phoneNumber: input.phoneNumber,
                 notes: input.notes,
-            });
+            })
 
             return {
                 status: 'success',
