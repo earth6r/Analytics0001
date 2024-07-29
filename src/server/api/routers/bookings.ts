@@ -2,13 +2,16 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import axios from "axios";
 import admin from 'firebase-admin';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
 
 // Set configuration options for the API route
 export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
+
+const API_URL = `http://localhost:3000/api`;
+// const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
@@ -73,15 +76,20 @@ export const bookingsRouter = createTRPCRouter({
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-            await axios.post("https://home0001.com/api/book-phone-call", {
-                email: input.email,
-                firstName: input.firstName,
-                lastName: input.lastName,
-                startTimestamp: input.startTimestamp,
-                endTimestamp: input.endTimestamp,
-                phoneNumber: input.phoneNumber,
-                notes: input.notes,
-            })
+            try {
+                await axios.post(`${API_URL}/bookings/book-phone-call`, {
+                    email: input.email,
+                    firstName: input.firstName,
+                    lastName: input.lastName,
+                    startTimestamp: input.startTimestamp,
+                    endTimestamp: input.endTimestamp,
+                    phoneNumber: input.phoneNumber,
+                    notes: input.notes,
+                    blockWhatsApp: true,
+                })
+            } catch (error) {
+                console.error('Error creating phone booking', error);
+            }
 
             return {
                 status: 'success',
@@ -101,17 +109,22 @@ export const bookingsRouter = createTRPCRouter({
             notes: z.string(),
         }))
         .mutation(async ({ input }) => {
-            await axios.post("https://home0001.com/api/book-property-tour", {
-                email: input.email,
-                firstName: input.firstName,
-                lastName: input.lastName,
-                startTimestamp: input.startTimestamp,
-                endTimestamp: input.endTimestamp,
-                typeOfBooking: input.typeOfBooking,
-                propertyType: input.propertyType,
-                phoneNumber: input.phoneNumber,
-                notes: input.notes,
-            })
+            try {
+                await axios.post(`${API_URL}/bookings/book-property-tour`, {
+                    email: input.email,
+                    firstName: input.firstName,
+                    lastName: input.lastName,
+                    startTimestamp: input.startTimestamp,
+                    endTimestamp: input.endTimestamp,
+                    typeOfBooking: input.typeOfBooking,
+                    propertyType: input.propertyType,
+                    phoneNumber: input.phoneNumber,
+                    notes: input.notes,
+                    blockWhatsApp: true,
+                })
+            } catch (error) {
+                console.error('Error creating property tour booking', error);
+            }
 
             return {
                 status: 'success',
