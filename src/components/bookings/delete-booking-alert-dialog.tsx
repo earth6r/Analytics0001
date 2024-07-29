@@ -33,6 +33,7 @@ const DeleteBookingAlertDialog = (props: DeleteBookingAlertDialogProps) => {
         <AlertDialog open={open} onOpenChange={onOpenChange}>
             <AlertDialogTrigger
                 disabled={booking?.status === "completed"}
+                className={booking?.status === "completed" ? "cursor-not-allowed" : ""}
             >
                 {triggerOverride ? triggerOverride : <Button className="bg-red-500 hover:bg-red-600"
                     disabled={booking?.status === "completed"}
