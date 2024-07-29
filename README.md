@@ -168,6 +168,8 @@ TODO:
 - error handle all routes not logged in
 - add local and staging and prod column to error table, maybe other tables as well
 - change button component to take loading and always disable when loading
+- protect all /api endpoints + trpc endpoints + research security
+- disable login button
 
 BOOKINGS:
 - fix the search bar for bookings page

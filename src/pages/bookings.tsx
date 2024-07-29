@@ -255,6 +255,7 @@ const Bookings = () => {
                                 </pre> */}
                                 <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
                                     async (value: string) => {
+                                        if (!booking?.status || value === "scheduled") return;
                                         setLoadingsForStatuses({
                                             ...loadingsForStatuses,
                                             [booking.uid]: true,
@@ -338,7 +339,7 @@ const BookingCard = (props: BookingCardProps) => {
 
     const router = useRouter();
     const [statusLoading, setStatusLoading] = useState<boolean>(false);
-    const updateBooking = api.bookings.updateBookingStatus.useMutation();
+    const updateBookingStatus = api.bookings.updateBookingStatus.useMutation();
 
     return (
         <Card key={booking.id} className={cn(booking?.status === "completed" ? "opacity-50 cursor-not-allowed select-none" : "")}>
@@ -373,8 +374,9 @@ const BookingCard = (props: BookingCardProps) => {
                     {/* <div className="">{(booking?.completed ? "completed" : "scheduled")}</div> */}
                     <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
                         async (value: string) => {
+                            if (!booking?.status || value === "scheduled") return;
                             setStatusLoading(true);
-                            await updateBooking.mutateAsync({
+                            await updateBookingStatus.mutateAsync({
                                 uid: booking.uid,
                                 status: value,
                                 bookingType: booking.type,

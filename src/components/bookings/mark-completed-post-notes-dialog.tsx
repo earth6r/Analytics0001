@@ -60,7 +60,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                     <Button onClick={
                         async () => {
                             setLoading(true);
-                            await completeBooking.mutateAsync({ uid: booking?.uid, bookingType: booking?.type, postNotes, });
+                            await completeBooking.mutateAsync({ uid: booking?.uid, bookingType: booking?.type, postNotes });
                             await getBooking.refetch();
                             setPostNotes('');
                             setOpen(false);
