@@ -199,7 +199,7 @@ export const bookingsRouter = createTRPCRouter({
             const fullNotes = `${additionalNotes}\n\nPost Meeting Notes: \n${input.postNotes}`;
 
             await updateDoc(d, {
-                completed: true,
+                status: 'completed',
                 additionalNotes: fullNotes,
             });
         }),
