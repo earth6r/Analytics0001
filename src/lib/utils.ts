@@ -58,4 +58,3 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
 
   return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
 }
-
