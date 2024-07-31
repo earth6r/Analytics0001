@@ -300,7 +300,7 @@ const Bookings = () => {
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                                     </div>
-                                    <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
+                                    {/* <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} /> */}
                                 </div>
                             </div>
                         ))}
@@ -348,11 +348,11 @@ const BookingCard = (props: BookingCardProps) => {
                     <div className="truncate max-w-64">
                         {booking?.firstName || "No First Name Provided"} {booking?.lastName || "No Last Name Provided"}
                     </div>
-                    <div>
+                    {/* <div>
                         <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} triggerOverride={
                             <Trash2 className="w-4 h-4" />
                         } />
-                    </div>
+                    </div> */}
                 </CardTitle>
                 <CardDescription>
                     {formatTimestamp(booking.startTimestamp)}
