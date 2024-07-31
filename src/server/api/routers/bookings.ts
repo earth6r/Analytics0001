@@ -10,8 +10,8 @@ export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
-const API_URL = `http://localhost:3000/api`;
-// const API_URL = `https://home0001.com/api`;
+// const API_URL = `http://localhost:3000/api`;
+const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
