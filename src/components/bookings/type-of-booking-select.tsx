@@ -24,10 +24,10 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
                 <SelectValue placeholder="Select a booking type" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="propertyTour">
+                <SelectItem value="propertyTour" className="cursor-pointer">
                     Property Tour
                 </SelectItem>
-                <SelectItem value="phoneCall">
+                <SelectItem value="phoneCall" className="cursor-pointer">
                     Phone Call
                 </SelectItem>
             </SelectContent>

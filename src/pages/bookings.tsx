@@ -242,10 +242,17 @@ const Bookings = () => {
                             <Skeleton className="h-12" />
                             <Skeleton className="h-12" />
                         </div>
-                    ) : <div className="space-y-2 mt-4">
+                    ) : <div className="space-y-4 mt-4">
                         {sortedData?.map((booking: any) => (
-                            <div key={booking.id} className="grid grid-cols-9 gap-4">
-                                <div className="col-span-2">{booking.email || "No Email Provided"}</div>
+                            <div key={booking.id} className="grid grid-cols-9 gap-4 items-center">
+                                <div className="col-span-2">
+                                    <div className="text-sm">
+                                        {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        {booking.email || "No Email Provided"}
+                                    </div>
+                                </div>
                                 {/* <div>{booking.type || "No Type Provided"}</div> */}
                                 <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
