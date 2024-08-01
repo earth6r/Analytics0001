@@ -20,24 +20,28 @@ const DashboardTabs = () => {
   };
 
   return (
-    <Tabs
-      value={router.query.tab as string ?? "registers"}
-      defaultValue={router.query.tab as string ?? "registers"}
-      className="w-full"
-    >
-      <div className="pl-6 pr-6 pt-6">
-        <TabsList className="grid w-full grid-cols-4 md:w-96">
-          <TabsTrigger
-            value="registers"
-            className={cn(
-              activeTab === "registers" ? "" : "text-muted-foreground",
-              "cursor-pointer",
-            )}
-            onClick={() => handleSetActiveTab("registers")}
-          >
-            Registers
-          </TabsTrigger>
-          <TabsTrigger
+    <div className="mt-2">
+      {/* TODO: uncomment */}
+      {/* TODO: make grid-cols-4 after uncommenting below */}
+      {/* TODO: remove parent div and remove registers below since there's already one in tabs */}
+      {/* <Tabs
+        value={router.query.tab as string ?? "registers"}
+        defaultValue={router.query.tab as string ?? "registers"}
+        className="w-full"
+      >
+        <div className="pl-6 pr-6 pt-6">
+          <TabsList className="grid w-full grid-cols-1 md:w-96">
+            <TabsTrigger
+              value="registers"
+              className={cn(
+                activeTab === "registers" ? "" : "text-muted-foreground",
+                "cursor-pointer",
+              )}
+              onClick={() => handleSetActiveTab("registers")}
+            >
+              Registers
+            </TabsTrigger>
+            <TabsTrigger
             value="messages"
             className={cn(
               activeTab === "messages" ? "" : "text-muted-foreground",
@@ -67,21 +71,23 @@ const DashboardTabs = () => {
           >
             Customers
           </TabsTrigger>
-        </TabsList>
-      </div>
-      <TabsContent value="registers" className="w-full">
-        <Registers />
-      </TabsContent>
-      <TabsContent value="messages">
-        <Messages />
-      </TabsContent>
-      <TabsContent value="emails" className="p-6">
-        <Emails />
-      </TabsContent>
-      <TabsContent value="customers" className="p-6">
-        <CustomersTabContent />
-      </TabsContent>
-    </Tabs>
+          </TabsList>
+        </div>
+        <TabsContent value="registers" className="w-full">
+          <Registers />
+        </TabsContent>
+        <TabsContent value="messages">
+          <Messages />
+        </TabsContent>
+        <TabsContent value="emails" className="p-6">
+          <Emails />
+        </TabsContent>
+        <TabsContent value="customers" className="p-6">
+          <CustomersTabContent />
+        </TabsContent>
+      </Tabs> */}
+      <Registers />
+    </div>
   );
 };
 

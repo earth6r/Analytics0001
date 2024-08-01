@@ -61,7 +61,8 @@ const Header = () => {
           >
             Registers
           </Link>
-          <Link
+          {/* TODO: uncomment and fix mobile view + fully test everything */}
+          {/* <Link
             href="/messages"
             className={cn(
               "text-muted-foreground transition-colors hover:text-foreground",
@@ -71,8 +72,9 @@ const Header = () => {
             )}
           >
             Messages
-          </Link>
-          <Link
+          </Link> */}
+          {/* TODO: uncomment and fix mobile view + fully test everything */}
+          {/* <Link
             href="/customers"
             className={cn(
               "text-muted-foreground transition-colors hover:text-foreground",
@@ -82,7 +84,7 @@ const Header = () => {
             )}
           >
             Customers
-          </Link>
+          </Link> */}
           <Link
             href="/bookings"
             className={cn(
@@ -148,7 +150,7 @@ const Header = () => {
               >
                 Registers
               </Link>
-              <Link
+              {/* <Link
                 href="/messages"
                 className={cn(
                   "text-muted-foreground hover:text-foreground",
@@ -158,8 +160,8 @@ const Header = () => {
                 )}
               >
                 Messages
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href="/customers"
                 className={cn(
                   "text-muted-foreground hover:text-foreground",
@@ -169,7 +171,7 @@ const Header = () => {
                 )}
               >
                 Customers
-              </Link>
+              </Link> */}
               <Link
                 href="/bookings"
                 className={cn(
