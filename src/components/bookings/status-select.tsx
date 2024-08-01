@@ -12,7 +12,7 @@ import { Pencil, X } from "lucide-react"
 
 interface StatusSelectProps {
     value: string
-    onChange: (value: string) => void
+    onChange: (value: string) => Promise<void>;
     loading: boolean
     booking: any
 }
@@ -22,8 +22,13 @@ const StatusSelect = (props: StatusSelectProps) => {
 
     const [editMode, setEditMode] = useState(false);
 
+    const onChangePostHandler = async (value: string) => {
+        await onChange(value);
+        setEditMode(false);
+    }
+
     return (
-        <Select value={value} onValueChange={onChange} disabled={value === "completed"}>
+        <Select value={value} onValueChange={onChangePostHandler} disabled={value === "completed" || loading}>
             <div
                 className="flex flex-row items-center space-x-2"
             >
