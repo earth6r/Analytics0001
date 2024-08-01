@@ -6,7 +6,7 @@ import { type NextApiRequest, type NextApiResponse } from "next/types";
 const getExchangeRate = async (asset_id: string) => {
     const response = await axios.get(`https://rest.coinapi.io/v1/exchangerate/${asset_id}/USD?apiKey=${process.env.COIN_API_IO_API_KEY}`);
 
-    return Number(response.data.rate).toFixed(2);
+    return Number(Number(response.data.rate).toFixed(2));
 };
 
 
