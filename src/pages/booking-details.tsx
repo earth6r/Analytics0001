@@ -90,7 +90,7 @@ const BookingDetails = () => {
                                         className="flex flex-row items-center space-x-2"
                                         onClick={
                                             () => window.open(
-                                                getPotentialCustomerDetails.data?.imageUrl,
+                                                displayImageUrl,
                                                 "_blank"
                                             )
                                         }
