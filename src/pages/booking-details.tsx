@@ -4,11 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, Timer } from "lucide-react";
+import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, SquareArrowOutUpRight, Timer } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -16,6 +19,7 @@ const BookingDetails = () => {
     const router = useRouter();
 
     const { email, type, uid } = router.query;
+    const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
 
     const bookingDetails = api.bookings.getBookingDetails.useQuery(
         {
@@ -27,6 +31,14 @@ const BookingDetails = () => {
             enabled: !!email && !!type && !!uid,
         }
     );
+
+    useEffect(() => {
+        if (bookingDetails.data?.imageUrl) {
+            setDisplayImageUrl(bookingDetails.data.imageUrl);
+        } else if (bookingDetails.data?.firstName && bookingDetails.data?.lastName) {
+            setDisplayImageUrl(`https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`);
+        }
+    }, [bookingDetails.data?.imageUrl, bookingDetails.data?.firstName, bookingDetails.data?.lastName]);
 
     const registerDetails = api.register.getRegisterDetails.useQuery(
         {
@@ -55,27 +67,45 @@ const BookingDetails = () => {
                         <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.push("/bookings")} />
                         <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-64">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     </div>
-                    <div className="flex flex-row items-center space-x-2">
+                    <div className="flex flex-row items-center space-x-2 select-none">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
-                        {<div className="relative w-10 h-10 hidden md:block">
-                            <Avatar className="h-10 w-10">
-                                <AvatarImage
-                                    src={
-                                        getPotentialCustomerDetails.data?.imageUrl ?? (bookingDetails.data?.firstName && bookingDetails.data?.lastName
-                                            ? `https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`
-                                            : undefined)
-                                    }
-                                    alt="@user"
-                                    className="object-cover"
-                                />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                        </div>}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="secondary" size="icon" className="rounded-full">
+                                    {<div className="relative w-10 h-10 hidden md:block">
+                                        <Avatar className="h-10 w-10">
+                                            <AvatarImage
+                                                src={displayImageUrl}
+                                                alt="@user"
+                                                className="object-cover"
+                                            />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                    </div>}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            {getPotentialCustomerDetails.data?.imageUrl && <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                    <div
+                                        className="flex flex-row items-center space-x-2"
+                                        onClick={
+                                            () => window.open(
+                                                getPotentialCustomerDetails.data?.imageUrl,
+                                                "_blank"
+                                            )
+                                        }
+                                    >
+                                        <h1>View Image</h1>
+                                        <SquareArrowOutUpRight className="w-4 h-4" />
+                                    </div>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>}
+                        </DropdownMenu>
                     </div>
                 </div>
 
                 <Card className="mt-6">
-                    <CardHeader>
+                    <CardHeader className="select-none">
                         <CardTitle>Register Details</CardTitle>
                         <CardDescription>
                             {`Details about the potential customer's register details.`}
@@ -141,7 +171,7 @@ const BookingDetails = () => {
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <RocketIcon className="w-4 h-4" />
-                                    <div className="max-w-max truncate text-blue-400" onClick={
+                                    <div className="max-w-max truncate text-blue-400 hover:text-blue-500 cursor-pointer" onClick={
                                         () => {
                                             window.open(ZOOM_URL, "_blank")
                                         }
