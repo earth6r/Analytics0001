@@ -7,6 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { Phone, School } from "lucide-react";
 
 interface BuyingPropertyTypeSelectProps {
     selectedItem: "propertyTour" | "phoneCall" | null | undefined;
@@ -25,10 +26,16 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="propertyTour" className="cursor-pointer">
-                    Property Tour
+                    <div className="flex flex-row items-center space-x-2">
+                        <School className="h-4 w-4" />
+                        <h1>Property Tour</h1>
+                    </div>
                 </SelectItem>
                 <SelectItem value="phoneCall" className="cursor-pointer">
-                    Phone Call
+                    <div className="flex flex-row items-center space-x-2">
+                        <Phone className="h-4 w-4" />
+                        <h1>Phone Call</h1>
+                    </div>
                 </SelectItem>
             </SelectContent>
         </Select>
