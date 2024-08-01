@@ -186,5 +186,3 @@ BOOKINGS:
 
   HARD:
   - join meeting url needs to be flexible length up to 1/2 of width
-  - remove the border of select status dropdown and filter status multi select dropdown which happens after closing (a focus of thin border)
-  
