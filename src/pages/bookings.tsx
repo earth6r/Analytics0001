@@ -304,7 +304,7 @@ const Bookings = () => {
                                 </pre> */}
                                 <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
                                     async (value: string) => {
-                                        if (!booking?.status || value === "scheduled") return;
+                                        if (!value || value === "scheduled") return;
                                         setLoadingsForStatuses({
                                             ...loadingsForStatuses,
                                             [booking.uid]: true,
@@ -423,7 +423,7 @@ const BookingCard = (props: BookingCardProps) => {
                     {/* <div className="">{(booking?.completed ? "completed" : "scheduled")}</div> */}
                     <StatusSelect value={booking?.status ? booking.status : "scheduled"} onChange={
                         async (value: string) => {
-                            if (!booking?.status || value === "scheduled") return;
+                            if (!value || value === "scheduled") return;
                             setStatusLoading(true);
                             await updateBookingStatus.mutateAsync({
                                 uid: booking.uid,
