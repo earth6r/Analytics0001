@@ -163,7 +163,8 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default">
+                {/* TODO: make this the same as the create booking button */}
+                <Button variant="default" className="space-x-2">
                     <span>+</span>
                     <span className="hidden md:block">Add Details</span>
                 </Button>
