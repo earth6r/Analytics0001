@@ -9,7 +9,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { CircleX, Notebook, Pencil, Save } from "lucide-react";
+import { Notebook, Pencil, Save } from "lucide-react";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import Spinner from "../common/spinner";
@@ -63,7 +63,6 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
                 <DialogFooter className="flex flex-row items-center justify-between space-x-4">
                     <DialogClose className="w-full">
                         <Button className="w-full space-x-2" variant="outline" onClick={() => setEditMode(false)}>
-                            <CircleX className="w-4 h-4" />
                             <span>Close</span>
                         </Button>
                     </DialogClose>
