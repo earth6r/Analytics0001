@@ -22,7 +22,7 @@ const TotalUniqueRegisteredUsersCount = () => {
   return (
     <StatCard
       title={totalUniqueRegisteredUsersCount.data?.toString()}
-      description="Total Unique Registered Users"
+      description="Waitlist Sign Ups (>Feb 2024)"
       deltaValue={totalUniqueUsersCountDelta.data}
       icon={<BookOpenCheckIcon className="h-6 w-6 text-muted-foreground" />}
     />
