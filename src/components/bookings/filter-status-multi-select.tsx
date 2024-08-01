@@ -6,7 +6,7 @@ import {
     SelectGroup,
     SelectTrigger,
 } from "@/components/ui/select"
-import { Check } from "lucide-react"
+import { Check, ListFilter } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface OptionProps {
@@ -58,8 +58,13 @@ const FilterStatusMultiSelect = (props: StatusSelectProps) => {
 
     return (
         <Select>
-            <SelectTrigger className="w-[240px] focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 select-none">
-                <div>Filter Status</div>
+            <SelectTrigger className="max-w-max focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 select-none">
+                <div className="flex flex-row items-center space-x-2 px-2">
+                    <ListFilter className="w-4 h-4" />
+                    <h1>
+                        Filter Status
+                    </h1>
+                </div>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>

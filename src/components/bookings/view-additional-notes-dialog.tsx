@@ -34,10 +34,12 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="space-x-2 w-full select-none" variant="default">
-                    <Notebook className="w-4 h-4" />
-                    <div>
-                        Meeting Notes
+                <Button className="w-full select-none" variant="default">
+                    <div className="flex flex-row items-center space-x-1">
+                        <Notebook className="w-4 h-4" />
+                        <div>
+                            Meeting Notes
+                        </div>
                     </div>
                 </Button>
             </DialogTrigger>
@@ -93,7 +95,7 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
                             }
                         }
                     }
-                    disabled={booking?.status === "completed" || loading}
+                        disabled={booking?.status === "completed" || loading}
                     >
                         {!loading && (editMode ? <Save className="w-4 h-4" /> : <Pencil className="w-4 h-4" />)}
                         <span>
