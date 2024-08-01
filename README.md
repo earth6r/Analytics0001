@@ -170,6 +170,7 @@ TODO:
 - change button component to take loading and always disable when loading
 - protect all /api endpoints + trpc endpoints + research security
 - disable login button
+- all warnings in console should be removed
 
 BOOKINGS:
 - fix the search bar for bookings page
@@ -178,6 +179,7 @@ BOOKINGS:
 - test select on mobile for filter status
 - autoFocus{false} on all inputs
 - clear on create booking removes placeholder for select
+- make skeletons for mobile view bookings better
 
   HARD:
   - join meeting url needs to be flexible length up to 1/2 of width

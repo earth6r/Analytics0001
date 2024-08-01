@@ -18,22 +18,31 @@ import { ZOOM_URL } from "./booking-details";
 import { Badge } from "@/components/ui/badge";
 import StatusSelect from "@/components/bookings/status-select";
 import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
+import { useUser } from "@/contexts/UserContext";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [filterStatus, setFilterStatus] = useState<string[]>([
-        "completed",
-        "scheduled",
-        "cancelled",
-        "no-show",
-        "confirmed",
-    ]);
     const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});
 
     const [open, setOpen] = useState(false);
+    const { email } = useUser();
+
+    useEffect(() => {
+        // TODO: change this logic to be completely from useUser
+        const authenticatedData = JSON.parse(
+            localStorage.getItem("authenticated") ?? "{}",
+        );
+        if (
+            !authenticatedData.authenticated ||
+            authenticatedData.expires < new Date().getTime() ||
+            !localStorage.getItem("email")
+        ) {
+            window.location.href = "/";
+        }
+    }, [email]);
 
     const router = useRouter();
 
@@ -45,6 +54,24 @@ const Bookings = () => {
         }
     );
     const updateBookingStatus = api.bookings.updateBookingStatus.useMutation();
+    const updateUserBookingStatusFilters = api.userSettings.updateUserBookingStatusFilters.useMutation();
+    const getUserSettings = api.userSettings.getUserSettings.useQuery({
+        email: email as string,
+    });
+
+    const [filterStatus, setFilterStatus] = useState<string[]>([
+        "completed",
+        "scheduled",
+        "cancelled",
+        "no-show",
+        "confirmed",
+    ]);
+
+    useEffect(() => {
+        if (!getUserSettings.isLoading && getUserSettings.data !== undefined && getUserSettings.data !== null) {
+            setFilterStatus(getUserSettings.data.statusFilters);
+        }
+    }, [getUserSettings.data, getUserSettings.isLoading]);
 
     useEffect(() => {
         if (getBookings.data) {
@@ -111,24 +138,39 @@ const Bookings = () => {
                         />
                         <FilterStatusMultiSelect
                             values={filterStatus}
-                            addValue={(value: string) => {
+                            addValue={async (value: string) => {
                                 setFilterStatus([...filterStatus, value]);
+                                await updateUserBookingStatusFilters.mutateAsync({
+                                    email: email as string,
+                                    statusFilters: [...filterStatus, value],
+                                });
+                                await getUserSettings.refetch();
                             }}
-                            removeValue={(value: string) => {
+                            removeValue={async (value: string) => {
                                 setFilterStatus(filterStatus.filter((status) => status !== value));
+                                await updateUserBookingStatusFilters.mutateAsync({
+                                    email: email as string,
+                                    statusFilters: filterStatus.filter((status) => status !== value),
+                                });
+                                await getUserSettings.refetch();
                             }}
                         />
                     </div>
                     <div className="flex flex-row items-center">
-                        {filterStatus.length > 0 && (
+                        {filterStatus.length > 0 && !getUserSettings.isLoading && (
                             <div className="flex flex-row items-center flex-wrap">
                                 {filterStatus.map((status) => (
                                     <div key={status} className="p-1">
                                         <Badge
                                             className="cursor-pointer select-none"
                                             onClick={
-                                                () => {
+                                                async () => {
                                                     setFilterStatus(filterStatus.filter((s) => s !== status));
+                                                    await updateUserBookingStatusFilters.mutateAsync({
+                                                        email: email as string,
+                                                        statusFilters: filterStatus.filter((s) => s !== status),
+                                                    });
+                                                    await getUserSettings.refetch();
                                                 }
                                             }>
                                             <div className="flex flex-row items-center space-x-2">

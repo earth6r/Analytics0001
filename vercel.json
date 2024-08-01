@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/cron-job.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/crypto-prices",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
