@@ -58,7 +58,7 @@ const FilterStatusMultiSelect = (props: StatusSelectProps) => {
 
     return (
         <Select>
-            <SelectTrigger className="w-[240px] focus:outline-none focus:ring-0 select-none">
+            <SelectTrigger className="w-[240px] focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 select-none">
                 <div>Filter Status</div>
             </SelectTrigger>
             <SelectContent>
