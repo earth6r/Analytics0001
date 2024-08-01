@@ -89,6 +89,7 @@ export const bookingsRouter = createTRPCRouter({
                 })
             } catch (error) {
                 console.error('Error creating phone booking', error);
+                // TODO: handle this better i.e. return status error
                 throw new Error('Error creating phone booking');
             }
 
