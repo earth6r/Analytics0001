@@ -65,7 +65,7 @@ const BookingDetails = () => {
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
                         <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.push("/bookings")} />
-                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-64">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />

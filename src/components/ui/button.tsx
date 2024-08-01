@@ -44,6 +44,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
+      // TODO: consider making the button height h-8 or smaller,
+      // also would need to change inputs and selects and avatars and all the component
+      // This makes the styling look more compact and minimal
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}

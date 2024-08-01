@@ -20,6 +20,7 @@ import Image from "next/image";
 import { Textarea } from "../ui/textarea"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "../ui/skeleton"
+import { CirclePlus } from "lucide-react"
 
 interface AddImageToUserDialogProps {
     refetch: () => Promise<any>;
@@ -165,7 +166,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
             <DialogTrigger asChild>
                 {/* TODO: make this the same as the create booking button */}
                 <Button variant="default" className="space-x-2">
-                    <span>+</span>
+                    <CirclePlus className="w-4 h-4" />
                     <span className="hidden md:block">Add Details</span>
                 </Button>
             </DialogTrigger>
