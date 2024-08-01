@@ -171,6 +171,7 @@ TODO:
 - protect all /api endpoints + trpc endpoints + research security
 - disable login button
 - all warnings in console should be removed
+- look at blocks for ui ideas i.e. filter, export, add product, etc.
 
 BOOKINGS:
 - fix the search bar for bookings page

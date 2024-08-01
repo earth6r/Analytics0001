@@ -288,10 +288,10 @@ const Bookings = () => {
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-9 gap-4 items-center">
                                 <div className="col-span-2">
-                                    <div className="text-sm">
+                                    <div>
                                         {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
                                     </div>
-                                    <div className="text-muted-foreground">
+                                    <div className="text-muted-foreground text-sm">
                                         {booking.email || "No Email Provided"}
                                     </div>
                                 </div>
