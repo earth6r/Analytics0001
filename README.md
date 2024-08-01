@@ -173,6 +173,7 @@ TODO:
 - all warnings in console should be removed
 - look at blocks for ui ideas i.e. filter, export, add product, etc.
  -    // TODO: how to send line number or get it dynamically and all the other info, ask chatgpt for ideas about this, how sentry does it, etc. (this is for Home0001)
+ - make error email better
 
 BOOKINGS:
 - fix the search bar for bookings page
