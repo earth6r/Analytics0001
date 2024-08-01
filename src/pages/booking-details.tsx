@@ -123,10 +123,10 @@ const BookingDetails = () => {
                             Information about the call set by Home0001.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="max-w-max overflow-x-scroll">
-                        <pre>
+                    <CardContent className="max-w-max whitespace-pre-wrap break-words">
+                        <div>
                             {getPotentialCustomerDetails.data?.profileNotes || "-"}
-                        </pre>
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -203,10 +203,10 @@ const BookingDetails = () => {
                             Meeting notes about the booking.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="max-w-max overflow-x-scroll">
-                        <pre>
+                    <CardContent className="max-w-max whitespace-pre-wrap break-words">
+                        <div>
                             {bookingDetails.data?.additionalNotes || "-"}
-                        </pre>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
