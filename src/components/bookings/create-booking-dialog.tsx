@@ -11,13 +11,14 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { api } from "@/utils/api"
-import { useState } from "react"
-import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
-import { TypeOfBookingSelect } from "./type-of-booking-select"
+import { api } from "@/utils/api"
+import { CirclePlus } from "lucide-react"
+import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { toast } from "../ui/use-toast"
+import { DatePicker } from "./date-picker"
+import { TypeOfBookingSelect } from "./type-of-booking-select"
 // import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
@@ -31,7 +32,11 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
     const [email, setEmail] = useState<string>("");
     const [startTimestamp, setStartTimestamp] = useState<string>("");
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [startTime, setStartTime] = useState<string>("");
     const [endTimestamp, setEndTimestamp] = useState<string>("");
+    const [endDate, setEndDate] = useState<Date>(new Date());
+    const [endTime, setEndTime] = useState<string>("");
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
     const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
@@ -89,19 +94,37 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             return;
         }
 
-        if (!startTimestamp) {
+        if (!startDate) {
             toast({
-                title: "Start Timestamp is required",
-                description: "Please enter the timestamp.",
+                title: "Start Date is required",
+                description: "Please enter the date.",
                 className: toastErrorStyle,
             });
             return;
         }
 
-        if (!endTimestamp) {
+        if (!startTime) {
             toast({
-                title: "End Timestamp is required",
-                description: "Please enter the timestamp.",
+                title: "Start Time is required",
+                description: "Please enter the time.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!endDate) {
+            toast({
+                title: "End Date is required",
+                description: "Please enter the date.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
+        if (!endTime) {
+            toast({
+                title: "End Time is required",
+                description: "Please enter the time.",
                 className: toastErrorStyle,
             });
             return;
@@ -137,8 +160,23 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         try {
             setIsLoading(true);
 
-            const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
-            const formattedEndTimestamp = new Date(endTimestamp).getTime().toString();
+            const startHour = Number(startTime.split(":")[0]);
+            const startMinute = Number(startTime.split(":")[1]);
+            startDate.setHours(startHour, startMinute, 0, 0);
+            const formattedStartTimestamp = startDate.getTime().toString();
+            const startMonthUTCMonth = startDate.getUTCMonth() + 1;
+            const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
+            const startDay = startDate.getUTCDate().toString().length === 1 ? `0${startDate.getUTCDate()}` : startDate.getUTCDate();
+            const startTimestamp = `${startDate.getUTCFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+
+            const endHour = Number(endTime.split(":")[0]);
+            const endMinute = Number(endTime.split(":")[1]);
+            endDate.setHours(endHour, endMinute, 0, 0);
+            const formattedEndTimestamp = endDate.getTime().toString();
+            const endMonthUTCMonth = endDate.getUTCMonth() + 1;
+            const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
+            const endDay = endDate.getUTCDate().toString().length === 1 ? `0${endDate.getUTCDate()}` : endDate.getUTCDate();
+            const endTimestamp = `${endDate.getUTCFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
 
             if (isNaN(Number(formattedStartTimestamp))) {
                 toast({
@@ -180,6 +218,26 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 return;
             }
 
+            if (new Date(startTimestamp).getTime() >= new Date(endTimestamp).getTime()) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "The start timestamp must be before the end timestamp.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            if (new Date(startTimestamp).getTime() <= new Date().getTime()) {
+                toast({
+                    title: "Invalid timestamp",
+                    description: "The start timestamp must be in the future.",
+                    className: toastErrorStyle,
+                });
+                setIsLoading(false);
+                return;
+            }
+
             const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
             // @ts-expect-error TODO: fix type
             await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, propertyType, phoneNumber, notes, firstName, lastName });
@@ -190,8 +248,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             setFirstName("");
             setLastName("");
             setPhoneNumber("");
-            setStartTimestamp("");
-            setEndTimestamp("");
+            setStartDate(new Date());
+            setStartTime("");
+            setEndDate(new Date());
+            setEndTime("");
             setTypeOfBooking(undefined);
             setPropertyType(null);
 
@@ -214,12 +274,15 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     }
 
     // TODO: disabled for timestamp 19 len and Nan timestamp
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startTimestamp || !endTimestamp || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber || !firstName || !lastName;
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !endDate || !endTime || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber || !firstName || !lastName;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="default">+</Button>
+                <Button variant="default" className="space-x-2">
+                    <CirclePlus className="w-4 h-4" />
+                    <h1>Create Booking</h1>
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0">
                 <DialogHeader className="px-6 pt-6">
@@ -250,20 +313,102 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         />
                         {/* TODO: think about whether there should be a date picker input and a time picker input */}
                         {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                        <Input
-                            id="startTimestamp"
-                            placeholder="Start Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
-                            onChange={(e) => setStartTimestamp(e.target.value)}
-                            value={startTimestamp}
-                        />
-                        {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                        {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                        <Input
-                            id="endTimestamp"
-                            placeholder="End Timestamp (UTC) YYYY-MM-DD HH:MM:SS"
-                            onChange={(e) => setEndTimestamp(e.target.value)}
-                            value={endTimestamp}
-                        />
+                        <div>
+                            <div className="flex flex-row items-center space-x-2">
+                                <DatePicker placeholder="Pick a start date" value={startDate} onValueChange={setStartDate} />
+                                <Input
+                                    id="startTimestamp"
+                                    placeholder={"🕛 HH:MM"}
+                                    className="focus-visible:ring-0 focus-visible:ring-offset-0"
+                                    onChange={(e) => {
+                                        let input = e.target.value;
+
+                                        const numbers = input.split(":").map(Number);
+                                        // @ts-expect-error TODO: fix type
+                                        const isDeleting = e.nativeEvent?.inputType === 'deleteContentBackward' || e.nativeEvent?.inputType === 'deleteContentForward';
+                                        const isInputStartingWithBasicDigit = input.startsWith("0") || input.startsWith("1") || input.startsWith("2");
+
+                                        if (input.length > 5 || numbers.some(isNaN) || input.split(":").length - 1 > 1) {
+                                            return;
+                                        }
+
+                                        if (input.length === 3 && !input.includes(":")) {
+                                            input = `${input.slice(0, 2)}:${input.slice(2)}`;
+                                        }
+
+                                        if (!isDeleting && input.length > 3 && (Number(input[3]) > 5 || Number(input[0]) > 2)) {
+                                            return;
+                                        }
+
+                                        if (input.startsWith("2") && input.length === 2 && !input.includes(":") && Number(input[1]) > 3) {
+                                            return;
+                                        }
+
+                                        if (!isDeleting) {
+                                            if (!isInputStartingWithBasicDigit && input.length === 1 && !input.includes(":")) {
+                                                input = `0${input}:`;
+                                            } else if (input.length === 2 && !input.includes(":")) {
+                                                input = `${input}:`;
+                                            } else if (isInputStartingWithBasicDigit && input[1] === ":" && input.length === 2) {
+                                                input = `0${input}`;
+                                            }
+                                        }
+                                        setStartTime(input)
+                                    }}
+                                    value={startTime}
+                                />
+                            </div>
+                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                        </div>
+                        <div>
+                            <div className="flex flex-row items-center space-x-2">
+                                <DatePicker placeholder="Pick an end date" value={endDate} onValueChange={setEndDate} />
+                                {/* TODO: think about whether there should be a date picker input and a time picker input */}
+                                {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                                <Input
+                                    id="endTimestamp"
+                                    placeholder="🕛 HH:MM"
+                                    className="focus-visible:ring-0 focus-visible:ring-offset-0"
+                                    onChange={(e) => {
+                                        let input = e.target.value;
+
+                                        const numbers = input.split(":").map(Number);
+                                        // @ts-expect-error TODO: fix type
+                                        const isDeleting = e.nativeEvent?.inputType === 'deleteContentBackward' || e.nativeEvent?.inputType === 'deleteContentForward';
+                                        const isInputStartingWithBasicDigit = input.startsWith("0") || input.startsWith("1") || input.startsWith("2");
+
+                                        if (input.length > 5 || numbers.some(isNaN) || input.split(":").length - 1 > 1) {
+                                            return;
+                                        }
+
+                                        if (input.length === 3 && !input.includes(":")) {
+                                            input = `${input.slice(0, 2)}:${input.slice(2)}`;
+                                        }
+
+                                        if (!isDeleting && input.length > 3 && (Number(input[3]) > 5 || Number(input[0]) > 2)) {
+                                            return;
+                                        }
+
+                                        if (input.startsWith("2") && input.length === 2 && !input.includes(":") && Number(input[1]) > 3) {
+                                            return;
+                                        }
+
+                                        if (!isDeleting) {
+                                            if (!isInputStartingWithBasicDigit && input.length === 1 && !input.includes(":")) {
+                                                input = `0${input}:`;
+                                            } else if (input.length === 2 && !input.includes(":")) {
+                                                input = `${input}:`;
+                                            } else if (isInputStartingWithBasicDigit && input[1] === ":" && input.length === 2) {
+                                                input = `0${input}`;
+                                            }
+                                        }
+                                        setEndTime(input)
+                                    }}
+                                    value={endTime}
+                                />
+                            </div>
+                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                        </div>
                         <Input
                             id="phoneNumber"
                             placeholder="Phone Number"
@@ -286,12 +431,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                     <Button variant="outline" className="w-full" onClick={() => {
                         setEmail("");
                         setPropertyType(null);
-                        setStartTimestamp("");
+                        setFirstName("");
+                        setLastName("");
+                        setStartDate(new Date());
+                        setStartTime("");
+                        setEndDate(new Date());
+                        setEndTime("");
                         setEndTimestamp("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startTimestamp && !endTimestamp && !phoneNumber && !typeOfBooking && !propertyType)
+                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType)
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
@@ -306,11 +456,15 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div className="font-medium">{`Please fill in all the required fields:`}</div>
                                     <div>{!email && `The email is required.`}</div>
                                     <div>{email && (!email.includes("@") || !email.includes(".")) && "The email is invalid. Requires a `.` and a `@`"}</div>
-                                    <div>{!startTimestamp && `The start timestamp is required.`}</div>
-                                    <div>{startTimestamp && isNaN(Number(new Date(startTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
-                                    <div>{startTimestamp && startTimestamp.length !== 19 && `The timestamp must be of length 19.`}</div>
-                                    <div>{!endTimestamp && `The end timestamp is required.`}</div>
-                                    <div>{endTimestamp && isNaN(Number(new Date(endTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div>
+                                    {/* <div>{!startTimestamp && `The start timestamp is required.`}</div> */}
+                                    <div>{!startDate && `The start date is required.`}</div>
+                                    <div>{!startTime && `The start time is required.`}</div>
+                                    {/* <div>{startTimestamp && isNaN(Number(new Date(startTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div> */}
+                                    {/* <div>{startTimestamp && startTimestamp.length !== 19 && `The timestamp must be of length 19.`}</div> */}
+                                    {/* <div>{!endTimestamp && `The end timestamp is required.`}</div> */}
+                                    {/* <div>{endTimestamp && isNaN(Number(new Date(endTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div> */}
+                                    <div>{!endDate && `The end date is required.`}</div>
+                                    <div>{!endTime && `The end time is required.`}</div>
                                     <div>{!phoneNumber && `The phone number is required.`}</div>
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
