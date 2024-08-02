@@ -35,6 +35,7 @@ const ErrorDetails = () => {
                                 <div>Count: {getErrorDetails.data?.count}</div>
                                 <div>Resolved: {getErrorDetails.data?.resolved ? "Yes" : "No"}</div>
                                 <div>Status Code: {getErrorDetails.data?.statusCode}</div>
+                                {/* TODO: add whitespace-pre-wrap break-words */}
                                 <pre className="w-96 h-96 overflow-y-scroll text-br" style={{ whiteSpace: 'pre-wrap' }}>
                                     Stack: {getErrorDetails.data?.error}
                                 </pre>

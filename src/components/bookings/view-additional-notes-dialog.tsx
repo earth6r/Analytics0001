@@ -10,7 +10,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Notebook, Pencil, Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import Spinner from "../common/spinner";
 import { api } from "@/utils/api";
@@ -26,21 +26,31 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
     const { booking, getBookings } = props;
 
     const [editMode, setEditMode] = useState(false);
-    const [newNotes, setNewNotes] = useState(booking?.additionalNotes || "");
+    const [newNotes, setNewNotes] = useState("");
     const [loading, setLoading] = useState(false);
 
     const updateAdditionalNotes = api.bookings.updateAdditionalNotes.useMutation();
 
+    useEffect(() => {
+        setNewNotes(booking?.additionalNotes || "");
+    }, [booking]);
+
     return (
-        <Dialog>
+        <Dialog onOpenChange={
+            (isOpen) => {
+                if (!isOpen) {
+                    setEditMode(false);
+                }
+            }
+        }>
             <DialogTrigger asChild>
-                <Button className="w-full select-none" variant="default">
-                    <div className="flex flex-row items-center space-x-1">
-                        <Notebook className="w-4 h-4" />
-                        <div>
-                            Meeting Notes
+                <Button className="w-full xl:max-w-max select-none" variant="default">
+                        <div className="flex flex-row items-center space-x-1">
+                            <Notebook className="w-4 h-4" />
+                            <div>
+                                Meeting Notes
+                            </div>
                         </div>
-                    </div>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -58,9 +68,9 @@ const ViewAdditionalNotesDialog = (props: ViewAdditionalNotesDialogProps) => {
                         className="resize-none h-96"
                     />
                 </div> : <div className="max-h-96 overflow-y-scroll">
-                    <pre>
+                    <div className="whitespace-pre-wrap break-words">
                         {booking?.additionalNotes || "No additional notes set"}
-                    </pre>
+                    </div>
                 </div>}
                 <DialogFooter className="flex flex-row items-center justify-between space-x-4">
                     <DialogClose className="w-full">
