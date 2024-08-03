@@ -156,7 +156,7 @@ const Bookings = () => {
                             }}
                         />
                     </div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center min-h-8">
                         {filterStatus.length > 0 && !getUserSettings.isLoading && (
                             <div className="flex flex-row items-center flex-wrap">
                                 {filterStatus.map((status) => (
