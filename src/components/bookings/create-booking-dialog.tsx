@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
-import { CirclePlus } from "lucide-react"
+import { CircleCheck, CirclePlus } from "lucide-react"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
@@ -44,6 +44,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [notes, setNotes] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
 
     // const form = useForm({
     //     defaultValues: {
@@ -262,7 +263,13 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 description: "The booking was successfully created in the database.",
                 className: toastSuccessStyle,
             });
-            onOpenChange(false);
+
+            setIsSuccess(true);
+
+            setTimeout(() => {
+                setIsSuccess(false);
+                onOpenChange(false);
+            }, 2000);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -419,7 +426,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         <Input
                             id="notes"
-                            placeholder="Notes"
+                            placeholder="Customer Notes"
+                            // TODO: change every single Input to have value over onChange i.e. like 430 should be value and 431 should be onChange
                             onChange={(e) => setNotes(e.target.value)}
                             value={notes}
                         />
@@ -441,14 +449,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType)
+                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType) || isSuccess
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
-                            <TooltipTrigger className="w-full">
+                            <TooltipTrigger className="w-full transition ease-in-out duration-300">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
-                                    disabled={disabled}>
-                                    {isLoading ? <Spinner /> : "Create Booking"}
+                                    disabled={disabled || isSuccess}>
+                                    {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Save")}
                                 </Button>
                             </TooltipTrigger>
                             {disabled && <TooltipContent>

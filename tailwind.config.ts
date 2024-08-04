@@ -67,10 +67,31 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        pop: {
+          '0%': { transform: 'scale(0)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        shine: {
+          '0%': { left: '-100%' },
+          '50%': { left: '100%' },
+          '100%': { left: '200%' },
+        },
+        pulseRing: {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)' },
+          '50%': { boxShadow: '0 0 0 10px rgba(255, 255, 255, 0)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        spin: 'spin 1s linear infinite',
+        pop: 'pop 0.3s ease-in-out',
+        shine: 'shine 3s infinite',
+        pulseRing: 'pulseRing 2s infinite',
       },
     },
   },

@@ -20,7 +20,7 @@ import Image from "next/image";
 import { Textarea } from "../ui/textarea"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "../ui/skeleton"
-import { CirclePlus } from "lucide-react"
+import { CirclePlus, Save } from "lucide-react"
 
 interface AddImageToUserDialogProps {
     refetch: () => Promise<any>;
@@ -104,7 +104,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
         const formValuesEqual = imageUrlEqual && profileNotesEqual;
         const isValidUrl = imageUrl && validateUrl(imageUrl);
         const _disabled = emptyForm || formValuesEqual || !isValidUrl;
-        setIsDisabled(_disabled);
+        setIsDisabled(imageUrl ? _disabled : !profileNotes);
     }, [imageUrl, profileNotes, potentialCustomerData]);
 
     const handleUrlUpload = async (selectedFile: File | undefined) => {
@@ -164,10 +164,12 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                {/* TODO: make this the same as the create booking button */}
-                <Button variant="default" className="space-x-2">
+                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRing")}>
                     <CirclePlus className="w-4 h-4" />
-                    <span className="hidden md:block">Add Details</span>
+                    <span className="hidden md:block">
+                        Add Details
+                    </span>
+                    {!imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 animate-shine"></span>}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] md:max-w-[600px] px-0">
@@ -234,21 +236,28 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                 </div>
                 <DialogFooter className="w-full flex flex-row items-center space-x-2 px-6">
                     <Button variant="outline" className="w-full" onClick={() => {
-                        setImageUrl("");
-                        setProfileNotes("");
-                    }} disabled={isDisabled}>Clear</Button>
+                        setImageUrl('');
+                        setProfileNotes('');
+                        setOpen(false);
+                    }}>Cancel</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger className="w-full">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
                                     disabled={isDisabled}>
-                                    {isLoading ? <Spinner /> : "Save"}
+                                    {isLoading ? <Spinner /> :
+                                        <div className="flex items-center justify-center space-x-2">
+                                            <Save className="w-4 h-4" />
+                                            <h1>Save</h1>
+                                        </div>
+                                    }
                                 </Button>
                             </TooltipTrigger>
                             {isDisabled && <TooltipContent>
                                 <div className="space-y-1">
                                     <div>
-                                        {imageUrl === "" && `The image URL is required. Please upload an image or provide a URL.`}
+                                        {/* {imageUrl === "" && `The image URL is required. Please upload an image or provide a URL.`} */}
+                                        {profileNotes === "" && `The profile notes are required. Please provide some profile notes.`}
                                     </div>
                                 </div>
                             </TooltipContent>}

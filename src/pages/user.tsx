@@ -67,7 +67,7 @@ const User = () => {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center cursor-pointer" onClick={handleClick}>
                 <h1>Missing email in request query</h1>
-                {routeLoading ? <Spinner /> : <h2 className="text-blue-400 hover:text-blue-500">Back to Dashboard</h2>}
+                {routeLoading ? <Spinner /> : <h2 className="text-blue-500 hover:text-blue-400">Back to Dashboard</h2>}
             </div>
         );
     }

@@ -62,10 +62,10 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                     <DetailItem label="Call Notes" value={booking?.additionalNotes || "No additional notes set"} tooltipLabel={booking?.additionalNotes}/>
 
                     {/* {booking?.email && <div className="flex flex-row items-center justify-center mt-2">
-                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-400 hover:text-blue-500 cursor-pointer">View User Details</div>}
+                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-500 hover:text-blue-400 cursor-pointer">View User Details</div>}
                     </div>} */}
                     {booking?.email && <div className="flex flex-row items-center justify-center mt-2">
-                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-400 hover:text-blue-500 cursor-pointer">View Full Details</div>}
+                        {routeLoading ? <Spinner /> : <div onClick={handleClick} className="text-blue-500 hover:text-blue-400 cursor-pointer">View Full Details</div>}
                     </div>}
                 </div>
                 <DialogFooter>
