@@ -180,6 +180,7 @@ TODO:
  - rename refetch to more specific i.e. refetchBookings
  - format and clean the whole repo code formatting/styling
  - use enums everywhere
+ - for all pages where there are 0 items, show a fun message i.e. "No bookings yet, start by creating one!" with the create button if there is one. this should also be shown when filtering and 0 results are found (add shine + animate pulse if 0 results only for the create button beside the 0 results message)
 
 BOOKINGS:
 - fix the search bar for bookings page
