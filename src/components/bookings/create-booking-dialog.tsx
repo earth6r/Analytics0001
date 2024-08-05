@@ -31,10 +31,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const { refetch, open, onOpenChange } = props;
 
     const [email, setEmail] = useState<string>("");
-    const [startTimestamp, setStartTimestamp] = useState<string>("");
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [startTime, setStartTime] = useState<string>("");
-    const [endTimestamp, setEndTimestamp] = useState<string>("");
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [endTime, setEndTime] = useState<string>("");
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
@@ -453,7 +451,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setStartTime("");
                         setEndDate(new Date());
                         setEndTime("");
-                        setEndTimestamp("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
