@@ -80,9 +80,13 @@ const config = {
           '50%': { left: '100%' },
           '100%': { left: '200%' },
         },
-        pulseRing: {
+        pulseRingDark: {
           '0%, 100%': { boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)' },
           '50%': { boxShadow: '0 0 0 10px rgba(255, 255, 255, 0)' },
+        },
+        pulseRingLight: {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(0, 0, 0, 0.5)' },
+          '50%': { boxShadow: '0 0 0 10px rgba(0, 0, 0, 0)' },
         },
       },
       animation: {
@@ -91,7 +95,8 @@ const config = {
         spin: 'spin 1s linear infinite',
         pop: 'pop 0.3s ease-in-out',
         shine: 'shine 3s infinite',
-        pulseRing: 'pulseRing 2s infinite',
+        pulseRingDark: 'pulseRingDark 2s infinite',
+        pulseRingLight: 'pulseRingLight 2s infinite',
       },
     },
   },
