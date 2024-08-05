@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
-import { CirclePlus } from "lucide-react"
+import { CircleCheck, CirclePlus } from "lucide-react"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
@@ -27,14 +27,41 @@ interface CreateBookingDialogProps {
     onOpenChange: (open: boolean) => void;
 }
 
+const formatTimeAlternate = (startTimestamp: string) => {
+    // Step 1: Extract date and time components
+    const [datePart, timePart, period] = startTimestamp.split(" ");
+
+    // Step 2: Reformat the date to YYYY-MM-DD
+    // @ts-expect-error TODO: fix type
+    const [year, day, month] = datePart.split("-");
+    // @ts-expect-error TODO: fix type
+    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+    // Step 3: Reformat the time to HH:MM:SS
+    // @ts-expect-error TODO: fix type
+    // eslint-disable-next-line prefer-const
+    let [hours, minutes, seconds] = timePart.split(":");
+    if (period === "PM" && hours !== "12") {
+        // @ts-expect-error TODO: fix type
+        hours = (parseInt(hours) + 12).toString();
+    } else if (period === "AM" && hours === "12") {
+        hours = "00";
+    }
+    // @ts-expect-error TODO: fix type
+    const formattedTime = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:${seconds.padStart(2, "0")}`;
+
+    // Step 4: Combine the date and time into the desired format
+    startTimestamp = `${formattedDate} ${formattedTime}`;
+
+    return startTimestamp;
+};
+
 const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const { refetch, open, onOpenChange } = props;
 
     const [email, setEmail] = useState<string>("");
-    const [startTimestamp, setStartTimestamp] = useState<string>("");
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [startTime, setStartTime] = useState<string>("");
-    const [endTimestamp, setEndTimestamp] = useState<string>("");
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [endTime, setEndTime] = useState<string>("");
     const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
@@ -44,6 +71,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [notes, setNotes] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
 
     // const form = useForm({
     //     defaultValues: {
@@ -160,23 +188,44 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         try {
             setIsLoading(true);
 
+            // TODO: rename all variables to not have UTC in them
             const startHour = Number(startTime.split(":")[0]);
-            const startMinute = Number(startTime.split(":")[1]);
-            startDate.setHours(startHour, startMinute, 0, 0);
+            const startMinuteNumber = Number(startTime.split(":")[1]);
+            startDate.setHours(startHour, startMinuteNumber, 0, 0);
+            let startMinute = startMinuteNumber.toString();
+            if (startMinute === "0") {
+                startMinute = "00";
+            }
             const formattedStartTimestamp = startDate.getTime().toString();
-            const startMonthUTCMonth = startDate.getUTCMonth() + 1;
+            const startMonthUTCMonth = startDate.getMonth() + 1;
             const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
-            const startDay = startDate.getUTCDate().toString().length === 1 ? `0${startDate.getUTCDate()}` : startDate.getUTCDate();
-            const startTimestamp = `${startDate.getUTCFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+            const startDay = startDate.getDate().toString().length === 1 ? `0${startDate.getDate()}` : startDate.getDate();
+            let startTimestamp = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+
+            // convert startTimestamp from EST to UTC
+            startTimestamp = new Date(startTimestamp).toLocaleString("en-US", { timeZone: "UTC" })
+            // @ts-expect-error TODO: fix type
+            startTimestamp = startTimestamp.split(", ")[0].split("/").reverse().join("-") + " " + startTimestamp.split(", ")[1];
+            startTimestamp = formatTimeAlternate(startTimestamp);
 
             const endHour = Number(endTime.split(":")[0]);
-            const endMinute = Number(endTime.split(":")[1]);
-            endDate.setHours(endHour, endMinute, 0, 0);
+            const endMinuteNumber = Number(endTime.split(":")[1]);
+            endDate.setHours(endHour, endMinuteNumber, 0, 0);
+            let endMinute = endMinuteNumber.toString();
+            if (endMinute === "0") {
+                endMinute = "00";
+            }
             const formattedEndTimestamp = endDate.getTime().toString();
-            const endMonthUTCMonth = endDate.getUTCMonth() + 1;
+            const endMonthUTCMonth = endDate.getMonth() + 1;
             const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
-            const endDay = endDate.getUTCDate().toString().length === 1 ? `0${endDate.getUTCDate()}` : endDate.getUTCDate();
-            const endTimestamp = `${endDate.getUTCFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
+            const endDay = endDate.getDate().toString().length === 1 ? `0${endDate.getDate()}` : endDate.getDate();
+            let endTimestamp = `${endDate.getFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
+
+            // convert endTimestamp from EST to UTC
+            endTimestamp = new Date(endTimestamp).toLocaleString("en-US", { timeZone: "UTC" })
+            // @ts-expect-error TODO: fix type
+            endTimestamp = endTimestamp.split(", ")[0].split("/").reverse().join("-") + " " + endTimestamp.split(", ")[1];
+            endTimestamp = formatTimeAlternate(endTimestamp);
 
             if (isNaN(Number(formattedStartTimestamp))) {
                 toast({
@@ -262,7 +311,13 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 description: "The booking was successfully created in the database.",
                 className: toastSuccessStyle,
             });
-            onOpenChange(false);
+
+            setIsSuccess(true);
+
+            setTimeout(() => {
+                setIsSuccess(false);
+                onOpenChange(false);
+            }, 2000);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -358,7 +413,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     value={startTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <div>
                             <div className="flex flex-row items-center space-x-2">
@@ -407,7 +462,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     value={endTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <Input
                             id="phoneNumber"
@@ -419,7 +474,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         <Input
                             id="notes"
-                            placeholder="Notes"
+                            placeholder="Customer Notes"
+                            // TODO: change every single Input to have value over onChange i.e. like 430 should be value and 431 should be onChange
                             onChange={(e) => setNotes(e.target.value)}
                             value={notes}
                         />
@@ -437,18 +493,17 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setStartTime("");
                         setEndDate(new Date());
                         setEndTime("");
-                        setEndTimestamp("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType)
+                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType) || isSuccess
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
-                            <TooltipTrigger className="w-full">
+                            <TooltipTrigger className="w-full transition ease-in-out duration-300">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
-                                    disabled={disabled}>
-                                    {isLoading ? <Spinner /> : "Create Booking"}
+                                    disabled={disabled || isSuccess}>
+                                    {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Save")}
                                 </Button>
                             </TooltipTrigger>
                             {disabled && <TooltipContent>

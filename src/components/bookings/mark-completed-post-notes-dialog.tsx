@@ -57,6 +57,10 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                     />
                 </div>
                 <DialogFooter>
+                    <Button variant="default" onClick={() => {
+                        setPostNotes('');
+                        setOpen(false)
+                    }} className="w-full">Cancel</Button>
                     <Button onClick={
                         async () => {
                             setLoading(true);
@@ -68,8 +72,14 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                         }
                     }
                         disabled={loading || !postNotes}
+                        className="w-full"
                     >
-                        {loading ? <Spinner /> : "Save changes"}
+                        {loading ? <Spinner /> :
+                            <div className="flex items-center justify-center space-x-2">
+                                <Check className="w-4 h-4" />
+                                <h1>Mark As Completed</h1>
+                            </div>
+                        }
                     </Button>
                 </DialogFooter>
             </DialogContent>

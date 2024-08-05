@@ -1,24 +1,25 @@
 import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
-import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
+import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
+import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
+import RescheduleBookingDialog from "@/components/bookings/reschedule-booking-dialog";
+import StatusSelect from "@/components/bookings/status-select";
 import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
 import Header from "@/components/common/header";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useInterval } from "@/contexts/IntervalContext";
+import { useUser } from "@/contexts/UserContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, Trash2, User, X } from "lucide-react";
+import { ArrowUpDownIcon, User, X } from "lucide-react";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
+import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
-import { Badge } from "@/components/ui/badge";
-import StatusSelect from "@/components/bookings/status-select";
-import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
-import { useUser } from "@/contexts/UserContext";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
@@ -57,6 +58,8 @@ const Bookings = () => {
     const updateUserBookingStatusFilters = api.userSettings.updateUserBookingStatusFilters.useMutation();
     const getUserSettings = api.userSettings.getUserSettings.useQuery({
         email: email as string,
+    }, {
+        enabled: !!email,
     });
 
     const [filterStatus, setFilterStatus] = useState<string[]>([
@@ -65,6 +68,7 @@ const Bookings = () => {
         "cancelled",
         "no-show",
         "confirmed",
+        "rescheduled",
     ]);
 
     useEffect(() => {
@@ -73,6 +77,7 @@ const Bookings = () => {
         }
     }, [getUserSettings.data, getUserSettings.isLoading]);
 
+    // TODO: make the endpoint sorted by the default below so it does not change once loaded
     useEffect(() => {
         if (getBookings.data) {
             let sortedBookingsData = getBookings.data.sort((a: any, b: any) => {
@@ -156,7 +161,7 @@ const Bookings = () => {
                             }}
                         />
                     </div>
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center min-h-8">
                         {filterStatus.length > 0 && !getUserSettings.isLoading && (
                             <div className="flex flex-row items-center flex-wrap">
                                 {filterStatus.map((status) => (
@@ -191,7 +196,7 @@ const Bookings = () => {
                     <div className="grid grid-cols-9 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
-                                Email
+                                Profile
                             </h1>
                             <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
                                 () => {
@@ -287,18 +292,74 @@ const Bookings = () => {
                     ) : <div className="space-y-4 mt-4">
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-9 gap-4 items-center">
-                                <div className="col-span-2">
-                                    <div>
-                                        {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
-                                    </div>
-                                    <div className="text-muted-foreground text-sm">
-                                        {booking.email || "No Email Provided"}
-                                    </div>
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div
+                                                className="col-span-2 flex flex-row items-center space-x-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2"
+                                                onClick={
+                                                    async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
+                                                }
+                                            >
+                                                <div>
+                                                    <Avatar className="h-10 w-10 rounded-lg">
+                                                        <AvatarImage
+                                                            src={booking?.imageUrl}
+                                                            alt="@user"
+                                                            className="object-cover"
+                                                        />
+                                                        <AvatarFallback>CN</AvatarFallback>
+                                                    </Avatar>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
+                                                    </div>
+                                                    <div className="text-muted-foreground text-sm">
+                                                        {booking.email || "No Email Provided"}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <div className="flex flex-row items-center space-x-4 p-1">
+                                                <div>
+                                                    <Avatar className="h-24 w-24 rounded-lg">
+                                                        <AvatarImage
+                                                            src={booking?.imageUrl}
+                                                            alt="@user"
+                                                            className="object-cover"
+                                                        />
+                                                        <AvatarFallback>CN</AvatarFallback>
+                                                    </Avatar>
+                                                </div>
+                                                <div>
+                                                    <div className="text-lg">
+                                                        {booking.firstName || "No First Name Provided"} {booking.lastName || "No Last Name Provided"}
+                                                    </div>
+                                                    <div className="text-muted-foreground text-md">
+                                                        {booking.email || "No Email Provided"}
+                                                    </div>
+                                                    <div
+                                                        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-muted-foreground hover:text-foreground border border-muted-foreground rounded-lg p-1 mt-2"
+                                                        onClick={
+                                                            async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
+                                                        }
+                                                    >
+                                                        <div className="flex flex-row items-center justify-center space-x-2">
+                                                            <User className="w-4 h-4" />
+                                                            <h1>View Profile</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                                 {/* <div>{booking.type || "No Type Provided"}</div> */}
                                 <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
-                                <div>{booking.phoneNumber || "No Phone Number Provided"}</div>
+                                <div className={cn(booking.phoneNumber ? "" : "text-center mr-5")}>{booking.phoneNumber || "-"}</div>
                                 {/* <pre className="col-span-3">
                                     {booking?.additionalNotes || "No Additional Notes Provided"}
                                 </pre> */}
@@ -346,6 +407,9 @@ const Bookings = () => {
                                         <User className="w-4 h-4" />
                                         <div className="select-none">Profile</div>
                                     </Button>
+                                    <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
+                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
+                                    </div>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                                     </div>
@@ -402,6 +466,9 @@ const BookingCard = (props: BookingCardProps) => {
                             <Trash2 className="w-4 h-4" />
                         } />
                     </div> */}
+                    {booking?.status === "rescheduled" && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                        rescheduled
+                    </Badge>}
                 </CardTitle>
                 <CardDescription>
                     {formatTimestamp(booking.startTimestamp)}
@@ -410,7 +477,7 @@ const BookingCard = (props: BookingCardProps) => {
             <div className="flex flex-row items-center justify-between px-6">
                 <div className="">
                     <h1 className="text-muted-foreground font-light">Join Meeting</h1>
-                    <div className={cn("text-blue-400 truncate max-w-32 md:max-w-48", booking?.status === "completed" ? "hover:text-blue-500" : "cursor-pointer")} onClick={
+                    <div className={cn("text-blue-500 truncate max-w-32 md:max-w-48", booking?.status === "completed" ? "cursor-not-allowed" : "hover:text-blue-400 cursor-pointer")} onClick={
                         () => {
                             if (booking?.status !== "completed")
                                 window.open(ZOOM_URL, "_blank")
@@ -465,10 +532,13 @@ const BookingCard = (props: BookingCardProps) => {
                     } />
                 </div> */}
             </div>
-            <div className={cn("px-6 mt-2", booking?.status === "completed" ? "pb-4" : "pb-6")}>
+            <div className={cn("px-6 mt-2", booking?.status === "completed" ? "pb-0" : "pb-2")}>
                 {booking?.status !== "completed" && (
                     <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                 )}
+            </div>
+            <div className="px-6 pb-6">
+                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
             </div>
         </Card>
     );

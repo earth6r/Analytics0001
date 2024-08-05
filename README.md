@@ -174,6 +174,12 @@ TODO:
 - look at blocks for ui ideas i.e. filter, export, add product, etc.
  -    // TODO: how to send line number or get it dynamically and all the other info, ask chatgpt for ideas about this, how sentry does it, etc. (this is for Home0001)
  - make error email better
+ - settings => profile picture needs to not show caption if no profile picture is set
+ - rename all handleClick, onClick, onSubmit, etc. to a common name (handleSubmit)
+ - use react-hook-form instead of manual form handling
+ - rename refetch to more specific i.e. refetchBookings
+ - format and clean the whole repo code formatting/styling
+ - use enums everywhere
 
 BOOKINGS:
 - fix the search bar for bookings page
@@ -183,6 +189,19 @@ BOOKINGS:
 - autoFocus{false} on all inputs
 - clear on create booking removes placeholder for select
 - make skeletons for mobile view bookings better
+- for create booking dialog, add in badges like voiceflow suggested times using get available times endpoint
+- make the start date and end date have undefined initial state and then if start date is set but not end date, then make the end date the same date as the start date for better ux - same as reschedule booking
+- disable start and end dates if it is in the past
+- close the popover after selecting a date
+- add booking type instead of any
+- create booking and reschedule booking needs to show the backend endpoint error message in the toast
+- data cleanup for bookings for start and end timestamp to always be numbers and not "string numbers"
+- also, timestamps should not have 3 extra 0's at the end, need to fix this + all saving logic everywhere even in Home0001 repo
+- see if i can make the loading to checkmark animation better, maybe make the spinner a full circle once done and then the current checkmark animation?
+- spinners need work
+- when editing status in mobile, join meeting moves slightly, stop this from happening
+- think if the current rescheduled badge should show its status instead of cards with just scheduled
+- hovering over rescheduled badge on the card should be the same hover color as the current color (this should be the variable of the default color since it currently messes with the theme color)
 
   HARD:
   - join meeting url needs to be flexible length up to 1/2 of width

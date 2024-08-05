@@ -25,7 +25,7 @@ const PreviewProfilePictureDialog = (props: PreviewProfilePictureDialogProps) =>
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <span className="text-blue-400 hover:text-blue-500 cursor-pointer select-none">
+                <span className="text-blue-500 hover:text-blue-400 cursor-pointer select-none">
                     here
                 </span>
             </DialogTrigger>

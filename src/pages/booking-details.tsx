@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, SquareArrowOutUpRight, Timer } from "lucide-react";
+import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -32,14 +33,6 @@ const BookingDetails = () => {
         }
     );
 
-    useEffect(() => {
-        if (bookingDetails.data?.imageUrl) {
-            setDisplayImageUrl(bookingDetails.data.imageUrl);
-        } else if (bookingDetails.data?.firstName && bookingDetails.data?.lastName) {
-            setDisplayImageUrl(`https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`);
-        }
-    }, [bookingDetails.data?.imageUrl, bookingDetails.data?.firstName, bookingDetails.data?.lastName]);
-
     const registerDetails = api.register.getRegisterDetails.useQuery(
         {
             email: email as string,
@@ -57,6 +50,14 @@ const BookingDetails = () => {
             enabled: !!email,
         }
     );
+
+    useEffect(() => {
+        if (getPotentialCustomerDetails.data?.imageUrl) {
+            setDisplayImageUrl(getPotentialCustomerDetails.data.imageUrl);
+        } else if (bookingDetails.data?.firstName && bookingDetails.data?.lastName) {
+            setDisplayImageUrl(`https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`);
+        }
+    }, [getPotentialCustomerDetails.data?.imageUrl, bookingDetails.data?.firstName, bookingDetails.data?.lastName]);
 
     return (
         <div>
@@ -103,6 +104,14 @@ const BookingDetails = () => {
                         </DropdownMenu>
                     </div>
                 </div>
+
+                {registerDetails.data && registerDetails.data.length > 1 && <Alert className="mb-4 mt-4">
+                    <TriangleAlert className="h-4 w-4" />
+                    <AlertTitle>Heads up!</AlertTitle>
+                    <AlertDescription>
+                        There are multiple register details for this email. Showing the latest one.
+                    </AlertDescription>
+                </Alert>}
 
                 <Card className="mt-6">
                     <CardHeader className="select-none">
@@ -153,7 +162,14 @@ const BookingDetails = () => {
                     </Card>
                     <Card className="w-full">
                         <CardHeader>
-                            <CardTitle>Appointment Details</CardTitle>
+                            <CardTitle className="flex flex-row items-center justify-between">
+                                <div>
+                                    Appointment Details
+                                </div>
+                                {bookingDetails.data?.status === "rescheduled" && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                                    rescheduled
+                                </Badge>}
+                            </CardTitle>
                             <CardDescription>
                                 Contact details for {bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}
                             </CardDescription>
@@ -170,12 +186,22 @@ const BookingDetails = () => {
                                     <div>{(bookingDetails.data?.endTimestamp - bookingDetails.data?.startTimestamp) / (60 * 1000) + " minutes"}</div>
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
+
                                     <RocketIcon className="w-4 h-4" />
-                                    <div className="max-w-max truncate text-blue-400 hover:text-blue-500 cursor-pointer" onClick={
-                                        () => {
-                                            window.open(ZOOM_URL, "_blank")
-                                        }
-                                    }>{ZOOM_URL}</div>
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
+                                                    () => {
+                                                        window.open(ZOOM_URL, "_blank")
+                                                    }
+                                                }>{ZOOM_URL}</div>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                Click to join the Zoom call
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                 </div>
                             </div>
                         </CardContent>
@@ -277,13 +303,6 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
 
     return (
         <div className="max-h-96 overflow-y-scroll">
-            {registerDetails.data.length > 1 && <Alert>
-                <RocketIcon className="h-4 w-4" />
-                <AlertTitle>Heads up!</AlertTitle>
-                <AlertDescription>
-                    There are multiple register details for this email. Showing the latest one.
-                </AlertDescription>
-            </Alert>}
             <div className="space-y-2">
                 {/* <div>
                     First Name: {registerData.firstName || "-"}

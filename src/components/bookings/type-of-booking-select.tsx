@@ -25,16 +25,16 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
                 <SelectValue placeholder="Select a booking type" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="propertyTour" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
-                    <div className="flex flex-row items-center space-x-2">
-                        <School className="h-4 w-4" />
-                        <h1>Property Tour</h1>
-                    </div>
-                </SelectItem>
                 <SelectItem value="phoneCall" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                     <div className="flex flex-row items-center space-x-2">
                         <Phone className="h-4 w-4" />
                         <h1>Phone Call</h1>
+                    </div>
+                </SelectItem>
+                <SelectItem value="propertyTour" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <div className="flex flex-row items-center space-x-2">
+                        <School className="h-4 w-4" />
+                        <h1>Property Tour</h1>
                     </div>
                 </SelectItem>
             </SelectContent>

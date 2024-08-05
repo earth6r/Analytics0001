@@ -124,8 +124,6 @@ export const userRouter = createTRPCRouter({
             fileBase64: z.string(),
         }))
         .mutation(async ({ input }): Promise<{ url: string; }> => {
-            console.log("input", input);
-
             // Split the input to separate the metadata from the actual Base64 data
             const matches = input.fileBase64.match(/^data:(.*);base64,(.*)$/);
             if (!matches || matches.length !== 3) {

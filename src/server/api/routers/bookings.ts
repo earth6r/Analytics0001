@@ -62,6 +62,21 @@ export const bookingsRouter = createTRPCRouter({
                 return a.timestamp - b.timestamp;
             });
 
+            for (const booking of bookings) {
+                const url = `https://ui-avatars.com/api/?name=${booking?.firstName + " " + booking?.lastName}`;
+
+                const potentialCustomerRef = collection(db, 'potentialCustomers');
+                const q = query(potentialCustomerRef, where('email', '==', booking.email));
+                const potentialCustomer = await getDocs(q);
+
+                if (potentialCustomer.empty) {
+                    booking.imageUrl = url;
+                } else {
+                    const firstDoc = potentialCustomer.docs[0];
+                    booking.imageUrl = firstDoc?.data()?.imageUrl || url;
+                }
+            }
+
             return bookings;
         }),
 
@@ -236,6 +251,39 @@ export const bookingsRouter = createTRPCRouter({
 
             await updateDoc(d, {
                 status: input.status,
+            });
+        }),
+
+    rescheduleBooking: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            bookingType: z.string(),
+            startTimestamp: z.string(),
+            endTimestamp: z.string(),
+            customerNotes: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            const firstName = (await getDoc(d)).data()?.firstName || "";
+            const lastName = (await getDoc(d)).data()?.lastName || "";
+            const currentAdditionalNotes = (await getDoc(d)).data()?.additionalNotes || "";
+            const appendAdditionalNotes = `Rescheduled booking with ${firstName} ${lastName} at ${input.startTimestamp} UTC`;
+
+            const currentNotes = (await getDoc(d)).data()?.notes || "";
+            const rescheduleCount = (await getDoc(d)).data()?.rescheduleCount || 0;
+
+            await updateDoc(d, {
+                startTimestamp: Number(new Date(input.startTimestamp).getTime()),
+                endTimestamp: Number(new Date(input.endTimestamp).getTime()),
+                additionalNotes: `${currentAdditionalNotes}\n\nRescheduled Booking: \n${appendAdditionalNotes}`,
+                notes: `${currentNotes}\n\nRescheduled Customer Notes: \n${input.customerNotes || '-'}`,
+                rescheduleCount: rescheduleCount + 1,
+                status: 'rescheduled',
             });
         }),
 });
