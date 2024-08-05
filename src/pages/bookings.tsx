@@ -1,27 +1,25 @@
 import CreateBookingDialog from "@/components/bookings/create-booking-dialog";
-import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
+import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
+import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
+import RescheduleBookingDialog from "@/components/bookings/reschedule-booking-dialog";
+import StatusSelect from "@/components/bookings/status-select";
 import ViewAdditionalNotesDialog from "@/components/bookings/view-additional-notes-dialog";
 import Header from "@/components/common/header";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useInterval } from "@/contexts/IntervalContext";
+import { useUser } from "@/contexts/UserContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, CalendarClock, Trash2, User, X } from "lucide-react";
+import { ArrowUpDownIcon, User, X } from "lucide-react";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import MarkCompletedPostNotesDialog from "@/components/bookings/mark-completed-post-notes-dialog";
+import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
-import { Badge } from "@/components/ui/badge";
-import StatusSelect from "@/components/bookings/status-select";
-import FilterStatusMultiSelect from "@/components/bookings/filter-status-multi-select";
-import { useUser } from "@/contexts/UserContext";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import RescheduleDialog from "@/components/bookings/reschedule-dialog";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
@@ -410,7 +408,7 @@ const Bookings = () => {
                                         <div className="select-none">Profile</div>
                                     </Button>
                                     <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
-                                        <RescheduleDialog booking={booking} refetchBookings={getBookings.refetch} />
+                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
                                     </div>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -540,7 +538,7 @@ const BookingCard = (props: BookingCardProps) => {
                 )}
             </div>
             <div className="px-6 pb-6">
-                <RescheduleDialog booking={booking} refetchBookings={getBookings.refetch} />
+                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
             </div>
         </Card>
     );

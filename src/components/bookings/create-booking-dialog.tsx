@@ -162,8 +162,12 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             setIsLoading(true);
 
             const startHour = Number(startTime.split(":")[0]);
-            const startMinute = Number(startTime.split(":")[1]);
-            startDate.setHours(startHour, startMinute, 0, 0);
+            const startMinuteNumber = Number(startTime.split(":")[1]);
+            startDate.setHours(startHour, startMinuteNumber, 0, 0);
+            let startMinute = startMinuteNumber.toString();
+            if (startMinute === "0") {
+                startMinute = "00";
+            }
             const formattedStartTimestamp = startDate.getTime().toString();
             const startMonthUTCMonth = startDate.getUTCMonth() + 1;
             const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
@@ -171,8 +175,12 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const startTimestamp = `${startDate.getUTCFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
 
             const endHour = Number(endTime.split(":")[0]);
-            const endMinute = Number(endTime.split(":")[1]);
-            endDate.setHours(endHour, endMinute, 0, 0);
+            const endMinuteNumber = Number(endTime.split(":")[1]);
+            endDate.setHours(endHour, endMinuteNumber, 0, 0);
+            let endMinute = endMinuteNumber.toString();
+            if (endMinute === "0") {
+                endMinute = "00";
+            }
             const formattedEndTimestamp = endDate.getTime().toString();
             const endMonthUTCMonth = endDate.getUTCMonth() + 1;
             const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
@@ -365,7 +373,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     value={startTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <div>
                             <div className="flex flex-row items-center space-x-2">
@@ -414,7 +422,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     value={endTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <Input
                             id="phoneNumber"

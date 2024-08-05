@@ -10,20 +10,19 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { api } from "@/utils/api"
 import { CalendarClock, CircleCheck } from "lucide-react"
 import { useState } from "react"
-import { DatePicker } from "./date-picker"
 import Spinner from "../common/spinner"
-import { api } from "@/utils/api"
+import { DatePicker } from "./date-picker"
 
 interface RescheduleDialogProps {
     booking: any;
     refetchBookings: () => Promise<any>;
 }
 
-const RescheduleDialog = (props: RescheduleDialogProps) => {
+const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
     const { booking, refetchBookings } = props;
 
     const [notes, setNotes] = useState("");
@@ -142,7 +141,7 @@ const RescheduleDialog = (props: RescheduleDialogProps) => {
                                     value={startTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <div>
                             <div className="flex flex-row items-center space-x-2">
@@ -191,7 +190,7 @@ const RescheduleDialog = (props: RescheduleDialogProps) => {
                                     value={endTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">UTC Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
                         <Input
                             id="notes"
@@ -231,4 +230,4 @@ const RescheduleDialog = (props: RescheduleDialogProps) => {
     )
 }
 
-export default RescheduleDialog
+export default RescheduleBookingDialog
