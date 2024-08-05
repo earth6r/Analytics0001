@@ -99,7 +99,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} />
+                <Input placeholder="john.appleseed@apple.com" autoFocus={false} {...field} />
               </FormControl>
               <FormDescription>
                 This is a given email that you can use to sign in.
