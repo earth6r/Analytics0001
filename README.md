@@ -179,6 +179,7 @@ TODO:
  - use react-hook-form instead of manual form handling
  - rename refetch to more specific i.e. refetchBookings
  - format and clean the whole repo code formatting/styling
+ - use enums everywhere
 
 BOOKINGS:
 - fix the search bar for bookings page

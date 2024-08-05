@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Menu, Package2, Search } from "lucide-react";
+import { Cog, Home, LogOut, Menu, Package2, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -233,15 +233,19 @@ const Header = () => {
                 onClick={async () => {
                   await router.push("/stats");
                 }}
+                className="flex flex-row items-center space-x-2"
               >
-                Home
+                <Home className="w-4 h-4" />
+                <h1>Home</h1>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={async () => {
                   await router.push("/settings");
                 }}
+                className="flex flex-row items-center space-x-2"
               >
-                Settings
+                <Cog className="w-4 h-4" />
+                <h1>Settings</h1>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -249,8 +253,10 @@ const Header = () => {
                   localStorage.removeItem("authenticated");
                   await router.push("/");
                 }}
+                className="flex flex-row items-center space-x-2 text-red-500"
               >
-                Logout
+                <LogOut className="w-4 h-4" />
+                <h1>Logout</h1>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
