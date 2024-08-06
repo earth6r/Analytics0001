@@ -269,8 +269,11 @@ export const bookingsRouter = createTRPCRouter({
 
             const d = doc(tableRef, input.uid);
 
+            // TODO: make this more efficient by awaiting once and calling the variable
+            const email = (await getDoc(d)).data()?.email || "";
             const firstName = (await getDoc(d)).data()?.firstName || "";
             const lastName = (await getDoc(d)).data()?.lastName || "";
+            const phoneNumber = (await getDoc(d)).data()?.phoneNumber || "";
             const currentAdditionalNotes = (await getDoc(d)).data()?.additionalNotes || "";
             const appendAdditionalNotes = `Rescheduled booking with ${firstName} ${lastName} at ${input.startTimestamp} UTC`;
 
@@ -290,12 +293,12 @@ export const bookingsRouter = createTRPCRouter({
             else {
                 try {
                     await axios.post(`${API_URL}/bookings/reschedule-phone-call-booking`, {
-                        email: input.email,
-                        firstName: input.firstName,
-                        lastName: input.lastName,
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
                         startTimestamp: input.startTimestamp,
                         endTimestamp: input.endTimestamp,
-                        phoneNumber: input.phoneNumber,
+                        phoneNumber: phoneNumber,
                         blockWhatsApp: false,
                     })
                 } catch (error) {
