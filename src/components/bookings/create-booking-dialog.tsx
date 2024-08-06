@@ -13,12 +13,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
-import { CircleCheck, CirclePlus } from "lucide-react"
+import { CircleCheck, CirclePlus, Info } from "lucide-react"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
 import { DatePicker } from "./date-picker"
 import { TypeOfBookingSelect } from "./type-of-booking-select"
+import moment from 'moment-timezone';
 // import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
@@ -27,7 +28,8 @@ interface CreateBookingDialogProps {
     onOpenChange: (open: boolean) => void;
 }
 
-const formatTimeAlternate = (startTimestamp: string) => {
+// TODO: move to utils
+export const formatTimeAlternate = (startTimestamp: string) => {
     // Step 1: Extract date and time components
     const [datePart, timePart, period] = startTimestamp.split(" ");
 
@@ -188,7 +190,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
         try {
             setIsLoading(true);
 
-            // TODO: rename all variables to not have UTC in them
             const startHour = Number(startTime.split(":")[0]);
             const startMinuteNumber = Number(startTime.split(":")[1]);
             startDate.setHours(startHour, startMinuteNumber, 0, 0);
@@ -202,11 +203,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const startDay = startDate.getDate().toString().length === 1 ? `0${startDate.getDate()}` : startDate.getDate();
             let startTimestamp = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
 
-            // convert startTimestamp from EST to UTC
-            startTimestamp = new Date(startTimestamp).toLocaleString("en-US", { timeZone: "UTC" })
-            // @ts-expect-error TODO: fix type
-            startTimestamp = startTimestamp.split(", ")[0].split("/").reverse().join("-") + " " + startTimestamp.split(", ")[1];
-            startTimestamp = formatTimeAlternate(startTimestamp);
+            // Convert startTimestamp from EST to UTC
+            const estMoment = moment.tz(startTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+            const utcMoment = estMoment.clone().tz('UTC');
+            startTimestamp = utcMoment.format('YYYY-MM-DD HH:mm:ss');
 
             const endHour = Number(endTime.split(":")[0]);
             const endMinuteNumber = Number(endTime.split(":")[1]);
@@ -221,11 +221,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const endDay = endDate.getDate().toString().length === 1 ? `0${endDate.getDate()}` : endDate.getDate();
             let endTimestamp = `${endDate.getFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
 
-            // convert endTimestamp from EST to UTC
-            endTimestamp = new Date(endTimestamp).toLocaleString("en-US", { timeZone: "UTC" })
-            // @ts-expect-error TODO: fix type
-            endTimestamp = endTimestamp.split(", ")[0].split("/").reverse().join("-") + " " + endTimestamp.split(", ")[1];
-            endTimestamp = formatTimeAlternate(endTimestamp);
+            // Convert endTimestamp from EST to UTC
+            const estEndMoment = moment.tz(endTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+            const utcEndMoment = estEndMoment.clone().tz('UTC');
+            endTimestamp = utcEndMoment.format('YYYY-MM-DD HH:mm:ss');
 
             if (isNaN(Number(formattedStartTimestamp))) {
                 toast({
@@ -293,17 +292,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             await refetch();
 
-            setEmail("");
-            setFirstName("");
-            setLastName("");
-            setPhoneNumber("");
-            setStartDate(new Date());
-            setStartTime("");
-            setEndDate(new Date());
-            setEndTime("");
-            setTypeOfBooking(undefined);
-            setPropertyType(null);
-
             setIsLoading(false);
 
             toast({
@@ -316,6 +304,16 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setTimeout(() => {
                 setIsSuccess(false);
+                setEmail("");
+                setFirstName("");
+                setLastName("");
+                setPhoneNumber("");
+                setStartDate(new Date());
+                setStartTime("");
+                setEndDate(new Date());
+                setEndTime("");
+                setTypeOfBooking(undefined);
+                setPropertyType(null);
                 onOpenChange(false);
             }, 2000);
         } catch (error) {
@@ -329,7 +327,9 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     }
 
     // TODO: disabled for timestamp 19 len and Nan timestamp
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !endDate || !endTime || !typeOfBooking || (typeOfBooking === "propertyTour" && !propertyType) || !phoneNumber || !firstName || !lastName;
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !endDate || !endTime || !typeOfBooking || !phoneNumber || !firstName || !lastName;
+
+    const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -341,7 +341,32 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0">
                 <DialogHeader className="px-6 pt-6">
-                    <DialogTitle>Create Booking</DialogTitle>
+                    <DialogTitle className="flex flex-row items-center space-x-2">
+                        <h1>Create Booking</h1>
+                        {/* TODO: make this supportive in mobile */}
+                        <TooltipProvider>
+                            <Tooltip open={infoTooltipOpened} onOpenChange={setInfoTooltipOpened} delayDuration={0}>
+                                <Info
+                                    className="w-4 h-4 cursor-pointer"
+                                    onMouseEnter={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setInfoTooltipOpened(!infoTooltipOpened);
+                                        }
+                                    }
+                                    onMouseLeave={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setInfoTooltipOpened(!infoTooltipOpened);
+                                        }
+                                    }
+                                />
+                                <TooltipContent className="mt-[-50px] select-none">
+                                    <p className="font-semibold max-w-96">This will create a Google Calendar Event and send a WhatsApp Notification Message to the Home0001 Team.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </DialogTitle>
                     <DialogDescription>
                         Create a new booking in the database. This will not send a Google Calendar invite.
                     </DialogDescription>
@@ -472,15 +497,15 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         />
                         {/* @ts-expect-error TODO: fix type */}
                         <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
-                        <Input
+                        {/* <Input
                             id="notes"
                             placeholder="Customer Notes"
                             // TODO: change every single Input to have value over onChange i.e. like 430 should be value and 431 should be onChange
                             onChange={(e) => setNotes(e.target.value)}
                             value={notes}
-                        />
+                        /> */}
                         {/* TODO: disable if type is phone call booking */}
-                        <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} />
+                        {/* <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} /> */}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
@@ -496,7 +521,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking && !propertyType) || isSuccess
+                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking) || isSuccess
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
@@ -523,7 +548,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div>{!phoneNumber && `The phone number is required.`}</div>
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
-                                    <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div>
+                                    {/* <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div> */}
                                     <div>{!firstName && `The first name is required.`}</div>
                                     <div>{!lastName && `The last name is required.`}</div>
                                 </div>

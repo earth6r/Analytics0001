@@ -20,6 +20,7 @@ import { ArrowUpDownIcon, User, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
+import BookingTabs from "@/components/bookings/booking-tabs";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
@@ -27,6 +28,7 @@ const Bookings = () => {
     const [sortKey, setSortKey] = useState<"email" | "type" | "startTimestamp" | "property" | "phoneNumber" | "endTimestamp">("startTimestamp");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});
+    const [tab, setTab] = useState<string>("all");
 
     const [open, setOpen] = useState(false);
     const { email } = useUser();
@@ -95,9 +97,17 @@ const Bookings = () => {
                 return false;
             });
 
+            // TODO: make this an enum
+            if (tab === "propertyTour") {
+                // TODO: make this an enum
+                sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Property Tour");
+            } else if (tab === "phoneCall") {
+                sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Phone Call");
+            }
+
             setSortedData(sortedBookingsData);
         }
-    }, [getBookings.data, sortOrder, sortKey, filterStatus]);
+    }, [getBookings.data, sortOrder, sortKey, filterStatus, tab]);
 
     return (
         <div>
@@ -111,6 +121,10 @@ const Bookings = () => {
                         onOpenChange={setOpen}
                         refetch={getBookings.refetch}
                     />
+                </div>
+
+                <div className="mt-2">
+                    <BookingTabs onValueChange={setTab} />
                 </div>
 
                 <div className="flex flex-col items-start justify-start w-full">
@@ -278,7 +292,7 @@ const Bookings = () => {
                         <div className="select-none">
                             Status
                         </div>
-                        <div className="col-span-3 select-none">Meeting Notes</div>
+                        <div className="col-span-3 select-none">Actions</div>
                     </div>
 
                     {getBookings.isLoading ? (
@@ -385,9 +399,9 @@ const Bookings = () => {
                                     loading={loadingsForStatuses[booking.uid] || false}
                                     booking={booking}
                                 />
-                                <div className="col-span-1">
+                                {/* <div className="col-span-1">
                                     <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
-                                </div>
+                                </div> */}
                                 <div className="flex flex-row items-center space-x-2">
                                     {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                                         // @ts-expect-error TODO: fix this
@@ -401,11 +415,15 @@ const Bookings = () => {
                                         }
                                     } /> */}
                                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
-                                    <Button variant="default" onClick={
-                                        async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
-                                    } className="flex flex-row items-center space-x-2">
+                                    <Button
+                                        variant="default"
+                                        onClick={
+                                            async () => await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`)
+                                        }
+                                    // className="flex flex-row items-center space-x-2"
+                                    >
                                         <User className="w-4 h-4" />
-                                        <div className="select-none">Profile</div>
+                                        {/* <div className="select-none">Profile</div> */}
                                     </Button>
                                     <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
                                         <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
@@ -466,7 +484,7 @@ const BookingCard = (props: BookingCardProps) => {
                             <Trash2 className="w-4 h-4" />
                         } />
                     </div> */}
-                    {booking?.status === "rescheduled" && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                    {(booking?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
                         rescheduled
                     </Badge>}
                 </CardTitle>
@@ -507,7 +525,7 @@ const BookingCard = (props: BookingCardProps) => {
                 </div>
             </div>
             <div className="px-6 flex flex-row items-center justify-between mt-10 space-x-2">
-                <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
+                {/* <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} /> */}
                 <Button
                     variant="default"
                     className="w-full space-x-2"

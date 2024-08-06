@@ -13,6 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -21,6 +22,7 @@ const BookingDetails = () => {
 
     const { email, type, uid } = router.query;
     const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const bookingDetails = api.bookings.getBookingDetails.useQuery(
         {
@@ -113,17 +115,35 @@ const BookingDetails = () => {
                     </AlertDescription>
                 </Alert>}
 
-                <Card className="mt-6">
-                    <CardHeader className="select-none">
-                        <CardTitle>Register Details</CardTitle>
-                        <CardDescription>
-                            {`Details about the potential customer's register details.`}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <RegisterDetails registerDetails={registerDetails} />
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card className="mt-6 w-full">
+                        <CardContent className="p-4">
+                            {/* TODO: fix the skeleton loading */}
+                            <div>
+                                <img
+                                    src={displayImageUrl as string}
+                                    alt="@user"
+                                    className="object-contain w-full h-96"
+                                    width={400}
+                                    height={400}
+                                    onLoad={() => { setImageLoaded(true) }}
+                                />
+                                {/* {!imageLoaded && <Skeleton className="h-96 rounded-lg" />} */}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="md:mt-6 w-full">
+                        <CardHeader className="select-none">
+                            <CardTitle>Register Details</CardTitle>
+                            <CardDescription>
+                                {`Details about the potential customer's register details.`}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <RegisterDetails registerDetails={registerDetails} />
+                        </CardContent>
+                    </Card>
+                </div>
 
                 <Card className="mt-6">
                     <CardHeader>
@@ -166,7 +186,7 @@ const BookingDetails = () => {
                                 <div>
                                     Appointment Details
                                 </div>
-                                {bookingDetails.data?.status === "rescheduled" && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                                {(bookingDetails.data?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
                                     rescheduled
                                 </Badge>}
                             </CardTitle>

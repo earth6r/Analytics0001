@@ -285,5 +285,22 @@ export const bookingsRouter = createTRPCRouter({
                 rescheduleCount: rescheduleCount + 1,
                 status: 'rescheduled',
             });
+
+            if (input.bookingType === "Property Tour") { }
+            else {
+                try {
+                    await axios.post(`${API_URL}/bookings/reschedule-phone-call-booking`, {
+                        email: input.email,
+                        firstName: input.firstName,
+                        lastName: input.lastName,
+                        startTimestamp: input.startTimestamp,
+                        endTimestamp: input.endTimestamp,
+                        phoneNumber: input.phoneNumber,
+                        blockWhatsApp: false,
+                    })
+                } catch (error) {
+                    console.error('Error creating property tour booking', error);
+                }
+            }
         }),
 });

@@ -202,6 +202,7 @@ BOOKINGS:
 - when editing status in mobile, join meeting moves slightly, stop this from happening
 - think if the current rescheduled badge should show its status instead of cards with just scheduled
 - hovering over rescheduled badge on the card should be the same hover color as the current color (this should be the variable of the default color since it currently messes with the theme color)
+- cant edit start and end time inputs in the middle i.e. if its 05:00, canlt delete the 5 only, need to fix
 
   HARD:
   - join meeting url needs to be flexible length up to 1/2 of width
