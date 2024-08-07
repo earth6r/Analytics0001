@@ -164,7 +164,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRing")}>
+                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRingLight dark:animate-pulseRingDark")}>
                     <CirclePlus className="w-4 h-4" />
                     <span className="hidden md:block">
                         Add Details

@@ -317,7 +317,7 @@ const Bookings = () => {
                                                 }
                                             >
                                                 <div>
-                                                    <Avatar className="h-10 w-10 rounded-lg">
+                                                    <Avatar className="h-10 w-10 rounded-lg border">
                                                         <AvatarImage
                                                             src={booking?.imageUrl}
                                                             alt="@user"
@@ -339,7 +339,8 @@ const Bookings = () => {
                                         <TooltipContent>
                                             <div className="flex flex-row items-center space-x-4 p-1">
                                                 <div>
-                                                    <Avatar className="h-24 w-24 rounded-lg">
+                                                    {/* TODO: make this a component and reuse above's component and make className a prop b/c above is different class */}
+                                                    <Avatar className="h-24 w-24 rounded-lg border">
                                                         <AvatarImage
                                                             src={booking?.imageUrl}
                                                             alt="@user"
