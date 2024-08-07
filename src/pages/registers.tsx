@@ -130,7 +130,7 @@ const ActionCell = ({ row }) => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-[450px] sm:max-w-[450px]">
           <DialogHeader>
-            <DialogTitle>Message Details</DialogTitle>
+            <DialogTitle>Register Details</DialogTitle>
             <DialogDescription>
               {`Details for ${row.original.firstName} ${row.original.lastName}`}
             </DialogDescription>
