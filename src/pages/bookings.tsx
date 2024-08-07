@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
 import BookingTabs from "@/components/bookings/booking-tabs";
+// import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 
 const Bookings = () => {
     const [sortedData, setSortedData] = useState<any[]>([]);
