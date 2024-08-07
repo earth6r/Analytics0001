@@ -108,8 +108,12 @@ const BookingDetails = () => {
                 </div>
 
                 {registerDetails.data && registerDetails.data.count > 1 && <Alert className="mt-4">
-                    <TriangleAlert className="h-4 w-4" />
-                    <AlertTitle>Heads up!</AlertTitle>
+                    <div className="flex flex-row space-x-1">
+                        <div className="text-yellow-500">
+                            <TriangleAlert className="h-4 w-4" />
+                        </div>
+                        <AlertTitle>Heads up!</AlertTitle>
+                    </div>
                     <AlertDescription>
                         There are multiple register details for this email. We will show as many details as possible.
                     </AlertDescription>
@@ -178,7 +182,7 @@ const BookingDetails = () => {
                                 <div className="flex flex-row items-center space-x-2">
                                     <Phone className="w-4 h-4" />
                                     <div>
-                                        {bookingDetails.data?.phoneNumber  ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
+                                        {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
                                     </div>
                                 </div>
                             </div>
