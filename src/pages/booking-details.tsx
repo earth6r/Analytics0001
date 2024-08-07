@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import Image from "next/image";
+import CopyTooltip from "@/components/customers/copy-tooltip";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -107,11 +107,11 @@ const BookingDetails = () => {
                     </div>
                 </div>
 
-                {registerDetails.data && registerDetails.data.length > 1 && <Alert className="mb-4 mt-4">
+                {registerDetails.data && registerDetails.data.count > 1 && <Alert className="mt-4">
                     <TriangleAlert className="h-4 w-4" />
                     <AlertTitle>Heads up!</AlertTitle>
                     <AlertDescription>
-                        There are multiple register details for this email. Showing the latest one.
+                        There are multiple register details for this email. We will show as many details as possible.
                     </AlertDescription>
                 </Alert>}
 
@@ -171,11 +171,15 @@ const BookingDetails = () => {
                             <div className="space-y-2">
                                 <div className="flex flex-row items-center space-x-2">
                                     <Mail className="w-4 h-4" />
-                                    <div>{bookingDetails.data?.email}</div>
+                                    <div>
+                                        <CopyTooltip value={bookingDetails.data?.email} />
+                                    </div>
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <Phone className="w-4 h-4" />
-                                    <div>{bookingDetails.data?.phoneNumber || "-"}</div>
+                                    <div>
+                                        {bookingDetails.data?.phoneNumber  ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
@@ -319,7 +323,7 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
         );
     }
 
-    const registerData = registerDetails.data[0];
+    const registerData = registerDetails.data.data;
 
     return (
         <div className="max-h-96 overflow-y-scroll">
