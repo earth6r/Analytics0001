@@ -79,8 +79,6 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
         const utcEndMoment = estEndMoment.clone().tz('UTC');
         endTimestamp = utcEndMoment.format('YYYY-MM-DD HH:mm:ss');
 
-        alert(`startTimestamp: ${startTimestamp}, endTimestamp: ${endTimestamp}`);
-
         try {
             await rescheduleBooking.mutateAsync({
                 uid: booking?.uid,
