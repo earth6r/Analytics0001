@@ -48,6 +48,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/router";
 
 const data: Payment[] = [
   // @ts-expect-error - fix this
@@ -102,6 +103,8 @@ export type Payment = {
 const ActionCell = ({ row }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const router = useRouter();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -122,7 +125,7 @@ const ActionCell = ({ row }) => {
         >
           Send Email
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+        <DropdownMenuItem onClick={async () => await router.push(`/booking-details?email=${row.original.email}&referral=/registers`)}>
           View Details
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -554,9 +557,9 @@ const Registers = () => {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                       </TableHead>
                     );
                   })}
