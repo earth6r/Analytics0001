@@ -13,14 +13,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import CopyTooltip from "@/components/customers/copy-tooltip";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
 const BookingDetails = () => {
     const router = useRouter();
 
-    const { email, type, uid } = router.query;
+    const { email, type, uid, referral } = router.query;
     const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const bookingDetails = api.bookings.getBookingDetails.useQuery(
         {
@@ -59,14 +61,32 @@ const BookingDetails = () => {
         }
     }, [getPotentialCustomerDetails.data?.imageUrl, bookingDetails.data?.firstName, bookingDetails.data?.lastName]);
 
+    if (
+        !registerDetails.isLoading &&
+        !registerDetails.data
+    ) {
+        // TODO: make this ui better https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=73914135
+        return (
+            <div className="flex flex-col items-center justify-center h-screen">
+                <div className="text-3xl font-bold">No register details found</div>
+                <div className="text-lg">Please try again later</div>
+                <div className="mt-4">
+                    <Button variant="default" onClick={() => referral ? router.push(referral as string) : router.push("/bookings")}>Go back</Button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <Header />
             <div className="p-6">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                        <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => router.push("/bookings")} />
-                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">{bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}</h1>
+                        <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => referral ? router.push(referral as string) : router.push("/bookings")} />
+                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">{
+                            bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                        }</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
@@ -105,25 +125,47 @@ const BookingDetails = () => {
                     </div>
                 </div>
 
-                {registerDetails.data && registerDetails.data.length > 1 && <Alert className="mb-4 mt-4">
-                    <TriangleAlert className="h-4 w-4" />
-                    <AlertTitle>Heads up!</AlertTitle>
+                {registerDetails.data && registerDetails.data.count > 1 && <Alert className="mt-4">
+                    <div className="flex flex-row space-x-1">
+                        <div className="text-yellow-500">
+                            <TriangleAlert className="h-4 w-4" />
+                        </div>
+                        <AlertTitle>Heads up!</AlertTitle>
+                    </div>
                     <AlertDescription>
-                        There are multiple register details for this email. Showing the latest one.
+                        There are multiple register details for this email. We will show as many details as possible.
                     </AlertDescription>
                 </Alert>}
 
-                <Card className="mt-6">
-                    <CardHeader className="select-none">
-                        <CardTitle>Register Details</CardTitle>
-                        <CardDescription>
-                            {`Details about the potential customer's register details.`}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <RegisterDetails registerDetails={registerDetails} />
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card className="mt-6 w-full">
+                        <CardContent className="p-4">
+                            {/* TODO: fix the skeleton loading */}
+                            <div>
+                                <img
+                                    src={displayImageUrl as string}
+                                    alt="@user"
+                                    className="object-contain w-full h-96"
+                                    width={400}
+                                    height={400}
+                                    onLoad={() => { setImageLoaded(true) }}
+                                />
+                                {/* {!imageLoaded && <Skeleton className="h-96 rounded-lg" />} */}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="md:mt-6 w-full">
+                        <CardHeader className="select-none">
+                            <CardTitle>Register Details</CardTitle>
+                            <CardDescription>
+                                {`Details about the potential customer's register details.`}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <RegisterDetails registerDetails={registerDetails} />
+                        </CardContent>
+                    </Card>
+                </div>
 
                 <Card className="mt-6">
                     <CardHeader>
@@ -144,18 +186,24 @@ const BookingDetails = () => {
                         <CardHeader>
                             <CardTitle>Contact Details</CardTitle>
                             <CardDescription>
-                                Contact details for {bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}
+                                Contact details for {
+                                    bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                }
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-2">
                                 <div className="flex flex-row items-center space-x-2">
                                     <Mail className="w-4 h-4" />
-                                    <div>{bookingDetails.data?.email}</div>
+                                    <div>
+                                        <CopyTooltip value={email as string} />
+                                    </div>
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <Phone className="w-4 h-4" />
-                                    <div>{bookingDetails.data?.phoneNumber || "-"}</div>
+                                    <div>
+                                        {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
@@ -166,24 +214,28 @@ const BookingDetails = () => {
                                 <div>
                                     Appointment Details
                                 </div>
-                                {bookingDetails.data?.status === "rescheduled" && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                                {(bookingDetails.data?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
                                     rescheduled
                                 </Badge>}
                             </CardTitle>
                             <CardDescription>
-                                Contact details for {bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}
+                                Appointment details for {
+                                    bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                }
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-2">
                                 <div className="flex flex-row items-center space-x-2">
                                     <Calendar className="w-4 h-4" />
-                                    <div>{formatTimestamp(bookingDetails.data?.startTimestamp)}</div>
+                                    <div>{formatTimestamp(bookingDetails.data?.startTimestamp) || "-"}</div>
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
                                     <Timer className="w-4 h-4" />
                                     <div className="font-semibold">Duration</div>
-                                    <div>{(bookingDetails.data?.endTimestamp - bookingDetails.data?.startTimestamp) / (60 * 1000) + " minutes"}</div>
+                                    <div>{
+                                        bookingDetails.data ? (bookingDetails.data?.endTimestamp - bookingDetails.data?.startTimestamp) / (60 * 1000) + " minutes" : "-"
+                                    }</div>
                                 </div>
                                 <div className="flex flex-row items-center space-x-2">
 
@@ -191,11 +243,11 @@ const BookingDetails = () => {
                                     <TooltipProvider>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
+                                                {bookingDetails.data ? <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
                                                     () => {
                                                         window.open(ZOOM_URL, "_blank")
                                                     }
-                                                }>{ZOOM_URL}</div>
+                                                }>{ZOOM_URL}</div> : <div>-</div>}
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 Click to join the Zoom call
@@ -299,7 +351,7 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
         );
     }
 
-    const registerData = registerDetails.data[0];
+    const registerData = registerDetails.data.data;
 
     return (
         <div className="max-h-96 overflow-y-scroll">

@@ -12,10 +12,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { api } from "@/utils/api"
-import { CalendarClock, CircleCheck } from "lucide-react"
+import { CalendarClock, CircleCheck, Info } from "lucide-react"
 import { useState } from "react"
 import Spinner from "../common/spinner"
 import { DatePicker } from "./date-picker"
+import { formatTimeAlternate } from "./create-booking-dialog"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { toast } from "../ui/use-toast"
+import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
+import moment from "moment-timezone";
 
 interface RescheduleDialogProps {
     booking: any;
@@ -40,18 +45,73 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
     async function handleReschedule() {
         setIsLoading(true);
         // TODO: need to call endpoint in Home0001 to create calendar booking + send whatsapp message
-        alert(`${startDate.toISOString().split("T")[0]} ${startTime}:00`)
-        alert(`${endDate.toISOString().split("T")[0]} ${endTime}:00`)
-        await rescheduleBooking.mutateAsync({
-            uid: booking?.uid,
-            bookingType: booking?.type,
-            customerNotes: notes,
-            startTimestamp: `${startDate.toISOString().split("T")[0]} ${startTime}:00`,
-            endTimestamp: `${endDate.toISOString().split("T")[0]} ${endTime}:00`
-        });
+        const startHour = Number(startTime.split(":")[0]);
+        const startMinuteNumber = Number(startTime.split(":")[1]);
+        startDate.setHours(startHour, startMinuteNumber, 0, 0);
+        let startMinute = startMinuteNumber.toString();
+        if (startMinute === "0") {
+            startMinute = "00";
+        }
+        const startMonthUTCMonth = startDate.getMonth() + 1;
+        const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
+        const startDay = startDate.getDate().toString().length === 1 ? `0${startDate.getDate()}` : startDate.getDate();
+        let startTimestamp = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+
+        // Convert startTimestamp from EST to UTC
+        const estMoment = moment.tz(startTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+        const utcMoment = estMoment.clone().tz('UTC');
+        startTimestamp = utcMoment.format('YYYY-MM-DD HH:mm:ss');
+
+        const endHour = Number(endTime.split(":")[0]);
+        const endMinuteNumber = Number(endTime.split(":")[1]);
+        endDate.setHours(endHour, endMinuteNumber, 0, 0);
+        let endMinute = endMinuteNumber.toString();
+        if (endMinute === "0") {
+            endMinute = "00";
+        }
+        const endMonthUTCMonth = endDate.getMonth() + 1;
+        const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
+        const endDay = endDate.getDate().toString().length === 1 ? `0${endDate.getDate()}` : endDate.getDate();
+        let endTimestamp = `${endDate.getFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
+
+        // Convert endTimestamp from EST to UTC
+        const estEndMoment = moment.tz(endTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+        const utcEndMoment = estEndMoment.clone().tz('UTC');
+        endTimestamp = utcEndMoment.format('YYYY-MM-DD HH:mm:ss');
+
+        try {
+            await rescheduleBooking.mutateAsync({
+                uid: booking?.uid,
+                bookingType: booking?.type,
+                customerNotes: notes,
+                startTimestamp: startTimestamp,
+                endTimestamp: endTimestamp,
+            });
 
 
-        await refetchBookings();
+            await refetchBookings();
+            toast({
+                title: "Booking Rescheduled",
+                description: "The booking has been successfully rescheduled.",
+                className: toastSuccessStyle,
+            })
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Error",
+                description: "An error occurred while rescheduling the booking.",
+                className: toastErrorStyle,
+            });
+
+            setIsLoading(false);
+            setIsSuccess(false);
+            setStartDate(new Date());
+            setEndDate(new Date());
+            setStartTime("");
+            setEndTime("");
+            setOpen(false);
+            return;
+        }
 
         setIsLoading(false);
         setIsSuccess(true);
@@ -66,6 +126,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
             setIsSuccess(false);
         }, 2000);
     };
+
+    const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -89,7 +151,31 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0">
                 <DialogHeader className="px-6 pt-6">
-                    <DialogTitle>Reschedule Meeting</DialogTitle>
+                    <DialogTitle className="flex flex-row items-center space-x-2">
+                        <h1>Reschedule Booking</h1>
+                        <TooltipProvider>
+                            <Tooltip open={infoTooltipOpened} onOpenChange={setInfoTooltipOpened} delayDuration={0}>
+                                <Info
+                                    className="w-4 h-4 cursor-pointer"
+                                    onMouseEnter={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setInfoTooltipOpened(!infoTooltipOpened);
+                                        }
+                                    }
+                                    onMouseLeave={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setInfoTooltipOpened(!infoTooltipOpened);
+                                        }
+                                    }
+                                />
+                                <TooltipContent className="mt-[-50px] select-none">
+                                    <p className="font-semibold max-w-96">This will create a Google Calendar Event and send a WhatsApp Notification Message to the Home0001 Team.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </DialogTitle>
                     <DialogDescription>
                         Reschedule the meeting with {booking?.firstName} {booking?.lastName}
                     </DialogDescription>
@@ -192,13 +278,13 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             </div>
                             <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
                         </div>
-                        <Input
+                        {/* <Input
                             id="notes"
                             type="text"
                             placeholder="Customer Notes"
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                        />
+                        /> */}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
