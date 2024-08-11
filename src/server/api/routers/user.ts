@@ -144,13 +144,11 @@ export const userRouter = createTRPCRouter({
 
             // Assuming `put` function accepts filename, data (as Buffer), and options
             const filename = `image_${Date.now()}`; // Generate a filename; adjust as needed
-            const { url } = await put(filename, fileBuffer, {
+            return await put(filename, fileBuffer, {
                 access: 'public',
                 token: process.env.BLOB_READ_WRITE_TOKEN,
                 contentType: contentType, // Optionally set the content type
             });
-
-            return { url };
         }),
 
     savePotentialCustomerDetails: publicProcedure
