@@ -39,6 +39,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [viewConflicts, setViewConflicts] = useState(true);
 
     const rescheduleBooking = api.bookings.rescheduleBooking.useMutation();
 
@@ -141,6 +142,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
             return;
         }
 
+        setViewConflicts(false);
+
         try {
             await rescheduleBooking.mutateAsync({
                 uid: booking?.uid,
@@ -183,6 +186,10 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
             setOpen(false);
             setIsSuccess(false);
         }, 2000);
+
+        setTimeout(() => {
+            setViewConflicts(true);
+        }, 1000);
     };
 
     const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
@@ -294,12 +301,13 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
                         />
-                        <ConflictingBookings
-                            startDate={startDate}
-                            startTime={startTime}
-                            bookingType={booking?.type}
-                            bookings={bookings}
-                        />
+                        {viewConflicts &&
+                            <ConflictingBookings
+                                startDate={startDate}
+                                startTime={startTime}
+                                bookingType={booking?.type}
+                                bookings={bookings}
+                            />}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">

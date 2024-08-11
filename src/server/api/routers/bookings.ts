@@ -11,8 +11,8 @@ export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
-// export const API_URL = `http://localhost:3000/api`;
-const API_URL = `https://home0001.com/api`;
+export const API_URL = `http://localhost:3000/api`;
+// const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
@@ -101,7 +101,7 @@ export const bookingsRouter = createTRPCRouter({
                     endTimestamp: input.endTimestamp,
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
-                    blockWhatsApp: true,
+                    blockWhatsApp: false,
                 })
             } catch (error) {
                 console.error('Error creating phone booking', error);
@@ -136,7 +136,7 @@ export const bookingsRouter = createTRPCRouter({
                     typeOfBooking: input.typeOfBooking,
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
-                    blockWhatsApp: true,
+                    blockWhatsApp: false, // TODO: wait for Yan to reply and change this + tooltip message accordingly
                 })
             } catch (error) {
                 console.error('Error creating property tour booking', error);

@@ -4,6 +4,7 @@ import { Skeleton } from '../ui/skeleton';
 import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { api } from '@/utils/api';
+import moment from 'moment';
 
 interface SuggestedTimesProps {
     startDate: Date | undefined;
@@ -56,7 +57,8 @@ const SuggestedTimes = (props: SuggestedTimesProps) => {
                                 variant="outline"
                                 className="cursor-pointer text-[10px] font-normal hover:bg-gray-200 dark:hover:bg-gray-700"
                                 onClick={() => {
-                                    setStartDate(new Date(item.date));
+                                    const newDate = moment.tz(item.date, 'America/New_York').toDate();
+                                    setStartDate(newDate);
                                     setStartTime(slot);
                                 }}
                             >

@@ -43,6 +43,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
+    const [viewConflicts, setViewConflicts] = useState(true);
 
     // const form = useForm({
     //     defaultValues: {
@@ -219,6 +220,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 return;
             }
 
+            setViewConflicts(false);
+
             const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
             await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
 
@@ -236,6 +239,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setTimeout(() => {
                 setIsSuccess(false);
+                onOpenChange(false);
                 setEmail("");
                 setFirstName("");
                 setLastName("");
@@ -243,8 +247,11 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 setStartDate(undefined);
                 setStartTime("");
                 setTypeOfBooking(undefined);
-                onOpenChange(false);
             }, 2000);
+
+            setTimeout(() => {
+                setViewConflicts(true);
+            }, 1000);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -378,12 +385,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
                         />
-                        <ConflictingBookings
-                            startDate={startDate}
-                            startTime={startTime}
-                            bookingType={typeOfBooking}
-                            bookings={bookings}
-                        />
+                        {viewConflicts &&
+                            <ConflictingBookings
+                                startDate={startDate}
+                                startTime={startTime}
+                                bookingType={typeOfBooking}
+                                bookings={bookings}
+                            />
+                        }
                         <Input
                             id="phoneNumber"
                             placeholder="Phone Number"

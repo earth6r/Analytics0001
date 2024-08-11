@@ -45,14 +45,15 @@ const ConflictingBookings = (props: ConflictingBookingsProps) => {
         });
 
     if (conflictingBookings.length === 0) {
-        return (
-            <div className="flex flex-row items-center justify-center space-x-2 text-sm">
-                <div className="text-green-500">
-                    <Check className="h-4 w-4" />
-                </div>
-                <h1>No Conflicting Bookings Found</h1>
-            </div>
-        );
+        // return (
+        //     <div className="flex flex-row items-center justify-center space-x-2 text-sm">
+        //         <div className="text-green-500">
+        //             <Check className="h-4 w-4" />
+        //         </div>
+        //         <h1>No Conflicting Bookings Found</h1>
+        //     </div>
+        // );
+        return null;
     }
 
     return (
@@ -65,7 +66,7 @@ const ConflictingBookings = (props: ConflictingBookingsProps) => {
                     Conflicting Bookings Found
                 </h1>
             </div>
-            <div>
+            <div className="space-y-2">
                 {conflictingBookings
                     .map((booking, index) => {
                         return (
