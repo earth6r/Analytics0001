@@ -50,7 +50,6 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   date = date.tz(localTimezone);
 
   // Format components
-  const dayOfWeek = date.format('dddd');
   const month = date.format('MMMM');
   const day = date.format('DD');
   const hours = date.format('h');
@@ -60,5 +59,5 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   // Get timezone abbreviation
   const timezoneAbbreviation = date.format('z');
 
-  return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
+  return `${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
 }

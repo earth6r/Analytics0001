@@ -70,13 +70,7 @@ const ConflictingBookings = (props: ConflictingBookingsProps) => {
                 {conflictingBookings
                     .map((booking, index) => {
                         return (
-                            <div key={index} className="">
-                                {/* <Badge
-                                    variant="outline"
-                                    className="w-full cursor-pointer text-[10px] font-normal hover:bg-gray-200 dark:hover:bg-gray-700"
-                                >
-                                    {`${booking.email} - ${formatTimestamp(booking.startTimestamp, true)}`}
-                                </Badge> */}
+                            <div key={index}>
                                 <div className="flex flex-row items-center justify-center text-sm space-x-2 border-2 border-red-400 rounded-md py-1">
                                     <span>{booking.email}</span>
                                     <span>{formatTimestamp(booking.startTimestamp, true)}</span>
