@@ -17,7 +17,6 @@ const sendNotification = async (email: string) => {
     })
 }
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const propertyToursRef = collection(db, "usersBookPropertyTour");
 
@@ -27,15 +26,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const propertyTours = propertyToursSnapshot.docs.map(doc => doc.data());
 
     for (const propertyTour of propertyTours) {
-        // Check if the property tour is scheduled in 30 minutes
+        // Convert startTimestamp to a moment object in UTC
         const startTimestampEpochUTC = Number(propertyTour.startTimestamp);
-        const propertyTourDateWithMinute = moment.utc(startTimestampEpochUTC).format('YYYY-MM-DD HH:mm');
+        const propertyTourDate = moment.utc(startTimestampEpochUTC).startOf('minute'); // round down to nearest minute
 
-        const currentDate = moment.utc().format('YYYY-MM-DD HH:mm');
+        // Get the current time in UTC and round down to nearest minute
+        const currentDate = moment.utc().startOf('minute');
 
-        // check if the property tour is scheduled in 30 minutes
-        if (moment(propertyTourDateWithMinute).isSame(moment(currentDate).add(30, 'minutes'))) {
-            sendNotification(propertyTour.email);
+        // Check if the property tour is scheduled in 30 minutes
+        const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
+
+        if (minutesUntilTour === 30) {
+            await sendNotification(propertyTour.email);
         }
     }
+
+    res.status(200).json({ message: "Notifications checked and sent if needed." });
 }
