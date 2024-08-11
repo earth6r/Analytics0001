@@ -20,6 +20,7 @@ import { Tooltip, TooltipContent, TooltipProvider } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import moment from "moment-timezone";
+import SuggestedTimes from "./suggested-times"
 
 interface RescheduleDialogProps {
     booking: any;
@@ -285,6 +286,12 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             </div>
                             <div className="text-xs text-muted-foreground text-center mt-1">EST Timezone 24H Time</div>
                         </div>
+                        <SuggestedTimes
+                            startDate={startDate}
+                            startTime={startTime}
+                            setStartDate={setStartDate}
+                            setStartTime={setStartTime}
+                        />
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">

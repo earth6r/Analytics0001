@@ -39,8 +39,8 @@ const BookingTabs = (props: BookingTabsProps) => {
                     </div>
                 </TabsTrigger>
                 <TabsTrigger
-                    value="propertyTour"
-                    onClick={() => onValueChange("propertyTour")}
+                    value="Property Tour"
+                    onClick={() => onValueChange("Property Tour")}
                 >
                     {/* TODO: make this a reusable component (like PhoneCallView or something) and import it in the dropdown in create booking as well*/}
                     <div className="flex flex-row items-center space-x-2">
@@ -49,8 +49,8 @@ const BookingTabs = (props: BookingTabsProps) => {
                     </div>
                 </TabsTrigger>
                 <TabsTrigger
-                    value="phoneCall"
-                    onClick={() => onValueChange("phoneCall")}
+                    value="Phone Call"
+                    onClick={() => onValueChange("Phone Call")}
                 >
                     {/* TODO: make this a reusable component (like PhoneCallView or something) and import it in the dropdown in create booking as well*/}
                     <div className="flex flex-row items-center space-x-2">

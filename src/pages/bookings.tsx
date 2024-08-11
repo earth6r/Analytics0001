@@ -99,10 +99,10 @@ const Bookings = () => {
             });
 
             // TODO: make this an enum
-            if (tab === "propertyTour") {
+            if (tab === "Property Tour") {
                 // TODO: make this an enum
                 sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Property Tour");
-            } else if (tab === "phoneCall") {
+            } else if (tab === "Phone Call") {
                 sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Phone Call");
             }
 
@@ -121,6 +121,7 @@ const Bookings = () => {
                         open={open}
                         onOpenChange={setOpen}
                         refetch={getBookings.refetch}
+                        bookings={getBookings.data || []}
                     />
                 </div>
 

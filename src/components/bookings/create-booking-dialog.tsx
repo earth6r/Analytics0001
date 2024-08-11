@@ -21,21 +21,23 @@ import { TypeOfBookingSelect } from "./type-of-booking-select"
 import moment from 'moment-timezone';
 import { Badge } from "../ui/badge"
 import SuggestedTimes from "./suggested-times"
+import ConflictingBookings from "./conflicting-bookings"
 // import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
     refetch: () => Promise<any>;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    bookings: any[];
 }
 
 const CreateBookingDialog = (props: CreateBookingDialogProps) => {
-    const { refetch, open, onOpenChange } = props;
+    const { refetch, open, onOpenChange, bookings } = props;
 
     const [email, setEmail] = useState<string>("");
     const [startDate, setStartDate] = useState<Date | undefined>(undefined);
     const [startTime, setStartTime] = useState<string>("");
-    const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
+    const [typeOfBooking, setTypeOfBooking] = useState<'Property Tour' | "Phone Call" | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [firstName, setFirstName] = useState("");
@@ -53,7 +55,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
     const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
     const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
-    const getAvailableHoursTalin = api.bookings.getAvailableHoursTalin.useQuery();
 
     async function onSubmit() {
         if (!email) {
@@ -151,7 +152,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const startTimestamp = utcMomentStartTimestamp.format('YYYY-MM-DD HH:mm:ss');
             const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
 
-            const addTimeMinutes = typeOfBooking === "propertyTour" ? 60 : 15;
+            const addTimeMinutes = typeOfBooking === "Property Tour" ? 60 : 15;
             const endTimestampEst = moment(estMomentStartTimestamp).add(addTimeMinutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
             const estMomentEndTimestamp = moment.tz(endTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
             const utcMomentEndTimestamp = estMomentEndTimestamp.clone().tz('UTC');
@@ -218,7 +219,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 return;
             }
 
-            const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
+            const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
             await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
 
             await refetch();
@@ -259,12 +260,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
     const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
 
-    const [visibleCount, setVisibleCount] = useState(6);
-
-    const loadMore = () => {
-        setVisibleCount(prevCount => prevCount + 6);
-    };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
@@ -302,7 +297,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         </TooltipProvider>
                     </DialogTitle>
                     <DialogDescription>
-                        Create a new booking in the database. This will not send a Google Calendar invite.
+                        Create a new booking in the database.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
@@ -378,11 +373,16 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             <div className="text-xs text-muted-foreground text-center mt-1">EST Timezone 24H Time</div>
                         </div>
                         <SuggestedTimes
-                            getAvailableHoursTalin={getAvailableHoursTalin}
                             startDate={startDate}
                             startTime={startTime}
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
+                        />
+                        <ConflictingBookings
+                            startDate={startDate}
+                            startTime={startTime}
+                            bookingType={typeOfBooking}
+                            bookings={bookings}
                         />
                         <Input
                             id="phoneNumber"
@@ -434,7 +434,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div>{!phoneNumber && `The phone number is required.`}</div>
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
-                                    {/* <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div> */}
+                                    {/* <div>{typeOfBooking === "Property Tour" && !propertyType && `The property type is required.`}</div> */}
                                     <div>{!firstName && `The first name is required.`}</div>
                                     <div>{!lastName && `The last name is required.`}</div>
                                 </div>

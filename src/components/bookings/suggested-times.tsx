@@ -3,9 +3,9 @@ import { Badge } from '../ui/badge';
 import { Skeleton } from '../ui/skeleton';
 import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { api } from '@/utils/api';
 
 interface SuggestedTimesProps {
-    getAvailableHoursTalin: any;
     startDate: Date | undefined;
     startTime: string;
     setStartDate: (date: Date) => void;
@@ -28,13 +28,15 @@ const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
 }
 
 const SuggestedTimes = (props: SuggestedTimesProps) => {
-    const { getAvailableHoursTalin, startDate, setStartDate, setStartTime } = props;
+    const { startDate, setStartDate, setStartTime } = props;
 
     const [visibleCount, setVisibleCount] = useState(6);
 
     const loadMore = () => {
         setVisibleCount(prevCount => prevCount + 6);
     };
+
+    const getAvailableHoursTalin = api.bookings.getAvailableHoursTalin.useQuery();
 
     if (getAvailableHoursTalin.isLoading) {
         return <Skeleton className="h-[82px]" />;

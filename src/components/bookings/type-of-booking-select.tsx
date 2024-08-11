@@ -10,7 +10,7 @@ import {
 import { Phone, School } from "lucide-react";
 
 interface BuyingPropertyTypeSelectProps {
-    selectedItem: "propertyTour" | "phoneCall" | null | undefined;
+    selectedItem: "Property Tour" | "Phone Call" | null | undefined;
     setSelectedItem: (selectedItem: string | undefined) => void;
     className?: string;
 }
@@ -25,13 +25,13 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
                 <SelectValue placeholder="Select a booking type" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="propertyTour" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+                <SelectItem value="Property Tour" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                     <div className="flex flex-row items-center space-x-2">
                         <School className="h-4 w-4" />
                         <h1>Property Tour - 1h</h1>
                     </div>
                 </SelectItem>
-                <SelectItem value="phoneCall" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
+                <SelectItem value="Phone Call" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                     <div className="flex flex-row items-center space-x-2">
                         <Phone className="h-4 w-4" />
                         <h1>Phone Call - 15m</h1>
