@@ -5,13 +5,13 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import moment from "moment-timezone";
 import { type NextApiRequest, type NextApiResponse } from "next/types";
 
-const sendNotification = async (email: string) => {
-    await axios.post(`${API_URL}/send-whatsapp`, {
+const sendNotification = (email: string) => {
+    axios.post(`${API_URL}/send-whatsapp`, {
         recipientPhone: '+14377703354',
         message: `There is a property tour booking in 30 minutes with ${email}.`,
     })
 
-    await axios.post(`${API_URL}/send-message`, {
+    axios.post(`${API_URL}/send-message`, {
         recipientPhone: '+14377703354',
         message: 'There is a booking for a property tour in 30 minutes.',
     })
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
 
         if (minutesUntilTour === 60) {
-            await sendNotification(propertyTour.email);
+            sendNotification(propertyTour.email);
         }
     }
 
