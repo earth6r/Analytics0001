@@ -21,14 +21,16 @@ import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import moment from "moment-timezone";
 import SuggestedTimes from "./suggested-times"
+import ConflictingBookings from "./conflicting-bookings"
 
 interface RescheduleDialogProps {
     booking: any;
     refetchBookings: () => Promise<any>;
+    bookings: any[];
 }
 
 const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
-    const { booking, refetchBookings } = props;
+    const { booking, refetchBookings, bookings } = props;
 
     const [notes, setNotes] = useState("");
     const [startDate, setStartDate] = useState<Date | undefined>();
@@ -291,6 +293,12 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             startTime={startTime}
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
+                        />
+                        <ConflictingBookings
+                            startDate={startDate}
+                            startTime={startTime}
+                            bookingType={booking?.type}
+                            bookings={bookings}
                         />
                     </div>
                 </div>

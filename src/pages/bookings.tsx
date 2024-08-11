@@ -436,7 +436,7 @@ const Bookings = () => {
                                         {/* <div className="select-none">Profile</div> */}
                                     </Button>
                                     <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
-                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
+                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
                                     </div>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -566,7 +566,7 @@ const BookingCard = (props: BookingCardProps) => {
                 )}
             </div>
             <div className="px-6 pb-6">
-                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
+                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
             </div>
         </Card>
     );
