@@ -28,13 +28,13 @@ export function TypeOfBookingSelect(props: BuyingPropertyTypeSelectProps) {
                 <SelectItem value="propertyTour" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                     <div className="flex flex-row items-center space-x-2">
                         <School className="h-4 w-4" />
-                        <h1>Property Tour</h1>
+                        <h1>Property Tour - 1h</h1>
                     </div>
                 </SelectItem>
                 <SelectItem value="phoneCall" className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                     <div className="flex flex-row items-center space-x-2">
                         <Phone className="h-4 w-4" />
-                        <h1>Phone Call</h1>
+                        <h1>Phone Call - 15m</h1>
                     </div>
                 </SelectItem>
             </SelectContent>
