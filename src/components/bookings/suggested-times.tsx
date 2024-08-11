@@ -52,7 +52,7 @@ const SuggestedTimes = (props: SuggestedTimesProps) => {
                         >
                             <Badge
                                 variant="outline"
-                                className="cursor-pointer text-[10px] font-normal"
+                                className="cursor-pointer text-[10px] font-normal hover:bg-gray-200 dark:hover:bg-gray-700"
                                 onClick={() => {
                                     setStartDate(new Date(item.date));
                                     setStartTime(slot);
