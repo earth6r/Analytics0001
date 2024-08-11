@@ -16,8 +16,7 @@ import { CalendarClock, CircleCheck, Info } from "lucide-react"
 import { useState } from "react"
 import Spinner from "../common/spinner"
 import { DatePicker } from "./date-picker"
-import { formatTimeAlternate } from "./create-booking-dialog"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { Tooltip, TooltipContent, TooltipProvider } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import moment from "moment-timezone";
@@ -31,10 +30,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
     const { booking, refetchBookings } = props;
 
     const [notes, setNotes] = useState("");
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [startDate, setStartDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
 
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +41,17 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
 
     async function handleReschedule() {
         setIsLoading(true);
-        // TODO: need to call endpoint in Home0001 to create calendar booking + send whatsapp message
+
+        if (!startDate || !startTime) {
+            setIsLoading(false);
+            toast({
+                title: "Error",
+                description: "Please select a valid date and time.",
+                className: toastErrorStyle,
+            });
+            return;
+        }
+
         const startHour = Number(startTime.split(":")[0]);
         const startMinuteNumber = Number(startTime.split(":")[1]);
         startDate.setHours(startHour, startMinuteNumber, 0, 0);
@@ -52,32 +59,84 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
         if (startMinute === "0") {
             startMinute = "00";
         }
+
         const startMonthUTCMonth = startDate.getMonth() + 1;
         const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
         const startDay = startDate.getDate().toString().length === 1 ? `0${startDate.getDate()}` : startDate.getDate();
-        let startTimestamp = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+        const startTimestampEst = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
 
         // Convert startTimestamp from EST to UTC
-        const estMoment = moment.tz(startTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
-        const utcMoment = estMoment.clone().tz('UTC');
-        startTimestamp = utcMoment.format('YYYY-MM-DD HH:mm:ss');
+        const estMomentStartTimestamp = moment.tz(startTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+        const utcMomentStartTimestamp = estMomentStartTimestamp.clone().tz('UTC');
+        const startTimestamp = utcMomentStartTimestamp.format('YYYY-MM-DD HH:mm:ss');
+        const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
 
-        const endHour = Number(endTime.split(":")[0]);
-        const endMinuteNumber = Number(endTime.split(":")[1]);
-        endDate.setHours(endHour, endMinuteNumber, 0, 0);
-        let endMinute = endMinuteNumber.toString();
-        if (endMinute === "0") {
-            endMinute = "00";
+        const addTimeMinutes = booking?.type === "Property Tour" ? 60 : 15;
+        const endTimestampEst = moment(estMomentStartTimestamp).add(addTimeMinutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+        const estMomentEndTimestamp = moment.tz(endTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+        const utcMomentEndTimestamp = estMomentEndTimestamp.clone().tz('UTC');
+        const endTimestamp = utcMomentEndTimestamp.format('YYYY-MM-DD HH:mm:ss');
+        const formattedEndTimestamp = new Date(endTimestamp).getTime().toString();
+
+        if (isNaN(Number(formattedStartTimestamp))) {
+            toast({
+                title: "Invalid timestamp",
+                description: "Please enter a valid start timestamp.",
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
         }
-        const endMonthUTCMonth = endDate.getMonth() + 1;
-        const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
-        const endDay = endDate.getDate().toString().length === 1 ? `0${endDate.getDate()}` : endDate.getDate();
-        let endTimestamp = `${endDate.getFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
 
-        // Convert endTimestamp from EST to UTC
-        const estEndMoment = moment.tz(endTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
-        const utcEndMoment = estEndMoment.clone().tz('UTC');
-        endTimestamp = utcEndMoment.format('YYYY-MM-DD HH:mm:ss');
+        if (startTimestamp.length !== 19) {
+            toast({
+                title: "Invalid timestamp",
+                description: `Please enter a valid start timestamp. Length must be 19. Got ${formattedStartTimestamp.length}.`,
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        if (isNaN(Number(formattedEndTimestamp))) {
+            toast({
+                title: "Invalid timestamp",
+                description: "Please enter a valid end timestamp.",
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        if (endTimestamp.length !== 19) {
+            toast({
+                title: "Invalid timestamp",
+                description: `Please enter a valid end timestamp. Length must be 19. Got ${formattedEndTimestamp.length}.`,
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        if (new Date(startTimestamp).getTime() >= new Date(endTimestamp).getTime()) {
+            toast({
+                title: "Invalid timestamp",
+                description: "The start timestamp must be before the end timestamp.",
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        if (new Date(startTimestamp).getTime() <= new Date().getTime()) {
+            toast({
+                title: "Invalid timestamp",
+                description: "The start timestamp must be in the future.",
+                className: toastErrorStyle,
+            });
+            setIsLoading(false);
+            return;
+        }
 
         try {
             await rescheduleBooking.mutateAsync({
@@ -105,10 +164,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
 
             setIsLoading(false);
             setIsSuccess(false);
-            setStartDate(new Date());
-            setEndDate(new Date());
+            setStartDate(undefined);
             setStartTime("");
-            setEndTime("");
             setOpen(false);
             return;
         }
@@ -118,10 +175,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
 
         setTimeout(() => {
             setNotes("");
-            setStartDate(new Date());
-            setEndDate(new Date());
+            setStartDate(undefined);
             setStartTime("");
-            setEndTime("");
             setOpen(false);
             setIsSuccess(false);
         }, 2000);
@@ -184,6 +239,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                     <div className="grid gap-4 px-6 py-2">
                         <div>
                             <div className="flex flex-row items-center space-x-2">
+                                {/* @ts-expect-error TODO: fix this type */}
                                 <DatePicker placeholder="Pick a start date" value={startDate} onValueChange={setStartDate} />
                                 <Input
                                     id="startTimestamp"
@@ -227,64 +283,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                                     value={startTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center mt-1">EST Timezone 24H Time</div>
                         </div>
-                        <div>
-                            <div className="flex flex-row items-center space-x-2">
-                                <DatePicker placeholder="Pick an end date" value={endDate} onValueChange={setEndDate} />
-                                {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                                {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                                <Input
-                                    id="endTimestamp"
-                                    placeholder="🕛 HH:MM"
-                                    className="focus-visible:ring-0 focus-visible:ring-offset-0"
-                                    onChange={(e) => {
-                                        let input = e.target.value;
-
-                                        const numbers = input.split(":").map(Number);
-                                        // @ts-expect-error TODO: fix type
-                                        const isDeleting = e.nativeEvent?.inputType === 'deleteContentBackward' || e.nativeEvent?.inputType === 'deleteContentForward';
-                                        const isInputStartingWithBasicDigit = input.startsWith("0") || input.startsWith("1") || input.startsWith("2");
-
-                                        if (input.length > 5 || numbers.some(isNaN) || input.split(":").length - 1 > 1) {
-                                            return;
-                                        }
-
-                                        if (input.length === 3 && !input.includes(":")) {
-                                            input = `${input.slice(0, 2)}:${input.slice(2)}`;
-                                        }
-
-                                        if (!isDeleting && input.length > 3 && (Number(input[3]) > 5 || Number(input[0]) > 2)) {
-                                            return;
-                                        }
-
-                                        if (input.startsWith("2") && input.length === 2 && !input.includes(":") && Number(input[1]) > 3) {
-                                            return;
-                                        }
-
-                                        if (!isDeleting) {
-                                            if (!isInputStartingWithBasicDigit && input.length === 1 && !input.includes(":")) {
-                                                input = `0${input}:`;
-                                            } else if (input.length === 2 && !input.includes(":")) {
-                                                input = `${input}:`;
-                                            } else if (isInputStartingWithBasicDigit && input[1] === ":" && input.length === 2) {
-                                                input = `0${input}`;
-                                            }
-                                        }
-                                        setEndTime(input)
-                                    }}
-                                    value={endTime}
-                                />
-                            </div>
-                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
-                        </div>
-                        {/* <Input
-                            id="notes"
-                            type="text"
-                            placeholder="Customer Notes"
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                        /> */}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
@@ -295,10 +295,8 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             className="w-full"
                             onClick={() => {
                                 setNotes("");
-                                setStartDate(new Date());
-                                setEndDate(new Date());
+                                setStartDate(undefined);
                                 setStartTime("");
-                                setEndTime("");
                                 setOpen(false);
                             }}
                             disabled={isLoading || isSuccess}
@@ -307,7 +305,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                         </Button>
                     </DialogClose>
                     <Button type="button" className="w-full" onClick={handleReschedule}
-                        disabled={!startDate || !startTime || !endDate || !endTime || isSuccess || isLoading}>
+                        disabled={!startDate || !startTime || isSuccess || isLoading}>
                         {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Reschedule")}
                     </Button>
                 </DialogFooter>

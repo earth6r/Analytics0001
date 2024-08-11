@@ -3,6 +3,7 @@ import { db } from "@/utils/firebase/initialize";
 import axios from "axios";
 import admin from 'firebase-admin';
 import { collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import moment from "moment";
 import { z } from "zod";
 
 // Set configuration options for the API route
@@ -10,8 +11,8 @@ export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
-// const API_URL = `http://localhost:3000/api`;
-const API_URL = `https://home0001.com/api`;
+export const API_URL = `http://localhost:3000/api`;
+// const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
@@ -121,7 +122,6 @@ export const bookingsRouter = createTRPCRouter({
             startTimestamp: z.string(),
             endTimestamp: z.string(),
             typeOfBooking: z.string(),
-            propertyType: z.string(),
             phoneNumber: z.string(),
             notes: z.string(),
         }))
@@ -134,13 +134,14 @@ export const bookingsRouter = createTRPCRouter({
                     startTimestamp: input.startTimestamp,
                     endTimestamp: input.endTimestamp,
                     typeOfBooking: input.typeOfBooking,
-                    propertyType: input.propertyType,
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
                     blockWhatsApp: true,
                 })
             } catch (error) {
                 console.error('Error creating property tour booking', error);
+                // TODO: handle this better i.e. return status error
+                throw new Error('Error creating property tour booking');
             }
 
             return {
@@ -226,7 +227,7 @@ export const bookingsRouter = createTRPCRouter({
                 throw new Error('Booking not found');
             }
 
-            const additionalNotes = currentDoc.data().additionalNotes;
+            const { additionalNotes } = currentDoc.data();
 
             const fullNotes = `${additionalNotes}\n\nPost Meeting Notes: \n${input.postNotes}`;
 
@@ -281,8 +282,8 @@ export const bookingsRouter = createTRPCRouter({
             const rescheduleCount = (await getDoc(d)).data()?.rescheduleCount || 0;
 
             await updateDoc(d, {
-                startTimestamp: Number(new Date(input.startTimestamp).getTime()),
-                endTimestamp: Number(new Date(input.endTimestamp).getTime()),
+                startTimestamp: Number(moment.utc(input.startTimestamp, "YYYY-MM-DD HH:mm:ss").valueOf()),
+                endTimestamp: Number(moment.utc(input.endTimestamp, "YYYY-MM-DD HH:mm:ss").valueOf()),
                 additionalNotes: `${currentAdditionalNotes}\n\nRescheduled Booking: \n${appendAdditionalNotes}`,
                 notes: `${currentNotes}\n\nRescheduled Customer Notes: \n${input.customerNotes || '-'}`,
                 rescheduleCount: rescheduleCount + 1,
@@ -305,5 +306,13 @@ export const bookingsRouter = createTRPCRouter({
                     console.error('Error creating property tour booking', error);
                 }
             }
+        }),
+
+    getAvailableHoursTalin: publicProcedure
+        .query(async () => {
+            const response = await axios.post(
+                `${API_URL}/google/available-meeting-hours`,
+            );
+            return response.data.data;
         }),
 });

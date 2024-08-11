@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import moment from "moment-timezone";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -37,24 +38,27 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
 
   let date;
   if (threeDigits) {
-    date = new Date(Number(timestampStr));
+    date = moment.utc(Number(timestampStr));
   } else {
-    date = new Date(Number(timestampStr) * 1000);
+    date = moment.utc(Number(timestampStr) * 1000);
   }
 
-  // Convert date to local time and format components
-  const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long' });
-  const month = date.toLocaleString('en-US', { month: 'long' });
-  const day = date.toLocaleString('en-US', { day: '2-digit' });
-  const hours = date.toLocaleString('en-US', { hour: 'numeric', hour12: true }).split(' ')[0];
-  const minutes = date.toLocaleString('en-US', { minute: '2-digit' }).padStart(2, '0');
-  const period = date.toLocaleString('en-US', { hour: 'numeric', hour12: true }).split(' ')[1];
+  // Use the browser's local timezone
+  const localTimezone = moment.tz.guess();
 
-  // EST, PST, etc.
-  const timezoneAbbreviation = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
-    .formatToParts(date)
-    .find(part => part.type === 'timeZoneName')
-    ?.value.match(/\b[A-Z]{3,4}\b/)?.[0] || '';
+  // Convert to local timezone
+  date = date.tz(localTimezone);
+
+  // Format components
+  const dayOfWeek = date.format('dddd');
+  const month = date.format('MMMM');
+  const day = date.format('DD');
+  const hours = date.format('h');
+  const minutes = date.format('mm');
+  const period = date.format('A');
+
+  // Get timezone abbreviation
+  const timezoneAbbreviation = date.format('z');
 
   return `${dayOfWeek}, ${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
 }
