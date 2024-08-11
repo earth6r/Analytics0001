@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the property tour is scheduled in 30 minutes
         const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
 
-        if (minutesUntilTour === 30) {
+        if (minutesUntilTour === 60) {
             await sendNotification(propertyTour.email);
         }
     }
