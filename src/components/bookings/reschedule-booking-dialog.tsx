@@ -189,7 +189,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
 
         setTimeout(() => {
             setViewConflicts(true);
-        }, 1000);
+        }, 2500);
     };
 
     const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);

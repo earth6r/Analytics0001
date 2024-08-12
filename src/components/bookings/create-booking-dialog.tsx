@@ -251,7 +251,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setTimeout(() => {
                 setViewConflicts(true);
-            }, 1000);
+            }, 2500);
         } catch (error) {
             setIsLoading(false);
             toast({
