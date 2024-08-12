@@ -12,7 +12,7 @@ export const config = {
 }
 
 // export const API_URL = `http://localhost:3000/api`;
-const API_URL = `https://home0001.com/api`;
+export const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
