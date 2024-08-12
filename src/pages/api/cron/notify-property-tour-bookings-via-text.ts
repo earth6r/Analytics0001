@@ -69,5 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
 
+    console.error("testing cron job");
+
     res.status(200).json({ message: "Notifications checked and sent if needed." });
 }
