@@ -5,15 +5,35 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import moment from "moment-timezone";
 import { type NextApiRequest, type NextApiResponse } from "next/types";
 
-const sendNotification = (email: string) => {
-    axios.post(`${API_URL}/send-whatsapp`, {
+const sendNotification = (
+    email: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    startTimestamp: string,
+) => {
+    axios.post(`${API_URL}/send-property-tour-reminder`, {
+        // TODO: change recipientPhone to all numbers of team
         recipientPhone: '+14377703354',
-        message: `There is a property tour booking in 30 minutes with ${email}.`,
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        startTimestamp,
     })
 
     axios.post(`${API_URL}/send-message`, {
+        // TODO: change recipientPhone to all numbers of team
         recipientPhone: '+14377703354',
-        message: 'There is a booking for a property tour in 30 minutes.',
+        message:
+            `There is a booking for a property tour in 1 hour.
+
+Name: ${firstName} ${lastName}
+Phone: ${phoneNumber}
+Start Time: ${startTimestamp}
+Date: ${startTimestamp}
+Details: https://analytics.home0001.com/booking-details?email=${email}
+            `,
     })
 }
 
@@ -36,8 +56,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the property tour is scheduled in 30 minutes
         const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
 
+        const startTimestampEst = moment.utc(startTimestampEpochUTC).tz('America/New_York').format('YYYY-MM-DD HH:mm:ss');
+
         if (minutesUntilTour === 60) {
-            sendNotification(propertyTour.email);
+            sendNotification(
+                propertyTour.email,
+                propertyTour.firstName,
+                propertyTour.lastName,
+                propertyTour.phoneNumber,
+                startTimestampEst,
+            );
         }
     }
 
