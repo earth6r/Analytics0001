@@ -11,14 +11,11 @@ interface SuggestedTimesProps {
     startTime: string;
     setStartDate: (date: Date) => void;
     setStartTime: (time: string) => void;
-    getAvailableHoursTalin: any;
 }
 
 const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
     const { startDate, startTime } = props;
     const [showSuggestedTimes, setShowSuggestedTimes] = useState(false);
-
-    const getAvailableHoursTalin = api.bookings.getAvailableHoursTalin.useQuery();
 
     if (startDate && startTime) {
         return null;
@@ -40,19 +37,21 @@ const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
     return (
         <div className="flex flex-col space-y-4">
             <h1 className="text-center text-sm font-semibold text-primary">Suggested Times</h1>
-            <SuggestedTimes {...props} getAvailableHoursTalin={getAvailableHoursTalin} />
+            <SuggestedTimes {...props} />
         </div>
     );
 }
 
 const SuggestedTimes = (props: SuggestedTimesProps) => {
-    const { startDate, setStartDate, setStartTime, getAvailableHoursTalin } = props;
+    const { startDate, setStartDate, setStartTime } = props;
 
     const [visibleCount, setVisibleCount] = useState(6);
 
     const loadMore = () => {
         setVisibleCount(prevCount => prevCount + 6);
     };
+
+    const getAvailableHoursTalin = api.bookings.getAvailableHoursTalin.useQuery();
 
     if (getAvailableHoursTalin.isLoading) {
         return <Skeleton className="h-[82px]" />;
