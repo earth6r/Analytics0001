@@ -15,9 +15,23 @@ interface SuggestedTimesProps {
 
 const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
     const { startDate, startTime } = props;
+    const [showSuggestedTimes, setShowSuggestedTimes] = useState(false);
 
     if (startDate && startTime) {
         return null;
+    }
+
+    if (!showSuggestedTimes) {
+        return (
+            <div
+                onClick={
+                    () => setShowSuggestedTimes(true)
+                }
+                className='text-center text-sm text-blue-500 cursor-pointer hover:underline'
+            >
+                Want to see suggested times?
+            </div>
+        );
     }
 
     return (
