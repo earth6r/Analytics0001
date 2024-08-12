@@ -16,7 +16,7 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { useUser } from "@/contexts/UserContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, User, X } from "lucide-react";
+import { ArrowUpDownIcon, Phone, School, User, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
@@ -99,10 +99,10 @@ const Bookings = () => {
             });
 
             // TODO: make this an enum
-            if (tab === "propertyTour") {
+            if (tab === "Property Tour") {
                 // TODO: make this an enum
                 sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Property Tour");
-            } else if (tab === "phoneCall") {
+            } else if (tab === "Phone Call") {
                 sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Phone Call");
             }
 
@@ -121,6 +121,7 @@ const Bookings = () => {
                         open={open}
                         onOpenChange={setOpen}
                         refetch={getBookings.refetch}
+                        bookings={getBookings.data || []}
                     />
                 </div>
 
@@ -308,7 +309,7 @@ const Bookings = () => {
                         {sortedData?.map((booking: any) => (
                             <div key={booking.id} className="grid grid-cols-9 gap-4 items-center">
                                 <TooltipProvider>
-                                    <Tooltip>
+                                    <Tooltip delayDuration={200}>
                                         <TooltipTrigger asChild>
                                             <div
                                                 className="col-span-2 flex flex-row items-center space-x-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2"
@@ -373,7 +374,14 @@ const Bookings = () => {
                                     </Tooltip>
                                 </TooltipProvider>
                                 {/* <div>{booking.type || "No Type Provided"}</div> */}
-                                <div className="col-span-2">{formatTimestamp(booking.startTimestamp) || "No Start Timestamp Provided"}</div>
+                                <div className="col-span-2 flex flex-row items-center space-x-2">
+                                    {booking.type === "Property Tour" ? (
+                                        <School className="w-4 h-4" />
+                                    ) : (
+                                        <Phone className="w-4 h-4" />
+                                    )}
+                                    <div>{formatTimestamp(booking.startTimestamp, true) || "No Start Timestamp Provided"}</div>
+                                </div>
                                 {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                                 <div className={cn(booking.phoneNumber ? "" : "text-center mr-5")}>{booking.phoneNumber || "-"}</div>
                                 {/* <pre className="col-span-3">
@@ -428,7 +436,7 @@ const Bookings = () => {
                                         {/* <div className="select-none">Profile</div> */}
                                     </Button>
                                     <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
-                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
+                                        <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
                                     </div>
                                     <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
@@ -558,7 +566,7 @@ const BookingCard = (props: BookingCardProps) => {
                 )}
             </div>
             <div className="px-6 pb-6">
-                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} />
+                <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
             </div>
         </Card>
     );

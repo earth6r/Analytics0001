@@ -1,5 +1,4 @@
 import Spinner from "@/components/common/spinner"
-import { BuyingPropertyTypeSelect } from "@/components/customers/buying-property-type-select"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -14,66 +13,37 @@ import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
 import { CircleCheck, CirclePlus, Info } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
 import { DatePicker } from "./date-picker"
 import { TypeOfBookingSelect } from "./type-of-booking-select"
 import moment from 'moment-timezone';
+import { Badge } from "../ui/badge"
+import SuggestedTimes from "./suggested-times"
+import ConflictingBookings from "./conflicting-bookings"
 // import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
     refetch: () => Promise<any>;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    bookings: any[];
 }
 
-// TODO: move to utils
-export const formatTimeAlternate = (startTimestamp: string) => {
-    // Step 1: Extract date and time components
-    const [datePart, timePart, period] = startTimestamp.split(" ");
-
-    // Step 2: Reformat the date to YYYY-MM-DD
-    // @ts-expect-error TODO: fix type
-    const [year, day, month] = datePart.split("-");
-    // @ts-expect-error TODO: fix type
-    const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-
-    // Step 3: Reformat the time to HH:MM:SS
-    // @ts-expect-error TODO: fix type
-    // eslint-disable-next-line prefer-const
-    let [hours, minutes, seconds] = timePart.split(":");
-    if (period === "PM" && hours !== "12") {
-        // @ts-expect-error TODO: fix type
-        hours = (parseInt(hours) + 12).toString();
-    } else if (period === "AM" && hours === "12") {
-        hours = "00";
-    }
-    // @ts-expect-error TODO: fix type
-    const formattedTime = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:${seconds.padStart(2, "0")}`;
-
-    // Step 4: Combine the date and time into the desired format
-    startTimestamp = `${formattedDate} ${formattedTime}`;
-
-    return startTimestamp;
-};
-
 const CreateBookingDialog = (props: CreateBookingDialogProps) => {
-    const { refetch, open, onOpenChange } = props;
+    const { refetch, open, onOpenChange, bookings } = props;
 
     const [email, setEmail] = useState<string>("");
-    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
     const [startTime, setStartTime] = useState<string>("");
-    const [endDate, setEndDate] = useState<Date>(new Date());
-    const [endTime, setEndTime] = useState<string>("");
-    const [typeOfBooking, setTypeOfBooking] = useState<'propertyTour' | "phoneCall" | null | undefined>(undefined);
-    const [propertyType, setPropertyType] = useState<string | null | undefined>(undefined);
+    const [typeOfBooking, setTypeOfBooking] = useState<'Property Tour' | "Phone Call" | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [notes, setNotes] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
+    const [viewConflicts, setViewConflicts] = useState(true);
 
     // const form = useForm({
     //     defaultValues: {
@@ -142,37 +112,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             return;
         }
 
-        if (!endDate) {
-            toast({
-                title: "End Date is required",
-                description: "Please enter the date.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!endTime) {
-            toast({
-                title: "End Time is required",
-                description: "Please enter the time.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
         if (!typeOfBooking) {
             toast({
                 title: "Type of Booking is required",
                 description: "Please select the type of booking.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (typeOfBooking === "propertyTour" && !propertyType) {
-            toast({
-                title: "Property Type is required",
-                description: "Please enter the property type.",
                 className: toastErrorStyle,
             });
             return;
@@ -197,34 +140,25 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             if (startMinute === "0") {
                 startMinute = "00";
             }
-            const formattedStartTimestamp = startDate.getTime().toString();
+
+            // TODO: here and reschedule logic, change var name to not have utc in it https://github.com/users/apinanyogaratnam/projects/35/views/1?filterQuery=not+have+ut&pane=issue&itemId=74344526
             const startMonthUTCMonth = startDate.getMonth() + 1;
             const startMonth = startMonthUTCMonth.toString().length === 1 ? `0${startMonthUTCMonth}` : startMonthUTCMonth;
             const startDay = startDate.getDate().toString().length === 1 ? `0${startDate.getDate()}` : startDate.getDate();
-            let startTimestamp = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
+            const startTimestampEst = `${startDate.getFullYear()}-${startMonth}-${startDay} ${startHour}:${startMinute}:00`;
 
             // Convert startTimestamp from EST to UTC
-            const estMoment = moment.tz(startTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
-            const utcMoment = estMoment.clone().tz('UTC');
-            startTimestamp = utcMoment.format('YYYY-MM-DD HH:mm:ss');
+            const estMomentStartTimestamp = moment.tz(startTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+            const utcMomentStartTimestamp = estMomentStartTimestamp.clone().tz('UTC');
+            const startTimestamp = utcMomentStartTimestamp.format('YYYY-MM-DD HH:mm:ss');
+            const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
 
-            const endHour = Number(endTime.split(":")[0]);
-            const endMinuteNumber = Number(endTime.split(":")[1]);
-            endDate.setHours(endHour, endMinuteNumber, 0, 0);
-            let endMinute = endMinuteNumber.toString();
-            if (endMinute === "0") {
-                endMinute = "00";
-            }
-            const formattedEndTimestamp = endDate.getTime().toString();
-            const endMonthUTCMonth = endDate.getMonth() + 1;
-            const endMonth = endMonthUTCMonth.toString().length === 1 ? `0${endMonthUTCMonth}` : endMonthUTCMonth;
-            const endDay = endDate.getDate().toString().length === 1 ? `0${endDate.getDate()}` : endDate.getDate();
-            let endTimestamp = `${endDate.getFullYear()}-${endMonth}-${endDay} ${endHour}:${endMinute}:00`;
-
-            // Convert endTimestamp from EST to UTC
-            const estEndMoment = moment.tz(endTimestamp, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
-            const utcEndMoment = estEndMoment.clone().tz('UTC');
-            endTimestamp = utcEndMoment.format('YYYY-MM-DD HH:mm:ss');
+            const addTimeMinutes = typeOfBooking === "Property Tour" ? 60 : 15;
+            const endTimestampEst = moment(estMomentStartTimestamp).add(addTimeMinutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+            const estMomentEndTimestamp = moment.tz(endTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
+            const utcMomentEndTimestamp = estMomentEndTimestamp.clone().tz('UTC');
+            const endTimestamp = utcMomentEndTimestamp.format('YYYY-MM-DD HH:mm:ss');
+            const formattedEndTimestamp = new Date(endTimestamp).getTime().toString();
 
             if (isNaN(Number(formattedStartTimestamp))) {
                 toast({
@@ -286,9 +220,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 return;
             }
 
-            const createBooking = typeOfBooking === "propertyTour" ? createPropertyTourBooking : createPhoneBooking;
-            // @ts-expect-error TODO: fix type
-            await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, propertyType, phoneNumber, notes, firstName, lastName });
+            setViewConflicts(false);
+
+            const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
+            await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
 
             await refetch();
 
@@ -304,18 +239,19 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setTimeout(() => {
                 setIsSuccess(false);
+                onOpenChange(false);
                 setEmail("");
                 setFirstName("");
                 setLastName("");
                 setPhoneNumber("");
-                setStartDate(new Date());
+                setStartDate(undefined);
                 setStartTime("");
-                setEndDate(new Date());
-                setEndTime("");
                 setTypeOfBooking(undefined);
-                setPropertyType(null);
-                onOpenChange(false);
             }, 2000);
+
+            setTimeout(() => {
+                setViewConflicts(true);
+            }, 1000);
         } catch (error) {
             setIsLoading(false);
             toast({
@@ -327,7 +263,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     }
 
     // TODO: disabled for timestamp 19 len and Nan timestamp
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !endDate || !endTime || !typeOfBooking || !phoneNumber || !firstName || !lastName;
+    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !typeOfBooking || !phoneNumber || !firstName || !lastName;
 
     const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
 
@@ -361,14 +297,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                         }
                                     }
                                 />
-                                <TooltipContent className="mt-[-50px] select-none">
-                                    <p className="font-semibold max-w-96">This will create a Google Calendar Event and send a WhatsApp Notification Message to the Home0001 Team.</p>
+                                <TooltipContent className="mt-[-70px] select-none">
+                                    <p className="font-semibold max-w-96">This will create a Google Calendar Event, update the hubspot contact property and send a WhatsApp Notification Message to the Home0001 Team.</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                     </DialogTitle>
                     <DialogDescription>
-                        Create a new booking in the database. This will not send a Google Calendar invite.
+                        Create a new booking in the database.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
@@ -391,10 +327,13 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             onChange={(e) => setLastName(e.target.value)}
                             value={lastName}
                         />
+                        {/* @ts-expect-error TODO: fix type */}
+                        <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         {/* TODO: think about whether there should be a date picker input and a time picker input */}
                         {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
                         <div>
                             <div className="flex flex-row items-center space-x-2">
+                                {/* @ts-expect-error: TODO: fix type */}
                                 <DatePicker placeholder="Pick a start date" value={startDate} onValueChange={setStartDate} />
                                 <Input
                                     id="startTimestamp"
@@ -438,65 +377,28 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     value={startTime}
                                 />
                             </div>
-                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
+                            <div className="text-xs text-muted-foreground text-center mt-1">EST Timezone 24H Time</div>
                         </div>
-                        <div>
-                            <div className="flex flex-row items-center space-x-2">
-                                <DatePicker placeholder="Pick an end date" value={endDate} onValueChange={setEndDate} />
-                                {/* TODO: think about whether there should be a date picker input and a time picker input */}
-                                {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
-                                <Input
-                                    id="endTimestamp"
-                                    placeholder="🕛 HH:MM"
-                                    className="focus-visible:ring-0 focus-visible:ring-offset-0"
-                                    onChange={(e) => {
-                                        let input = e.target.value;
-
-                                        const numbers = input.split(":").map(Number);
-                                        // @ts-expect-error TODO: fix type
-                                        const isDeleting = e.nativeEvent?.inputType === 'deleteContentBackward' || e.nativeEvent?.inputType === 'deleteContentForward';
-                                        const isInputStartingWithBasicDigit = input.startsWith("0") || input.startsWith("1") || input.startsWith("2");
-
-                                        if (input.length > 5 || numbers.some(isNaN) || input.split(":").length - 1 > 1) {
-                                            return;
-                                        }
-
-                                        if (input.length === 3 && !input.includes(":")) {
-                                            input = `${input.slice(0, 2)}:${input.slice(2)}`;
-                                        }
-
-                                        if (!isDeleting && input.length > 3 && (Number(input[3]) > 5 || Number(input[0]) > 2)) {
-                                            return;
-                                        }
-
-                                        if (input.startsWith("2") && input.length === 2 && !input.includes(":") && Number(input[1]) > 3) {
-                                            return;
-                                        }
-
-                                        if (!isDeleting) {
-                                            if (!isInputStartingWithBasicDigit && input.length === 1 && !input.includes(":")) {
-                                                input = `0${input}:`;
-                                            } else if (input.length === 2 && !input.includes(":")) {
-                                                input = `${input}:`;
-                                            } else if (isInputStartingWithBasicDigit && input[1] === ":" && input.length === 2) {
-                                                input = `0${input}`;
-                                            }
-                                        }
-                                        setEndTime(input)
-                                    }}
-                                    value={endTime}
-                                />
-                            </div>
-                            <div className="text-xs text-muted-foreground text-center">EST Timezone</div>
-                        </div>
+                        <SuggestedTimes
+                            startDate={startDate}
+                            startTime={startTime}
+                            setStartDate={setStartDate}
+                            setStartTime={setStartTime}
+                        />
+                        {viewConflicts &&
+                            <ConflictingBookings
+                                startDate={startDate}
+                                startTime={startTime}
+                                bookingType={typeOfBooking}
+                                bookings={bookings}
+                            />
+                        }
                         <Input
                             id="phoneNumber"
                             placeholder="Phone Number"
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             value={phoneNumber}
                         />
-                        {/* @ts-expect-error TODO: fix type */}
-                        <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         {/* <Input
                             id="notes"
                             placeholder="Customer Notes"
@@ -511,17 +413,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
                     <Button variant="outline" className="w-full" onClick={() => {
                         setEmail("");
-                        setPropertyType(null);
                         setFirstName("");
                         setLastName("");
-                        setStartDate(new Date());
+                        setStartDate(undefined);
                         setStartTime("");
-                        setEndDate(new Date());
-                        setEndTime("");
                         setTypeOfBooking(null);
                         setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startTime && !endTime && !phoneNumber && !typeOfBooking) || isSuccess
+                        isLoading || (!email && !startDate && !startTime && !phoneNumber && !typeOfBooking) || isSuccess
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
@@ -541,14 +440,10 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     <div>{!startTime && `The start time is required.`}</div>
                                     {/* <div>{startTimestamp && isNaN(Number(new Date(startTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div> */}
                                     {/* <div>{startTimestamp && startTimestamp.length !== 19 && `The timestamp must be of length 19.`}</div> */}
-                                    {/* <div>{!endTimestamp && `The end timestamp is required.`}</div> */}
-                                    {/* <div>{endTimestamp && isNaN(Number(new Date(endTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div> */}
-                                    <div>{!endDate && `The end date is required.`}</div>
-                                    <div>{!endTime && `The end time is required.`}</div>
                                     <div>{!phoneNumber && `The phone number is required.`}</div>
                                     <div>{!typeOfBooking
                                         && `The type of booking is required.`}</div>
-                                    {/* <div>{typeOfBooking === "propertyTour" && !propertyType && `The property type is required.`}</div> */}
+                                    {/* <div>{typeOfBooking === "Property Tour" && !propertyType && `The property type is required.`}</div> */}
                                     <div>{!firstName && `The first name is required.`}</div>
                                     <div>{!lastName && `The last name is required.`}</div>
                                 </div>

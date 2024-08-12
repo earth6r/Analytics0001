@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/crypto-prices",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/notify-property-tour-bookings-via-text",
+      "schedule": "* * * * *"
     }
   ]
 }
