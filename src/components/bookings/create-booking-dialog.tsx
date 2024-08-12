@@ -315,18 +315,20 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
                         />
-                        <Input
-                            id="firstName"
-                            placeholder="First Name"
-                            onChange={(e) => setFirstName(e.target.value)}
-                            value={firstName}
-                        />
-                        <Input
-                            id="lastName"
-                            placeholder="Last Name"
-                            onChange={(e) => setLastName(e.target.value)}
-                            value={lastName}
-                        />
+                        <div className="flex flex-row items-center space-x-2">
+                            <Input
+                                id="firstName"
+                                placeholder="First Name"
+                                onChange={(e) => setFirstName(e.target.value)}
+                                value={firstName}
+                            />
+                            <Input
+                                id="lastName"
+                                placeholder="Last Name"
+                                onChange={(e) => setLastName(e.target.value)}
+                                value={lastName}
+                            />
+                        </div>
                         {/* @ts-expect-error TODO: fix type */}
                         <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         {/* TODO: think about whether there should be a date picker input and a time picker input */}
