@@ -4,7 +4,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar, CalendarNoDay } from "@/components/ui/calendar"
 import {
     Popover,
     PopoverContent,
@@ -16,10 +16,11 @@ interface DatetimePickerProps {
     placeholder?: string;
     value: Date;
     onValueChange: (value: Date) => void;
+    noDay?: boolean;
 }
 
 export function DatePicker(props: DatetimePickerProps) {
-    const { placeholder = "Pick a date", value, onValueChange } = props;
+    const { placeholder = "Pick a date", value, onValueChange, noDay = false } = props;
 
     return (
         <Popover>
@@ -36,13 +37,23 @@ export function DatePicker(props: DatetimePickerProps) {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 z-[100] pointer-events-auto">
-                <Calendar
-                    mode="single"
-                    selected={value}
-                    onSelect={(date) => {
-                        onValueChange(date as Date);
-                    }}
-                />
+                {noDay ? (
+                    <CalendarNoDay
+                        mode="single"
+                        selected={value}
+                        onSelect={(date) => {
+                            onValueChange(date as Date);
+                        }}
+                    />
+                ) : (
+                    <Calendar
+                        mode="single"
+                        selected={value}
+                        onSelect={(date) => {
+                            onValueChange(date as Date);
+                        }}
+                    />
+                )}
             </PopoverContent>
         </Popover>
     )
