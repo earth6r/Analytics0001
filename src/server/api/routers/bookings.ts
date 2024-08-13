@@ -11,8 +11,8 @@ export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
-// export const API_URL = `http://localhost:3000/api`;
-export const API_URL = `https://home0001.com/api`;
+export const API_URL = `http://localhost:3000/api`;
+// export const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
@@ -290,7 +290,21 @@ export const bookingsRouter = createTRPCRouter({
                 status: 'rescheduled',
             });
 
-            if (input.bookingType === "Property Tour") { }
+            if (input.bookingType === "Property Tour") {
+                try {
+                    await axios.post(`${API_URL}/bookings/reschedule-property-tour-booking`, {
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        startTimestamp: input.startTimestamp,
+                        endTimestamp: input.endTimestamp,
+                        phoneNumber: phoneNumber,
+                        blockWhatsApp: false,
+                    })
+                } catch (error) {
+                    console.error('Error creating property tour booking', error);
+                }
+            }
             else {
                 try {
                     await axios.post(`${API_URL}/bookings/reschedule-phone-call-booking`, {
