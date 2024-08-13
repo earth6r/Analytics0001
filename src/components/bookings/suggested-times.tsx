@@ -23,19 +23,14 @@ const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
 
     if (!showSuggestedTimes) {
         return (
-            <div
-                onClick={
-                    () => setShowSuggestedTimes(true)
-                }
-                className='text-center text-sm text-blue-500 cursor-pointer hover:underline'
-            >
-                Want to see suggested times?
+            <div className="text-center text-xs select-none text-blue-500">
+                <span onClick={() => setShowSuggestedTimes(true)} className="cursor-pointer hover:underline">Want to see suggested times?</span>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 select-none">
             <h1 className="text-center text-sm font-semibold text-primary">Suggested Times</h1>
             <SuggestedTimes {...props} />
         </div>
@@ -113,8 +108,8 @@ const SuggestedTimes = (props: SuggestedTimesProps) => {
                     </div>
                     <div>
                         {visibleCount < filteredItems.length && (
-                            <div onClick={loadMore} className="text-center text-xs mt-2 cursor-pointer">
-                                <span className="hover:underline">Load More</span>
+                            <div className="text-center text-xs mt-2 select-none">
+                                <span onClick={loadMore} className="cursor-pointer hover:underline">Load More</span>
                             </div>
                         )}
                     </div>
