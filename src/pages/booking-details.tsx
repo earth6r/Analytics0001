@@ -63,7 +63,9 @@ const BookingDetails = () => {
 
     if (
         !registerDetails.isLoading &&
-        !registerDetails.data
+        !registerDetails.data &&
+        !bookingDetails.isLoading &&
+        !bookingDetails.data
     ) {
         // TODO: make this ui better https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=73914135
         return (
