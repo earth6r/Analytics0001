@@ -222,6 +222,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setViewConflicts(false);
 
+            // TODO: remove typeOfBooking input and notes input
             const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
             await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
 

@@ -10,10 +10,13 @@ import NotificationForm from "@/components/settings/notification-form";
 import { ArrowLeftCircleIcon, Bell, CircleUser, Cookie, Handshake, LogOut, Monitor, SunMoon, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/router";
 
 const Settings = () => {
   const [selectedSettingsTab, setSelectedSettingsTab] = useState<string | null>("profile");
   const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const authenticatedData = JSON.parse(
@@ -217,6 +220,7 @@ const Settings = () => {
                 <ProfileForm />
               </div>
             )}
+
             {selectedSettingsTab === "account" && (
               <div>
                 <div className="flex flex-row items-center space-x-2 md:space-x-0">
@@ -232,6 +236,7 @@ const Settings = () => {
                 <AccountForm />
               </div>
             )}
+
             {selectedSettingsTab === "appearance" && (
               <div>
                 <div className="flex flex-row items-center space-x-2 md:space-x-0">
@@ -248,6 +253,7 @@ const Settings = () => {
                 <AppearanceForm />
               </div>
             )}
+
             {selectedSettingsTab === "notifications" && (
               <div>
                 <div className="flex flex-row items-center space-x-2 md:space-x-0">
@@ -261,8 +267,19 @@ const Settings = () => {
                 </h3>
                 <Separator className="mb-6 mt-6" />
                 <NotificationForm />
+                {/* TODO: add in a setting for subscribing to error emails currently set to yan, james and api
+                need to then add in logic to add to firestore and every time saveError is called, need to modify
+                the function to query all the subscribed email
+                https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=74689571 */}
+                <div
+                  className="mt-2 text-sm text-blue-500 hover:underline cursor-pointer select-none"
+                  onClick={() => router.push(`/errors`)}
+                >
+                  Interested in seeing internal errors?
+                </div>
               </div>
             )}
+
             {selectedSettingsTab === "display" && (
               <div>
                 <div className="flex flex-row items-center space-x-2 md:space-x-0">

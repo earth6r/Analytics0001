@@ -14,6 +14,9 @@ const Errors = () => {
         }
     );
 
+    // TODO: add mark as resolved button, this would loop through current errors and mark as resolved but new errors with the exact type should not be filled as resolved
+    // https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=74689733
+
     return (
         <div>
             <Header />
