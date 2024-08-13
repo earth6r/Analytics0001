@@ -16,7 +16,7 @@ const CircularQuestionMarkTooltip = (props: CircularQuestionMarkTooltipProps) =>
     return (
         <TooltipProvider delayDuration={0}>
             <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild className="text-muted-foreground hover:text-primary">
                     <CircleHelp className="w-4 h-4" />
                 </TooltipTrigger>
                 <TooltipContent>
