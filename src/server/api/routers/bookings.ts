@@ -136,7 +136,7 @@ export const bookingsRouter = createTRPCRouter({
                     typeOfBooking: input.typeOfBooking,
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
-                    blockWhatsApp: false, // TODO: wait for Yan to reply and change this + tooltip message accordingly
+                    blockWhatsApp: false,
                 })
             } catch (error) {
                 console.error('Error creating property tour booking', error);
