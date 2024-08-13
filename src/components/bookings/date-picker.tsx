@@ -16,11 +16,10 @@ interface DatetimePickerProps {
     placeholder?: string;
     value: Date;
     onValueChange: (value: Date) => void;
-    noDay?: boolean;
 }
 
 export function DatePicker(props: DatetimePickerProps) {
-    const { placeholder = "Pick a date", value, onValueChange, noDay = false } = props;
+    const { placeholder = "Pick a date", value, onValueChange } = props;
 
     return (
         <Popover>
@@ -36,24 +35,14 @@ export function DatePicker(props: DatetimePickerProps) {
                     {value ? format(value, "PPP") : <span>{placeholder}</span>}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className={cn(noDay ? "w-[200px]" : "w-auto", "p-0 z-[100] pointer-events-auto")}>
-                {noDay ? (
-                    <CalendarNoDay
-                        mode="single"
-                        selected={value}
-                        onSelect={(date) => {
-                            onValueChange(date as Date);
-                        }}
-                    />
-                ) : (
-                    <Calendar
-                        mode="single"
-                        selected={value}
-                        onSelect={(date) => {
-                            onValueChange(date as Date);
-                        }}
-                    />
-                )}
+            <PopoverContent className={cn("w-auto p-0 z-[100] pointer-events-auto")}>
+                <Calendar
+                    mode="single"
+                    selected={value}
+                    onSelect={(date) => {
+                        onValueChange(date as Date);
+                    }}
+                />
             </PopoverContent>
         </Popover>
     )
