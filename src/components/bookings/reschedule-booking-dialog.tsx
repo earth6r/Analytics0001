@@ -242,7 +242,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                         </TooltipProvider>
                     </DialogTitle>
                     <DialogDescription>
-                        Reschedule the meeting with {booking?.firstName} {booking?.lastName}
+                        Reschedule the {booking?.type} with {booking?.firstName} {booking?.lastName}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
