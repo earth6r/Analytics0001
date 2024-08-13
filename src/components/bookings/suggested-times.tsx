@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge } from '../ui/badge';
 import { Skeleton } from '../ui/skeleton';
 import { Info } from 'lucide-react';
@@ -11,13 +11,14 @@ interface SuggestedTimesProps {
     startTime: string;
     setStartDate: (date: Date) => void;
     setStartTime: (time: string) => void;
+    bookingType: string | undefined | null;
 }
 
 const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
-    const { startDate, startTime } = props;
+    const { startDate, startTime, bookingType } = props;
     const [showSuggestedTimes, setShowSuggestedTimes] = useState(false);
 
-    if (startDate && startTime) {
+    if ((startDate && startTime) || !bookingType) {
         return null;
     }
 
@@ -38,7 +39,7 @@ const SuggestedTimesWrapper = (props: SuggestedTimesProps) => {
 }
 
 const SuggestedTimes = (props: SuggestedTimesProps) => {
-    const { startDate, setStartDate, setStartTime } = props;
+    const { startDate, setStartDate, setStartTime, bookingType } = props;
 
     const [visibleCount, setVisibleCount] = useState(6);
 
@@ -46,13 +47,28 @@ const SuggestedTimes = (props: SuggestedTimesProps) => {
         setVisibleCount(prevCount => prevCount + 6);
     };
 
-    const getAvailableHoursTalin = api.bookings.getAvailableHoursTalin.useQuery();
+    const getAvailableHours = api.bookings.getAvailableHours.useQuery(
+        {
+            email: bookingType === "Property Tour" ? 'lowereastside@home0001.com' : 'talin@home0001.com',
+        },
+        {
+            enabled: !!bookingType,
+        }
+    );
 
-    if (getAvailableHoursTalin.isLoading) {
+    useEffect(() => {
+        const refetchAvailableHours = async () => {
+            await getAvailableHours.refetch();
+        };
+
+        refetchAvailableHours();
+    }, [bookingType, getAvailableHours]);
+
+    if (getAvailableHours.isLoading) {
         return <Skeleton className="h-[82px]" />;
     }
 
-    const filteredItems = (getAvailableHoursTalin.data || [])
+    const filteredItems = (getAvailableHours.data || [])
         .filter((item: any) => item.HasAvailability)
         .flatMap((item: any, index: number) =>
             item.slots.map((slot: any, index1: number) => {
@@ -101,7 +117,7 @@ const SuggestedTimes = (props: SuggestedTimesProps) => {
 
     return (
         <div>
-            {getAvailableHoursTalin.data && getAvailableHoursTalin.data.length > 0 && (
+            {getAvailableHours.data && getAvailableHours.data.length > 0 && (
                 <div>
                     <div className="grid grid-cols-3 gap-4">
                         {filteredItems.slice(0, visibleCount)}

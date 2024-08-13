@@ -322,10 +322,13 @@ export const bookingsRouter = createTRPCRouter({
             }
         }),
 
-    getAvailableHoursTalin: publicProcedure
-        .query(async () => {
+    getAvailableHours: publicProcedure
+        .input(z.object({
+            email: z.string(),
+        }))
+        .query(async ({ input }) => {
             const response = await axios.post(
-                `${API_URL}/google/available-meeting-hours`,
+                `${API_URL}/google/available-meeting-hours?email=${input.email}`,
             );
             return response.data.data;
         }),

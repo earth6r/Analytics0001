@@ -386,6 +386,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             startTime={startTime}
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
+                            bookingType={typeOfBooking}
                         />
                         {viewConflicts &&
                             <ConflictingBookings

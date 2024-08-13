@@ -300,6 +300,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             startTime={startTime}
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
+                            bookingType={booking?.type}
                         />
                         {viewConflicts &&
                             <ConflictingBookings
