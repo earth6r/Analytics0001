@@ -36,7 +36,7 @@ export function DatePicker(props: DatetimePickerProps) {
                     {value ? format(value, "PPP") : <span>{placeholder}</span>}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 z-[100] pointer-events-auto">
+            <PopoverContent className={cn(noDay ? "w-[200px]" : "w-auto", "p-0 z-[100] pointer-events-auto")}>
                 {noDay ? (
                     <CalendarNoDay
                         mode="single"
