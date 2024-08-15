@@ -26,7 +26,7 @@ const BookingTabs = (props: BookingTabsProps) => {
     const { onValueChange } = props;
 
     return (
-        <Tabs defaultValue="all" className="w-[500px]">
+        <Tabs defaultValue="all" className="w-full md:w-[500px]">
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger
                     value="all"

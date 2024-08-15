@@ -13,7 +13,7 @@ const generateDefaultSettings = async (email: string) => {
         color: "default", // default, red, green, blue, orange
         notifications: true,
         interval: null,
-        statusFilters: ["completed", "cancelled", "no-show", "scheduled", "confirmed", "rescheduled"],
+        statusFilters: ["completed", "cancelled", "no-show", "scheduled", "confirmed", "rescheduled", "pending"],
     });
 
     // return the docRef

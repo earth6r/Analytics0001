@@ -74,6 +74,7 @@ const FilterStatusMultiSelect = (props: StatusSelectProps) => {
                     <Option value="no-show" selected={values.includes("no-show")} addValue={addValue} removeValue={removeValue} values={values} />
                     <Option value="cancelled" selected={values.includes("cancelled")} addValue={addValue} removeValue={removeValue} values={values} />
                     <Option value="rescheduled" selected={values.includes("rescheduled")} addValue={addValue} removeValue={removeValue} values={values} />
+                    <Option value="pending" selected={values.includes("pending")} addValue={addValue} removeValue={removeValue} values={values} />
                 </SelectGroup>
             </SelectContent>
         </Select>

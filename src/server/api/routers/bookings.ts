@@ -11,12 +11,15 @@ export const config = {
     maxDuration: 300, // Maximum duration for the API route to respond to a request (5 minutes)
 }
 
-// export const API_URL = `http://localhost:3000/api`;
-export const API_URL = `https://home0001.com/api`;
+export const API_URL = `http://localhost:3000/api`;
+// export const API_URL = `https://home0001.com/api`;
 
 export const bookingsRouter = createTRPCRouter({
     getBookings: publicProcedure
-        .query(async () => {
+        .input(z.object({
+            email: z.string().optional(),
+        }))
+        .query(async ({ input },) => {
             const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
             const querySnapshot = await getDocs(phoneCallBookingsRef);
             const bookings: any[] = [];
@@ -76,6 +79,10 @@ export const bookingsRouter = createTRPCRouter({
                     const firstDoc = potentialCustomer.docs[0];
                     booking.imageUrl = firstDoc?.data()?.imageUrl || url;
                 }
+            }
+
+            if (input.email) {
+                return bookings.filter(booking => booking.email === input.email);
             }
 
             return bookings;
@@ -212,7 +219,24 @@ export const bookingsRouter = createTRPCRouter({
         .input(z.object({
             uid: z.string(),
             bookingType: z.string(),
-            postNotes: z.string(),
+            productFit: z.boolean(),
+            productFitNotes: z.string(),
+            budget: z.boolean(),
+            budgetAmount: z.number(),
+            interest: z.boolean(),
+            interestNotes: z.string(),
+            communityMember: z.boolean(),
+            losAngeles: z.boolean(),
+            newYork: z.boolean(),
+            paris: z.boolean(),
+            london: z.boolean(),
+            berlin: z.boolean(),
+            mexicoCity: z.boolean(),
+            somewhereElse: z.boolean(),
+            somewhereElseNotes: z.string(),
+            timing: z.boolean(),
+            selectedDate: z.date().optional(),
+            bookATour: z.boolean(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
@@ -227,14 +251,51 @@ export const bookingsRouter = createTRPCRouter({
                 throw new Error('Booking not found');
             }
 
-            const { additionalNotes } = currentDoc.data();
+            const { email, firstName, lastName, phoneNumber } = currentDoc.data();
 
-            const fullNotes = `${additionalNotes}\n\nPost Meeting Notes: \n${input.postNotes}`;
-
+            // TODO: display old bookings with additionalNotes field in the booking-details page
             await updateDoc(d, {
                 status: 'completed',
-                additionalNotes: fullNotes,
+                additionalDetails: {
+                    productFit: input.productFit,
+                    productFitNotes: input.productFitNotes,
+                    budget: input.budget,
+                    budgetAmount: input.budgetAmount,
+                    interest: input.interest,
+                    interestNotes: input.interestNotes,
+                    communityMember: input.communityMember,
+                    locations: {
+                        losAngeles: input.losAngeles,
+                        newYork: input.newYork,
+                        paris: input.paris,
+                        london: input.london,
+                        berlin: input.berlin,
+                        mexicoCity: input.mexicoCity,
+                        somewhereElse: input.somewhereElse,
+                        somewhereElseNotes: input.somewhereElseNotes,
+                    },
+                    timing: input.timing,
+                    selectedDate: input.selectedDate ? input.selectedDate.getTime() : null,
+                    bookATour: input.bookATour,
+                },
             });
+
+            if (input.bookATour) {
+                try {
+                    await axios.post(`${API_URL}/bookings/book-property-tour`, {
+                        email: email,
+                        firstName: firstName,
+                        lastName: lastName,
+                        pending: true, // this means cannot validate start and end timestamps and cannot create a google calendar event
+                        phoneNumber: phoneNumber,
+                        blockWhatsApp: false,
+                    })
+                } catch (error) {
+                    console.error('Error creating property tour booking', error);
+                    // TODO: handle this better i.e. return status error
+                    throw new Error('Error creating property tour booking');
+                }
+            }
         }),
 
     updateBookingStatus: publicProcedure
@@ -332,4 +393,45 @@ export const bookingsRouter = createTRPCRouter({
             );
             return response.data.data;
         }),
+
+    // booking type should always be property tour
+    confirmPendingPropertyTourBooking: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            startTimestamp: z.string(),
+            endTimestamp: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            try {
+                await axios.post(`${API_URL}/bookings/confirm-pending-property-tour-booking`, {
+                    uid: input.uid,
+                    startTimestamp: input.startTimestamp,
+                    endTimestamp: input.endTimestamp,
+                })
+            } catch (error) {
+                console.error('Error confirming property tour booking', error);
+            }
+        }),
+
+    updateInterviewerName: publicProcedure
+        .input(
+            z.object({
+                interviewer: z.string(),
+                uid: z.string(),
+                bookingType: z.string(),
+            })
+        )
+        .mutation(
+            async ({ input }) => {
+                const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+                const tableRef = collection(db, tableNameRef);
+
+                const d = doc(tableRef, input.uid);
+
+                await updateDoc(d, {
+                    interviewer: input.interviewer,
+                });
+            }
+        ),
 });

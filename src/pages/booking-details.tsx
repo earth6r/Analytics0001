@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowLeftCircleIcon, Calendar, Mail, Phone, RocketIcon, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
+import { AlertCircle, ArrowLeftCircleIcon, Calendar, FileQuestion, Mail, MapPin, NotepadText, Phone, RocketIcon, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import CopyTooltip from "@/components/customers/copy-tooltip";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
+// TODO: rename component and page to user-details
 const BookingDetails = () => {
     const router = useRouter();
 
@@ -32,6 +33,16 @@ const BookingDetails = () => {
         },
         {
             enabled: !!email && !!type && !!uid,
+        }
+    );
+
+    // TODO: make a specific query for bookings by email for efficiency
+    const bookings = api.bookings.getBookings.useQuery(
+        {
+            email: email as string,
+        },
+        {
+            enabled: !!email,
         }
     );
 
@@ -92,6 +103,7 @@ const BookingDetails = () => {
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
                         <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
+                        {/* TODO: fix issue of image not showing in mobile view */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="secondary" size="icon" className="rounded-full">
@@ -169,22 +181,23 @@ const BookingDetails = () => {
                     </Card>
                 </div>
 
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Profile Notes</CardTitle>
-                        <CardDescription>
-                            Information about the call set by Home0001.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="max-w-max whitespace-pre-wrap break-words">
-                        <div>
-                            {getPotentialCustomerDetails.data?.profileNotes || "-"}
-                        </div>
-                    </CardContent>
-                </Card>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <Card className="w-full">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Profile Notes</CardTitle>
+                            <CardDescription>
+                                Information about the call set by Home0001.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="max-w-max whitespace-pre-wrap break-words">
+                            <div>
+                                {getPotentialCustomerDetails.data?.profileNotes || "-"}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* TODO: need better styling than a grid because i.e. robbie.j.s111@icloud.com has big notes but very small contact section */}
+                    <Card>
                         <CardHeader>
                             <CardTitle>Contact Details</CardTitle>
                             <CardDescription>
@@ -210,85 +223,95 @@ const BookingDetails = () => {
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="w-full">
-                        <CardHeader>
-                            <CardTitle className="flex flex-row items-center justify-between">
-                                <div>
-                                    Appointment Details
-                                </div>
-                                {(bookingDetails.data?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
-                                    rescheduled
-                                </Badge>}
-                            </CardTitle>
-                            <CardDescription>
-                                Appointment details for {
-                                    bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
-                                }
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-2">
-                                <div className="flex flex-row items-center space-x-2">
-                                    <Calendar className="w-4 h-4" />
-                                    <div>{formatTimestamp(bookingDetails.data?.startTimestamp) || "-"}</div>
-                                </div>
-                                <div className="flex flex-row items-center space-x-2">
-                                    <Timer className="w-4 h-4" />
-                                    <div className="font-semibold">Duration</div>
-                                    <div>{
-                                        bookingDetails.data ? (bookingDetails.data?.endTimestamp - bookingDetails.data?.startTimestamp) / (60 * 1000) + " minutes" : "-"
-                                    }</div>
-                                </div>
-                                <div className="flex flex-row items-center space-x-2">
-
-                                    <RocketIcon className="w-4 h-4" />
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                {bookingDetails.data ? <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
-                                                    () => {
-                                                        window.open(ZOOM_URL, "_blank")
-                                                    }
-                                                }>{ZOOM_URL}</div> : <div>-</div>}
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                Click to join the Zoom call
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
                 </div>
 
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Customer Questions</CardTitle>
-                        <CardDescription>
-                            Notes and Questions created by the customer.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="max-w-max overflow-x-scroll">
-                        <pre>
-                            {bookingDetails.data?.notes || "-"}
-                        </pre>
-                    </CardContent>
-                </Card>
+                <div className="mt-6 space-y-6">
+                    {bookings.data && bookings.data.map((booking: any, index: number) => (
+                        <Card key={index}>
+                            <CardHeader>
+                                <CardTitle className="flex flex-row items-center justify-between">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <div>{booking?.type === "Property Tour" ? <School className="w-4 h-4" /> : <Phone className="w-4 h-4" />}</div>
+                                        <div>{booking?.type === "Property Tour" ? "Property Tour" : "Phone Call"} Appointment Details</div>
+                                    </div>
+                                    {(booking?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                                        rescheduled
+                                    </Badge>}
+                                </CardTitle>
+                                <CardDescription>
+                                    Appointment details for {
+                                        booking ? (booking?.firstName + " " + booking?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                    }
+                                </CardDescription>
+                                {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle>Action Required</AlertTitle>
+                                    <AlertDescription>
+                                        Pending Booking. Add a date to this booking in the <span className="underline cursor-pointer" onClick={
+                                            () => router.push(`/bookings`)
+                                        }>bookings</span> page
+                                    </AlertDescription>
+                                </Alert>}
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-2">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <Calendar className="w-4 h-4" />
+                                        <div>{formatTimestamp(booking?.startTimestamp) || "-"}</div>
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <Timer className="w-4 h-4" />
+                                        <div className="font-semibold">Duration</div>
+                                        <div>{
+                                            booking && booking?.startTimestamp && booking?.endTimestamp ? (booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes" : "-"
+                                        }</div>
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <MapPin className="w-4 h-4" />
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    {booking ? <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
+                                                        () => {
+                                                            window.open(
+                                                                booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL, "_blank")
+                                                        }
+                                                    }>{
+                                                            booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL
+                                                        }</div> : <div>-</div>}
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {booking?.type === "Property Tour" ? "Click to view the location" : "Click to join the Zoom call"}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    </div>
 
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Meeting Notes</CardTitle>
-                        <CardDescription>
-                            Meeting notes about the booking.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="max-w-max whitespace-pre-wrap break-words">
-                        <div>
-                            {bookingDetails.data?.additionalNotes || "-"}
-                        </div>
-                    </CardContent>
-                </Card>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <FileQuestion className="w-4 h-4" />
+                                        <h1 className="font-semibold">Customer Questions</h1>
+                                    </div>
+                                    <div className="ml-6">
+                                        <p className="whitespace-pre-wrap break-words">
+                                            {booking?.notes || "-"}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <NotepadText className="w-4 h-4" />
+                                        <h1 className="font-semibold">Meeting Notes</h1>
+                                    </div>
+                                    <div className="ml-6">
+                                        <p className="whitespace-pre-wrap break-words">
+                                            {booking?.notes || "-"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
             </div>
         </div>
     );

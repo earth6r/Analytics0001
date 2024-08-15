@@ -241,7 +241,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                             </Tooltip>
                         </TooltipProvider>
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-start">
                         Reschedule the {booking?.type.toLowerCase()} with {booking?.firstName} {booking?.lastName}
                     </DialogDescription>
                 </DialogHeader>

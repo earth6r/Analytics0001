@@ -21,6 +21,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
 import BookingTabs from "@/components/bookings/booking-tabs";
+import AddPropertyTourDateDialog from "@/components/bookings/add-property-tour-date-dialog";
+import InterviewerInput from "@/components/bookings/interviewer-input";
 // import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 
 const Bookings = () => {
@@ -52,7 +54,9 @@ const Bookings = () => {
 
     const { interval } = useInterval();
     const getBookings = api.bookings.getBookings.useQuery(
-        undefined,
+        {
+            email: undefined,
+        },
         {
             refetchInterval: interval,
         }
@@ -72,6 +76,7 @@ const Bookings = () => {
         "no-show",
         "confirmed",
         "rescheduled",
+        "pending",
     ]);
 
     useEffect(() => {
@@ -209,7 +214,7 @@ const Bookings = () => {
                 </div>
 
                 <div className="mt-4 hidden xl:block overflow-y-scroll">
-                    <div className="grid grid-cols-9 gap-4 font-semibold">
+                    <div className="grid grid-cols-11 gap-4 font-semibold">
                         <div className="flex flex-row items-center justify-start space-x-2 select-none col-span-2">
                             <h1>
                                 Profile
@@ -294,6 +299,9 @@ const Bookings = () => {
                         <div className="select-none">
                             Status
                         </div>
+                        <div className="select-none col-span-2">
+                            Interviewer
+                        </div>
                         <div className="col-span-3 select-none">Actions</div>
                     </div>
 
@@ -307,7 +315,7 @@ const Bookings = () => {
                         </div>
                     ) : <div className="space-y-4 mt-4">
                         {sortedData?.map((booking: any) => (
-                            <div key={booking.id} className="grid grid-cols-9 gap-4 items-center">
+                            <div key={booking.id} className={cn("grid grid-cols-11 gap-4 items-center")}>
                                 <TooltipProvider>
                                     <Tooltip delayDuration={200}>
                                         <TooltipTrigger asChild>
@@ -409,10 +417,13 @@ const Bookings = () => {
                                     loading={loadingsForStatuses[booking.uid] || false}
                                     booking={booking}
                                 />
+                                <div className="col-span-2">
+                                    <InterviewerInput booking={booking} refetch={getBookings.refetch} />
+                                </div>
                                 {/* <div className="col-span-1">
                                     <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
                                 </div> */}
-                                <div className="flex flex-row items-center space-x-2">
+                                <div className="flex flex-row items-center space-x-2 col-span-3">
                                     {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                                         // @ts-expect-error TODO: fix this
                                         notesOpens[booking.uid] || false
@@ -438,9 +449,12 @@ const Bookings = () => {
                                     <div className={booking?.status === "completed" ? "cursor-not-allowed" : ""}>
                                         <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
                                     </div>
-                                    <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
+                                    {booking?.type === "Phone Call" && <div className={cn(booking?.status === "completed" ? "cursor-not-allowed" : "")}>
                                         <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
-                                    </div>
+                                    </div>}
+                                    {/* {!booking?.startTimestamp && !booking?.endTimestamp &&
+                                        <Badge variant="destructive" className="">Action Required</Badge>} */}
+                                    {!booking?.startTimestamp && !booking?.endTimestamp && <AddPropertyTourDateDialog booking={booking} refetch={getBookings.refetch} bookings={getBookings.data || []} />}
                                     {/* <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} /> */}
                                 </div>
                             </div>
@@ -497,6 +511,11 @@ const BookingCard = (props: BookingCardProps) => {
                     {(booking?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
                         rescheduled
                     </Badge>}
+                    {/* {
+                        !booking?.startTimestamp && !booking?.endTimestamp && <Badge variant="destructive">
+                            Action Required
+                        </Badge>
+                    } */}
                 </CardTitle>
                 <CardDescription>
                     {formatTimestamp(booking.startTimestamp)}
@@ -565,9 +584,13 @@ const BookingCard = (props: BookingCardProps) => {
                     <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
                 )}
             </div>
-            <div className="px-6 pb-6">
+            <div className={cn("px-6", !booking?.startTimestamp && !booking?.endTimestamp ? "pb-0" : "pb-6")}>
                 <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
             </div>
+            {!booking?.startTimestamp && !booking?.endTimestamp &&
+                <div className="mt-2 px-6 pb-6">
+                    <AddPropertyTourDateDialog booking={booking} refetch={getBookings.refetch} bookings={getBookings.data || []} />
+                </div>}
         </Card>
     );
 };

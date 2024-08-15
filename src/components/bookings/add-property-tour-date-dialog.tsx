@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
-import { CircleCheck, CirclePlus, Info } from "lucide-react"
+import { CalendarPlus2, CircleCheck, CirclePlus, Info } from "lucide-react"
 import { useMemo, useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
@@ -26,22 +26,17 @@ import ConflictingBookings from "./conflicting-bookings"
 
 interface CreateBookingDialogProps {
     refetch: () => Promise<any>;
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
     bookings: any[];
+    booking: any;
 }
 
-const CreateBookingDialog = (props: CreateBookingDialogProps) => {
-    const { refetch, open, onOpenChange, bookings } = props;
+const AddPropertyTourDateDialog = (props: CreateBookingDialogProps) => {
+    const { refetch, bookings, booking } = props;
 
-    const [email, setEmail] = useState<string>("");
+    const [open, onOpenChange] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [startDate, setStartDate] = useState<Date | undefined>(undefined);
     const [startTime, setStartTime] = useState<string>("");
-    const [typeOfBooking, setTypeOfBooking] = useState<'Property Tour' | "Phone Call" | null | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState<string>("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [viewConflicts, setViewConflicts] = useState(true);
 
@@ -54,46 +49,9 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     //     }
     // })
 
-    const createPhoneBooking = api.bookings.createPhoneBooking.useMutation();
-    const createPropertyTourBooking = api.bookings.createPropertyTourBooking.useMutation();
+    const addPropertyTourDate = api.bookings.confirmPendingPropertyTourBooking.useMutation();
 
     async function onSubmit() {
-        if (!email) {
-            toast({
-                title: "Email is required",
-                description: "Please enter the email address.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!email.includes("@") || !email.includes(".")) {
-            toast({
-                title: "Invalid email",
-                description: "Please enter a valid email address.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!firstName) {
-            toast({
-                title: "First Name is required",
-                description: "Please enter the first name.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!lastName) {
-            toast({
-                title: "Last Name is required",
-                description: "Please enter the last name.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
         if (!startDate) {
             toast({
                 title: "Start Date is required",
@@ -107,24 +65,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             toast({
                 title: "Start Time is required",
                 description: "Please enter the time.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!typeOfBooking) {
-            toast({
-                title: "Type of Booking is required",
-                description: "Please select the type of booking.",
-                className: toastErrorStyle,
-            });
-            return;
-        }
-
-        if (!phoneNumber) {
-            toast({
-                title: "Phone Number is required",
-                description: "Please enter the phone number.",
                 className: toastErrorStyle,
             });
             return;
@@ -153,7 +93,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const startTimestamp = utcMomentStartTimestamp.format('YYYY-MM-DD HH:mm:ss');
             const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
 
-            const addTimeMinutes = typeOfBooking === "Property Tour" ? 60 : 15;
+            const addTimeMinutes = 60;
             const endTimestampEst = moment(estMomentStartTimestamp).add(addTimeMinutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
             const estMomentEndTimestamp = moment.tz(endTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
             const utcMomentEndTimestamp = estMomentEndTimestamp.clone().tz('UTC');
@@ -222,17 +162,19 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             setViewConflicts(false);
 
-            // TODO: remove typeOfBooking input and notes input
-            const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
-            await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
+            await addPropertyTourDate.mutateAsync({
+                startTimestamp,
+                endTimestamp,
+                uid: booking?.uid,
+            });
 
             await refetch();
 
             setIsLoading(false);
 
             toast({
-                title: "Booking created",
-                description: "The booking was successfully created in the database.",
+                title: "Success",
+                description: "The date has been added to the booking successfully.",
                 className: toastSuccessStyle,
             });
 
@@ -241,13 +183,8 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             setTimeout(() => {
                 setIsSuccess(false);
                 onOpenChange(false);
-                setEmail("");
-                setFirstName("");
-                setLastName("");
-                setPhoneNumber("");
                 setStartDate(undefined);
                 setStartTime("");
-                setTypeOfBooking(undefined);
             }, 2000);
 
             setTimeout(() => {
@@ -257,29 +194,29 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             setIsLoading(false);
             toast({
                 title: "An error occurred",
-                description: "An error occurred while creating a booking in the database.",
+                description: "An error occurred while adding the date to the booking.",
                 className: toastErrorStyle,
             });
         }
     }
 
     // TODO: disabled for timestamp 19 len and Nan timestamp
-    const disabled = isLoading || !email || !email.includes("@") || !email.includes(".") || !startDate || !startTime || !typeOfBooking || !phoneNumber || !firstName || !lastName;
+    const disabled = isLoading || !startDate || !startTime;
 
     const [infoTooltipOpened, setInfoTooltipOpened] = useState(false);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="default" className="space-x-2">
-                    <CirclePlus className="w-4 h-4" />
-                    <h1>Create Booking</h1>
+                <Button variant="destructive" className="w-full xl:max-w-max space-x-2">
+                    <CalendarPlus2 className="w-4 h-4" />
+                    <h1>Add Date</h1>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0">
                 <DialogHeader className="px-6 pt-6">
                     <DialogTitle className="flex flex-row items-center space-x-2">
-                        <h1>Create Booking</h1>
+                        <h1>Add Date</h1>
                         {/* TODO: make this supportive in mobile */}
                         <TooltipProvider>
                             <Tooltip open={infoTooltipOpened} onOpenChange={setInfoTooltipOpened} delayDuration={0}>
@@ -305,35 +242,14 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         </TooltipProvider>
                     </DialogTitle>
                     <DialogDescription className="text-start">
-                        Create a new booking in the database.
+                        Add a date to the booking.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
                     <div className="grid gap-4 px-6 py-2">
-                        <Input
-                            id="email"
-                            placeholder="Email"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                        />
-                        <div className="flex flex-row items-center space-x-2">
-                            <Input
-                                id="firstName"
-                                placeholder="First Name"
-                                onChange={(e) => setFirstName(e.target.value)}
-                                value={firstName}
-                            />
-                            <Input
-                                id="lastName"
-                                placeholder="Last Name"
-                                onChange={(e) => setLastName(e.target.value)}
-                                value={lastName}
-                            />
-                        </div>
-                        {/* @ts-expect-error TODO: fix type */}
-                        <TypeOfBookingSelect className="w-full" selectedItem={typeOfBooking} setSelectedItem={setTypeOfBooking} />
                         {/* TODO: think about whether there should be a date picker input and a time picker input */}
                         {/* TODO: add exact length for string restriction to len of 19 XXXX-XX-XX XX:XX:XX */}
+                        {/* TODO: make this its own component and add in logic to set the date and time to the formatting logic used in the onsubmit function and convert to est */}
                         <div>
                             <div className="flex flex-row items-center space-x-2">
                                 {/* @ts-expect-error: TODO: fix type */}
@@ -387,44 +303,24 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                             startTime={startTime}
                             setStartDate={setStartDate}
                             setStartTime={setStartTime}
-                            bookingType={typeOfBooking}
+                            bookingType={"Property Tour"}
                         />
                         {viewConflicts &&
                             <ConflictingBookings
                                 startDate={startDate}
                                 startTime={startTime}
-                                bookingType={typeOfBooking}
+                                bookingType={"Property Tour"}
                                 bookings={bookings}
                             />
                         }
-                        <Input
-                            id="phoneNumber"
-                            placeholder="Phone Number"
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            value={phoneNumber}
-                        />
-                        {/* <Input
-                            id="notes"
-                            placeholder="Customer Notes"
-                            // TODO: change every single Input to have value over onChange i.e. like 430 should be value and 431 should be onChange
-                            onChange={(e) => setNotes(e.target.value)}
-                            value={notes}
-                        /> */}
-                        {/* TODO: disable if type is phone call booking */}
-                        {/* <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} /> */}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
                     <Button variant="outline" className="w-full" onClick={() => {
-                        setEmail("");
-                        setFirstName("");
-                        setLastName("");
                         setStartDate(undefined);
                         setStartTime("");
-                        setTypeOfBooking(null);
-                        setPhoneNumber("");
                     }} disabled={
-                        isLoading || (!email && !startDate && !startTime && !phoneNumber && !typeOfBooking) || isSuccess
+                        isLoading || (!startDate && !startTime) || isSuccess
                     }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
@@ -434,24 +330,6 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                                     {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Save")}
                                 </Button>
                             </TooltipTrigger>
-                            {disabled && <TooltipContent>
-                                <div className="space-y-1">
-                                    <div className="font-medium">{`Please fill in all the required fields:`}</div>
-                                    <div>{!email && `The email is required.`}</div>
-                                    <div>{email && (!email.includes("@") || !email.includes(".")) && "The email is invalid. Requires a `.` and a `@`"}</div>
-                                    {/* <div>{!startTimestamp && `The start timestamp is required.`}</div> */}
-                                    <div>{!startDate && `The start date is required.`}</div>
-                                    <div>{!startTime && `The start time is required.`}</div>
-                                    {/* <div>{startTimestamp && isNaN(Number(new Date(startTimestamp).getTime().toString())) && `The timestamp is invalid. Expected format is YYYY-MM-DD HH:MM:SS`}</div> */}
-                                    {/* <div>{startTimestamp && startTimestamp.length !== 19 && `The timestamp must be of length 19.`}</div> */}
-                                    <div>{!phoneNumber && `The phone number is required.`}</div>
-                                    <div>{!typeOfBooking
-                                        && `The type of booking is required.`}</div>
-                                    {/* <div>{typeOfBooking === "Property Tour" && !propertyType && `The property type is required.`}</div> */}
-                                    <div>{!firstName && `The first name is required.`}</div>
-                                    <div>{!lastName && `The last name is required.`}</div>
-                                </div>
-                            </TooltipContent>}
                         </Tooltip>
                     </TooltipProvider>
                 </DialogFooter>
@@ -460,4 +338,4 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     )
 }
 
-export default CreateBookingDialog;
+export default AddPropertyTourDateDialog;

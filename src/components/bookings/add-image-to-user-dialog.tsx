@@ -210,7 +210,8 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                                     <div className="font-bold text-4xl">
                                         + Add Image
                                     </div>
-                                    <div className="text-muted-foreground text-center">Drop a file here to upload, or click here to browse</div>
+                                    <div className="text-muted-foreground text-center hidden xl:block">Drop a file here to upload, or click here to browse</div>
+                                    <div className="text-muted-foreground text-center block xl:hidden">Click here to browse</div>
                                 </div>
                             </div>}
                         <div className="mt-4">
