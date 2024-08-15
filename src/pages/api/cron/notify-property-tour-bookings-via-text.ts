@@ -5,6 +5,16 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import moment from "moment-timezone";
 import { type NextApiRequest, type NextApiResponse } from "next/types";
 
+const numbers = [
+    '+15038676436',
+    '+4915168698913',
+    '+17134103755', // yan
+    '+14377703354', // api
+    '+19175824100',
+    '+447577459373',
+    '+491634841797',
+]
+
 const sendNotification = (
     email: string,
     firstName: string,
@@ -12,21 +22,22 @@ const sendNotification = (
     phoneNumber: string,
     startTimestamp: string,
 ) => {
-    axios.post(`${API_URL}/send-property-tour-reminder`, {
-        // TODO: change recipientPhone to all numbers of team
-        recipientPhone: '+14377703354',
-        email,
-        firstName,
-        lastName,
-        phoneNumber,
-        startTimestamp,
-    })
+    for (const number of numbers) {
+        axios.post(`${API_URL}/send-property-tour-reminder`, {
+            // TODO: change recipientPhone to all numbers of team
+            recipientPhone: number,
+            email,
+            firstName,
+            lastName,
+            phoneNumber,
+            startTimestamp,
+        })
 
-    axios.post(`${API_URL}/send-message`, {
-        // TODO: change recipientPhone to all numbers of team
-        recipientPhone: '+14377703354',
-        message:
-            `There is a booking for a property tour in 1 hour.
+        axios.post(`${API_URL}/send-message`, {
+            // TODO: change recipientPhone to all numbers of team
+            recipientPhone: number,
+            message:
+                `There is a booking for a property tour in 1 hour.
 
 Name: ${firstName} ${lastName}
 Phone: ${phoneNumber}
@@ -34,7 +45,8 @@ Start Time: ${startTimestamp}
 Date: ${startTimestamp}
 Details: https://analytics.home0001.com/booking-details?email=${email}
             `,
-    })
+        })
+    }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
