@@ -299,6 +299,13 @@ const BookingDetails = () => {
                                             <h1>{booking?.interviewer || "-"}</h1>
                                         </div>
                                     </div>
+                                    <div>
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <Contact className="w-4 h-4" />
+                                            <h1 className="font-semibold">Status</h1>
+                                            <Badge>{booking?.status || "scheduled"}</Badge>
+                                        </div>
+                                    </div>
                                     <div className="flex flex-row items-center space-x-2">
                                         <FileQuestion className="w-4 h-4" />
                                         <h1 className="font-semibold">Customer Questions</h1>
@@ -312,13 +319,42 @@ const BookingDetails = () => {
                                 <div>
                                     <div className="flex flex-row items-center space-x-2">
                                         <NotepadText className="w-4 h-4" />
-                                        <h1 className="font-semibold">Meeting Notes</h1>
+                                        <h1 className="font-semibold">Legacy Meeting Notes</h1>
                                     </div>
                                     <div className="ml-6">
                                         <p className="whitespace-pre-wrap break-words">
-                                            {booking?.notes || "-"}
+                                            {booking?.additionalNotes || "-"}
                                         </p>
                                     </div>
+                                </div>
+                                <div>
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <NotepadText className="w-4 h-4" />
+                                        <h1 className="font-semibold">Meeting Notes</h1>
+                                    </div>
+                                    {/* TODO: remove hover on badges */}
+                                    {/* TODO: make badge have an option to have no hover i.e. hover={false} which if true, will have cursor-pointer and such and not if false. need to reuse everywhere because not consistent atm */}
+                                    {booking?.additionalDetails ? <div className="ml-6">
+                                        <div>
+                                            {/* TODO: consider using an icon instead of displaying true/false */}
+                                            Budget: {JSON.stringify(booking?.additionalDetails?.budget)} {booking?.additionalDetails?.budgetAmount}
+                                        </div>
+                                        <div>
+                                            Community Member: {JSON.stringify(booking?.additionalDetails?.communityMember)}
+                                        </div>
+                                        <div>
+                                            Interest: {JSON.stringify(booking?.additionalDetails?.interest)} {booking?.additionalDetails?.interestNotes}
+                                        </div>
+                                        <div>
+                                            Locations: {booking?.additionalDetails?.locations?.berlin && <Badge>Berlin</Badge>} {booking?.additionalDetails?.locations?.london && <Badge>London</Badge>} {booking?.additionalDetails?.locations?.losAngeles && <Badge>Los Angeles</Badge>} {booking?.additionalDetails?.locations?.mexicoCity && <Badge>Mexico City</Badge>} {booking?.additionalDetails?.locations?.newYork && <Badge>New York</Badge>} {booking?.additionalDetails?.locations?.paris && <Badge>Paris</Badge>} {booking?.additionalDetails?.locations?.somewhereElse && <Badge>{booking?.additionalDetails?.locations?.somewhereElseNotes}</Badge>}
+                                        </div>
+                                        <div>
+                                            Product Fit: {JSON.stringify(booking?.additionalDetails?.productFit)} {booking?.additionalDetails?.productFitNotes}
+                                        </div>
+                                        <div>
+                                            Timing: {JSON.stringify(booking?.additionalDetails?.timing)}
+                                        </div>
+                                    </div> : <div className="ml-6">-</div>}
                                 </div>
                             </CardContent>
                         </Card>

@@ -37,6 +37,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [projectFitNotes, setProjectFitNotes] = useState('');
     const [budgetChecked, setBudgetChecked] = useState(false);
     const [sliderValue, setSliderValue] = useState([500_000]);
+    const [sliderValueMax, setSliderValueMax] = useState([2_000_000]);
     const [interestChecked, setInterestChecked] = useState(false);
     const [interestNotes, setInterestNotes] = useState('');
     const [communityChecked, setCommunityChecked] = useState(false);
@@ -103,7 +104,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
                                     <Label htmlFor="budget">Budget</Label>
-                                    <CircularQuestionMarkTooltip label="Check this field if the potential customer matches the budget" />
+                                    <CircularQuestionMarkTooltip label="Check this field if the potential customer matches the budget. Slide the slider to select the min and max budget." />
                                 </div>
                                 <div className="flex flex-row items-center space-x-1">
                                     <h1 className="text-sm text-muted-foreground">Qualified?</h1>
@@ -115,23 +116,30 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             </div>
                             <div className="flex flex-row items-center justify-between mt-1">
                                 <div className="text-muted-foreground text-sm">
-                                    $500K USD
+                                    Min: {sliderValue[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                                 </div>
                                 <div className="text-muted-foreground text-sm">
-                                    {sliderValue[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                                </div>
-                                <div className="text-muted-foreground text-sm">
-                                    $2M USD
+                                    Max: {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                                 </div>
                             </div>
-                            <Slider
-                                value={sliderValue}
-                                onValueChange={(value) => setSliderValue(value)}
-                                min={500_000}
-                                max={2_000_000}
-                                step={50_000}
-                                className="mt-2"
-                            />
+                            <div className="space-y-4">
+                                <Slider
+                                    value={sliderValue}
+                                    onValueChange={(value) => setSliderValue(value)}
+                                    min={500_000}
+                                    max={2_000_000}
+                                    step={50_000}
+                                    className="mt-2"
+                                />
+                                <Slider
+                                    value={sliderValueMax}
+                                    onValueChange={(value) => setSliderValueMax(value)}
+                                    min={500_000}
+                                    max={2_000_000}
+                                    step={50_000}
+                                    className="mt-2"
+                                />
+                            </div>
                         </div>
 
                         <div className="mt-1">
@@ -318,6 +326,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 productFitNotes: projectFitNotes,
                                 budget: budgetChecked,
                                 budgetAmount: sliderValue[0] as number,
+                                budgetAmountMax: sliderValueMax[0] as number,
                                 interest: interestChecked,
                                 interestNotes: interestNotes,
                                 communityMember: communityChecked,
