@@ -69,11 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
 
         const startTimestampEst = moment.utc(startTimestampEpochUTC).tz('America/New_York').format('YYYY-MM-DD HH:mm:ss');
-        if (minutesUntilTour < 120) {
-            console.error(
-                `current date: ${currentDate.format('YYYY-MM-DD HH:mm:ss')}, start date: ${propertyTourDate.format('YYYY-MM-DD HH:mm:ss')}, minutes until tour: ${minutesUntilTour}`,
-            )
-        }
+
         if (minutesUntilTour === 60) {
             sendNotification(
                 propertyTour.email,
