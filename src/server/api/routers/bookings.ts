@@ -254,6 +254,38 @@ export const bookingsRouter = createTRPCRouter({
 
             const { email, firstName, lastName, phoneNumber } = currentDoc.data();
 
+            try {
+                const locationFitArray = [
+                    ...(input.losAngeles ? ['LA'] : []),
+                    ...(input.newYork ? ['NYC'] : []),
+                    ...(input.paris ? ['Paris'] : []),
+                    ...(input.london ? ['London'] : []),
+                    ...(input.berlin ? ['Berlin'] : []),
+                    ...(input.mexicoCity ? ['CDMX'] : []),
+                    ...(input.somewhereElse ? ['Else'] : []),
+                ];
+                await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                    properties: {
+                        product_fit_verified: input.productFit,
+                        product_fit_description: input.productFitNotes,
+                        budget_fit_verified: input.budget,
+                        budget_min_value: input.budgetAmount,
+                        budget_max_value: input.budgetAmountMax,
+                        interest_fit_verified: input.interest,
+                        interest_fit_details: input.interestNotes, // TODO: test this
+                        location_fit_verified: input.losAngeles || input.newYork || input.paris || input.london || input.berlin || input.mexicoCity,
+                        location_fit_detials: locationFitArray.join(';'),
+                        location_fit_else: input.somewhereElseNotes,
+                        buying_timeline_fit_verified: input.timing,
+                        buying_timeline_details: input.selectedDate ? input.selectedDate.toISOString().split('T')[0] : null, // TODO: test both cases
+                        community_member_qualified: input.communityMember,
+                        book_tour_verified: input.bookATour,
+                    }
+                })
+            } catch (error) {
+                console.error('Error updating hubspot contact field', error);
+            }
+
             // TODO: display old bookings with additionalNotes field in the booking-details page
             await updateDoc(d, {
                 status: 'completed',
@@ -434,6 +466,20 @@ export const bookingsRouter = createTRPCRouter({
                 await updateDoc(d, {
                     interviewer: input.interviewer,
                 });
+
+                // update hubspot contact property of phone_call_interviewer
+                const currentDoc = await getDoc(d);
+                const { email } = currentDoc?.data() || {};
+
+                try {
+                    await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                        properties: {
+                            phone_call_interviewer: input.interviewer,
+                        }
+                    })
+                } catch (error) {
+                    console.error('Error updating hubspot contact field', error);
+                }
             }
         ),
 });

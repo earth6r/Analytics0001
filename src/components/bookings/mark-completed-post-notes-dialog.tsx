@@ -345,6 +345,27 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             await getBooking.refetch();
                             setOpen(false);
                             setLoading(false);
+
+                            setProductFitChecked(false);
+                            setProjectFitNotes('');
+                            setBudgetChecked(false);
+                            setSliderValue([500_000]);
+                            setSliderValueMax([2_000_000]);
+                            setInterestChecked(false);
+                            setInterestNotes('');
+                            setCommunityChecked(false);
+                            setLosAngelesChecked(false);
+                            setNewYorkChecked(false);
+                            setParisChecked(false);
+                            setLondonChecked(false);
+                            setBerlinChecked(false);
+                            setMexicoCityChecked(false);
+                            setSomewhereElseChecked(false);
+                            setSomewhereElseNotes('');
+                            setTimingChecked(false);
+                            setSelectedDate(undefined);
+                            setBookATourChecked(false);
+
                             toast({
                                 title: "Success", // TODO: keep all the titles and descriptions the same format and similar text labels
                                 description: "Marked booking as completed",
