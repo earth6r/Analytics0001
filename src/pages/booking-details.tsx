@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { AlertCircle, ArrowLeftCircleIcon, Calendar, Contact, FileQuestion, Mail, MapPin, NotepadText, Phone, RocketIcon, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
+import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, Contact, FileQuestion, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -218,6 +218,12 @@ const BookingDetails = () => {
                                     <Phone className="w-4 h-4" />
                                     <div>
                                         {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
+                                    </div>
+                                </div>
+                                <div className="flex flex-row items-center space-x-2">
+                                    <Bell className="w-4 h-4" />
+                                    <div>
+                                        {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium : "-"}
                                     </div>
                                 </div>
                             </div>
