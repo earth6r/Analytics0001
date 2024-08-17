@@ -90,6 +90,27 @@ const BookingDetails = () => {
         );
     }
 
+    const createHyperlinks = (text: string) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.split(urlRegex).map((part: string, index: number) => {
+            if (urlRegex.test(part)) {
+                // return <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>;
+                return (
+                    <TooltipTrigger key={index}>
+                        <div key={index} className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
+                            () => window.open(
+                                part,
+                                "_blank"
+                            )
+                        }>{part}
+                        </div>
+                    </TooltipTrigger>
+                );
+            }
+            return part;
+        });
+    };
+
     return (
         <div>
             <Header />
@@ -190,9 +211,16 @@ const BookingDetails = () => {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="max-w-max whitespace-pre-wrap break-words">
-                            <div>
-                                {getPotentialCustomerDetails.data?.profileNotes || "-"}
-                            </div>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <div>
+                                        {typeof getPotentialCustomerDetails.data?.profileNotes === "string" ? createHyperlinks(getPotentialCustomerDetails.data?.profileNotes || "-") : "-"}
+                                    </div>
+                                    <TooltipContent>
+                                        Click to View the Link
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </CardContent>
                     </Card>
 
