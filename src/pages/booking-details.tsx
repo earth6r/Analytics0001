@@ -337,7 +337,7 @@ const BookingDetails = () => {
                                     {booking?.additionalDetails ? <div className="ml-6">
                                         <div>
                                             {/* TODO: consider using an icon instead of displaying true/false */}
-                                            Budget: {JSON.stringify(booking?.additionalDetails?.budget)} {booking?.additionalDetails?.budgetAmount}
+                                            Budget: {JSON.stringify(booking?.additionalDetails?.budget)} {booking?.additionalDetails?.budgetAmount?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD to {booking?.additionalDetails?.budgetAmountMax?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) || "$2,000,000"} USD
                                         </div>
                                         <div>
                                             Community Member: {JSON.stringify(booking?.additionalDetails?.communityMember)}
