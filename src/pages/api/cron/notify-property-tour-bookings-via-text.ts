@@ -15,7 +15,7 @@ const numbers = [
     '+491634841797',
 ]
 
-const sendNotification = (
+const sendNotification = async (
     email: string,
     firstName: string,
     lastName: string,
@@ -23,21 +23,26 @@ const sendNotification = (
     startTimestamp: string,
 ) => {
     for (const number of numbers) {
-        axios.post(`${API_URL}/send-property-tour-reminder`, {
-            // TODO: change recipientPhone to all numbers of team
-            recipientPhone: number,
-            email,
-            firstName,
-            lastName,
-            phoneNumber,
-            startTimestamp,
-        })
+        try {
+            await axios.post(`${API_URL}/send-property-tour-reminder`, {
+                // TODO: change recipientPhone to all numbers of team
+                recipientPhone: number,
+                email,
+                firstName,
+                lastName,
+                phoneNumber,
+                startTimestamp,
+            })
+        } catch (error) {
+            console.error(`Failed to send notification to ${number}`, error);
+        }
 
-        axios.post(`${API_URL}/send-message`, {
-            // TODO: change recipientPhone to all numbers of team
-            recipientPhone: number,
-            message:
-                `There is a booking for a property tour in 1 hour.
+        try {
+            await axios.post(`${API_URL}/send-message`, {
+                // TODO: change recipientPhone to all numbers of team
+                recipientPhone: number,
+                message:
+                    `There is a booking for a property tour in 1 hour.
 
 Name: ${firstName} ${lastName}
 Phone: ${phoneNumber}
@@ -45,7 +50,10 @@ Start Time: ${startTimestamp}
 Date: ${startTimestamp}
 Details: https://analytics.home0001.com/booking-details?email=${email}
             `,
-        })
+            })
+        } catch (error) {
+            console.error(`Failed to send notification to ${number}`, error);
+        }
     }
 }
 
@@ -69,9 +77,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const minutesUntilTour = propertyTourDate.diff(currentDate, 'minutes');
 
         const startTimestampEst = moment.utc(startTimestampEpochUTC).tz('America/New_York').format('YYYY-MM-DD HH:mm:ss');
-
+        // console.error(
+        //     `current date: ${currentDate.format('YYYY-MM-DD HH:mm:ss')}, start date: ${propertyTourDate.format('YYYY-MM-DD HH:mm:ss')}, minutes until tour: ${minutesUntilTour}`,
+        // )
         if (minutesUntilTour === 60) {
-            sendNotification(
+            await sendNotification(
                 propertyTour.email,
                 propertyTour.firstName,
                 propertyTour.lastName,
