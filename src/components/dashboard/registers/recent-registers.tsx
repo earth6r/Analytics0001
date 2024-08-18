@@ -35,14 +35,14 @@ const RecentRegisters = () => {
   const [numberOfBadges, setNumberOfBadges] = useState(2);
 
   const handleResize = () => {
-    if (window.innerWidth < 550 ) {
+    if (window.innerWidth < 550) {
       setNumberOfBadges(1);
     } else {
       setNumberOfBadges(2);
     }
   }
 
-  useEffect (() => {
+  useEffect(() => {
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -63,7 +63,6 @@ const RecentRegisters = () => {
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </Button>
-        {/* {JSON.stringify(recentRegisters.data)} */}
       </CardHeader>
       <CardContent>
         <Table>
@@ -78,68 +77,68 @@ const RecentRegisters = () => {
           <TableBody>
             {recentRegisters.data
               ? recentRegisters.data.map((register, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <div className="font-medium">
-                        {register.firstName + " " + register.lastName}
-                      </div>
-                      <div className="text-sm text-muted-foreground inline">
-                        {register.email}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      {register.type}
-                    </TableCell>
-                    <TableCell className="flex flex-row items-center justify-start space-x-2">
-                      {(register.locationsOfInterest || [])
-                        .slice(0, numberOfBadges)
-                        .map((location: string, index: number) => (
-                          <Badge
-                            key={index}
-                            className="text-xs"
-                            variant="outline"
-                          >
-                            {location}
-                          </Badge>
-                        ))}
-                      {(register.locationsOfInterest || []).length > numberOfBadges && (
-                        <Badge className="text-xs" variant="outline">
-                          +{register.locationsOfInterest.length - numberOfBadges}
+                <TableRow key={index}>
+                  <TableCell>
+                    <div className="font-medium">
+                      {register.firstName + " " + register.lastName}
+                    </div>
+                    <div className="text-sm text-muted-foreground inline">
+                      {register.email}
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden xl:table-column">
+                    {register.type}
+                  </TableCell>
+                  <TableCell className="flex flex-row items-center justify-start space-x-2">
+                    {(register.locationsOfInterest || [])
+                      .slice(0, numberOfBadges)
+                      .map((location: string, index: number) => (
+                        <Badge
+                          key={index}
+                          className="text-xs"
+                          variant="outline"
+                        >
+                          {location}
                         </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-end">
-                      {register.createdAt ? register.createdAt.slice(0, 10) : ""}
-                    </TableCell>
-                  </TableRow>
-                ))
+                      ))}
+                    {(register.locationsOfInterest || []).length > numberOfBadges && (
+                      <Badge className="text-xs" variant="outline">
+                        +{register.locationsOfInterest.length - numberOfBadges}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-end">
+                    {register.createdAt ? register.createdAt.slice(0, 10) : ""}
+                  </TableCell>
+                </TableRow>
+              ))
               : [1, 2, 3, 4, 5, 6].map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <Skeleton className="h-10 w-[400px]" />
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton className="h-10 w-[400px]" />
+                  </TableCell>
+                  <TableCell className="hidden xl:table-column">
+                    <Skeleton className="h-8 w-20" />
+                  </TableCell>
+                  <TableCell className="flex w-full items-center space-x-2">
+                    <Skeleton className="h-6 w-12 rounded-full border" />
+                    <Skeleton className="h-6 w-12 rounded-full border" />
+                    <Skeleton className="h-6 w-12 rounded-full border" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                    <Skeleton className="h-8 w-20" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                    <Skeleton className="h-8 w-20" />
+                  </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell className="">
+                    <div className="flex w-full items-center justify-end">
                       <Skeleton className="h-8 w-20" />
-                    </TableCell>
-                    <TableCell className="flex w-full items-center space-x-2">
-                      <Skeleton className="h-6 w-12 rounded-full border" />
-                      <Skeleton className="h-6 w-12 rounded-full border" />
-                      <Skeleton className="h-6 w-12 rounded-full border" />
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      <Skeleton className="h-8 w-20" />
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      <Skeleton className="h-8 w-20" />
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell className="">
-                      <div className="flex w-full items-center justify-end">
-                        <Skeleton className="h-8 w-20" />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>
