@@ -91,7 +91,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 space-y-6 mt-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-10/12 md:w-3/4 lg:w-1/2 space-y-6 mt-6">
         <FormField
           control={form.control}
           name="email"
@@ -115,7 +115,9 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} />
+                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} style={{
+                  fontSize: "16px",
+                }} />
               </FormControl>
               <FormDescription>
                 This is a given password that you can use to sign in.
