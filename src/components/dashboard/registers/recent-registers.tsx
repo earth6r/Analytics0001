@@ -20,6 +20,7 @@ import { api } from "@/utils/api";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect, useState } from "react";
 
 const RecentRegisters = () => {
   const { interval } = useInterval();
@@ -30,6 +31,24 @@ const RecentRegisters = () => {
       refetchInterval: interval,
     },
   );
+
+  const [numberOfBadges, setNumberOfBadges] = useState(2);
+
+  const handleResize = () => {
+    if (window.innerWidth < 550 ) {
+      setNumberOfBadges(1);
+    } else {
+      setNumberOfBadges(2);
+    }
+  }
+
+  useEffect (() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   return (
     <Card className="mt-6 h-[600px] w-full shadow md:mt-0 md:w-3/5">
@@ -52,9 +71,8 @@ const RecentRegisters = () => {
             <TableRow>
               <TableHead>User</TableHead>
               <TableHead className="hidden xl:table-column">Type</TableHead>
-              <TableHead className="">Locations of Interest</TableHead>
-              <TableHead className="hidden md:table-column">Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="flex flex-row items-center justify-start">Locations of Interest</TableHead>
+              <TableHead className="text-right">Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -65,16 +83,16 @@ const RecentRegisters = () => {
                       <div className="font-medium">
                         {register.firstName + " " + register.lastName}
                       </div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
+                      <div className="text-sm text-muted-foreground inline">
                         {register.email}
                       </div>
                     </TableCell>
                     <TableCell className="hidden xl:table-column">
                       {register.type}
                     </TableCell>
-                    <TableCell className="space-x-2">
+                    <TableCell className="flex flex-row items-center justify-start space-x-2">
                       {(register.locationsOfInterest || [])
-                        .slice(0, 2)
+                        .slice(0, numberOfBadges)
                         .map((location: string, index: number) => (
                           <Badge
                             key={index}
@@ -84,16 +102,15 @@ const RecentRegisters = () => {
                             {location}
                           </Badge>
                         ))}
-                      {(register.locationsOfInterest || []).length > 2 && (
+                      {(register.locationsOfInterest || []).length > numberOfBadges && (
                         <Badge className="text-xs" variant="outline">
-                          +{register.locationsOfInterest.length - 2}
+                          +{register.locationsOfInterest.length - numberOfBadges}
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      {register.createdAt}
+                    <TableCell className="text-end">
+                      {register.createdAt ? register.createdAt.slice(0, 10) : ""}
                     </TableCell>
-                    <TableCell className="text-right">{45}</TableCell>
                   </TableRow>
                 ))
               : [1, 2, 3, 4, 5, 6].map((_, index) => (
