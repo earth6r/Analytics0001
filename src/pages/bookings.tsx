@@ -300,7 +300,7 @@ const Bookings = () => {
                             Status
                         </div>
                         <div className="select-none col-span-2">
-                            Interviewer
+                            Tour Guide
                         </div>
                         <div className="col-span-3 select-none">Actions</div>
                     </div>
@@ -580,9 +580,10 @@ const BookingCard = (props: BookingCardProps) => {
                 </div> */}
             </div>
             <div className={cn("px-6 mt-2", booking?.status === "completed" ? "pb-0" : "pb-2")}>
-                {booking?.status !== "completed" && (
-                    <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
-                )}
+                {booking?.status !== "completed" && booking?.type === "Phone Call" &&
+                    (
+                        <MarkCompletedPostNotesDialog booking={booking} getBooking={getBookings} />
+                    )}
             </div>
             <div className={cn("px-6", !booking?.startTimestamp && !booking?.endTimestamp ? "pb-0" : "pb-6")}>
                 <RescheduleBookingDialog booking={booking} refetchBookings={getBookings.refetch} bookings={getBookings.data || []} />
