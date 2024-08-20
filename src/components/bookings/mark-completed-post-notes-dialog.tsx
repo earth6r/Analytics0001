@@ -355,7 +355,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 somewhereElseNotes: somewhereElseNotes,
                                 timing: timingChecked,
                                 selectedDate: selectedDate,
-                                timeline: timelineSelectedValue,
+                                timeline: timelineSelectedValue ?? null,
                                 bookATour: bookATourChecked,
                             });
                             await getBooking.refetch();

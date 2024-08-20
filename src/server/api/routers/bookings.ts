@@ -238,7 +238,7 @@ export const bookingsRouter = createTRPCRouter({
             timing: z.boolean(),
             selectedDate: z.date().optional(),
             bookATour: z.boolean(),
-            timeline: z.string().optional(),
+            timeline: z.string().nullable(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
