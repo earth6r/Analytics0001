@@ -238,6 +238,7 @@ export const bookingsRouter = createTRPCRouter({
             timing: z.boolean(),
             selectedDate: z.date().optional(),
             bookATour: z.boolean(),
+            timeline: z.string().optional(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
@@ -280,6 +281,7 @@ export const bookingsRouter = createTRPCRouter({
                         buying_timeline_details: input.selectedDate ? input.selectedDate.toISOString().split('T')[0] : null, // TODO: test both cases
                         community_member_qualified: input.communityMember,
                         book_tour_verified: input.bookATour,
+                        buying_timeline_phone_call_meeting_notes: input.timeline,
                     }
                 })
             } catch (error) {
@@ -311,6 +313,7 @@ export const bookingsRouter = createTRPCRouter({
                     timing: input.timing,
                     selectedDate: input.selectedDate ? input.selectedDate.getTime() : null,
                     bookATour: input.bookATour,
+                    timeline: input.timeline,
                 },
             });
 

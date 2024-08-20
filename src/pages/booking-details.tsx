@@ -382,6 +382,9 @@ const BookingDetails = () => {
                                         <div>
                                             Timing: {JSON.stringify(booking?.additionalDetails?.timing)}
                                         </div>
+                                        <div>
+                                            Buying Timeline: {booking?.additionalDetails?.timeline}
+                                        </div>
                                     </div> : <div className="ml-6">-</div>}
                                 </div>
                             </CardContent>

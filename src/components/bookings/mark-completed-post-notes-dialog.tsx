@@ -21,6 +21,8 @@ import { DatePicker } from "./date-picker";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 import { toastSuccessStyle } from "@/lib/toast-styles";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 interface MarkCompletedPostNotesDialogProps {
     booking: any;
@@ -51,6 +53,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [somewhereElseNotes, setSomewhereElseNotes] = useState('');
     const [timingChecked, setTimingChecked] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+    const [timelineSelectedValue, setTimelineSelectedValue] = useState<string | null>(null);
     const [bookATourChecked, setBookATourChecked] = useState(false);
 
     const completeBooking = api.bookings.completeBooking.useMutation();
@@ -260,8 +263,8 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                         <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
-                                    <Label htmlFor="timing">Timing</Label>
-                                    <CircularQuestionMarkTooltip label="Check this field if the potential customer is in the same timing. Select the first day of the month if there is no specific day" />
+                                    <Label htmlFor="timeline">Timeline</Label>
+                                    <CircularQuestionMarkTooltip label="Check this field if the potential customer is in the same buying timeline." />
                                 </div>
                                 <div className="flex flex-row items-center space-x-1">
                                     <h1 className="text-sm text-muted-foreground">Qualified?</h1>
@@ -272,11 +275,23 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <DatePicker
-                                    // @ts-expect-error TODO: fix this
-                                    value={selectedDate}
-                                    onValueChange={(date) => setSelectedDate(date)}
-                                />
+                                <Select
+                                    value={timelineSelectedValue || undefined}
+                                    onValueChange={(value) => setTimelineSelectedValue(value)}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a buying timeline" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="Immediate">Immediate</SelectItem>
+                                            <SelectItem value="1-3 Months">1-3 Months</SelectItem>
+                                            <SelectItem value="3-6 Months">3-6 Months</SelectItem>
+                                            <SelectItem value="6-12 Months">6-12 Months</SelectItem>
+                                            <SelectItem value="Not Sure">Not Sure</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 
@@ -340,6 +355,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 somewhereElseNotes: somewhereElseNotes,
                                 timing: timingChecked,
                                 selectedDate: selectedDate,
+                                timeline: timelineSelectedValue,
                                 bookATour: bookATourChecked,
                             });
                             await getBooking.refetch();
