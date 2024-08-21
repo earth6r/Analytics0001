@@ -388,6 +388,8 @@ export const bookingsRouter = createTRPCRouter({
                 status: 'rescheduled',
             });
 
+            const currentDoc = await getDoc(d);
+
             if (input.bookingType === "Property Tour") {
                 try {
                     const response = await axios.post(`${API_URL}/bookings/reschedule-property-tour-booking`, {
@@ -398,6 +400,7 @@ export const bookingsRouter = createTRPCRouter({
                         endTimestamp: input.endTimestamp,
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
+                        googleCalendarEventIdExistingBooking: currentDoc.data()?.googleCalendarEventId,
                     })
 
                     const { googleCalendarEventId } = response.data;
@@ -419,6 +422,7 @@ export const bookingsRouter = createTRPCRouter({
                         endTimestamp: input.endTimestamp,
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
+                        googleCalendarEventIdExistingBooking: currentDoc.data()?.googleCalendarEventId,
                     })
 
                     const { googleCalendarEventId } = response.data;
