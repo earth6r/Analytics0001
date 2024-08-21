@@ -128,7 +128,11 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             <div className="space-y-4">
                                 <Slider
                                     value={sliderValue}
-                                    onValueChange={(value) => setSliderValue(value)}
+                                    onValueChange={(value) => {
+                                        if (value[0] && sliderValueMax[0] && value[0] <= sliderValueMax[0]) {
+                                            setSliderValue(value);
+                                        }
+                                    }}
                                     min={500_000}
                                     max={2_000_000}
                                     step={50_000}
@@ -136,7 +140,11 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 />
                                 <Slider
                                     value={sliderValueMax}
-                                    onValueChange={(value) => setSliderValueMax(value)}
+                                    onValueChange={(value) => {
+                                        if (value[0] && sliderValue[0] && value[0] >= sliderValue[0]) {
+                                            setSliderValueMax(value);
+                                        }
+                                    }}
                                     min={500_000}
                                     max={2_000_000}
                                     step={50_000}
