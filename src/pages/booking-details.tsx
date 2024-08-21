@@ -151,8 +151,8 @@ const BookingDetails = () => {
                                             )
                                         }
                                     >
-                                        <h1>View Image</h1>
                                         <SquareArrowOutUpRight className="w-4 h-4" />
+                                        <h1>View Image</h1>
                                     </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>}
