@@ -112,6 +112,14 @@ const Bookings = () => {
                 sortedBookingsData = sortedBookingsData.filter((booking: any) => booking.type === "Phone Call");
             }
 
+            // put pending status at the top
+            sortedBookingsData = sortedBookingsData.sort((a: any, b: any) => {
+                if (a?.status === "pending") {
+                    return -1;
+                }
+                return 0;
+            });
+
             setSortedData(sortedBookingsData);
         }
     }, [getBookings.data, sortOrder, sortKey, filterStatus, tab]);
