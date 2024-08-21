@@ -390,7 +390,7 @@ export const bookingsRouter = createTRPCRouter({
 
             if (input.bookingType === "Property Tour") {
                 try {
-                    await axios.post(`${API_URL}/bookings/reschedule-property-tour-booking`, {
+                    const response = await axios.post(`${API_URL}/bookings/reschedule-property-tour-booking`, {
                         email: email,
                         firstName: firstName,
                         lastName: lastName,
@@ -399,13 +399,19 @@ export const bookingsRouter = createTRPCRouter({
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
                     })
+
+                    const { googleCalendarEventId } = response.data;
+
+                    await updateDoc(d, {
+                        googleCalendarEventId: googleCalendarEventId,
+                    });
                 } catch (error) {
                     console.error('Error creating property tour booking', error);
                 }
             }
             else {
                 try {
-                    await axios.post(`${API_URL}/bookings/reschedule-phone-call-booking`, {
+                    const response = await axios.post(`${API_URL}/bookings/reschedule-phone-call-booking`, {
                         email: email,
                         firstName: firstName,
                         lastName: lastName,
@@ -414,6 +420,12 @@ export const bookingsRouter = createTRPCRouter({
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
                     })
+
+                    const { googleCalendarEventId } = response.data;
+
+                    await updateDoc(d, {
+                        googleCalendarEventId: googleCalendarEventId,
+                    });
                 } catch (error) {
                     console.error('Error creating property tour booking', error);
                 }
