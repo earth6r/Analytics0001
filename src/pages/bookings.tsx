@@ -16,13 +16,14 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { useUser } from "@/contexts/UserContext";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { ArrowUpDownIcon, Phone, School, User, X } from "lucide-react";
+import { AlertCircle, ArrowUpDownIcon, Phone, School, User, X } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ZOOM_URL } from "./booking-details";
 import BookingTabs from "@/components/bookings/booking-tabs";
 import AddPropertyTourDateDialog from "@/components/bookings/add-property-tour-date-dialog";
 import InterviewerInput from "@/components/bookings/interviewer-input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 
 const Bookings = () => {
@@ -119,6 +120,18 @@ const Bookings = () => {
         <div>
             <Header />
             <div className="p-6">
+                {
+                    // check if there's a status of pending
+                    getBookings.data?.some((booking: any) => booking.status === "pending") && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Action Required</AlertTitle>
+                            <AlertDescription>
+                                Pending Bookings Found. Add a date to property tour bookings that are pending.
+                            </AlertDescription>
+                        </Alert>
+                    )
+                }
                 <div className="flex flex-row items-center justify-between">
                     <h1 className="text-4xl font-bold">Bookings</h1>
                     {/* TODO: uncomment after fixing this */}
