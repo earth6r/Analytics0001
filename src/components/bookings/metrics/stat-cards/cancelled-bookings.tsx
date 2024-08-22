@@ -1,4 +1,4 @@
-import { BookmarkCheck, TicketX } from "lucide-react";
+import { TicketX } from "lucide-react";
 import StatCard from "@/components/common/stat-card";
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
