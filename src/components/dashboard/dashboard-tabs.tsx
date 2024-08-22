@@ -6,6 +6,7 @@ import Messages from "@/components/dashboard/messages/messages";
 import { useRouter } from "next/router";
 import Emails from "@/components/dashboard/emails/emails";
 import CustomersTabContent from "@/components/dashboard/customers/customers-tab-content";
+import BookingsMetrics from "../bookings/metrics/bookings-metrics";
 
 const DashboardTabs = () => {
   const router = useRouter();
@@ -24,13 +25,13 @@ const DashboardTabs = () => {
       {/* TODO: uncomment */}
       {/* TODO: make grid-cols-4 after uncommenting below */}
       {/* TODO: remove parent div and remove registers below since there's already one in tabs */}
-      {/* <Tabs
+      <Tabs
         value={router.query.tab as string ?? "registers"}
         defaultValue={router.query.tab as string ?? "registers"}
         className="w-full"
       >
         <div className="pl-6 pr-6 pt-6">
-          <TabsList className="grid w-full grid-cols-1 md:w-96">
+          <TabsList className="grid w-full grid-cols-2 md:w-96">
             <TabsTrigger
               value="registers"
               className={cn(
@@ -42,6 +43,16 @@ const DashboardTabs = () => {
               Registers
             </TabsTrigger>
             <TabsTrigger
+              value="bookings"
+              className={cn(
+                activeTab === "bookings" ? "" : "text-muted-foreground",
+                "cursor-pointer",
+              )}
+              onClick={() => handleSetActiveTab("bookings")}
+            >
+              Bookings
+            </TabsTrigger>
+            {/* <TabsTrigger
             value="messages"
             className={cn(
               activeTab === "messages" ? "" : "text-muted-foreground",
@@ -70,7 +81,7 @@ const DashboardTabs = () => {
             onClick={() => handleSetActiveTab("customers")}
           >
             Customers
-          </TabsTrigger>
+          </TabsTrigger> */}
           </TabsList>
         </div>
         <TabsContent value="registers" className="w-full">
@@ -85,8 +96,10 @@ const DashboardTabs = () => {
         <TabsContent value="customers" className="p-6">
           <CustomersTabContent />
         </TabsContent>
-      </Tabs> */}
-      <Registers />
+        <TabsContent value="bookings" className="p-6">
+          <BookingsMetrics />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

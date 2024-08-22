@@ -63,7 +63,7 @@ export const bookingsRouter = createTRPCRouter({
 
             // sort by timestamp
             bookings.sort((a, b) => {
-                return a.timestamp - b.timestamp;
+                return a.startTimestamp - b.startTimestamp;
             });
 
             for (const booking of bookings) {
@@ -501,4 +501,164 @@ export const bookingsRouter = createTRPCRouter({
                 }
             }
         ),
+
+    completedBookingsCount: publicProcedure
+        .query(async () => {
+            const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+            const phoneCallQuery = query(phoneCallBookingsRef, where("status", "==", "completed"));
+            const querySnapshot = await getDocs(phoneCallQuery);
+
+            const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+            const propertyTourQuery = query(propertyTourBookingsRef, where("status", "==", "completed"));
+            const querySnapshot2 = await getDocs(propertyTourQuery);
+
+            return querySnapshot.size + querySnapshot2.size;
+        }),
+
+    completedBookingsCountDelta: publicProcedure
+        .query(async () => {
+            return -1; // TODO: implement this
+        }),
+
+    cancelledBookingsCount: publicProcedure
+        .query(async () => {
+            const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+            const phoneCallQuery = query(phoneCallBookingsRef, where("status", "==", "cancelled"));
+            const querySnapshot = await getDocs(phoneCallQuery);
+
+            const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+            const propertyTourQuery = query(propertyTourBookingsRef, where("status", "==", "cancelled"));
+            const querySnapshot2 = await getDocs(propertyTourQuery);
+
+            return querySnapshot.size + querySnapshot2.size;
+        }),
+
+    cancelledBookingsCountDelta: publicProcedure
+        .query(async () => {
+            return -1; // TODO: implement this
+        }),
+
+    noShowBookingsCount: publicProcedure
+        .query(async () => {
+            const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+            const phoneCallQuery = query(phoneCallBookingsRef, where("status", "==", "no-show"));
+            const querySnapshot = await getDocs(phoneCallQuery);
+
+            const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+            const propertyTourQuery = query(propertyTourBookingsRef, where("status", "==", "no-show"));
+            const querySnapshot2 = await getDocs(propertyTourQuery);
+
+            return querySnapshot.size + querySnapshot2.size;
+        }),
+
+    noShowBookingsCountDelta: publicProcedure
+        .query(async () => {
+            return -1; // TODO: implement this
+        }),
+
+    pendingBookingsCount: publicProcedure
+        .query(async () => {
+            const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+            const phoneCallQuery = query(phoneCallBookingsRef, where("status", "==", "pending"));
+            const querySnapshot = await getDocs(phoneCallQuery);
+
+            const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+            const propertyTourQuery = query(propertyTourBookingsRef, where("status", "==", "pending"));
+            const querySnapshot2 = await getDocs(propertyTourQuery);
+
+            return querySnapshot.size + querySnapshot2.size;
+        }),
+
+    pendingBookingsCountDelta: publicProcedure
+        .query(async () => {
+            return -1; // TODO: implement this
+        }),
+
+    bookingsCount: publicProcedure
+        .query(async () => {
+            const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+            const querySnapshot = await getDocs(phoneCallBookingsRef);
+
+            const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+            const querySnapshot2 = await getDocs(propertyTourBookingsRef);
+
+            return querySnapshot.size + querySnapshot2.size;
+        }),
+
+    bookingsOverTime: publicProcedure.query(async () => {
+        const startDate = new Date('2024-07-29');
+
+        const phoneCallBookingsRef = collection(db, "usersBookPhoneCall");
+        const propertyTourBookingsRef = collection(db, "usersBookPropertyTour");
+
+        // @ts-expect-error TODO: fix type
+        function safeParseTimestamp(timestamp) {
+            if (timestamp?.toDate && typeof timestamp.toDate === 'function') {
+                return timestamp.toDate();
+            }
+            if (timestamp instanceof Date) {
+                return timestamp;
+            }
+            if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+                const parsed = new Date(timestamp);
+                if (isNaN(parsed.getTime())) {
+                    console.error('Invalid timestamp:', timestamp);
+                    return null;
+                }
+                return parsed;
+            }
+            console.error('Unrecognized timestamp format:', timestamp);
+            return null;
+        }
+
+        // @ts-expect-error TODO: fix type
+        function processBookings(querySnapshot, type) {
+            // @ts-expect-error TODO: fix type
+            return querySnapshot.docs.map((doc) => {
+                const data = doc.data();
+                const parsedDate = safeParseTimestamp(data.startTimestamp);
+                if (!parsedDate) {
+                    console.error(`Invalid date for ${type} booking:`, doc.id, data.startTimestamp);
+                    return null;
+                }
+                const date = parsedDate.toISOString().split("T")[0];
+                return { date, type };
+                // @ts-expect-error TODO: fix type
+            }).filter(booking => booking !== null);
+        }
+
+        // Fetch and process phone call bookings
+        const phoneCallQuerySnapshot = await getDocs(phoneCallBookingsRef);
+        const phoneCallBookings = processBookings(phoneCallQuerySnapshot, "Call");
+
+        // Fetch and process property tour bookings
+        const propertyTourQuerySnapshot = await getDocs(propertyTourBookingsRef);
+        const propertyTourBookings = processBookings(propertyTourQuerySnapshot, "Tour");
+
+        // Combine bookings
+        const allBookings = [...phoneCallBookings, ...propertyTourBookings];
+
+        // Create a map to store all dates from startDate to the current date
+        const currentDate = new Date();
+        const dateMap = {};
+        for (let d = new Date(startDate); d <= currentDate; d.setDate(d.getDate() + 1)) {
+            const formattedDate = d.toISOString().split("T")[0];
+            // @ts-expect-error TODO: fix type
+            dateMap[formattedDate] = { date: formattedDate, Tour: 0, Call: 0 };
+        }
+
+        // Aggregate bookings into the dateMap
+        allBookings.forEach(({ date, type }) => {
+            // @ts-expect-error TODO: fix type
+            if (dateMap[date]) {
+                // @ts-expect-error TODO: fix type
+                dateMap[date][type] += 1;
+            }
+        });
+
+        // Convert the dateMap object to an array
+        return Object.values(dateMap);
+    }),
+
+
 });
