@@ -93,7 +93,7 @@ const BookingsOverTime = () => {
                         />
                         <ChartTooltip
                             content={
-                                <ChartTooltipContent labelKey="bookings" indicator="line" />
+                                <ChartTooltipContent />
                             }
                             cursor={false}
                             defaultIndex={1}
