@@ -15,14 +15,6 @@ import {
 } from "@/components/ui/chart"
 import { useInterval } from "@/contexts/IntervalContext"
 import { api } from "@/utils/api"
-const chartData = [
-    { date: "2024-07-15", "Tour": 400, "Call": 200 },
-    { date: "2024-07-16", "Tour": 300, "Call": 400 },
-    { date: "2024-07-17", "Tour": 300, "Call": 200 },
-    { date: "2024-07-18", "Tour": 200, "Call": 400 },
-    { date: "2024-07-19", "Tour": 200, "Call": 200 },
-    { date: "2024-07-20", "Tour": 100, "Call": 300 },
-]
 
 const chartConfig = {
     bookings: {
@@ -59,7 +51,7 @@ const BookingsOverTime = () => {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Bookings</CardTitle>
+                <CardTitle>All Bookings</CardTitle>
                 <CardDescription>
                     {bookingsCount.data?.toString()} Total Bookings
                 </CardDescription>

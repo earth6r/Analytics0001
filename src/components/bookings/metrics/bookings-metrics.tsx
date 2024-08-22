@@ -14,14 +14,14 @@ const BookingsMetrics = () => {
                 <NoShowBookings />
                 <PendingBookings />
             </div>
-            <div className="mt-6 flex flex-row items-center space-x-6">
-                <div className="w-1/3">
+            <div className="mt-6 flex flex-col md:flex-row justify-center md:items-center md:justify-normal space-y-6 md:space-x-6 md:space-y-0">
+                <div className="w-full md:w-1/3">
                     <BookingsOverTime />
                 </div>
-                <div className="w-1/3">
+                <div className="w-full md:w-1/3">
                     <BookingsOverTime />
                 </div>
-                <div className="w-1/3">
+                <div className="w-full md:w-1/3">
                     <BookingsOverTime />
                 </div>
             </div>
