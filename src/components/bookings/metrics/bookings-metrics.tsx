@@ -1,4 +1,6 @@
 import BookingsOverTime from "./charts/bookings-over-time";
+import CompletedBookingsOverTime from "./charts/completed-over-time";
+import NoShowBookingsOverTime from "./charts/no-show-over-time";
 import CancelledBookings from "./stat-cards/cancelled-bookings";
 import CompletedBookings from "./stat-cards/completed-bookings";
 import NoShowBookings from "./stat-cards/no-show-bookings";
@@ -19,10 +21,11 @@ const BookingsMetrics = () => {
                     <BookingsOverTime />
                 </div>
                 <div className="w-full md:w-1/3">
-                    <BookingsOverTime />
+                    <CompletedBookingsOverTime />
                 </div>
                 <div className="w-full md:w-1/3">
-                    <BookingsOverTime />
+                    <CancelledBookings />
+                    <NoShowBookingsOverTime />
                 </div>
             </div>
         </div>
