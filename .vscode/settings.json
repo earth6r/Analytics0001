@@ -5,6 +5,7 @@
     "firestore",
     "hookform",
     "hubspot",
+    "hutk",
     "lucide",
     "nextjs",
     "notsure",
@@ -16,6 +17,7 @@
     "tanstack",
     "Timelinedec",
     "TRPC",
-    "unclickable"
+    "unclickable",
+    "Waitlist"
   ]
 }

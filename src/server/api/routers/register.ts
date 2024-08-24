@@ -78,4 +78,18 @@ export const registerRouter = createTRPCRouter({
                 count: registers.length,
             }
         }),
+
+    getRegisterCount: publicProcedure
+        .input(
+            z.object({
+                startDate: z.date(),
+                endDate: z.date(),
+            }),
+        )
+        .query(async ({ input }) => {
+            const registerRef = collection(db, "register");
+            const register = await getDocs(query(registerRef, where("createdAt", ">=", input.startDate.getTime().toString()), where("createdAt", "<=", input.endDate.getTime().toString())));
+
+            return register.size;
+        }),
 });
