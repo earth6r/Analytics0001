@@ -30,6 +30,7 @@ import {
   AlertCircle,
   ArrowUpDownIcon,
   Phone,
+  Plus,
   School,
   User,
   X,
@@ -41,6 +42,7 @@ import BookingTabs from "@/components/bookings/booking-tabs";
 import AddPropertyTourDateDialog from "@/components/bookings/add-property-tour-date-dialog";
 import InterviewerInput from "@/components/bookings/interviewer-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Statuses } from "@/utils/status";
 // import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 
 const Bookings = () => {
@@ -98,15 +100,7 @@ const Bookings = () => {
     },
   );
 
-  const [filterStatus, setFilterStatus] = useState<string[]>([
-    "completed",
-    "scheduled",
-    "cancelled",
-    "no-show",
-    "confirmed",
-    "rescheduled",
-    "pending",
-  ]);
+  const [filterStatus, setFilterStatus] = useState<string[]>(Statuses);
 
   useEffect(() => {
     if (
@@ -236,7 +230,7 @@ const Bookings = () => {
                 setSortedData(filteredData);
               }}
             />
-            <FilterStatusMultiSelect
+            {/* <FilterStatusMultiSelect
               values={filterStatus}
               addValue={async (value: string) => {
                 setFilterStatus([...filterStatus, value]);
@@ -258,35 +252,63 @@ const Bookings = () => {
                 });
                 await getUserSettings.refetch();
               }}
-            />
+            /> */}
           </div>
           <div className="flex min-h-8 flex-row items-center">
-            {filterStatus.length > 0 && !getUserSettings.isLoading && (
-              <div className="flex flex-row flex-wrap items-center">
-                {filterStatus.map((status) => (
-                  <div key={status} className="p-1">
-                    <Badge
-                      className="cursor-pointer select-none"
-                      onClick={async () => {
-                        setFilterStatus(
-                          filterStatus.filter((s) => s !== status),
-                        );
-                        await updateUserBookingStatusFilters.mutateAsync({
-                          email: email as string,
-                          statusFilters: filterStatus.filter(
-                            (s) => s !== status,
-                          ),
-                        });
-                        await getUserSettings.refetch();
-                      }}
-                    >
-                      <div className="flex flex-row items-center space-x-2">
-                        <h1>{status}</h1>
-                        <X className="h-4 w-4" />
+            {!getUserSettings.isLoading && (
+              <div className="space-y-4">
+                <div className="flex flex-row flex-wrap items-center">
+                  {filterStatus.map((status) => (
+                    <div key={status} className="p-1">
+                      <Badge
+                        className="cursor-pointer select-none"
+                        onClick={async () => {
+                          setFilterStatus(
+                            filterStatus.filter((s) => s !== status),
+                          );
+                          await updateUserBookingStatusFilters.mutateAsync({
+                            email: email as string,
+                            statusFilters: filterStatus.filter(
+                              (s) => s !== status,
+                            ),
+                          });
+                          await getUserSettings.refetch();
+                        }}
+                      >
+                        <div className="flex flex-row items-center space-x-2">
+                          <h1>{status}</h1>
+                          <X className="h-4 w-4" />
+                        </div>
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-row flex-wrap items-center">
+                  {Statuses
+                    .filter((status) => !filterStatus.includes(status))
+                    .map((status) => (
+                      <div key={status} className="p-1">
+                        <Badge
+                          variant="default"
+                          className="cursor-pointer select-none"
+                          onClick={async () => {
+                            setFilterStatus([...filterStatus, status]);
+                            await updateUserBookingStatusFilters.mutateAsync({
+                              email: email as string,
+                              statusFilters: [...filterStatus, status],
+                            });
+                            await getUserSettings.refetch();
+                          }}
+                        >
+                          <div className="flex flex-row items-center space-x-2">
+                            <h1>{status}</h1>
+                            <Plus className="h-4 w-4" />
+                          </div>
+                        </Badge>
                       </div>
-                    </Badge>
-                  </div>
-                ))}
+                    ))}
+                </div>
               </div>
             )}
           </div>
@@ -536,7 +558,7 @@ const Bookings = () => {
                           `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
                         )
                       }
-                      // className="flex flex-row items-center space-x-2"
+                    // className="flex flex-row items-center space-x-2"
                     >
                       <User className="h-4 w-4" />
                       {/* <div className="select-none">Profile</div> */}

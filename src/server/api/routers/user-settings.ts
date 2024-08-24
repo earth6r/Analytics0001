@@ -1,5 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
+import { Statuses } from "@/utils/status";
 import { addDoc, collection, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { z } from "zod";
 
@@ -13,7 +14,7 @@ const generateDefaultSettings = async (email: string) => {
         color: "default", // default, red, green, blue, orange
         notifications: true,
         interval: null,
-        statusFilters: ["completed", "cancelled", "no-show", "scheduled", "confirmed", "rescheduled", "pending"],
+        statusFilters: Statuses,
     });
 
     // return the docRef

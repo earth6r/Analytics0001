@@ -45,7 +45,8 @@ const BookingTabs = (props: BookingTabsProps) => {
                     {/* TODO: make this a reusable component (like PhoneCallView or something) and import it in the dropdown in create booking as well*/}
                     <div className="flex flex-row items-center space-x-2">
                         <School className="h-4 w-4" />
-                        <h1>Property Tours</h1>
+                        <h1 className="hidden md:block">Property Tours</h1>
+                        <h1 className="block md:hidden">Tours</h1>
                     </div>
                 </TabsTrigger>
                 <TabsTrigger
@@ -55,7 +56,8 @@ const BookingTabs = (props: BookingTabsProps) => {
                     {/* TODO: make this a reusable component (like PhoneCallView or something) and import it in the dropdown in create booking as well*/}
                     <div className="flex flex-row items-center space-x-2">
                         <Phone className="h-4 w-4" />
-                        <h1>Phone Calls</h1>
+                        <h1 className="hidden md:block">Phone Calls</h1>
+                        <h1 className="block md:hidden">Calls</h1>
                     </div>
                 </TabsTrigger>
             </TabsList>
