@@ -893,4 +893,36 @@ export const bookingsRouter = createTRPCRouter({
         // Convert the dateMap object to an array
         return Object.values(dateMap);
     }),
+
+    bookingsCountByType: publicProcedure
+        .input(
+            z.object({
+                startDate: z.date(),
+                endDate: z.date(),
+                type: z.string(),
+            }),
+        )
+        .query(async ({ input }) => {
+            let bookingsRef;
+
+            if (input.type === "Property Tour") {
+                bookingsRef = collection(db, "usersBookPropertyTour");
+            } else {
+                bookingsRef = collection(db, "usersBookPhoneCall");
+            }
+            // const q = await getDocs(query(bookingsRef, where("startTimestamp", ">=", (input.startDate.getTime() * 1000)), where("startTimestamp", "<=", (input.endDate.getTime() * 1000))));
+
+            const querySnapshot = await getDocs(bookingsRef);
+
+            let count = 0;
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const parsedDate = new Date(data.startTimestamp);
+                if (parsedDate >= input.startDate && parsedDate <= input.endDate) {
+                    count++;
+                }
+            });
+
+            return count;
+        }),
 });
