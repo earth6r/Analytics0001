@@ -133,7 +133,7 @@ const ActionCell = ({ row }) => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-[450px] sm:max-w-[450px]">
           <DialogHeader>
-            <DialogTitle>Register Details</DialogTitle>
+            <DialogTitle>Waitlist Details</DialogTitle>
             <DialogDescription>
               {`Details for ${row.original.firstName} ${row.original.lastName}`}
             </DialogDescription>
@@ -509,7 +509,7 @@ const Registers = () => {
     <div>
       <Header />
       <div className="w-full p-6">
-        <h1 className="text-4xl font-bold">Registers</h1>
+        <h1 className="text-4xl font-bold">Waitlists</h1>
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter emails..."

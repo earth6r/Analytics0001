@@ -40,7 +40,7 @@ const DashboardTabs = () => {
               )}
               onClick={() => handleSetActiveTab("registers")}
             >
-              Registers
+              Waitlists
             </TabsTrigger>
             <TabsTrigger
               value="bookings"

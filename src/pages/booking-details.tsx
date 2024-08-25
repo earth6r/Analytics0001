@@ -81,7 +81,7 @@ const BookingDetails = () => {
         // TODO: make this ui better https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=73914135
         return (
             <div className="flex flex-col items-center justify-center h-screen">
-                <div className="text-3xl font-bold">No register details found</div>
+                <div className="text-3xl font-bold">No waitlist details found</div>
                 <div className="text-lg">Please try again later</div>
                 <div className="mt-4">
                     <Button variant="default" onClick={() => referral ? router.push(referral as string) : router.push("/bookings")}>Go back</Button>
@@ -168,7 +168,7 @@ const BookingDetails = () => {
                         <AlertTitle>Heads up!</AlertTitle>
                     </div>
                     <AlertDescription>
-                        There are multiple register details for this email. We will show as many details as possible.
+                        There are multiple waitlist details for this email. We will show as many details as possible.
                     </AlertDescription>
                 </Alert>}
 
@@ -177,6 +177,7 @@ const BookingDetails = () => {
                         <CardContent className="p-4">
                             {/* TODO: fix the skeleton loading */}
                             <div>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={displayImageUrl as string}
                                     alt="@user"
@@ -191,9 +192,9 @@ const BookingDetails = () => {
                     </Card>
                     <Card className="md:mt-6 w-full">
                         <CardHeader className="select-none">
-                            <CardTitle>Register Details</CardTitle>
+                            <CardTitle>Waitlist Details</CardTitle>
                             <CardDescription>
-                                {`Details about the potential customer's register details.`}
+                                {`Details about the potential customer's waitlist details.`}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>

@@ -88,7 +88,7 @@ const Header = () => {
                 : "text-muted-foreground",
             )}
           >
-            Registers
+            Waitlists
           </Link>
           {/* TODO: uncomment and fix mobile view + fully test everything */}
           {/* <Link
@@ -177,7 +177,7 @@ const Header = () => {
                     : "text-muted-foreground",
                 )}
               >
-                Registers
+                Waitlists
               </Link>
               {/* <Link
                 href="/messages"

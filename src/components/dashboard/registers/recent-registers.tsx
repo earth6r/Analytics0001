@@ -54,8 +54,8 @@ const RecentRegisters = () => {
     <Card className="mt-6 h-[600px] w-full shadow md:mt-0 md:w-3/5">
       <CardHeader className="flex flex-row items-center">
         <div className="grid gap-2">
-          <CardTitle>Registers</CardTitle>
-          <CardDescription>Recent registers from Home0001.</CardDescription>
+          <CardTitle>Waitlists</CardTitle>
+          <CardDescription>Recent waitlists from Home0001.</CardDescription>
         </div>
         <Button asChild size="sm" className="ml-auto gap-1">
           <Link href="/registers">
