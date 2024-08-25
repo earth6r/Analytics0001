@@ -32,11 +32,11 @@ const DeleteBookingAlertDialog = (props: DeleteBookingAlertDialogProps) => {
     return (
         <AlertDialog open={open} onOpenChange={onOpenChange}>
             <AlertDialogTrigger
-                // disabled={booking?.status === "completed"}
-                // className={booking?.status === "completed" ? "cursor-not-allowed" : ""}
+                disabled={booking?.status === "completed"}
+                className={booking?.status === "completed" ? "cursor-not-allowed" : ""}
             >
                 {triggerOverride ? triggerOverride : <Button className="bg-red-500 hover:bg-red-600"
-                    // disabled={booking?.status === "completed"}
+                    disabled={booking?.status === "completed"}
                 >
                     <Trash2 className="w-5 h-5" />
                 </Button>}
@@ -45,7 +45,7 @@ const DeleteBookingAlertDialog = (props: DeleteBookingAlertDialogProps) => {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the booking. This should only be done for bookings created by mistake.
+                        {`This action cannot be undone. This will permanently delete ${booking?.firstName} ${booking?.lastName}'s booking. This should only be done for bookings created by mistake.`}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

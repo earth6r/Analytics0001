@@ -32,6 +32,7 @@ import {
   Phone,
   Plus,
   School,
+  Trash2,
   User,
   X,
 } from "lucide-react";
@@ -43,7 +44,7 @@ import AddPropertyTourDateDialog from "@/components/bookings/add-property-tour-d
 import InterviewerInput from "@/components/bookings/interviewer-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Statuses } from "@/utils/status";
-// import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
+import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
 
 const Bookings = () => {
   const [sortedData, setSortedData] = useState<any[]>([]);
@@ -213,7 +214,7 @@ const Bookings = () => {
                       ?.toLowerCase()
                       ?.includes(searchQuery.toLowerCase()) ||
                     booking?.lastName
-                      ?.toLowerCase() 
+                      ?.toLowerCase()
                       ?.includes(searchQuery.toLowerCase())
                   );
                 });
@@ -589,7 +590,7 @@ const Bookings = () => {
                         bookings={getBookings.data || []}
                       />
                     )}
-                    {/* <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} /> */}
+                    <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
                   </div>
                 </div>
               ))}
@@ -646,11 +647,11 @@ const BookingCard = (props: BookingCardProps) => {
             {booking?.firstName || "No First Name Provided"}{" "}
             {booking?.lastName || "No Last Name Provided"}
           </div>
-          {/* <div>
-                        <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} triggerOverride={
-                            <Trash2 className="w-4 h-4" />
-                        } />
-                    </div> */}
+          <div>
+            <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} triggerOverride={
+              <Trash2 className="w-4 h-4" />
+            } />
+          </div>
           {(booking?.rescheduleCount || 0) > 1 && (
             <Badge
               variant="default"
