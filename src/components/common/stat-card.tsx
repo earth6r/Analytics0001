@@ -28,13 +28,13 @@ const StatCard = (props: StatCardProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-xs text-muted-foreground">
+        {/* <div className="text-xs text-muted-foreground">
           {deltaValue ? (
             `${deltaValue > 0 ? "+" : ""}${isFinite(deltaValue) ? deltaValue : "∞"}% from last month`
           ) : (
             <Skeleton className="h-5 w-full" />
           )}
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
