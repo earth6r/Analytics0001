@@ -190,7 +190,20 @@ export const bookingsRouter = createTRPCRouter({
 
             const d = doc(tableRef, input.uid);
 
+            const booking = await getDoc(d);
+
             await deleteDoc(d);
+
+            try {
+                await axios.delete(`${API_URL}/google/delete-google-calendar-event`, {
+                    data: {
+                        eventId: booking.data()?.googleCalendarEventId,
+                        calendarEmail: input.bookingType,
+                    }
+                });
+            } catch (error) {
+                console.error('Error deleting google calendar event', error);
+            }
         }),
 
     getBookingDetails: publicProcedure
