@@ -194,7 +194,6 @@ const Bookings = () => {
               placeholder="Search bookings..."
               className="w-full lg:w-1/4"
               value={searchQuery}
-              disabled // TODO: remove this after fixing search
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 const searchQuery = e.target.value;
@@ -207,24 +206,15 @@ const Bookings = () => {
 
                 const filteredData = sortedData.filter((booking: any) => {
                   return (
-                    booking.email
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    booking.type
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    booking.startTimestamp
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    booking.endTimestamp
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    booking?.property
+                    booking?.email
                       ?.toLowerCase()
                       ?.includes(searchQuery.toLowerCase()) ||
-                    booking.phoneNumber
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase())
+                    booking?.firstName
+                      ?.toLowerCase()
+                      ?.includes(searchQuery.toLowerCase()) ||
+                    booking?.lastName
+                      ?.toLowerCase() 
+                      ?.includes(searchQuery.toLowerCase())
                   );
                 });
                 setSortedData(filteredData);
@@ -254,7 +244,7 @@ const Bookings = () => {
               }}
             /> */}
           </div>
-          <div className="flex min-h-8 flex-row items-center">
+          <div className="flex min-h-8 flex-row items-center mt-2">
             {!getUserSettings.isLoading && (
               <div className="space-y-4">
                 <div className="flex flex-row flex-wrap items-center">
