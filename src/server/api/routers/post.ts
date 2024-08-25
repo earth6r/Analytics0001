@@ -1394,4 +1394,109 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
+  globalSearch: publicProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await authenticate();
+
+      if (!input.query) {
+        return [];
+      }
+
+      const globalSearch = [] as {
+        type: string, value: {
+          uid: string,
+          firstName: string | null,
+          lastName: string | null,
+          email: string | null,
+          imageUrl: string,
+        }
+      }[];
+
+      // buying-progress-user
+      // const users = await getDocs(collection(db, "users"));
+      // users.forEach((doc) => {
+      //   const data = doc.data();
+      //   if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
+      //     data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
+      //     data.email?.toLowerCase().includes(input.query.toLowerCase())) {
+      //     globalSearch.push({
+      //       type: "buying-process-user",
+      //       value: {
+      //         uid: doc.id,
+      //         firstName: data?.firstName ?? null,
+      //         lastName: data?.lastName ?? null,
+      //         email: data.email,
+      //         imageUrl: `https://ui-avatars.com/api/?name=${data?.firstName + " " + data?.lastName}`
+      //       },
+      //     });
+      //   }
+      // });
+
+      // property-tour-booking-user
+      const propertyTourBookingUser = await getDocs(collection(db, "usersBookPropertyTour"));
+      propertyTourBookingUser.forEach((doc) => {
+        const data = doc.data();
+        if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          globalSearch.push({
+            type: "property-tour-booking-user",
+            value: {
+              uid: doc.id,
+              firstName: data?.firstName ?? null,
+              lastName: data?.lastName ?? null,
+              email: data.email,
+              imageUrl: `https://ui-avatars.com/api/?name=${data?.firstName + " " + data?.lastName}`
+            },
+          });
+        }
+      });
+
+      // phone-call-booking-user
+      const phoneCallBookingUser = await getDocs(collection(db, "usersBookPhoneCall"));
+      phoneCallBookingUser.forEach((doc) => {
+        const data = doc.data();
+        if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          globalSearch.push({
+            type: "phone-call-booking-user",
+            value: {
+              uid: doc.id,
+              firstName: data?.firstName ?? null,
+              lastName: data?.lastName ?? null,
+              email: data.email,
+              imageUrl: `https://ui-avatars.com/api/?name=${data?.firstName + " " + data?.lastName}`
+            },
+          });
+        }
+      });
+
+      // register-user
+      const registerUser = await getDocs(collection(db, "register"));
+      registerUser.forEach((doc) => {
+        const data = doc.data();
+        if (data?.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data?.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
+          data?.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          globalSearch.push({
+            type: "register-user",
+            value: {
+              uid: doc.id,
+              firstName: data?.firstName ?? null,
+              lastName: data?.lastName ?? null,
+              email: data.email,
+              imageUrl: `https://ui-avatars.com/api/?name=${data?.firstName + " " + data?.lastName}`
+            },
+          });
+        }
+      });
+
+      return globalSearch;
+    }),
 });

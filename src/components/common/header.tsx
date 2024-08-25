@@ -10,12 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Cog, Home, LogOut, Menu, Package2, Search } from "lucide-react";
+import { Cog, Home, LogOut, Menu, Package2, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@/contexts/UserContext";
+import { api } from "@/utils/api";
+import lodash from "lodash";
+import Spinner from "./spinner";
 
 const Header = () => {
   const router = useRouter();
@@ -27,6 +30,30 @@ const Header = () => {
   useEffect(() => {
     setName(localStorage.getItem("name"));
   }, []);
+
+  const [globalSearchValue, setGlobalSearchValue] = useState("");
+  const [globalSearchResults, setGlobalSearchResults] = useState<{
+    type: string, value: {
+      uid: string,
+      firstName: string | null,
+      lastName: string | null,
+      email: string | null,
+      imageUrl: string,
+    }
+  }[] | null>(null);
+
+  const globalSearch = api.post.globalSearch.useMutation();
+
+  const fetchGlobalSearchResults = useCallback(
+    lodash.debounce(async (value: string) => {
+      if (value) {
+        const response = await globalSearch.mutateAsync({ query: value });
+        setGlobalSearchResults(response);
+        console.log(value, response);
+      }
+    }, 2000),
+    []
+  );
 
   return (
     <div>
@@ -203,11 +230,60 @@ const Header = () => {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search products..."
+                placeholder="Search..."
                 className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-                disabled
+                value={globalSearchValue}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setGlobalSearchValue(value);
+                  fetchGlobalSearchResults(value);
+                }}
               />
             </div>
+            {globalSearchValue &&
+              <div className="z-[500] absolute border rounded-lg bg-white mt-1 p-1 space-y-4 w-full">
+                {
+                  globalSearchResults !== null &&
+                  globalSearchResults.length > 0 &&
+                  globalSearchResults.map((result) => (
+                    <div
+                      key={result.value.uid}
+                      className="flex flex-row items-center space-x-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 hover:rounded-lg p-1"
+                      onClick={async () => {
+                        await router.push(`/booking-details?email=${result.value.email}`);
+                      }}
+                    >
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage
+                          src={result.value.imageUrl ?? (result.value.firstName
+                            ? `https://ui-avatars.com/api/?name=${result.value.firstName}+${result.value.lastName}`
+                            : undefined)
+                          }
+                          alt={result.value.firstName ?? "@user"}
+                        />
+                        <AvatarFallback>{result.value.firstName?.charAt(0).toUpperCase()}{result.value.lastName?.charAt(0).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      <h1 className="text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap sm:max-w-[200px] md:max-w-[100px] lg:max-w-[200px]"
+                      >{result.value.firstName + " " + result.value.lastName}</h1>
+                    </div>
+                  ))
+                }
+
+                {
+                  globalSearchResults !== null &&
+                  globalSearchResults.length === 0 &&
+                  <div>
+                    <h1 className="text-muted-foreground">No results found</h1>
+                  </div>
+                }
+
+                {
+                  globalSearch.isPending &&
+                  <div className="flex items-center justify-center">
+                    <Spinner />
+                  </div>
+                }
+              </div>}
           </form>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -261,8 +337,8 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </header>
-    </div>
+      </header >
+    </div >
   );
 };
 
