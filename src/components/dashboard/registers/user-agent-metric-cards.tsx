@@ -47,7 +47,7 @@ const UserAgentMetricCards = () => {
   return (
     <div className="flex flex-col pb-6 pl-6 pr-6 md:flex-row md:space-x-6">
       {/* TODO: make each card its own component */}
-      <Card className="min-h-80 md:w-1/5">
+      <Card className="min-h-80 md:w-1/3">
         <CardHeader>
           <CardTitle>Device Info Stats</CardTitle>
           <CardDescription>Register Device Information Stats</CardDescription>
@@ -56,7 +56,7 @@ const UserAgentMetricCards = () => {
           <ProgressChart data={deviceInfoStats} />
         </ScrollArea>
       </Card>
-      <Card className="min-h-80 mt-6 md:mt-0 md:w-1/5">
+      <Card className="min-h-80 mt-6 md:mt-0 md:w-1/3">
         <CardHeader>
           <CardTitle>Browser Info Stats</CardTitle>
           <CardDescription>Register Browser Info Stats</CardDescription>
@@ -65,7 +65,7 @@ const UserAgentMetricCards = () => {
           <ProgressChart data={browserInfoStats} />
         </ScrollArea>
       </Card>
-      <Card className="max-h-80 min-h-80 mt-6 md:mt-0 md:w-1/5 overflow-hidden">
+      <Card className="max-h-80 min-h-80 mt-6 md:mt-0 md:w-1/3 overflow-hidden">
         <CardHeader>
           <CardTitle>Language Stats</CardTitle>
           <CardDescription>Register Language Stats</CardDescription>
@@ -74,7 +74,9 @@ const UserAgentMetricCards = () => {
           <ProgressChart data={languageStats} />
         </ScrollArea>
       </Card>
-      <Card className="min-h-80 mt-6 md:mt-0 md:w-1/5">
+
+      {/* TODO: uncomment and make this data real */}
+      {/* <Card className="min-h-80 mt-6 md:mt-0 md:w-1/5">
         <CardHeader>
           <CardTitle className="flex flex-row items-center justify-between">
             <div>
@@ -105,7 +107,7 @@ const UserAgentMetricCards = () => {
         <ScrollArea className="flex max-h-48 flex-col">
           <ProgressChart data={cityStats} />
         </ScrollArea>
-      </Card>
+      </Card> */}
     </div>
   );
 };
