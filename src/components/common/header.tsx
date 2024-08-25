@@ -26,6 +26,7 @@ const Header = () => {
   const { profilePictureUrl } = useUser();
 
   const [name, setName] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     setName(localStorage.getItem("name"));
@@ -44,12 +45,13 @@ const Header = () => {
 
   const globalSearch = api.post.globalSearch.useMutation();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchGlobalSearchResults = useCallback(
     lodash.debounce(async (value: string) => {
       if (value) {
         const response = await globalSearch.mutateAsync({ query: value });
         setGlobalSearchResults(response);
-        console.log(value, response);
+        setIsSearching(false);
       }
     }, 2000),
     []
@@ -236,16 +238,13 @@ const Header = () => {
                 onChange={(e) => {
                   const value = e.target.value;
                   setGlobalSearchValue(value);
+                  setIsSearching(true);
                   fetchGlobalSearchResults(value);
                 }}
               />
-            </div>
-            {globalSearchValue &&
-              <div className="z-[500] absolute border rounded-lg bg-white mt-1 p-1 space-y-4 w-full">
-                {
-                  globalSearchResults !== null &&
-                  globalSearchResults.length > 0 &&
-                  globalSearchResults.map((result) => (
+              {globalSearchValue && (
+                <div className="z-[500] absolute border rounded-lg bg-white mt-1 p-1 space-y-4 w-full sm:w-[300px] md:w-[200px] lg:w-[300px]">
+                  {globalSearchResults !== null && globalSearchResults.length > 0 && globalSearchResults.map((result) => (
                     <div
                       key={result.value.uid}
                       className="flex flex-row items-center space-x-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 hover:rounded-lg p-1"
@@ -263,27 +262,24 @@ const Header = () => {
                         />
                         <AvatarFallback>{result.value.firstName?.charAt(0).toUpperCase()}{result.value.lastName?.charAt(0).toUpperCase()}</AvatarFallback>
                       </Avatar>
-                      <h1 className="text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap sm:max-w-[200px] md:max-w-[100px] lg:max-w-[200px]"
-                      >{result.value.firstName + " " + result.value.lastName}</h1>
+                      <h1 className="text-muted-foreground text-ellipsis overflow-hidden whitespace-nowrap sm:max-w-[200px] md:max-w-[100px] lg:max-w-[200px]">
+                        {result.value.firstName + " " + result.value.lastName}
+                      </h1>
                     </div>
-                  ))
-                }
-
-                {
-                  globalSearchResults !== null &&
-                  globalSearchResults.length === 0 &&
-                  <div>
-                    <h1 className="text-muted-foreground">No results found</h1>
-                  </div>
-                }
-
-                {
-                  globalSearch.isPending &&
-                  <div className="flex items-center justify-center">
-                    <Spinner />
-                  </div>
-                }
-              </div>}
+                  ))}
+                  {globalSearchResults !== null && globalSearchResults.length === 0 && (
+                    <div>
+                      <h1 className="text-muted-foreground">No results found</h1>
+                    </div>
+                  )}
+                  {isSearching && (
+                    <div className="flex items-center justify-center">
+                      <Spinner />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </form>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

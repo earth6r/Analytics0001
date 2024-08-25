@@ -1416,34 +1416,21 @@ export const postRouter = createTRPCRouter({
           imageUrl: string,
         }
       }[];
-
-      // buying-progress-user
-      // const users = await getDocs(collection(db, "users"));
-      // users.forEach((doc) => {
-      //   const data = doc.data();
-      //   if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
-      //     data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
-      //     data.email?.toLowerCase().includes(input.query.toLowerCase())) {
-      //     globalSearch.push({
-      //       type: "buying-process-user",
-      //       value: {
-      //         uid: doc.id,
-      //         firstName: data?.firstName ?? null,
-      //         lastName: data?.lastName ?? null,
-      //         email: data.email,
-      //         imageUrl: `https://ui-avatars.com/api/?name=${data?.firstName + " " + data?.lastName}`
-      //       },
-      //     });
-      //   }
-      // });
+      const emails = new Set();
 
       // property-tour-booking-user
       const propertyTourBookingUser = await getDocs(collection(db, "usersBookPropertyTour"));
       propertyTourBookingUser.forEach((doc) => {
         const data = doc.data();
+
+        if (emails.has(data?.email?.toLowerCase())) {
+          return;
+        }
+
         if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          emails.add(data.email.toLowerCase());
           globalSearch.push({
             type: "property-tour-booking-user",
             value: {
@@ -1461,9 +1448,15 @@ export const postRouter = createTRPCRouter({
       const phoneCallBookingUser = await getDocs(collection(db, "usersBookPhoneCall"));
       phoneCallBookingUser.forEach((doc) => {
         const data = doc.data();
+
+        if (emails.has(data?.email?.toLowerCase())) {
+          return;
+        }
+
         if (data.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          emails.add(data.email.toLowerCase());
           globalSearch.push({
             type: "phone-call-booking-user",
             value: {
@@ -1481,9 +1474,15 @@ export const postRouter = createTRPCRouter({
       const registerUser = await getDocs(collection(db, "register"));
       registerUser.forEach((doc) => {
         const data = doc.data();
+
+        if (emails.has(data?.email?.toLowerCase())) {
+          return;
+        }
+
         if (data?.firstName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data?.lastName?.toLowerCase().includes(input.query.toLowerCase()) ||
           data?.email?.toLowerCase().includes(input.query.toLowerCase())) {
+          emails.add(data.email.toLowerCase());
           globalSearch.push({
             type: "register-user",
             value: {
