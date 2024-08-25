@@ -1407,6 +1407,7 @@ export const postRouter = createTRPCRouter({
         return [];
       }
 
+      // TODO: utilize `type` in the frontend somehow
       const globalSearch = [] as {
         type: string, value: {
           uid: string,
