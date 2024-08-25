@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Cog, Home, LogOut, Menu, Package2, Search, X } from "lucide-react";
+import { Cog, Home, LogOut, Menu, Package2, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
