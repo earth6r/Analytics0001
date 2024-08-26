@@ -5,7 +5,7 @@
       "schedule": "0 * * * *"
     },
     {
-      "path": "/api/cron/notify-property-tour-bookings-via-text",
+      "path": "/api/cron/notify-phone-call-bookings-via-text",
       "schedule": "* * * * *"
     }
   ]
