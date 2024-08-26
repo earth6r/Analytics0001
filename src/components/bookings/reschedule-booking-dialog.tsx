@@ -153,7 +153,6 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                 endTimestamp: endTimestamp,
             });
 
-
             await refetchBookings();
             toast({
                 title: "Booking Rescheduled",
