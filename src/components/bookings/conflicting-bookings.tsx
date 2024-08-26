@@ -31,8 +31,8 @@ const ConflictingBookings = (props: ConflictingBookingsProps) => {
     // Convert the UTC datetime to an epoch timestamp
     const epochStartTimestamp = utcStartDateTime.valueOf(); // .valueOf() gives the timestamp in milliseconds
 
-    // if bookingType is "Property Tour", add 1 hour to the epochStartTimestamp, else add 15 minutes
-    const estEndDateTime = bookingType === 'Property Tour' ? estStartDateTime.add(1, 'hour') : estStartDateTime.add(15, 'minutes');
+    // if bookingType is "Property Tour", add 45 minutes to the epochStartTimestamp, else add 15 minutes
+    const estEndDateTime = bookingType === 'Property Tour' ? estStartDateTime.add(45, 'minutes') : estStartDateTime.add(15, 'minutes');
     const epochEndTimestamp = estEndDateTime.utc().valueOf();
 
     const conflictingBookings = bookings
