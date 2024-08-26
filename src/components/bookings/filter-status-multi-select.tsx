@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select"
 import { Check, ListFilter } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Statuses } from "@/utils/status"
 
 interface OptionProps {
     value: string
@@ -66,13 +67,11 @@ const FilterStatusMultiSelect = (props: StatusSelectProps) => {
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <Option value="scheduled" selected={values.includes("scheduled")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="confirmed" selected={values.includes("confirmed")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="completed" selected={values.includes("completed")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="no-show" selected={values.includes("no-show")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="cancelled" selected={values.includes("cancelled")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="rescheduled" selected={values.includes("rescheduled")} addValue={addValue} removeValue={removeValue} values={values} />
-                    <Option value="pending" selected={values.includes("pending")} addValue={addValue} removeValue={removeValue} values={values} />
+                    {
+                        Statuses.map((status, index) => (
+                            <Option key={index} value={status} selected={values.includes(status)} addValue={addValue} removeValue={removeValue} values={values} />
+                        ))
+                    }
                 </SelectGroup>
             </SelectContent>
         </Select>

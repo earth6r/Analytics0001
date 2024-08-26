@@ -80,7 +80,7 @@ const Bookings = () => {
 
   const router = useRouter();
 
-  const { interval } = useInterval();
+  const { interval, timezone } = useInterval();
   const getBookings = api.bookings.getBookings.useQuery(
     {
       email: undefined,
@@ -483,7 +483,7 @@ const Bookings = () => {
                       <Phone className="h-4 w-4" />
                     )}
                     <div>
-                      {formatTimestamp(booking.startTimestamp, true) ||
+                      {formatTimestamp(booking.startTimestamp, true, timezone) ||
                         "No Start Timestamp Provided"}
                     </div>
                   </div>
@@ -632,6 +632,8 @@ const BookingCard = (props: BookingCardProps) => {
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
   const updateBookingStatus = api.bookings.updateBookingStatus.useMutation();
 
+  const { timezone } = useInterval();
+
   return (
     <Card
       key={booking.id}
@@ -667,7 +669,7 @@ const BookingCard = (props: BookingCardProps) => {
                     } */}
         </CardTitle>
         <CardDescription>
-          {formatTimestamp(booking.startTimestamp)}
+          {formatTimestamp(booking?.startTimestamp, true, timezone) || "-"}
         </CardDescription>
       </CardHeader>
       <div className="flex flex-row items-center justify-between px-6">

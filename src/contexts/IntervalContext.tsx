@@ -1,3 +1,4 @@
+import { api } from "@/utils/api";
 import React, {
   createContext,
   useState,
@@ -5,13 +6,13 @@ import React, {
   type ReactNode,
   useEffect,
 } from "react";
+import { useUser } from "./UserContext";
 
 export type Interval = number | false;
 
 interface IntervalContextProps {
   interval: Interval;
-  setInterval: React.Dispatch<React.SetStateAction<Interval>>;
-  setIntervalWithLocalStorage: (value: Interval) => void;
+  timezone: string;
 }
 
 const IntervalContext = createContext<IntervalContextProps | undefined>(
@@ -20,27 +21,39 @@ const IntervalContext = createContext<IntervalContextProps | undefined>(
 
 const IntervalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [interval, setInterval] = useState<number | false>(false);
+  const [timezone, setTimezone] = useState<string>("America/New_York");
+  const { email } = useUser();
 
   useEffect(() => {
-    const interval = localStorage.getItem("interval");
-    if (interval) {
-      setInterval(parseInt(interval) * 1000);
+    // TODO: change this logic to be completely from useUser
+    const authenticatedData = JSON.parse(
+      localStorage.getItem("authenticated") ?? "{}",
+    );
+    if (
+      !authenticatedData.authenticated ||
+      authenticatedData.expires < new Date().getTime() ||
+      !localStorage.getItem("email")
+    ) {
+      window.location.href = "/";
     }
-  }, []);
+  }, [email]);
 
-  const setIntervalWithLocalStorage = (value: Interval) => {
-    if (value) {
-      localStorage.setItem("interval", (value * 1000).toString());
-      setInterval(value);
-    } else {
-      localStorage.removeItem("interval");
-      setInterval(false);
+  const userSettings = api.userSettings.getUserSettings.useQuery({
+    email: email as string,
+  }, {
+    enabled: !!email,
+  });
+
+  useEffect(() => {
+    if (userSettings.data) {
+      setInterval(userSettings.data.interval ?? false);
+      setTimezone(userSettings.data.timezone ?? "America/New_York");
     }
-  };
+  }, [userSettings.data]);
 
   return (
     <IntervalContext.Provider
-      value={{ interval, setInterval, setIntervalWithLocalStorage }}
+      value={{ interval, timezone }}
     >
       {children}
     </IntervalContext.Provider>

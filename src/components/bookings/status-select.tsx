@@ -9,6 +9,7 @@ import {
 import Spinner from "../common/spinner"
 import { useState } from "react"
 import { Pencil, X } from "lucide-react"
+import { Statuses } from "@/utils/status"
 
 interface StatusSelectProps {
     value: string
@@ -52,13 +53,9 @@ const StatusSelect = (props: StatusSelectProps) => {
             </div>
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                    <SelectItem value="confirmed">Confirmed</SelectItem>
-                    {/* <SelectItem value="completed">Completed</SelectItem> */}
-                    <SelectItem value="no-show">No Show</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                    <SelectItem value="rescheduled">Rescheduled</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
+                    {Statuses.filter((status) => status !== "completed").map((status, index) => (
+                        <SelectItem key={index} value={status}>{status.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</SelectItem>
+                    ))}
                 </SelectGroup>
             </SelectContent>
         </Select>

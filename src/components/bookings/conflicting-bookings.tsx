@@ -1,7 +1,8 @@
 import { formatTimestamp } from "@/lib/utils";
-import { Badge } from "../ui/badge";
+import { Badge } from "../ui/badge"; // TODO: use this somehow in the ui
 import moment from "moment-timezone";
-import { Check, TriangleAlert } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
+import { useInterval } from "@/contexts/IntervalContext";
 
 interface ConflictingBookingsProps {
     startDate: Date | undefined;
@@ -12,6 +13,8 @@ interface ConflictingBookingsProps {
 
 const ConflictingBookings = (props: ConflictingBookingsProps) => {
     const { startDate, startTime, bookingType, bookings } = props;
+
+    const { timezone } = useInterval();
 
     if (!startDate || !startTime || !bookingType) {
         return null;
@@ -73,7 +76,7 @@ const ConflictingBookings = (props: ConflictingBookingsProps) => {
                             <div key={index}>
                                 <div className="flex flex-row items-center justify-center text-sm space-x-2 border-2 border-red-400 rounded-md py-1">
                                     <span>{booking.email}</span>
-                                    <span>{formatTimestamp(booking.startTimestamp, true)}</span>
+                                    <span>{formatTimestamp(booking.startTimestamp, true, timezone)}</span>
                                 </div>
                             </div>
                         );

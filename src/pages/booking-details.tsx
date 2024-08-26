@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CopyTooltip from "@/components/customers/copy-tooltip";
+import { useInterval } from "@/contexts/IntervalContext";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -24,6 +25,8 @@ const BookingDetails = () => {
     const { email, type, uid, referral } = router.query;
     const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
     const [imageLoaded, setImageLoaded] = useState(false);
+
+    const { timezone } = useInterval();
 
     const bookingDetails = api.bookings.getBookingDetails.useQuery(
         {
@@ -292,7 +295,7 @@ const BookingDetails = () => {
                                 <div className="space-y-2">
                                     <div className="flex flex-row items-center space-x-2">
                                         <Calendar className="w-4 h-4" />
-                                        <div>{formatTimestamp(booking?.startTimestamp) || "-"}</div>
+                                        <div>{formatTimestamp(booking?.startTimestamp, true, timezone) || "-"}</div>
                                     </div>
                                     <div className="flex flex-row items-center space-x-2">
                                         <Timer className="w-4 h-4" />

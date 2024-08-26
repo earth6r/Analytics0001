@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const generateDefaultSettings = async (email: string) => {
     const userSettingsRef = collection(db, "userSettings");
-    const response = await addDoc(userSettingsRef, {
+    return await addDoc(userSettingsRef, {
         email,
         profilePictureUrl: "",
         name: "",
@@ -15,10 +15,8 @@ const generateDefaultSettings = async (email: string) => {
         notifications: true,
         interval: null,
         statusFilters: Statuses,
+        timezone: "America/New_York",
     });
-
-    // return the docRef
-    return response;
 }
 
 export const userSettingsRouter = createTRPCRouter({
@@ -29,7 +27,7 @@ export const userSettingsRouter = createTRPCRouter({
             const email = input.email;
 
             const userSettingsRef = collection(db, "userSettings");
-            const q = query(userSettingsRef, where("email", "==", email));
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
             const querySnapshot: any = await getDocs(q);
 
             let docRef = null;
@@ -55,7 +53,7 @@ export const userSettingsRouter = createTRPCRouter({
             const { email } = input;
 
             const userSettingsRef = collection(db, "userSettings");
-            const q = query(userSettingsRef, where("email", "==", email));
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
             const querySnapshot: any = await getDocs(q);
 
             if (querySnapshot.empty) {
@@ -72,7 +70,7 @@ export const userSettingsRouter = createTRPCRouter({
             const { email } = input;
 
             const userSettingsRef = collection(db, "userSettings");
-            const q = query(userSettingsRef, where("email", "==", email));
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
             const querySnapshot: any = await getDocs(q);
 
             if (querySnapshot.empty) {
@@ -89,7 +87,7 @@ export const userSettingsRouter = createTRPCRouter({
             const { email, statusFilters } = input;
 
             const userSettingsRef = collection(db, "userSettings");
-            const q = query(userSettingsRef, where("email", "==", email));
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
             const querySnapshot: any = await getDocs(q);
 
             let docRef = null;
@@ -102,6 +100,50 @@ export const userSettingsRouter = createTRPCRouter({
 
             await updateDoc(docRef, {
                 statusFilters,
+            });
+        }),
+
+    updateUserTimezone: publicProcedure
+        .input(z.object({ email: z.string(), timezone: z.string() }))
+        .mutation(async ({ input }) => {
+            const { email, timezone } = input;
+
+            const userSettingsRef = collection(db, "userSettings");
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
+            const querySnapshot: any = await getDocs(q);
+
+            let docRef = null;
+            if (querySnapshot.empty) {
+                // create new userSettings
+                docRef = await generateDefaultSettings(email);
+            } else {
+                docRef = querySnapshot.docs[0].ref;
+            }
+
+            await updateDoc(docRef, {
+                timezone,
+            });
+        }),
+
+    updateUserInterval: publicProcedure
+        .input(z.object({ email: z.string(), interval: z.number().nullable() }))
+        .mutation(async ({ input }) => {
+            const { email, interval } = input;
+
+            const userSettingsRef = collection(db, "userSettings");
+            const q = query(userSettingsRef, where("email", "==", email.toLowerCase()));
+            const querySnapshot: any = await getDocs(q);
+
+            let docRef = null;
+            if (querySnapshot.empty) {
+                // create new userSettings
+                docRef = await generateDefaultSettings(email);
+            } else {
+                docRef = querySnapshot.docs[0].ref;
+            }
+
+            await updateDoc(docRef, {
+                interval,
             });
         }),
 });

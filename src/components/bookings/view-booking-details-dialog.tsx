@@ -14,6 +14,7 @@ import { formatTimestamp } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Spinner from "../common/spinner";
+import { useInterval } from "@/contexts/IntervalContext";
 // import Spinner from "../common/spinner";
 
 interface ViewBookingDetailsDialogProps {
@@ -31,6 +32,8 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
         await router.push(`/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`);
         setRouteLoading(false);
     };
+
+    const { timezone } = useInterval();
 
     return (
         <Dialog>
@@ -50,7 +53,7 @@ const ViewBookingDetailsDialog = (props: ViewBookingDetailsDialogProps) => {
                     } copyable />
                     {/* <DetailItem label="UID" value={booking?.uid} copyable /> */}
                     <DetailItem label="Type" value={booking?.type || "No type set"} />
-                    <DetailItem label="Meeting Time" value={formatTimestamp(booking.startTimestamp) || "No Meeting Time set"} tooltipLabel={formatTimestamp(booking.startTimestamp) as string} />
+                    <DetailItem label="Meeting Time" value={formatTimestamp(booking.startTimestamp, true, timezone) || "No Meeting Time set"} tooltipLabel={formatTimestamp(booking.startTimestamp, true, timezone) as string} />
                     {/* <DetailItem label="End Timestamp" value={formatTimestamp(booking.endTimestamp) || "No End Timestamp set"} /> */}
                     {/* endTimestamp - startTimestamp value in seconds with 3 zeros extra in the epoch. need to divide by 60 to get minutes and 1000 to get the actual epoch value */}
                     <DetailItem label="Duration" value={(booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes"|| "No duration set"} />

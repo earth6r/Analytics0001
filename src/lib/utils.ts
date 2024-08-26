@@ -31,7 +31,7 @@ export function convertDateString(dateString: string | null) {
   return formattedDate;
 }
 
-export function formatTimestamp(timestampStr: string, threeDigits: boolean = true) {
+export function formatTimestamp(timestampStr: string, threeDigits: boolean = true, timezone: string = 'America/New_York') {
   if (!timestampStr) {
     return null;
   }
@@ -43,11 +43,7 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
     date = moment.utc(Number(timestampStr) * 1000);
   }
 
-  // Use the browser's local timezone
-  const localTimezone = moment.tz.guess();
-
-  // Convert to local timezone
-  date = date.tz(localTimezone);
+  date = date.tz(timezone);
 
   // Format components
   const month = date.format('MMMM');
