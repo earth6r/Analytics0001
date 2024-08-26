@@ -24,19 +24,19 @@ const IntervalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [timezone, setTimezone] = useState<string>("America/New_York");
   const { email } = useUser();
 
-  useEffect(() => {
-    // TODO: change this logic to be completely from useUser
-    const authenticatedData = JSON.parse(
-      localStorage.getItem("authenticated") ?? "{}",
-    );
-    if (
-      !authenticatedData.authenticated ||
-      authenticatedData.expires < new Date().getTime() ||
-      !localStorage.getItem("email")
-    ) {
-      window.location.href = "/";
-    }
-  }, [email]);
+  // useEffect(() => {
+  //   // TODO: change this logic to be completely from useUser
+  //   const authenticatedData = JSON.parse(
+  //     localStorage.getItem("authenticated") ?? "{}",
+  //   );
+  //   if (
+  //     !authenticatedData.authenticated ||
+  //     authenticatedData.expires < new Date().getTime() ||
+  //     !localStorage.getItem("email")
+  //   ) {
+  //     window.location.href = "/";
+  //   }
+  // }, [email]);
 
   const userSettings = api.userSettings.getUserSettings.useQuery({
     email: email as string,
