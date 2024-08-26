@@ -153,7 +153,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
             const startTimestamp = utcMomentStartTimestamp.format('YYYY-MM-DD HH:mm:ss');
             const formattedStartTimestamp = new Date(startTimestamp).getTime().toString();
 
-            const addTimeMinutes = typeOfBooking === "Property Tour" ? 60 : 15;
+            const addTimeMinutes = typeOfBooking === "Property Tour" ? 45 : 15;
             const endTimestampEst = moment(estMomentStartTimestamp).add(addTimeMinutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
             const estMomentEndTimestamp = moment.tz(endTimestampEst, 'YYYY-MM-DD HH:mm:ss', 'America/New_York');
             const utcMomentEndTimestamp = estMomentEndTimestamp.clone().tz('UTC');
