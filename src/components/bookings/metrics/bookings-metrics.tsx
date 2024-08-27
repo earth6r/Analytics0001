@@ -8,6 +8,7 @@ import CompletedBookings from "./stat-cards/completed-bookings";
 import NoShowBookings from "./stat-cards/no-show-bookings";
 import PendingBookings from "./stat-cards/pending-bookings";
 import moment from "moment";
+import BookingsCounts from "./bookings-counts";
 
 const BookingsMetrics = () => {
     // 0 to 1 month ago
@@ -35,7 +36,7 @@ const BookingsMetrics = () => {
                 <NoShowBookings />
                 <PendingBookings />
 
-                <BookingsCount
+                {/* <BookingsCount
                     startDate={startDate}
                     endDate={endDate}
                     description={"Phone Call Bookings in the last month"}
@@ -58,9 +59,9 @@ const BookingsMetrics = () => {
                     endDate={endDateSixToTwelveMonths}
                     description={"Phone Call Bookings 6+ months ago"}
                     type="Phone Call"
-                />
+                /> */}
 
-                <BookingsCount
+                {/* <BookingsCount
                     startDate={startDate}
                     endDate={endDate}
                     description={"Property Tour Bookings in the last month"}
@@ -83,7 +84,12 @@ const BookingsMetrics = () => {
                     endDate={endDateSixToTwelveMonths}
                     description={"Property Tour Bookings 6+ months ago"}
                     type="Property Tour"
-                />
+                /> */}
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <BookingsCounts bookingType="Phone Call" />
+                <BookingsCounts bookingType="Property Tour" />
             </div>
             <div className="mt-6 flex flex-col md:flex-row justify-center md:items-center md:justify-normal space-y-6 md:space-x-6 md:space-y-0">
                 <div className="w-full md:w-1/3">

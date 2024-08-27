@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import { collection, getDocs, query, where } from "firebase/firestore/lite";
+import moment from "moment-timezone";
 import { z } from "zod";
 
 function getPropertyValue(registers: any, property: string) {
@@ -91,5 +92,69 @@ export const registerRouter = createTRPCRouter({
             const register = await getDocs(query(registerRef, where("createdAt", ">=", input.startDate.getTime().toString()), where("createdAt", "<=", input.endDate.getTime().toString())));
 
             return register.size;
+        }),
+
+    getWaitlistCounts: publicProcedure
+        .query(async () => {
+            const registerRef = collection(db, "register");
+            const dateField = "createdAt";
+
+            const counts = {
+                'lessThan30Days': 0,
+                'oneToThreeMonths': 0,
+                'threeToSixMonths': 0,
+                'sixPlusMonths': 0,
+            };
+
+            // Less than 30 days
+            let startDate = moment.utc().startOf("day").subtract(30, "days").toDate();
+            let endDate = moment.utc().endOf("day").toDate();
+
+            let register = await getDocs(query(registerRef,
+                where(dateField, ">=", startDate.getTime().toString()),
+                where(dateField, "<=", endDate.getTime().toString())
+            ));
+
+            counts.lessThan30Days = register.size;
+
+            // 1 to 3 months
+            startDate = moment.utc().startOf("day").subtract(3, "months").toDate();
+            endDate = moment.utc().startOf("day").subtract(1, "months").toDate();
+
+            register = await getDocs(query(registerRef,
+                where(dateField, ">=", startDate.getTime().toString()),
+                where(dateField, "<=", endDate.getTime().toString())
+            ));
+
+            counts.oneToThreeMonths = register.size;
+
+            // 3 to 6 months
+            startDate = moment.utc().startOf("day").subtract(6, "months").toDate();
+            endDate = moment.utc().startOf("day").subtract(3, "months").toDate();
+
+            register = await getDocs(query(registerRef,
+                where(dateField, ">=", startDate.getTime().toString()),
+                where(dateField, "<=", endDate.getTime().toString())
+            ));
+
+            counts.threeToSixMonths = register.size;
+
+            // 6 plus months
+            startDate = moment.utc().subtract(60, 'months').toDate();
+            endDate = moment.utc().startOf("day").subtract(6, "months").toDate();
+
+            register = await getDocs(query(registerRef,
+                where(dateField, ">=", startDate.getTime().toString()),
+                where(dateField, "<=", endDate.getTime().toString())
+            ));
+
+            counts.sixPlusMonths = register.size;
+
+            return [
+                { 'Less than 30 days': counts.lessThan30Days },
+                { '1 to 3 months': counts.oneToThreeMonths },
+                { '3 to 6 months': counts.threeToSixMonths },
+                { '6+ months': counts.sixPlusMonths },
+            ];
         }),
 });

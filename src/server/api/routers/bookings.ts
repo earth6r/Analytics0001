@@ -938,4 +938,73 @@ export const bookingsRouter = createTRPCRouter({
 
             return count;
         }),
+
+    getBookingsCount: publicProcedure
+        .input(z.object({
+            type: z.string(),
+        }))
+        .query(async ({ input }) => {
+            const indexName = input.type === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+            const bookingsRef = collection(db, indexName);
+            const dateField = "startTimestamp";
+
+            const counts = {
+                'lessThan30Days': 0,
+                'oneToThreeMonths': 0,
+                'threeToSixMonths': 0,
+                'sixPlusMonths': 0,
+            };
+
+            // Less than 30 days
+            let startDate = moment.utc().startOf("day").subtract(30, "days").toDate();
+            let endDate = moment.utc().endOf("day").toDate();
+
+            let bookings = await getDocs(query(bookingsRef,
+                where(dateField, ">=", startDate.getTime()),
+                where(dateField, "<=", endDate.getTime())
+            ));
+
+            counts.lessThan30Days = bookings.size;
+
+            // 1 to 3 months
+            startDate = moment.utc().startOf("day").subtract(3, "months").toDate();
+            endDate = moment.utc().startOf("day").subtract(1, "months").toDate();
+
+            bookings = await getDocs(query(bookingsRef,
+                where(dateField, ">=", startDate.getTime()),
+                where(dateField, "<=", endDate.getTime())
+            ));
+
+            counts.oneToThreeMonths = bookings.size;
+
+            // 3 to 6 months
+            startDate = moment.utc().startOf("day").subtract(6, "months").toDate();
+            endDate = moment.utc().startOf("day").subtract(3, "months").toDate();
+
+            bookings = await getDocs(query(bookingsRef,
+                where(dateField, ">=", startDate.getTime()),
+                where(dateField, "<=", endDate.getTime())
+            ));
+
+            counts.threeToSixMonths = bookings.size;
+
+            // 6 plus months
+            startDate = moment.utc().subtract(60, 'months').toDate();
+            endDate = moment.utc().startOf("day").subtract(6, "months").toDate();
+
+            bookings = await getDocs(query(bookingsRef,
+                where(dateField, ">=", startDate.getTime()),
+                where(dateField, "<=", endDate.getTime())
+            ));
+
+            counts.sixPlusMonths = bookings.size;
+
+            return [
+                { 'Less than 30 days': counts.lessThan30Days },
+                { '1 to 3 months': counts.oneToThreeMonths },
+                { '3 to 6 months': counts.threeToSixMonths },
+                { '6+ months': counts.sixPlusMonths },
+            ];
+        }),
+
 });
