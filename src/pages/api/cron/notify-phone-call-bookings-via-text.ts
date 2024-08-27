@@ -30,7 +30,7 @@ const sendNotification = async (
         await axios.post(`${API_URL}/send-message`, {
             recipientPhone: phoneNumber,
             message:
-                `Hi, this is Talin from HOME0001. Just a quick reminder that you’ll be meeting a member of the collective on Zoom in 60 min. You can find the call link in the email confirmation and the calendar invite we sent you. Let me know in case you’d prefer a phone call instead and we’ll ring you in an hour.`,
+                `Hi, this is Talin from HOME0001. Quick reminder that we have a Zoom call coming up in an hour. You can find the call link in the email confirmation and the calendar invite we shared with you. Let me know in case you’d prefer a phone call and we’ll ring you instead.`,
         })
     } catch (error) {
         console.error(`Failed to send notification to ${phoneNumber}`, error);
