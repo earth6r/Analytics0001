@@ -125,32 +125,18 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                     Max: {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                                 </div>
                             </div>
-                            <div className="space-y-4">
-                                <Slider
-                                    value={sliderValue}
-                                    onValueChange={(value) => {
-                                        if (value[0] && sliderValueMax[0] && value[0] <= sliderValueMax[0]) {
-                                            setSliderValue(value);
-                                        }
-                                    }}
-                                    min={500_000}
-                                    max={2_000_000}
-                                    step={50_000}
-                                    className="mt-2"
-                                />
-                                <Slider
-                                    value={sliderValueMax}
-                                    onValueChange={(value) => {
-                                        if (value[0] && sliderValue[0] && value[0] >= sliderValue[0]) {
-                                            setSliderValueMax(value);
-                                        }
-                                    }}
-                                    min={500_000}
-                                    max={2_000_000}
-                                    step={50_000}
-                                    className="mt-2"
-                                />
-                            </div>
+                            <Slider
+                                value={sliderValueMax}
+                                onValueChange={(value) => {
+                                    if (value[0] && sliderValue[0] && value[0] >= sliderValue[0]) {
+                                        setSliderValueMax(value);
+                                    }
+                                }}
+                                min={500_000}
+                                max={2_000_000}
+                                step={50_000}
+                                className="mt-2"
+                            />
                         </div>
 
                         <div className="mt-1">
