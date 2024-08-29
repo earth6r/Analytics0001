@@ -103,7 +103,7 @@ const Header = () => {
             Messages
           </Link> */}
           {/* TODO: uncomment and fix mobile view + fully test everything */}
-          {/* <Link
+          <Link
             href="/customers"
             className={cn(
               "text-muted-foreground transition-colors hover:text-foreground",
@@ -113,7 +113,7 @@ const Header = () => {
             )}
           >
             Customers
-          </Link> */}
+          </Link>
           <Link
             href="/bookings"
             className={cn(
