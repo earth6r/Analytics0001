@@ -567,20 +567,18 @@ const Bookings = () => {
                         bookings={getBookings.data || []}
                       />
                     </div>
-                    {booking?.type === "Phone Call" && (
-                      <div
-                        className={cn(
-                          booking?.status === "completed"
-                            ? "cursor-not-allowed"
-                            : "",
-                        )}
-                      >
-                        <MarkCompletedPostNotesDialog
-                          booking={booking}
-                          getBooking={getBookings}
-                        />
-                      </div>
-                    )}
+                    <div
+                      className={cn(
+                        booking?.status === "completed"
+                          ? "cursor-not-allowed"
+                          : "",
+                      )}
+                    >
+                      <MarkCompletedPostNotesDialog
+                        booking={booking}
+                        getBooking={getBookings}
+                      />
+                    </div>
                     {/* {!booking?.startTimestamp && !booking?.endTimestamp &&
                                         <Badge variant="destructive" className="">Action Required</Badge>} */}
                     {!booking?.startTimestamp && !booking?.endTimestamp && (

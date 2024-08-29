@@ -305,7 +305,8 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             </div>
                         </div>
 
-                        <div>
+                        {booking.type === "Phone Call" &&
+                            <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
                                     <Label htmlFor="book-a-tour">Book a Tour?</Label>
@@ -321,7 +322,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <DialogFooter className="px-6 pb-6">
