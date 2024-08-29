@@ -31,7 +31,7 @@ const DashboardTabs = () => {
         className="w-full"
       >
         <div className="pl-6 pr-6 pt-6">
-          <TabsList className="grid w-full grid-cols-2 md:w-96">
+          <TabsList className="grid w-full grid-cols-3 md:w-96">
             <TabsTrigger
               value="registers"
               className={cn(
@@ -72,16 +72,17 @@ const DashboardTabs = () => {
           >
             Emails
           </TabsTrigger>
-          <TabsTrigger
-            value="customers"
-            className={cn(
-              activeTab === "customers" ? "" : "text-muted-foreground",
-              "cursor-pointer",
-            )}
-            onClick={() => handleSetActiveTab("customers")}
-          >
-            Customers
-          </TabsTrigger> */}
+          */}
+            <TabsTrigger
+              value="customers"
+              className={cn(
+                activeTab === "customers" ? "" : "text-muted-foreground",
+                "cursor-pointer",
+              )}
+              onClick={() => handleSetActiveTab("customers")}
+            >
+              Customers
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="registers" className="w-full">

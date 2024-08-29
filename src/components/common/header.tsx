@@ -190,7 +190,7 @@ const Header = () => {
               >
                 Messages
               </Link> */}
-              {/* <Link
+              <Link
                 href="/customers"
                 className={cn(
                   "text-muted-foreground hover:text-foreground",
@@ -200,7 +200,7 @@ const Header = () => {
                 )}
               >
                 Customers
-              </Link> */}
+              </Link>
               <Link
                 href="/bookings"
                 className={cn(
