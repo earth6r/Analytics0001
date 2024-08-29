@@ -30,7 +30,7 @@ const sendNotification = async (
         await axios.post(`${API_URL}/send-message`, {
             recipientPhone: phoneNumber,
             message:
-                `Hi ${firstName}, Just a quick reminder about your upcoming tour at 48 Allen, New York, NY, 10002 at TIME. You will meet Carl outside. Let us know if you are unable to make it.
+                `Hi ${firstName}, Just a quick reminder about your upcoming tour at 48 Allen, New York, NY, 10002 at ${startTimestamp}. You will meet Carl outside. Let us know if you are unable to make it.
 Best,
 Talin`,
         })
