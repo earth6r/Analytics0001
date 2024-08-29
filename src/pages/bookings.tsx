@@ -385,7 +385,7 @@ const Bookings = () => {
                             </div> */}
             </div>
             <div className="select-none">Status</div>
-            <div className="col-span-2 select-none">Tour Guide</div>
+            <div className="col-span-2 select-none">Host</div>
             <div className="col-span-3 select-none">Actions</div>
           </div>
 
