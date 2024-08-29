@@ -106,7 +106,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                         <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
-                                    <Label htmlFor="budget">Budget</Label>
+                                    <Label htmlFor="budget">Max Budget</Label>
                                     <CircularQuestionMarkTooltip label="Check this field if the potential customer matches the budget. Slide the slider to select the min and max budget." />
                                 </div>
                                 <div className="flex flex-row items-center space-x-1">
@@ -117,12 +117,9 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                     />
                                 </div>
                             </div>
-                            <div className="flex flex-row items-center justify-between mt-1">
+                            <div className="flex flex-row items-center justify-center mt-1">
                                 <div className="text-muted-foreground text-sm">
-                                    Min: {sliderValue[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                                </div>
-                                <div className="text-muted-foreground text-sm">
-                                    Max: {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                                    {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                                 </div>
                             </div>
                             <Slider
