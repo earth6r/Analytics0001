@@ -115,9 +115,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="!Ex@m413!12E" autoFocus={false} {...field} style={{
-                  fontSize: "16px",
-                }} />
+                <Input placeholder="!Ex@m413!12E" {...field} />
               </FormControl>
               <FormDescription>
                 This is a given password that you can use to sign in.
