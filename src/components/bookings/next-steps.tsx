@@ -7,6 +7,13 @@ interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
 }
 
+interface TestData {
+  profile: string;
+  nextSteps: string;
+  notes: string;
+  deferredDate: string;
+}
+
 const NextSteps = (props: NextStepsProps) => {
   const { setNextStepsVisible } = props;
 
@@ -21,14 +28,36 @@ const NextSteps = (props: NextStepsProps) => {
   const [sortKey, setSortKey] = useState<string>('startTimestamp');
   const [sortOrder, setSortOrder] = useState<string>('asc');
 
+  // Test data
+  const testData: TestData[] = [
+    {
+      profile: 'John Doe',
+      nextSteps: 'Follow up on email',
+      notes: 'Sent initial contact email',
+      deferredDate: '2024-09-01',
+    },
+    {
+      profile: 'Jane Smith',
+      nextSteps: 'Schedule a meeting',
+      notes: 'Discussed project scope',
+      deferredDate: '2024-09-05',
+    },
+    {
+      profile: 'Alice Johnson',
+      nextSteps: 'Send contract',
+      notes: 'Client interested in premium plan',
+      deferredDate: '2024-09-10',
+    },
+  ];
+
   return (
     <div>
       <div
         className="text-xs text-blue-500 hover:underline cursor-pointer select-none mt-1"
-        onClick={
-          () => setNextStepsVisible(false)
-        }
-      >View Bookings?</div>
+        onClick={() => setNextStepsVisible(false)}
+      >
+        View Bookings?
+      </div>
       <Input
         placeholder="Search..."
         className="w-full lg:w-1/4"
@@ -40,8 +69,7 @@ const NextSteps = (props: NextStepsProps) => {
       />
       <div className="flex min-h-8 flex-row items-center mt-2">
         <div className="space-y-4">
-          {
-            filterStatus.length > 0 &&
+          {filterStatus.length > 0 && (
             <div className="flex flex-row flex-wrap items-center">
               {filterStatus.map((status) => (
                 <div key={status} className="p-1">
@@ -49,7 +77,7 @@ const NextSteps = (props: NextStepsProps) => {
                     className="cursor-pointer select-none"
                     onClick={async () => {
                       setFilterStatus(
-                        filterStatus.filter((s) => s !== status),
+                        filterStatus.filter((s) => s !== status)
                       );
                     }}
                   >
@@ -60,15 +88,14 @@ const NextSteps = (props: NextStepsProps) => {
                   </Badge>
                 </div>
               ))}
-            </div>}
+            </div>
+          )}
 
-          {Statuses
-            .filter((status) => !filterStatus.includes(status))
-            .length > 0 &&
+          {Statuses.filter((status) => !filterStatus.includes(status))
+            .length > 0 && (
             <div className="flex flex-row flex-wrap items-center">
-              {Statuses
-                .filter((status) => !filterStatus.includes(status))
-                .map((status) => (
+              {Statuses.filter((status) => !filterStatus.includes(status)).map(
+                (status) => (
                   <div key={status} className="p-1">
                     <Badge
                       variant="default"
@@ -83,12 +110,16 @@ const NextSteps = (props: NextStepsProps) => {
                       </div>
                     </Badge>
                   </div>
-                ))}
-            </div>}
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
+      <div className="text-4xl font-bold">IN PROGRESS - FAKE DATA</div>
       <div className="mt-4 hidden overflow-y-scroll xl:block">
         <div className="grid grid-cols-11 gap-4 font-semibold">
+          {/* Headers */}
           <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Profile</h1>
             <div
@@ -105,16 +136,17 @@ const NextSteps = (props: NextStepsProps) => {
             </div>
           </div>
 
-          {/* next steps */}
+          {/* Next Steps */}
           <div className="col-span-3 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Next Steps</h1>
           </div>
 
-          {/* notes */}
+          {/* Notes */}
           <div className="col-span-3 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Notes</h1>
           </div>
 
+          {/* Deferred Date */}
           <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Deferred Date</h1>
             <div
@@ -132,15 +164,17 @@ const NextSteps = (props: NextStepsProps) => {
           </div>
         </div>
 
-        {/* add test data */}
-        <div className="">
-              <div className="grid grid-cols-11 gap-4 items-center">
-                <div>hi</div>
-                <div>hi</div>
-                <div>hi</div>
-              </div>
+        {/* Test Data Rows */}
+        <div>
+          {testData.map((data, index) => (
+            <div key={index} className="grid grid-cols-11 gap-4 items-center">
+              <div className="col-span-2">{data.profile}</div>
+              <div className="col-span-3">{data.nextSteps}</div>
+              <div className="col-span-3">{data.notes}</div>
+              <div className="col-span-2">{data.deferredDate}</div>
+            </div>
+          ))}
         </div>
-
       </div>
     </div>
   );
