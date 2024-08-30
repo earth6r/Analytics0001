@@ -15,6 +15,7 @@ interface InterviewerDropdownProps {
 const InterviewerDropdown = (props: InterviewerDropdownProps) => {
     const { value, onChange } = props;
 
+    // TODO: when changed, update immediately in the database instead of saving in state (just like the status select)
     return (
         <Select value={value} onValueChange={onChange}>
             <SelectTrigger className="w-[180px]">

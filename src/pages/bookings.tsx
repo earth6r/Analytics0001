@@ -682,12 +682,12 @@ const BookingCard = (props: BookingCardProps) => {
           {formatTimestamp(booking?.startTimestamp, true, timezone) || "-"}
         </CardDescription>
       </CardHeader>
-      <div className="flex flex-row items-center justify-between px-6">
-        <div className="">
-          <h1 className="font-light text-muted-foreground">Join Meeting</h1>
+      <div className="flex flex-col items-center justify-between px-6 space-y-2">
+        <div className="w-full flex flex-row items-center justify-between">
+          <h1 className="font-light text-muted-foreground">Meeting Link</h1>
           <div
             className={cn(
-              "max-w-32 truncate text-blue-500 md:max-w-48",
+              "max-w-32 truncate text-blue-500 md:max-w-48 underline",
               booking?.status === "completed"
                 ? "cursor-not-allowed"
                 : "cursor-pointer hover:text-blue-400",
@@ -697,10 +697,11 @@ const BookingCard = (props: BookingCardProps) => {
                 window.open(ZOOM_URL, "_blank");
             }}
           >
-            {ZOOM_URL}
+            Join Meeting
           </div>
         </div>
-        <div className="">
+
+        <div className="w-full flex flex-row items-center justify-between">
           <h1 className="font-light text-muted-foreground">Status</h1>
           {/* <div className="">{(booking?.completed ? "completed" : "scheduled")}</div> */}
           <StatusSelect
@@ -719,6 +720,11 @@ const BookingCard = (props: BookingCardProps) => {
             loading={statusLoading}
             booking={booking}
           />
+        </div>
+
+        <div className="w-full flex flex-row items-center justify-between">
+          <h1 className="font-light text-muted-foreground">Host</h1>
+          <InterviewerInput booking={booking} refetch={getBookings.refetch} />
         </div>
       </div>
       <div className="mt-10 flex flex-row items-center justify-between space-x-2 px-6">
@@ -755,10 +761,13 @@ const BookingCard = (props: BookingCardProps) => {
         )}
       >
         {booking?.status !== "completed" && booking?.type === "Phone Call" && (
-          <MarkCompletedPostNotesDialog
-            booking={booking}
-            getBooking={getBookings}
-          />
+          <div className="flex flex-row items-center space-x-2">
+            <MarkCompletedPostNotesDialog
+              booking={booking}
+              getBooking={getBookings}
+            />
+            <NextStepsDialog booking={booking} />
+          </div>
         )}
       </div>
       <div

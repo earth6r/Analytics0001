@@ -47,6 +47,7 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
             <DialogTrigger asChild>
                 <Button variant="default" className="w-full space-x-2 select-none">
                     <Check className="w-4 h-4" />
+                    <span className="block xl:hidden">Next Steps</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0 select-none">
