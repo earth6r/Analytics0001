@@ -2,7 +2,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
 import axios from "axios";
 import admin from 'firebase-admin';
-import { collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import moment from "moment";
 import { z } from "zod";
 
@@ -1007,4 +1007,40 @@ export const bookingsRouter = createTRPCRouter({
             ];
         }),
 
+    addNextSteps: publicProcedure
+        .input(z.object({
+            email: z.string(),
+            nextStepsNotes: z.string(),
+            nextStepsDropdownValue: z.string(),
+            otherNextSteps: z.string(),
+            deferredDate: z.number().nullable(),
+        }))
+        .mutation(
+            async ({ input }) => {
+                const tableNameRef = "potentialCustomers";
+
+                const tableRef = collection(db, tableNameRef);
+
+                const result = await getDocs(query(tableRef, where("email", "==", input.email)));
+
+                if (result.empty) {
+                    await addDoc(tableRef, {
+                        email: input.email,
+                        nextStepsNotes: input.nextStepsNotes,
+                        nextStepsDropdownValue: input.nextStepsDropdownValue,
+                        otherNextSteps: input.otherNextSteps,
+                        deferredDate: input.deferredDate,
+                    });
+                } else {
+                    const d = doc(tableRef, result.docs[0]?.id);
+
+                    await updateDoc(d, {
+                        nextStepsNotes: input.nextStepsNotes,
+                        nextStepsDropdownValue: input.nextStepsDropdownValue,
+                        otherNextSteps: input.otherNextSteps,
+                        deferredDate: input.deferredDate,
+                    });
+                }
+            }
+        ),
 });

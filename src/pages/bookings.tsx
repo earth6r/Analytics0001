@@ -45,6 +45,8 @@ import InterviewerInput from "@/components/bookings/interviewer-input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Statuses } from "@/utils/status";
 import DeleteBookingAlertDialog from "@/components/bookings/delete-booking-alert-dialog";
+import NextSteps from "@/components/bookings/next-steps";
+import NextStepsDialog from "@/components/bookings/next-steps-dialog";
 
 const Bookings = () => {
   const [sortedData, setSortedData] = useState<any[]>([]);
@@ -188,6 +190,8 @@ const Bookings = () => {
         <div className="mt-2">
           <BookingTabs onValueChange={setTab} />
         </div>
+
+        {/* <NextSteps /> */}
 
         <div className="flex w-full flex-col items-start justify-start">
           <div className="mt-4 flex w-full flex-row items-center space-x-2">
@@ -542,6 +546,8 @@ const Bookings = () => {
                                         }
                                     } /> */}
                     {/* <ViewBookingDetailsDialog booking={booking} /> */}
+                    {/* TODO: need to default the values if existing ones exist */}
+                    <NextStepsDialog booking={booking} />
                     <Button
                       variant="default"
                       onClick={async () =>

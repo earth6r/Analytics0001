@@ -22,6 +22,8 @@ export const nextStepsMapping = {
     "awaiting:cancelled-property-tour": "Cancelled TOUR",
     "awaiting:no-show-phone-call": "No Show CALL",
     "awaiting:no-show-property-tour": "No Show TOUR",
+    "awaiting:lead-lost": "Lead Lost",
+    "awaiting:lead-won": "Lead Won",
     "other": "Other",
 };
 
