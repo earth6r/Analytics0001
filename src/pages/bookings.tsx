@@ -63,6 +63,8 @@ const Bookings = () => {
   const [loadingsForStatuses, setLoadingsForStatuses] = useState<any>({});
   const [tab, setTab] = useState<string>("all");
 
+  const [nextStepsVisible, setNextStepsVisible] = useState<boolean>(false);
+
   const [open, setOpen] = useState(false);
   const { email } = useUser();
 
@@ -187,45 +189,50 @@ const Bookings = () => {
           />
         </div>
 
-        <div className="mt-2">
-          <BookingTabs onValueChange={setTab} />
-        </div>
+        {nextStepsVisible ? <NextSteps setNextStepsVisible={setNextStepsVisible} /> : <div>
+          <div className="mt-2">
+            <div
+              className="text-xs text-blue-500 hover:underline cursor-pointer select-none"
+              onClick={
+                () => setNextStepsVisible(true)
+              }
+            >View Next Steps?</div>
+            <BookingTabs onValueChange={setTab} />
+          </div>
 
-        {/* <NextSteps /> */}
+          <div className="flex w-full flex-col items-start justify-start">
+            <div className="mt-4 flex w-full flex-row items-center space-x-2">
+              <Input
+                placeholder="Search bookings..."
+                className="w-full lg:w-1/4"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  const searchQuery = e.target.value;
 
-        <div className="flex w-full flex-col items-start justify-start">
-          <div className="mt-4 flex w-full flex-row items-center space-x-2">
-            <Input
-              placeholder="Search bookings..."
-              className="w-full lg:w-1/4"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                const searchQuery = e.target.value;
+                  if (!searchQuery) {
+                    // @ts-expect-error TODO: fix type
+                    setSortedData(getBookings.data);
+                    return;
+                  }
 
-                if (!searchQuery) {
-                  // @ts-expect-error TODO: fix type
-                  setSortedData(getBookings.data);
-                  return;
-                }
-
-                const filteredData = sortedData.filter((booking: any) => {
-                  return (
-                    booking?.email
-                      ?.toLowerCase()
-                      ?.includes(searchQuery.toLowerCase()) ||
-                    booking?.firstName
-                      ?.toLowerCase()
-                      ?.includes(searchQuery.toLowerCase()) ||
-                    booking?.lastName
-                      ?.toLowerCase()
-                      ?.includes(searchQuery.toLowerCase())
-                  );
-                });
-                setSortedData(filteredData);
-              }}
-            />
-            {/* <FilterStatusMultiSelect
+                  const filteredData = sortedData.filter((booking: any) => {
+                    return (
+                      booking?.email
+                        ?.toLowerCase()
+                        ?.includes(searchQuery.toLowerCase()) ||
+                      booking?.firstName
+                        ?.toLowerCase()
+                        ?.includes(searchQuery.toLowerCase()) ||
+                      booking?.lastName
+                        ?.toLowerCase()
+                        ?.includes(searchQuery.toLowerCase())
+                    );
+                  });
+                  setSortedData(filteredData);
+                }}
+              />
+              {/* <FilterStatusMultiSelect
               values={filterStatus}
               addValue={async (value: string) => {
                 setFilterStatus([...filterStatus, value]);
@@ -248,85 +255,85 @@ const Bookings = () => {
                 await getUserSettings.refetch();
               }}
             /> */}
-          </div>
-          <div className="flex min-h-8 flex-row items-center mt-2">
-            {!getUserSettings.isLoading && (
-              <div className="space-y-4">
-                <div className="flex flex-row flex-wrap items-center">
-                  {filterStatus.map((status) => (
-                    <div key={status} className="p-1">
-                      <Badge
-                        className="cursor-pointer select-none"
-                        onClick={async () => {
-                          setFilterStatus(
-                            filterStatus.filter((s) => s !== status),
-                          );
-                          await updateUserBookingStatusFilters.mutateAsync({
-                            email: email as string,
-                            statusFilters: filterStatus.filter(
-                              (s) => s !== status,
-                            ),
-                          });
-                          await getUserSettings.refetch();
-                        }}
-                      >
-                        <div className="flex flex-row items-center space-x-2">
-                          <h1>{status}</h1>
-                          <X className="h-4 w-4" />
-                        </div>
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-row flex-wrap items-center">
-                  {Statuses
-                    .filter((status) => !filterStatus.includes(status))
-                    .map((status) => (
+            </div>
+            <div className="flex min-h-8 flex-row items-center mt-2">
+              {!getUserSettings.isLoading && (
+                <div className="space-y-4">
+                  <div className="flex flex-row flex-wrap items-center">
+                    {filterStatus.map((status) => (
                       <div key={status} className="p-1">
                         <Badge
-                          variant="default"
                           className="cursor-pointer select-none"
                           onClick={async () => {
-                            setFilterStatus([...filterStatus, status]);
+                            setFilterStatus(
+                              filterStatus.filter((s) => s !== status),
+                            );
                             await updateUserBookingStatusFilters.mutateAsync({
                               email: email as string,
-                              statusFilters: [...filterStatus, status],
+                              statusFilters: filterStatus.filter(
+                                (s) => s !== status,
+                              ),
                             });
                             await getUserSettings.refetch();
                           }}
                         >
                           <div className="flex flex-row items-center space-x-2">
                             <h1>{status}</h1>
-                            <Plus className="h-4 w-4" />
+                            <X className="h-4 w-4" />
                           </div>
                         </Badge>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="flex flex-row flex-wrap items-center">
+                    {Statuses
+                      .filter((status) => !filterStatus.includes(status))
+                      .map((status) => (
+                        <div key={status} className="p-1">
+                          <Badge
+                            variant="default"
+                            className="cursor-pointer select-none"
+                            onClick={async () => {
+                              setFilterStatus([...filterStatus, status]);
+                              await updateUserBookingStatusFilters.mutateAsync({
+                                email: email as string,
+                                statusFilters: [...filterStatus, status],
+                              });
+                              await getUserSettings.refetch();
+                            }}
+                          >
+                            <div className="flex flex-row items-center space-x-2">
+                              <h1>{status}</h1>
+                              <Plus className="h-4 w-4" />
+                            </div>
+                          </Badge>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4 hidden overflow-y-scroll xl:block">
+            <div className="grid grid-cols-11 gap-4 font-semibold">
+              <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
+                <h1>Profile</h1>
+                <div
+                  className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                  onClick={() => {
+                    if (sortKey === "email") {
+                      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                    } else {
+                      setSortKey("email");
+                    }
+                  }}
+                >
+                  <ArrowUpDownIcon className="h-4 w-4" />
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-4 hidden overflow-y-scroll xl:block">
-          <div className="grid grid-cols-11 gap-4 font-semibold">
-            <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
-              <h1>Profile</h1>
-              <div
-                className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => {
-                  if (sortKey === "email") {
-                    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                  } else {
-                    setSortKey("email");
-                  }
-                }}
-              >
-                <ArrowUpDownIcon className="h-4 w-4" />
-              </div>
-            </div>
-            {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
+              {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Type of Booking
                             </h1>
@@ -342,23 +349,23 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div> */}
-            <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
-              <h1>Meeting Time</h1>
-              <div
-                className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => {
-                  if (sortKey === "startTimestamp") {
-                    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-                  } else {
-                    setSortKey("startTimestamp");
-                  }
-                }}
-              >
-                <ArrowUpDownIcon className="h-4 w-4" />
+              <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
+                <h1>Meeting Time</h1>
+                <div
+                  className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                  onClick={() => {
+                    if (sortKey === "startTimestamp") {
+                      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+                    } else {
+                      setSortKey("startTimestamp");
+                    }
+                  }}
+                >
+                  <ArrowUpDownIcon className="h-4 w-4" />
+                </div>
               </div>
-            </div>
-            {/* <div>Property Type</div> */}
-            {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
+              {/* <div>Property Type</div> */}
+              {/* <div className="flex flex-row items-center justify-start space-x-2 select-none">
                             <h1>
                                 Property Type
                             </h1>
@@ -374,9 +381,9 @@ const Bookings = () => {
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div>
                         </div> */}
-            <div className="flex select-none flex-row items-center justify-start space-x-2">
-              <h1>Phone Number</h1>
-              {/* <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
+              <div className="flex select-none flex-row items-center justify-start space-x-2">
+                <h1>Phone Number</h1>
+                {/* <div className="hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg" onClick={
                                 () => {
                                     if (sortKey === "phoneNumber") {
                                         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -387,154 +394,154 @@ const Bookings = () => {
                             }>
                                 <ArrowUpDownIcon className="w-4 h-4" />
                             </div> */}
+              </div>
+              <div className="select-none">Status</div>
+              <div className="col-span-2 select-none">Host</div>
+              <div className="col-span-3 select-none">Actions</div>
             </div>
-            <div className="select-none">Status</div>
-            <div className="col-span-2 select-none">Host</div>
-            <div className="col-span-3 select-none">Actions</div>
-          </div>
 
-          {getBookings.isLoading ? (
-            <div className="mt-4 space-y-2">
-              <Skeleton className="h-12" />
-              <Skeleton className="h-12" />
-              <Skeleton className="h-12" />
-              <Skeleton className="h-12" />
-              <Skeleton className="h-12" />
-            </div>
-          ) : (
-            <div className="mt-4 space-y-4">
-              {sortedData?.map((booking: any) => (
-                <div
-                  key={booking.id}
-                  className={cn("grid grid-cols-11 items-center gap-4")}
-                >
-                  <TooltipProvider>
-                    <Tooltip delayDuration={200}>
-                      <TooltipTrigger asChild>
-                        <div
-                          className="col-span-2 flex cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-                          onClick={async () =>
-                            await router.push(
-                              `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
-                            )
-                          }
-                        >
-                          <div>
-                            <Avatar className="h-10 w-10 rounded-lg border">
-                              <AvatarImage
-                                src={booking?.imageUrl}
-                                alt="@user"
-                                className="object-cover"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div>
+            {getBookings.isLoading ? (
+              <div className="mt-4 space-y-2">
+                <Skeleton className="h-12" />
+                <Skeleton className="h-12" />
+                <Skeleton className="h-12" />
+                <Skeleton className="h-12" />
+                <Skeleton className="h-12" />
+              </div>
+            ) : (
+              <div className="mt-4 space-y-4">
+                {sortedData?.map((booking: any) => (
+                  <div
+                    key={booking.id}
+                    className={cn("grid grid-cols-11 items-center gap-4")}
+                  >
+                    <TooltipProvider>
+                      <Tooltip delayDuration={200}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className="col-span-2 flex cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={async () =>
+                              await router.push(
+                                `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
+                              )
+                            }
+                          >
                             <div>
-                              {booking.firstName || "No First Name Provided"}{" "}
-                              {booking.lastName || "No Last Name Provided"}
+                              <Avatar className="h-10 w-10 rounded-lg border">
+                                <AvatarImage
+                                  src={booking?.imageUrl}
+                                  alt="@user"
+                                  className="object-cover"
+                                />
+                                <AvatarFallback>CN</AvatarFallback>
+                              </Avatar>
                             </div>
-                            <div className="text-sm text-muted-foreground">
-                              {booking.email || "No Email Provided"}
-                            </div>
-                          </div>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <div className="flex flex-row items-center space-x-4 p-1">
-                          <div>
-                            {/* TODO: make this a component and reuse above's component and make className a prop b/c above is different class */}
-                            <Avatar className="h-24 w-24 rounded-lg border">
-                              <AvatarImage
-                                src={booking?.imageUrl}
-                                alt="@user"
-                                className="object-cover"
-                              />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div>
-                            <div className="text-lg">
-                              {booking.firstName || "No First Name Provided"}{" "}
-                              {booking.lastName || "No Last Name Provided"}
-                            </div>
-                            <div className="text-md text-muted-foreground">
-                              {booking.email || "No Email Provided"}
-                            </div>
-                            <div
-                              className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"
-                              onClick={async () =>
-                                await router.push(
-                                  `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
-                                )
-                              }
-                            >
-                              <div className="flex flex-row items-center justify-center space-x-2">
-                                <User className="h-4 w-4" />
-                                <h1>View Profile</h1>
+                            <div>
+                              <div>
+                                {booking.firstName || "No First Name Provided"}{" "}
+                                {booking.lastName || "No Last Name Provided"}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {booking.email || "No Email Provided"}
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  {/* <div>{booking.type || "No Type Provided"}</div> */}
-                  <div className="col-span-2 flex flex-row items-center space-x-2">
-                    {booking.type === "Property Tour" ? (
-                      <School className="h-4 w-4" />
-                    ) : (
-                      <Phone className="h-4 w-4" />
-                    )}
-                    <div>
-                      {formatTimestamp(booking.startTimestamp, true, timezone) ||
-                        "No Start Timestamp Provided"}
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="flex flex-row items-center space-x-4 p-1">
+                            <div>
+                              {/* TODO: make this a component and reuse above's component and make className a prop b/c above is different class */}
+                              <Avatar className="h-24 w-24 rounded-lg border">
+                                <AvatarImage
+                                  src={booking?.imageUrl}
+                                  alt="@user"
+                                  className="object-cover"
+                                />
+                                <AvatarFallback>CN</AvatarFallback>
+                              </Avatar>
+                            </div>
+                            <div>
+                              <div className="text-lg">
+                                {booking.firstName || "No First Name Provided"}{" "}
+                                {booking.lastName || "No Last Name Provided"}
+                              </div>
+                              <div className="text-md text-muted-foreground">
+                                {booking.email || "No Email Provided"}
+                              </div>
+                              <div
+                                className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"
+                                onClick={async () =>
+                                  await router.push(
+                                    `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
+                                  )
+                                }
+                              >
+                                <div className="flex flex-row items-center justify-center space-x-2">
+                                  <User className="h-4 w-4" />
+                                  <h1>View Profile</h1>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    {/* <div>{booking.type || "No Type Provided"}</div> */}
+                    <div className="col-span-2 flex flex-row items-center space-x-2">
+                      {booking.type === "Property Tour" ? (
+                        <School className="h-4 w-4" />
+                      ) : (
+                        <Phone className="h-4 w-4" />
+                      )}
+                      <div>
+                        {formatTimestamp(booking.startTimestamp, true, timezone) ||
+                          "No Start Timestamp Provided"}
+                      </div>
                     </div>
-                  </div>
-                  {/* <div>{booking.property || "No Property Type Provided"}</div> */}
-                  <div
-                    className={cn(
-                      booking.phoneNumber ? "" : "mr-5 text-center",
-                    )}
-                  >
-                    {booking.phoneNumber || "-"}
-                  </div>
-                  {/* <pre className="col-span-3">
+                    {/* <div>{booking.property || "No Property Type Provided"}</div> */}
+                    <div
+                      className={cn(
+                        booking.phoneNumber ? "" : "mr-5 text-center",
+                      )}
+                    >
+                      {booking.phoneNumber || "-"}
+                    </div>
+                    {/* <pre className="col-span-3">
                                     {booking?.additionalNotes || "No Additional Notes Provided"}
                                 </pre> */}
-                  <StatusSelect
-                    value={booking?.status ? booking.status : "scheduled"}
-                    onChange={async (value: string) => {
-                      if (!value) return;
-                      setLoadingsForStatuses({
-                        ...loadingsForStatuses,
-                        [booking.uid]: true,
-                      });
-                      await updateBookingStatus.mutateAsync({
-                        uid: booking.uid,
-                        status: value,
-                        bookingType: booking.type,
-                      });
-                      await getBookings.refetch();
-                      setLoadingsForStatuses({
-                        ...loadingsForStatuses,
-                        [booking.uid]: false,
-                      });
-                    }}
-                    loading={loadingsForStatuses[booking.uid] || false}
-                    booking={booking}
-                  />
-                  <div className="col-span-2">
-                    <InterviewerInput
+                    <StatusSelect
+                      value={booking?.status ? booking.status : "scheduled"}
+                      onChange={async (value: string) => {
+                        if (!value) return;
+                        setLoadingsForStatuses({
+                          ...loadingsForStatuses,
+                          [booking.uid]: true,
+                        });
+                        await updateBookingStatus.mutateAsync({
+                          uid: booking.uid,
+                          status: value,
+                          bookingType: booking.type,
+                        });
+                        await getBookings.refetch();
+                        setLoadingsForStatuses({
+                          ...loadingsForStatuses,
+                          [booking.uid]: false,
+                        });
+                      }}
+                      loading={loadingsForStatuses[booking.uid] || false}
                       booking={booking}
-                      refetch={getBookings.refetch}
                     />
-                  </div>
-                  {/* <div className="col-span-1">
+                    <div className="col-span-2">
+                      <InterviewerInput
+                        booking={booking}
+                        refetch={getBookings.refetch}
+                      />
+                    </div>
+                    {/* <div className="col-span-1">
                                     <ViewAdditionalNotesDialog booking={booking} getBookings={getBookings} />
                                 </div> */}
-                  <div className="col-span-3 flex flex-row items-center space-x-2">
-                    {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
+                    <div className="col-span-3 flex flex-row items-center space-x-2">
+                      {/* <AddAdditionalNotesDialog booking={booking} refetch={getBookings.refetch} open={
                                         // @ts-expect-error TODO: fix this
                                         notesOpens[booking.uid] || false
                                     } onOpenChange={
@@ -545,80 +552,79 @@ const Bookings = () => {
                                             });
                                         }
                                     } /> */}
-                    {/* <ViewBookingDetailsDialog booking={booking} /> */}
-                    {/* TODO: need to default the values if existing ones exist */}
-                    <NextStepsDialog booking={booking} />
-                    <Button
+                      {/* <ViewBookingDetailsDialog booking={booking} /> */}
+                      {/* TODO: need to default the values if existing ones exist */}
+                      <NextStepsDialog booking={booking} />
+                      {/* <Button
                       variant="default"
                       onClick={async () =>
                         await router.push(
                           `/booking-details?email=${booking.email}&type=${booking.type}&uid=${booking.uid}`,
                         )
                       }
-                    // className="flex flex-row items-center space-x-2"
                     >
                       <User className="h-4 w-4" />
-                      {/* <div className="select-none">Profile</div> */}
-                    </Button>
-                    <div
-                      className={
-                        booking?.status === "completed"
-                          ? "cursor-not-allowed"
-                          : ""
-                      }
-                    >
-                      <RescheduleBookingDialog
-                        booking={booking}
-                        refetchBookings={getBookings.refetch}
-                        bookings={getBookings.data || []}
-                      />
-                    </div>
-                    <div
-                      className={cn(
-                        booking?.status === "completed"
-                          ? "cursor-not-allowed"
-                          : "",
-                      )}
-                    >
-                      <MarkCompletedPostNotesDialog
-                        booking={booking}
-                        getBooking={getBookings}
-                      />
-                    </div>
-                    {/* {!booking?.startTimestamp && !booking?.endTimestamp &&
+                    </Button> */}
+                      <div
+                        className={
+                          booking?.status === "completed"
+                            ? "cursor-not-allowed"
+                            : ""
+                        }
+                      >
+                        <RescheduleBookingDialog
+                          booking={booking}
+                          refetchBookings={getBookings.refetch}
+                          bookings={getBookings.data || []}
+                        />
+                      </div>
+                      <div
+                        className={cn(
+                          booking?.status === "completed"
+                            ? "cursor-not-allowed"
+                            : "",
+                        )}
+                      >
+                        <MarkCompletedPostNotesDialog
+                          booking={booking}
+                          getBooking={getBookings}
+                        />
+                      </div>
+                      {/* {!booking?.startTimestamp && !booking?.endTimestamp &&
                                         <Badge variant="destructive" className="">Action Required</Badge>} */}
-                    {!booking?.startTimestamp && !booking?.endTimestamp && (
-                      <AddPropertyTourDateDialog
-                        booking={booking}
-                        refetch={getBookings.refetch}
-                        bookings={getBookings.data || []}
-                      />
-                    )}
-                    <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
+                      {!booking?.startTimestamp && !booking?.endTimestamp && (
+                        <AddPropertyTourDateDialog
+                          booking={booking}
+                          refetch={getBookings.refetch}
+                          bookings={getBookings.data || []}
+                        />
+                      )}
+                      <DeleteBookingAlertDialog booking={booking} refetch={getBookings.refetch} />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="mt-4 block xl:hidden">
-          {getBookings.isLoading ? (
-            <div className="space-y-2">
-              <Skeleton className="h-24" />
-            </div>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-              {sortedData?.map((booking: any, index) => (
-                <BookingCard
-                  key={index}
-                  booking={booking}
-                  getBookings={getBookings}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+          <div className="mt-4 block xl:hidden">
+            {getBookings.isLoading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-24" />
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+                {sortedData?.map((booking: any, index) => (
+                  <BookingCard
+                    key={index}
+                    booking={booking}
+                    getBookings={getBookings}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>}
       </div>
     </div>
   );
@@ -745,7 +751,7 @@ const BookingCard = (props: BookingCardProps) => {
       <div
         className={cn(
           "mt-2 px-6",
-          booking?.status === "completed" ? "pb-0" : "pb-2",
+          (booking?.status === "completed" || booking?.status === "pending") ? "pb-0" : "pb-2",
         )}
       >
         {booking?.status !== "completed" && booking?.type === "Phone Call" && (
