@@ -97,6 +97,9 @@ export const bookingsRouter = createTRPCRouter({
             endTimestamp: z.string(),
             phoneNumber: z.string(),
             notes: z.string(),
+
+            disableTextReminder: z.boolean(),
+            disableCalendarInvite: z.boolean(),
         }))
         .mutation(async ({ input }) => {
             try {
@@ -109,6 +112,9 @@ export const bookingsRouter = createTRPCRouter({
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
                     blockWhatsApp: false,
+
+                    disableTextReminder: input.disableTextReminder,
+                    disableCalendarInvite: input.disableCalendarInvite,
                 })
             } catch (error) {
                 console.error('Error creating phone booking', error);
@@ -131,6 +137,9 @@ export const bookingsRouter = createTRPCRouter({
             typeOfBooking: z.string(),
             phoneNumber: z.string(),
             notes: z.string(),
+
+            disableTextReminder: z.boolean(),
+            disableCalendarInvite: z.boolean(),
         }))
         .mutation(async ({ input }) => {
             try {
@@ -144,6 +153,9 @@ export const bookingsRouter = createTRPCRouter({
                     phoneNumber: input.phoneNumber,
                     notes: input.notes,
                     blockWhatsApp: false,
+
+                    disableTextReminder: input.disableTextReminder,
+                    disableCalendarInvite: input.disableCalendarInvite,
                 })
             } catch (error) {
                 console.error('Error creating property tour booking', error);
@@ -373,6 +385,7 @@ export const bookingsRouter = createTRPCRouter({
             startTimestamp: z.string(),
             endTimestamp: z.string(),
             customerNotes: z.string(),
+            disableCalendarInvite: z.boolean(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
@@ -414,6 +427,7 @@ export const bookingsRouter = createTRPCRouter({
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
                         googleCalendarEventIdExistingBooking: currentDoc.data()?.googleCalendarEventId,
+                        disableCalendarInvite: input.disableCalendarInvite,
                     })
 
                     const { googleCalendarEventId } = response.data;
@@ -436,6 +450,7 @@ export const bookingsRouter = createTRPCRouter({
                         phoneNumber: phoneNumber,
                         blockWhatsApp: false,
                         googleCalendarEventIdExistingBooking: currentDoc.data()?.googleCalendarEventId,
+                        disableCalendarInvite: input.disableCalendarInvite,
                     })
 
                     const { googleCalendarEventId } = response.data;

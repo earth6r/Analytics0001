@@ -12,16 +12,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { toastErrorStyle, toastSuccessStyle } from "@/lib/toast-styles"
 import { api } from "@/utils/api"
-import { CircleCheck, CirclePlus, Info } from "lucide-react"
-import { useMemo, useState } from "react"
+import { ChevronDown, ChevronUp, CircleCheck, CirclePlus, Info } from "lucide-react"
+import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { toast } from "../ui/use-toast"
 import { DatePicker } from "./date-picker"
 import { TypeOfBookingSelect } from "./type-of-booking-select"
 import moment from 'moment-timezone';
-import { Badge } from "../ui/badge"
 import SuggestedTimes from "./suggested-times"
 import ConflictingBookings from "./conflicting-bookings"
+import { Checkbox } from "../ui/checkbox"
+import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip"
 // import { useForm } from "react-hook-form"
 
 interface CreateBookingDialogProps {
@@ -44,6 +45,11 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
     const [lastName, setLastName] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [viewConflicts, setViewConflicts] = useState(true);
+
+    // advanced options
+    const [advancedOptionsVisible, setAdvancedOptionsVisible] = useState(false);
+    const [disableTextReminderChecked, setDisableTextReminderChecked] = useState(false);
+    const [disableCalendarInviteChecked, setDisableCalendarInviteChecked] = useState(false);
 
     // const form = useForm({
     //     defaultValues: {
@@ -224,7 +230,7 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
 
             // TODO: remove typeOfBooking input and notes input
             const createBooking = typeOfBooking === "Property Tour" ? createPropertyTourBooking : createPhoneBooking;
-            await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName });
+            await createBooking.mutateAsync({ email, startTimestamp, endTimestamp, typeOfBooking, phoneNumber, notes: "", firstName, lastName, disableTextReminder: disableTextReminderChecked, disableCalendarInvite: disableCalendarInviteChecked });
 
             await refetch();
 
@@ -248,6 +254,9 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                 setStartDate(undefined);
                 setStartTime("");
                 setTypeOfBooking(undefined);
+
+                setDisableTextReminderChecked(false);
+                setDisableCalendarInviteChecked(false);
             }, 2000);
 
             setTimeout(() => {
@@ -412,26 +421,48 @@ const CreateBookingDialog = (props: CreateBookingDialogProps) => {
                         /> */}
                         {/* TODO: disable if type is phone call booking */}
                         {/* <BuyingPropertyTypeSelect className="w-full" selectedItem={propertyType} setSelectedItem={setPropertyType} /> */}
+
+                        <div className="flex justify-center">
+                            <div className="hover:underline cursor-pointer select-none flex flex-row items-center justify-center space-x-0.5" onClick={
+                                () => setAdvancedOptionsVisible(!advancedOptionsVisible)
+                            }>
+                                <h1 className="text-xs text-blue-500">Advanced Options</h1>
+                                {advancedOptionsVisible ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                            </div>
+                        </div>
+                        {advancedOptionsVisible && (
+                            <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <h1 className="text-sm">Disable Text Reminder</h1>
+                                        <CircularQuestionMarkTooltip label="If selected, this will not send the user a text via their selected preference (sms currently)." />
+                                    </div>
+                                    <Checkbox
+                                        checked={disableTextReminderChecked}
+                                        onCheckedChange={(checked) => setDisableTextReminderChecked(!!checked)}
+                                    />
+                                </div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <h1 className="text-sm">Disable Calendar Invite</h1>
+                                        <CircularQuestionMarkTooltip label="If selected, this will not send the user a calendar invite." />
+                                    </div>
+                                    <Checkbox
+                                        checked={disableCalendarInviteChecked}
+                                        onCheckedChange={(checked) => setDisableCalendarInviteChecked(!!checked)}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <DialogFooter className="flex flex-row items-center space-x-2 px-6 pb-6">
-                    <Button variant="outline" className="w-full" onClick={() => {
-                        setEmail("");
-                        setFirstName("");
-                        setLastName("");
-                        setStartDate(undefined);
-                        setStartTime("");
-                        setTypeOfBooking(null);
-                        setPhoneNumber("");
-                    }} disabled={
-                        isLoading || (!email && !startDate && !startTime && !phoneNumber && !typeOfBooking) || isSuccess
-                    }>Clear</Button>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger className="w-full transition ease-in-out duration-300">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
                                     disabled={disabled || isSuccess}>
-                                    {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Save")}
+                                    {isLoading ? <Spinner /> : (isSuccess ? <CircleCheck className="w-4 h-4 animate-pop" /> : "Create")}
                                 </Button>
                             </TooltipTrigger>
                             {disabled && <TooltipContent>

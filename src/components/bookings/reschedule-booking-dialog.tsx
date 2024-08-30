@@ -151,6 +151,7 @@ const RescheduleBookingDialog = (props: RescheduleDialogProps) => {
                 customerNotes: notes,
                 startTimestamp: startTimestamp,
                 endTimestamp: endTimestamp,
+                disableCalendarInvite: booking?.disableCalendarInvite || false,
             });
 
             await refetchBookings();

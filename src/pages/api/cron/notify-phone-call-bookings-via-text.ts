@@ -46,6 +46,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const phoneCalls = phoneCallsSnapshot.docs.map(doc => doc.data());
 
     for (const phoneCall of phoneCalls) {
+        if (phoneCall?.disableTextReminder) {
+            continue;
+        }
+
         // Convert startTimestamp to a moment object in UTC
         const startTimestampEpochUTC = Number(phoneCall.startTimestamp);
         const phoneCallDate = moment.utc(startTimestampEpochUTC).startOf('minute'); // round down to nearest minute

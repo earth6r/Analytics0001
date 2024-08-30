@@ -48,6 +48,10 @@ export default async function handler(
   const propertyTours = propertyTourSnapshot.docs.map((doc) => doc.data());
 
   for (const propertyTour of propertyTours) {
+    if (propertyTour?.disableTextReminder) {
+      continue;
+    }
+
     // Convert startTimestamp to a moment object in UTC
     const startTimestampEpochUTC = Number(propertyTour.startTimestamp);
     const propertyTourDate = moment
