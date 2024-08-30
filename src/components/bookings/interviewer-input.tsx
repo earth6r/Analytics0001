@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Pencil, Save } from "lucide-react";
 import Spinner from "../common/spinner";
 import { api } from "@/utils/api";
+import InterviewerDropdown from "./interviewer-dropdown";
 
 interface InterviewerInputProps {
     booking: any
@@ -29,14 +30,7 @@ const InterviewerInput = (props: InterviewerInputProps) => {
                     {/* TODO: fix sizing so the size is the same if its loading or not so its not moving all over the place and distracting the user */}
                     {loading ? <Spinner /> :
                         <div className="flex flex-row items-center space-x-2">
-                            <Input
-                                value={value}
-                                onChange={async (e) => {
-                                    setValue(e.target.value);
-                                }}
-                                disabled={loading}
-                                placeholder="Enter interviewer name"
-                            />
+                            <InterviewerDropdown value={value} onChange={setValue} />
                             <Save className="w-4 h-4" onClick={
                                 async () => {
                                     setLoading(true);
