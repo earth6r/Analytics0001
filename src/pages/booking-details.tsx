@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, Contact, FileQuestion, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
+import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, CircleAlert, CircleOff, Contact, FileQuestion, Hourglass, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CopyTooltip from "@/components/customers/copy-tooltip";
 import { useInterval } from "@/contexts/IntervalContext";
+import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -219,6 +220,30 @@ const BookingDetails = () => {
                                 <Tooltip>
                                     <div>
                                         {typeof getPotentialCustomerDetails.data?.profileNotes === "string" ? createHyperlinks(getPotentialCustomerDetails.data?.profileNotes || "-") : "-"}
+                                    </div>
+                                    {/* TODO: make this ui much better, use untitledui for inspiration (maybe just make this a third card with profile notes and contact details) */}
+                                    <div className="border rounded-lg p-4 mt-2">
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <div>Next Steps:</div>
+                                            {getPotentialCustomerDetails.data?.nextStepsDropdownValue && (
+                                                <div>
+                                                    {getPotentialCustomerDetails.data?.nextStepsDropdownValue.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : getPotentialCustomerDetails.data?.nextStepsDropdownValue.startsWith("awaiting:") ? <Hourglass className="w-4 h-4" /> : <CircleOff className="w-4 h-4" />}
+                                                </div>
+                                            )}
+                                            {/* @ts-expect-error TODO: fix type */}
+                                            <div>{(getPotentialCustomerDetails.data?.nextStepsDropdownValue && nextStepsMapping[getPotentialCustomerDetails.data?.nextStepsDropdownValue]) || "-"}</div>
+                                        </div>
+                                        <div>
+                                            Next Steps Notes: {getPotentialCustomerDetails.data?.nextStepsNotes || "-"}
+                                        </div>
+                                        {/* TODO: display if dropdown value is other */}
+                                        <div>
+                                            otherNextSteps: {getPotentialCustomerDetails.data?.otherNextSteps || "-"}
+                                        </div>
+                                        <div>
+                                            {/* TODO: format date using format and pass in analytics user's preferred timezone and such */}
+                                            deferredDate: {getPotentialCustomerDetails.data?.deferredDate}
+                                        </div>
                                     </div>
                                     <TooltipContent>
                                         Click to View the Link
