@@ -43,10 +43,16 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
     const [existingChainVisible, setExistingChainVisible] = useState(false);
 
     const addNextSteps = api.bookings.addNextSteps.useMutation();
-    const existingNextSteps = api.bookings.getNextSteps.useQuery({ email: booking.email });
+    const existingNextSteps = api.bookings.getNextSteps.useQuery(
+        {
+            email: booking.email
+        },
+        {
+            enabled: !!booking?.email
+        }
+    );
 
     const api_utils = api.useUtils();
-    // TODO: query existing next steps if exists and useEffect to set the values, add skeleton loading
 
     useEffect(() => {
         if (existingNextSteps.data) {
@@ -105,7 +111,6 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
                             if (deferredDate) {
                                 deferredDateUtc = moment(deferredDate).utc().unix();
                             }
-
                             await addNextSteps.mutateAsync({
                                 email: booking.email,
                                 nextStepsNotes,
@@ -132,7 +137,11 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
                             })
                         }
                     }
-                        disabled={loading || nextStepsNotes === '' || (nextStepsDropdownValue === "other" && !otherNextSteps)}
+                        disabled={loading || nextStepsNotes === '' || (nextStepsDropdownValue === "other" && !otherNextSteps) || (
+                            nextStepsNotes === existingNextSteps.data?.nextStepsNotes &&
+                            deferredDate?.getTime() === moment.utc(moment.unix(existingNextSteps.data?.deferredDate)).toDate().getTime() &&
+                            nextStepsDropdownValue === ''
+                        )}
                         className="w-full"
                     >
                         {loading ? <Spinner /> :
