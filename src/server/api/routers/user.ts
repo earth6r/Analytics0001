@@ -212,4 +212,40 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             return doc.data();
         }),
+
+    deleteChainLink: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                index: z.number(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, index } = input;
+
+            const tableName = "potentialCustomers";
+
+            const potentialCustomerRef = collection(db, tableName);
+
+            // Query to find the document with the specified email
+            const potentialCustomerQuery = query(potentialCustomerRef, where('email', '==', email));
+            const querySnapshot = await getDocs(potentialCustomerQuery);
+
+            if (querySnapshot.empty) {
+                throw new Error('Potential customer not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+
+
+            const { nextStepsDropdownValue } = doc?.data() as { nextStepsDropdownValue: any[] };
+
+            const currentNextStepsDropdownValue = nextStepsDropdownValue as any[];
+            currentNextStepsDropdownValue.splice(index, 1);
+
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                nextStepsDropdownValue: currentNextStepsDropdownValue,
+            });
+        }),
 });

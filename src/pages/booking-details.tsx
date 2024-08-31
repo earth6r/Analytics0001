@@ -2,20 +2,22 @@ import Header from "@/components/common/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatTimestamp } from "@/lib/utils";
+import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, CircleAlert, CircleOff, Contact, FileQuestion, Hourglass, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, TriangleAlert } from "lucide-react";
+import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, CircleAlert, CircleOff, Contact, FileQuestion, Hourglass, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, Trash2, TriangleAlert } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CopyTooltip from "@/components/customers/copy-tooltip";
 import { useInterval } from "@/contexts/IntervalContext";
 import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
+import moment from "moment";
+import DeleteNextStepChainLink from "@/components/bookings/delete-next-step-chain-link";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -26,6 +28,7 @@ const BookingDetails = () => {
     const { email, type, uid, referral } = router.query;
     const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [nextStepsAction, setNextStepsAction] = useState<string | null>(null);
 
     const { timezone } = useInterval();
 
@@ -75,6 +78,14 @@ const BookingDetails = () => {
             setDisplayImageUrl(`https://ui-avatars.com/api/?name=${bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName}`);
         }
     }, [getPotentialCustomerDetails.data?.imageUrl, bookingDetails.data?.firstName, bookingDetails.data?.lastName]);
+
+    useEffect(() => {
+        if (getPotentialCustomerDetails.data?.nextStepsDropdownValue && getPotentialCustomerDetails.data?.nextStepsDropdownValue.length > 0) {
+            setNextStepsAction(getPotentialCustomerDetails.data?.nextStepsDropdownValue[getPotentialCustomerDetails.data?.nextStepsDropdownValue.length - 1].value);
+        } else {
+            setNextStepsAction(null);
+        }
+    }, [getPotentialCustomerDetails.data?.nextStepsDropdownValue]);
 
     if (
         !registerDetails.isLoading &&
@@ -127,7 +138,7 @@ const BookingDetails = () => {
                         }</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
-                        <AddImageToUserDialog email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
+                        <AddImageToUserDialog initialLoading={getPotentialCustomerDetails.isLoading || getPotentialCustomerDetails.isError || getPotentialCustomerDetails.isFetching || getPotentialCustomerDetails.isPending} email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
                         {/* TODO: fix issue of image not showing in mobile view */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -221,30 +232,6 @@ const BookingDetails = () => {
                                     <div>
                                         {typeof getPotentialCustomerDetails.data?.profileNotes === "string" ? createHyperlinks(getPotentialCustomerDetails.data?.profileNotes || "-") : "-"}
                                     </div>
-                                    {/* TODO: make this ui much better, use untitledui for inspiration (maybe just make this a third card with profile notes and contact details) */}
-                                    <div className="border rounded-lg p-4 mt-2">
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <div>Next Steps:</div>
-                                            {getPotentialCustomerDetails.data?.nextStepsDropdownValue && (
-                                                <div>
-                                                    {getPotentialCustomerDetails.data?.nextStepsDropdownValue.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : getPotentialCustomerDetails.data?.nextStepsDropdownValue.startsWith("awaiting:") ? <Hourglass className="w-4 h-4" /> : <CircleOff className="w-4 h-4" />}
-                                                </div>
-                                            )}
-                                            {/* @ts-expect-error TODO: fix type */}
-                                            <div>{(getPotentialCustomerDetails.data?.nextStepsDropdownValue && nextStepsMapping[getPotentialCustomerDetails.data?.nextStepsDropdownValue]) || "-"}</div>
-                                        </div>
-                                        <div>
-                                            Next Steps Notes: {getPotentialCustomerDetails.data?.nextStepsNotes || "-"}
-                                        </div>
-                                        {/* TODO: display if dropdown value is other */}
-                                        <div>
-                                            otherNextSteps: {getPotentialCustomerDetails.data?.otherNextSteps || "-"}
-                                        </div>
-                                        <div>
-                                            {/* TODO: format date using format and pass in analytics user's preferred timezone and such */}
-                                            deferredDate: {getPotentialCustomerDetails.data?.deferredDate}
-                                        </div>
-                                    </div>
                                     <TooltipContent>
                                         Click to View the Link
                                     </TooltipContent>
@@ -283,6 +270,68 @@ const BookingDetails = () => {
                                         {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium : "-"}
                                     </div>
                                 </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Next Steps</CardTitle>
+                            <CardDescription>
+                                Next steps set by Home0001.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            {/* TODO: make this ui much better, use untitledui for inspiration (maybe just make this a third card with profile notes and contact details) */}
+                            <div>
+                                Notes: {getPotentialCustomerDetails.data?.nextStepsNotes || "-"}
+                            </div>
+                            <div>
+                                {/* TODO: format date using format and pass in analytics user's preferred timezone and such */}
+                                Deferred Date: {getPotentialCustomerDetails.data?.deferredDate ? moment.utc(moment.unix(getPotentialCustomerDetails.data?.deferredDate)).format("MMM DD, YYYY") : "-"}
+                            </div>
+                            <div>
+                                Latest Status: {
+                                    nextStepsAction ? (
+                                        <Badge className={cn(
+                                            nextStepsAction.startsWith("action:") ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
+                                        )}>
+                                            {nextStepsAction.startsWith("action:") ? "Action Required" : "Awaiting Response"}
+                                        </Badge>
+                                    ) : "-"}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="right-element">
+                        <CardHeader>
+                            <CardTitle>Next Steps Chain</CardTitle>
+                            <CardDescription>
+                                History of Next steps set by Home0001.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            {/* TODO: make this ui much better, use untitledui for inspiration (maybe just make this a third card with profile notes and contact details) */}
+                            <div className="flex flex-row items-center space-x-2">
+                                {(getPotentialCustomerDetails.data?.nextStepsDropdownValue || []).length > 0 ? (
+                                    <div>
+                                        {getPotentialCustomerDetails.data?.nextStepsDropdownValue.map((step: any, index: number) => (
+                                            <div key={index} className="flex flex-row items-center space-x-2">
+                                                <div className="flex flex-row items-center space-x-1">
+                                                    {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : <Hourglass className="w-4 h-4" />}
+                                                    {/* @ts-expect-error TODO: Fix this */}
+                                                    <h1>{nextStepsMapping[step.value] || step.value.split(":").slice(1).join(":")
+                                                    } -</h1>
+                                                    <h1>{
+                                                        moment.utc(moment.unix(step.timestamp)).format("MMM DD, YYYY")
+                                                    }</h1>
+                                                </div>
+                                                <DeleteNextStepChainLink email={email as string} index={index} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : <div>-</div>}
                             </div>
                         </CardContent>
                     </Card>

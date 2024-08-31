@@ -26,6 +26,7 @@ interface AddImageToUserDialogProps {
     refetch: () => Promise<any>;
     email: string;
     potentialCustomerData: any;
+    initialLoading: boolean;
 }
 
 const MAX_FILE_SIZE = 1024 * 1024 * 4.5; // 4.5MB
@@ -48,7 +49,7 @@ const validateUrl = (url: string) => {
 };
 
 const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
-    const { refetch, email, potentialCustomerData } = props;
+    const { refetch, email, potentialCustomerData, initialLoading } = props;
 
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -179,62 +180,66 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                         Add details to the potential customer.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="max-h-96 overflow-y-scroll">
+                {initialLoading ?
                     <div className="px-6 pb-2">
-                        {imageUrl ? <div className="relative flex items-center justify-center h-48">
-                            <Image
-                                src={validateUrl(imageUrl) ? imageUrl : ""}
-                                alt="Preview"
-                                className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
-                                layout="fill"
-                                objectFit="cover"
-                                onLoad={() => setImageLoaded(true)}
-                            />
-                            {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
-                        </div> :
-                            <div
-                                className="rounded-lg border border-muted-foreground border-dashed h-48 flex items-center justify-center cursor-pointer"
-                                onDrop={handleDrop}
-                                onDragOver={handleDragOver}
-                                // @ts-expect-error TODO: fix this
-                                onClick={() => document.getElementById('fileInput').click()}
-                            >
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    accept="image/*"
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
+                        <Skeleton className="h-96" />
+                    </div> :
+                    <div className="max-h-96 overflow-y-scroll">
+                        <div className="px-6 pb-2">
+                            {imageUrl ? <div className="relative flex items-center justify-center h-48">
+                                <Image
+                                    src={validateUrl(imageUrl) ? imageUrl : ""}
+                                    alt="Preview"
+                                    className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    onLoad={() => setImageLoaded(true)}
                                 />
-                                <div className="flex flex-col items-center justify-center">
-                                    <div className="font-bold text-4xl">
-                                        + Add Image
+                                {!imageLoaded && <Skeleton className="absolute h-48 rounded-lg" />}
+                            </div> :
+                                <div
+                                    className="rounded-lg border border-muted-foreground border-dashed h-48 flex items-center justify-center cursor-pointer"
+                                    onDrop={handleDrop}
+                                    onDragOver={handleDragOver}
+                                    // @ts-expect-error TODO: fix this
+                                    onClick={() => document.getElementById('fileInput').click()}
+                                >
+                                    <input
+                                        type="file"
+                                        id="fileInput"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                    />
+                                    <div className="flex flex-col items-center justify-center">
+                                        <div className="font-bold text-4xl">
+                                            + Add Image
+                                        </div>
+                                        <div className="text-muted-foreground text-center hidden xl:block">Drop a file here to upload, or click here to browse</div>
+                                        <div className="text-muted-foreground text-center block xl:hidden">Click here to browse</div>
                                     </div>
-                                    <div className="text-muted-foreground text-center hidden xl:block">Drop a file here to upload, or click here to browse</div>
-                                    <div className="text-muted-foreground text-center block xl:hidden">Click here to browse</div>
-                                </div>
-                            </div>}
-                        <div className="mt-4">
-                            <Label>Image URL</Label>
-                            <Input
-                                className="mt-2"
-                                value={imageUrl}
-                                onChange={handleImageUrlChange}
-                                placeholder="URL"
-                            />
-                            {!validateUrl(imageUrl) && imageUrl !== "" && <div className="text-red-500 text-sm mt-1">Invalid URL</div>}
+                                </div>}
+                            <div className="mt-4">
+                                <Label>Image URL</Label>
+                                <Input
+                                    className="mt-2"
+                                    value={imageUrl}
+                                    onChange={handleImageUrlChange}
+                                    placeholder="URL"
+                                />
+                                {!validateUrl(imageUrl) && imageUrl !== "" && <div className="text-red-500 text-sm mt-1">Invalid URL</div>}
+                            </div>
+                            <div className="mt-4">
+                                <Label>Profile Notes</Label>
+                                <Textarea
+                                    className="mt-2 resize-none h-48"
+                                    value={profileNotes}
+                                    onChange={handleProfileNotesChange}
+                                    placeholder="Profile Notes"
+                                />
+                            </div>
                         </div>
-                        <div className="mt-4">
-                            <Label>Profile Notes</Label>
-                            <Textarea
-                                className="mt-2 resize-none h-48"
-                                value={profileNotes}
-                                onChange={handleProfileNotesChange}
-                                placeholder="Profile Notes"
-                            />
-                        </div>
-                    </div>
-                </div>
+                    </div>}
                 <DialogFooter className="w-full flex flex-row items-center space-x-2 px-6">
                     <Button variant="outline" className="w-full" onClick={() => {
                         setImageUrl('');

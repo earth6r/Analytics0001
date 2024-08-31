@@ -1027,7 +1027,6 @@ export const bookingsRouter = createTRPCRouter({
             email: z.string(),
             nextStepsNotes: z.string(),
             nextStepsDropdownValue: z.string(),
-            otherNextSteps: z.string(),
             deferredDate: z.number().nullable(),
         }))
         .mutation(
@@ -1042,20 +1041,52 @@ export const bookingsRouter = createTRPCRouter({
                     await addDoc(tableRef, {
                         email: input.email,
                         nextStepsNotes: input.nextStepsNotes,
-                        nextStepsDropdownValue: input.nextStepsDropdownValue,
-                        otherNextSteps: input.otherNextSteps,
+                        nextStepsDropdownValue: input.nextStepsDropdownValue ? [
+                            {
+                                value: input.nextStepsDropdownValue,
+                                timestamp: Math.floor(moment.utc().valueOf() / 1000),
+                            }
+                        ] : [],
                         deferredDate: input.deferredDate,
                     });
                 } else {
                     const d = doc(tableRef, result.docs[0]?.id);
 
+                    const currentNextStepsDropdownValue = result.docs[0]?.data()?.nextStepsDropdownValue || [];
+
+                    if (input.nextStepsDropdownValue) {
+                        currentNextStepsDropdownValue.push({
+                            value: input.nextStepsDropdownValue,
+                            timestamp: Math.floor(moment.utc().valueOf() / 1000),
+                        });
+                    }
+
                     await updateDoc(d, {
                         nextStepsNotes: input.nextStepsNotes,
-                        nextStepsDropdownValue: input.nextStepsDropdownValue,
-                        otherNextSteps: input.otherNextSteps,
+                        nextStepsDropdownValue: currentNextStepsDropdownValue,
                         deferredDate: input.deferredDate,
                     });
                 }
+            }
+        ),
+
+    getNextSteps: publicProcedure
+        .input(z.object({
+            email: z.string(),
+        }))
+        .query(
+            async ({ input }) => {
+                const tableNameRef = "potentialCustomers";
+
+                const tableRef = collection(db, tableNameRef);
+
+                const result = await getDocs(query(tableRef, where("email", "==", input.email)));
+
+                if (result.empty) {
+                    return null;
+                }
+
+                return result?.docs[0]?.data();
             }
         ),
 });

@@ -30,26 +30,29 @@ export const nextStepsMapping = {
 interface NextStepsProps {
     value: string;
     onChange: (value: string) => void;
+    separate: string | null;
+    disabled?: boolean;
 }
 
 const NextStepsDropdown = (props: NextStepsProps) => {
-    const { value, onChange } = props;
+    const { value, onChange, separate = null, disabled = false } = props;
 
     return (
         <div>
-            <Select value={value} onValueChange={onChange}>
+            <Select value={value} onValueChange={onChange} disabled={disabled}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Select a next step" />
+                    <SelectValue placeholder={separate ? `Select an ${separate} step` : "Select a next step"} />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
                         {Object
                             .entries(nextStepsMapping)
+                            .filter(([mappingKey]) => !separate || mappingKey.startsWith(separate) || mappingKey.startsWith("other"))
                             .map(([mappingKey, mappingValue]) => (
                                 <SelectItem key={mappingKey} value={mappingKey} className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                                     <div className="flex flex-row items-center space-x-2">
                                         <div>
-                                            {mappingKey.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : mappingKey.startsWith("awaiting:") ? <Hourglass className="w-4 h-4" /> : <CircleOff className="w-4 h-4" />}
+                                            {mappingKey.startsWith("action:") || separate === "action" ? <CircleAlert className="w-4 h-4" /> : mappingKey.startsWith("awaiting:") || separate === "awaiting" ? <Hourglass className="w-4 h-4" /> : <CircleOff className="w-4 h-4" />}
                                         </div>
                                         <div>
                                             {mappingValue}
