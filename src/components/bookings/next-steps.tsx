@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import { ArrowUpDownIcon, Plus, X } from "lucide-react";
+import { ArrowUpDownIcon, CircleAlert, Hourglass, Plus, X } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
+import { useInterval } from "@/contexts/IntervalContext";
+import NextStepsDialog from "./next-steps-dialog";
 
 interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
@@ -20,43 +22,65 @@ interface TestData {
 const NextSteps = (props: NextStepsProps) => {
   const { setNextStepsVisible } = props;
 
+  const { timezone } = useInterval();
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const Statuses = [
     'Action Required',
     'Awaiting Response',
   ];
-  const [filterStatus, setFilterStatus] = useState<string[]>([]);
+  const [filterStatus, setFilterStatus] = useState<any[]>([
+    'Action Required',
+    'Awaiting Response',
+    // null, // TODO: I need this because there's a chance there's no status. ask yan?
+  ]);
 
-  const [sortKey, setSortKey] = useState<string>('startTimestamp');
+  const [sortKey, setSortKey] = useState<string>('deferredDate');
   const [sortOrder, setSortOrder] = useState<string>('asc');
+
+  const [sortedData, setSortedData] = useState<any[]>([]);
 
   const allNextSteps = api.user.allNextSteps.useQuery();
 
-  // Test data
-  const testData: TestData[] = [
-    {
-      profile: 'John Doe',
-      nextSteps: 'Follow up on email',
-      notes: 'Sent initial contact email',
-      deferredDate: '2024-09-01',
-      latestStatus: 'Action Required',
-    },
-    {
-      profile: 'Jane Smith',
-      nextSteps: 'Schedule a meeting',
-      notes: 'Discussed project scope',
-      deferredDate: '2024-09-05',
-      latestStatus: 'Awaiting Response',
-    },
-    {
-      profile: 'Alice Johnson',
-      nextSteps: 'Send contract',
-      notes: 'Client interested in premium plan',
-      deferredDate: '2024-09-10',
-      latestStatus: 'Action Required',
-    },
-  ];
+  useEffect(() => {
+    if (allNextSteps.data) {
+      let filteredData = allNextSteps.data.filter((data) => {
+        return filterStatus.includes(data.latestStatus);
+      });
+
+      if (searchQuery) {
+        const searchQueryLower = searchQuery.toLowerCase();
+        filteredData = filteredData.filter((data) => {
+          return data.profile.email.toLowerCase().includes(searchQueryLower) ||
+            data.profile.firstName.toLowerCase().includes(searchQueryLower) ||
+            data.profile.lastName.toLowerCase().includes(searchQueryLower);
+        });
+      }
+
+      filteredData = filteredData.sort((a, b) => {
+        if (sortOrder === "asc") {
+          if (sortKey === "email") {
+            return a.profile.email.localeCompare(b.profile.email);
+          } else if (sortKey === "deferredDate") {
+            return a.deferredDate - b.deferredDate;
+          } else if (sortKey === "status") {
+            return a.latestStatus.localeCompare(b.latestStatus);
+          }
+        } else {
+          if (sortKey === "email") {
+            return b.profile.email.localeCompare(a.profile.email);
+          } else if (sortKey === "deferredDate") {
+            return b.deferredDate - a.deferredDate;
+          } else if (sortKey === "status") {
+            return b.latestStatus.localeCompare(a.latestStatus);
+          }
+        }
+      });
+
+      setSortedData(filteredData);
+    }
+  }, [allNextSteps.data, sortKey, sortOrder, filterStatus, searchQuery]);
 
   return (
     <div>
@@ -124,9 +148,8 @@ const NextSteps = (props: NextStepsProps) => {
             )}
         </div>
       </div>
-      <div className="text-4xl font-bold">IN PROGRESS - FAKE DATA</div>
       <div className="mt-4 hidden overflow-y-scroll xl:block">
-        <div className="grid grid-cols-11 gap-4 font-semibold">
+        <div className="grid grid-cols-12 gap-4 font-semibold">
           {/* Headers */}
           <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Profile</h1>
@@ -160,10 +183,10 @@ const NextSteps = (props: NextStepsProps) => {
             <div
               className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={() => {
-                if (sortKey === "startTimestamp") {
+                if (sortKey === "deferredDate") {
                   setSortOrder(sortOrder === "asc" ? "desc" : "asc");
                 } else {
-                  setSortKey("startTimestamp");
+                  setSortKey("deferredDate");
                 }
               }}
             >
@@ -177,47 +200,71 @@ const NextSteps = (props: NextStepsProps) => {
             <div
               className="rounded-lg p-2 hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={() => {
-                if (sortKey === "email") {
+                if (sortKey === "status") {
                   setSortOrder(sortOrder === "asc" ? "desc" : "asc");
                 } else {
-                  setSortKey("email");
+                  setSortKey("status");
                 }
               }}
             >
               <ArrowUpDownIcon className="h-4 w-4" />
             </div>
           </div>
+
+          {/* Actions */}
+          <div className="col-span-1 flex select-none flex-row items-center justify-start space-x-2">
+            <h1>Actions</h1>
+          </div>
         </div>
 
         {/* Test Data Rows */}
         <div>
-          {testData.map((data, index) => (
-            <div key={index} className="grid grid-cols-11 gap-4 items-center space-y-2">
+          {sortedData.map((data, index) => (
+            <div key={index} className="grid grid-cols-12 gap-4 items-center space-y-2 border-b py-2">
               <div className="col-span-2">
-                {data.profile}
+                <div>{data.profile.firstName} {data.profile.lastName}</div>
+                <div className="text-muted-foreground">{data.profile.email}</div>
               </div>
-              <div className="col-span-2">
-                {data.nextSteps}
+              <div className="col-span-2 flex flex-row items-center space-x-2">
+                <div>
+                  {data.latestStatus && (
+                    <div>
+                      {data.latestStatus === "Action Required" ? (
+                        <CircleAlert className="h-4 w-4" />
+                      ) : (
+                        <Hourglass className="h-4 w-4" />
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  {data.latestNextStep || "-"}
+                </div>
               </div>
               <div className="col-span-3">
-                {data.notes}
+                {data.notes || "-"}
               </div>
               <div className="col-span-2">
-                {data.deferredDate}
+                {formatTimestamp(data.deferredDate, false, timezone) || "-"}
               </div>
               <div className="col-span-2">
                 <Badge className={cn(
                   data.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
                 )}>
-                  {data.latestStatus}
+                  {data.latestStatus || "-"}
                 </Badge>
+              </div>
+
+              <div className="col-span-1">
+                <NextStepsDialog
+                  email={data.profile.email}
+                  variant="Modify"
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
-
-          {JSON.stringify(allNextSteps.data)}
     </div>
   );
 };

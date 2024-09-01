@@ -554,7 +554,7 @@ const Bookings = () => {
                                     } /> */}
                       {/* <ViewBookingDetailsDialog booking={booking} /> */}
                       {/* TODO: need to default the values if existing ones exist */}
-                      <NextStepsDialog booking={booking} />
+                      <NextStepsDialog email={booking?.email} />
                       {/* <Button
                       variant="default"
                       onClick={async () =>
@@ -766,7 +766,7 @@ const BookingCard = (props: BookingCardProps) => {
               booking={booking}
               getBooking={getBookings}
             />
-            <NextStepsDialog booking={booking} />
+            <NextStepsDialog email={booking?.email} />
           </div>
         )}
       </div>

@@ -24,12 +24,13 @@ import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
 import NextStepDialogTabs from "./next-step-dialog-tabs";
 
-interface MarkCompletedPostNotesDialogProps {
-    booking: any;
+interface NextStepsDialogProps {
+    email: string;
+    variant?: string;
 };
 
-const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
-    const { booking } = props;
+const NextStepsDialog = (props: NextStepsDialogProps) => {
+    const { email, variant = undefined } = props;
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -45,10 +46,10 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
     const addNextSteps = api.bookings.addNextSteps.useMutation();
     const existingNextSteps = api.bookings.getNextSteps.useQuery(
         {
-            email: booking.email
+            email: email
         },
         {
-            enabled: !!booking?.email
+            enabled: !!email
         }
     );
 
@@ -70,7 +71,7 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="default" className="w-full space-x-2 select-none">
-                    <Check className="w-4 h-4" />
+                    {variant ? variant : <Check className="w-4 h-4" />}
                     <span className="block xl:hidden">Next Steps</span>
                 </Button>
             </DialogTrigger>
@@ -112,7 +113,7 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
                                 deferredDateUtc = moment(deferredDate).utc().unix();
                             }
                             await addNextSteps.mutateAsync({
-                                email: booking.email,
+                                email: email,
                                 nextStepsNotes,
                                 nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,
                                 deferredDate: deferredDateUtc,
@@ -132,7 +133,7 @@ const NextStepsDialog = (props: MarkCompletedPostNotesDialogProps) => {
 
                             toast({
                                 title: "Success", // TODO: keep all the titles and descriptions the same format and similar text labels
-                                description: "Marked booking as completed",
+                                description: "Next steps saved successfully.",
                                 className: toastSuccessStyle,
                             })
                         }

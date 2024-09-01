@@ -4,6 +4,7 @@ import admin from 'firebase-admin';
 import { put } from '@vercel/blob';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { db } from "@/utils/firebase/initialize";
+import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
 
 // Set configuration options for the API route
 export const config = {
@@ -281,13 +282,27 @@ export const userRouter = createTRPCRouter({
                         lastName = querySnapshot?.docs[0]?.data().lastName;
                     }
 
+                    let lastNextStepValue = (nextStepsDropdownValue || []).length > 0 ? (nextStepsDropdownValue[nextStepsDropdownValue.length - 1].value) : null;
+                    const lastNextStepStatus = lastNextStepValue?.startsWith("action:") ? "Action Required" : "Awaiting Response";
+
+                    // @ts-expect-error TODO: fix this type
+                    if (lastNextStepValue && nextStepsMapping[lastNextStepValue]) {
+                        // @ts-expect-error TODO: fix this type
+                        lastNextStepValue = nextStepsMapping[lastNextStepValue];
+                    } else if (lastNextStepValue) {
+                        lastNextStepValue = lastNextStepValue?.replace('action:', '').replace('awaiting:', '');
+                    }
+
                     nextSteps.push({
-                        email: data.email,
-                        firstName,
-                        lastName,
-                        nextStepsDropdownValue,
+                        profile: {
+                            email: data.email,
+                            firstName,
+                            lastName,
+                        },
+                        latestNextStep: lastNextStepValue,
+                        latestStatus: lastNextStepStatus,
                         deferredDate,
-                        nextStepsNotes,
+                        notes: nextStepsNotes,
                     });
                 }
             }
