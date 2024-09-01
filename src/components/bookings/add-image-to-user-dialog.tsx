@@ -212,6 +212,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                                         onChange={handleFileChange}
                                     />
                                     <div className="flex flex-col items-center justify-center">
+                                        <Image width={50} height={50} src="/file.png" alt="Upload" />
                                         <div className="font-bold text-4xl">
                                             + Add Image
                                         </div>
