@@ -84,6 +84,10 @@ const NextSteps = (props: NextStepsProps) => {
     }
   }, [allNextSteps.data, sortKey, sortOrder, filterStatus, searchQuery]);
 
+  // TODO:
+    // - add profile picture
+    // - add link to booking-details page
+
   return (
     <div>
       <div
@@ -108,7 +112,7 @@ const NextSteps = (props: NextStepsProps) => {
               {filterStatus.map((status) => (
                 <div key={status} className="p-1">
                   <Badge
-                    className="cursor-pointer select-none"
+                    className={cn("cursor-pointer select-none", status === "Action Required" ? "bg-red-500 hover:bg-red-600" : "bg-blue-300 hover:bg-blue-400")}
                     onClick={async () => {
                       setFilterStatus(
                         filterStatus.filter((s) => s !== status)
@@ -133,7 +137,7 @@ const NextSteps = (props: NextStepsProps) => {
                     <div key={status} className="p-1">
                       <Badge
                         variant="default"
-                        className="cursor-pointer select-none"
+                        className={cn("cursor-pointer select-none", status === "Action Required" ? "bg-red-500 hover:bg-red-600" : "bg-blue-300 hover:bg-blue-400")}
                         onClick={async () => {
                           setFilterStatus([...filterStatus, status]);
                         }}
@@ -232,9 +236,9 @@ const NextSteps = (props: NextStepsProps) => {
                   {data.latestStatus && (
                     <div>
                       {data.latestStatus === "Action Required" ? (
-                        <CircleAlert className="h-4 w-4" />
+                        <CircleAlert className="h-4 w-4 text-red-500" />
                       ) : (
-                        <Hourglass className="h-4 w-4" />
+                        <Hourglass className="h-4 w-4 text-blue-300" />
                       )}
                     </div>
                   )}
@@ -243,7 +247,7 @@ const NextSteps = (props: NextStepsProps) => {
                   {data.latestNextStep || "-"}
                 </div>
               </div>
-              <div className="col-span-3">
+              <div className="col-span-3 whitespace-pre-wrap break-words">
                 {data.notes || "-"}
               </div>
               <div className="col-span-2">
@@ -251,7 +255,7 @@ const NextSteps = (props: NextStepsProps) => {
               </div>
               <div className="col-span-2">
                 <Badge className={cn(
-                  data.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
+                  data.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-blue-300 hover:bg-blue-300",
                 )}>
                   {data.latestStatus || "-"}
                 </Badge>
@@ -305,7 +309,7 @@ const NextStepsCard = (props: NextStepsCardProps) => {
           <div>{item?.profile?.firstName} {item?.profile?.lastName}</div>
           <Badge
             className={cn(
-              item?.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
+              item?.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-blue-300 hover:bg-blue-300",
             )}
           >
             {item?.latestStatus || "-"}
@@ -320,9 +324,9 @@ const NextStepsCard = (props: NextStepsCardProps) => {
               {item?.latestStatus && (
                 <div>
                   {item?.latestStatus === "Action Required" ? (
-                    <CircleAlert className="h-4 w-4" />
+                    <CircleAlert className="h-4 w-4 text-red-500" />
                   ) : (
-                    <Hourglass className="h-4 w-4" />
+                    <Hourglass className="h-4 w-4 text-blue-300" />
                   )}
                 </div>
               )}

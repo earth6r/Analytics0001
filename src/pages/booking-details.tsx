@@ -296,7 +296,7 @@ const BookingDetails = () => {
                                 Latest Status: {
                                     nextStepsAction ? (
                                         <Badge className={cn(
-                                            nextStepsAction.startsWith("action:") ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
+                                            nextStepsAction.startsWith("action:") ? "bg-red-500 hover:bg-red-500" : "bg-blue-300 hover:bg-blue-300",
                                         )}>
                                             {nextStepsAction.startsWith("action:") ? "Action Required" : "Awaiting Response"}
                                         </Badge>
@@ -319,7 +319,7 @@ const BookingDetails = () => {
                                         {getPotentialCustomerDetails.data?.nextStepsDropdownValue.map((step: any, index: number) => (
                                             <div key={index} className="flex flex-row items-center space-x-2">
                                                 <div className="flex flex-row items-center space-x-1">
-                                                    {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : <Hourglass className="w-4 h-4" />}
+                                                    {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4 text-red-500" /> : <Hourglass className="w-4 h-4 text-blue-300" />}
                                                     {/* @ts-expect-error TODO: Fix this */}
                                                     <h1>{nextStepsMapping[step.value] || step.value.split(":").slice(1).join(":")
                                                     } -</h1>

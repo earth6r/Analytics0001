@@ -52,7 +52,7 @@ const NextStepsDropdown = (props: NextStepsProps) => {
                                 <SelectItem key={mappingKey} value={mappingKey} className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                                     <div className="flex flex-row items-center space-x-2">
                                         <div>
-                                            {mappingKey.startsWith("action:") || separate === "action" ? <CircleAlert className="w-4 h-4" /> : mappingKey.startsWith("awaiting:") || separate === "awaiting" ? <Hourglass className="w-4 h-4" /> : <CircleOff className="w-4 h-4" />}
+                                            {mappingKey.startsWith("action:") || separate === "action" ? <CircleAlert className="w-4 h-4 text-red-500" /> : mappingKey.startsWith("awaiting:") || separate === "awaiting" ? <Hourglass className="w-4 h-4 text-blue-300" /> : <CircleOff className="w-4 h-4" />}
                                         </div>
                                         <div>
                                             {mappingValue}

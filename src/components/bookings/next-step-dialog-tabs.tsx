@@ -72,7 +72,7 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
                             }
                             className={cn(`flex flex-row items-center justify-center space-x-1`, `w-full text-center border rounded-md text-sm py-2 hover:bg-accent cursor-pointer`, typeOfStep === "action" && "bg-accent")}
                         >
-                            <CircleAlert className="w-4 h-4" />
+                            <CircleAlert className="w-4 h-4 text-red-500" />
                             <div>Action</div>
                         </div>
                         <div
@@ -84,7 +84,7 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
                             }
                             className={cn(`flex flex-row items-center justify-center space-x-1`, `w-full text-center border rounded-md text-sm py-2 hover:bg-accent cursor-pointer`, typeOfStep === "awaiting" && "bg-accent")}
                         >
-                            <Hourglass className="w-4 h-4" />
+                            <Hourglass className="w-4 h-4 text-blue-300" />
                             <div>Awaiting</div>
                         </div>
                     </div>
@@ -113,7 +113,7 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
                                 <div className="text-xs text-muted-foreground space-y-1">
                                     {(existingNextSteps.data?.nextStepsDropdownValue || []).map((step: any, index: number) => (
                                         <div key={index} className="flex flex-row items-center space-x-1">
-                                            {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : <Hourglass className="w-4 h-4" />}
+                                            {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4 text-red-500" /> : <Hourglass className="w-4 h-4 text-blue-300" />}
                                             {/* @ts-expect-error TODO: Fix this */}
                                             <h1>{nextStepsMapping[step.value] || step.value.split(":").slice(1).join(":")
                                             } -</h1>
