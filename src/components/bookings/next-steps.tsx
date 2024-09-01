@@ -251,7 +251,7 @@ const NextSteps = (props: NextStepsProps) => {
                 {data.notes || "-"}
               </div>
               <div className="col-span-2">
-                {formatTimestamp(data?.deferredDate, false, timezone) || "-"}
+                {formatTimestamp(data?.deferredDate, false, timezone, true) || "-"}
               </div>
               <div className="col-span-2">
                 <Badge className={cn(

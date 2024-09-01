@@ -31,7 +31,7 @@ export function convertDateString(dateString: string | null) {
   return formattedDate;
 }
 
-export function formatTimestamp(timestampStr: string, threeDigits: boolean = true, timezone: string = 'America/New_York') {
+export function formatTimestamp(timestampStr: string, threeDigits: boolean = true, timezone: string = 'America/New_York', noTime = false) {
   if (!timestampStr) {
     return null;
   }
@@ -55,5 +55,9 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   // Get timezone abbreviation
   const timezoneAbbreviation = date.format('z');
 
-  return `${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation}`;
+  if (noTime) {
+    return `${month} ${day} ${date.format('YYYY')} ${timezoneAbbreviation}`;
+  };
+
+  return `${month} ${day} ${hours}:${minutes} ${period} ${timezoneAbbreviation} `;
 }
