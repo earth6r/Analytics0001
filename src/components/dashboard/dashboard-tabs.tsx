@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Emails from "@/components/dashboard/emails/emails";
 import CustomersTabContent from "@/components/dashboard/customers/customers-tab-content";
 import BookingsMetrics from "../bookings/metrics/bookings-metrics";
+import Metrics from "./logins/metrics";
 
 const DashboardTabs = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const DashboardTabs = () => {
         className="w-full"
       >
         <div className="pl-6 pr-6 pt-6">
-          <TabsList className="grid w-full grid-cols-3 md:w-96">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 md:w-96">
             <TabsTrigger
               value="registers"
               className={cn(
@@ -83,6 +84,16 @@ const DashboardTabs = () => {
             >
               Customers
             </TabsTrigger>
+            <TabsTrigger
+              value="logins"
+              className={cn(
+                activeTab === "logins" ? "" : "text-muted-foreground",
+                "cursor-pointer hidden md:block",
+              )}
+              onClick={() => handleSetActiveTab("logins")}
+            >
+              Logins
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="registers" className="w-full">
@@ -100,8 +111,11 @@ const DashboardTabs = () => {
         <TabsContent value="bookings" className="p-6">
           <BookingsMetrics />
         </TabsContent>
-      </Tabs>
-    </div>
+        <TabsContent value="logins" className="p-6">
+          <Metrics />
+        </TabsContent>
+      </Tabs >
+    </div >
   );
 };
 

@@ -309,4 +309,40 @@ export const userRouter = createTRPCRouter({
 
             return nextSteps;
         }),
+
+    getMainLogins: publicProcedure
+        .query(async () => {
+            const userRef = collection(db, 'login_history');
+            const querySnapshot = await getDocs(userRef);
+
+            const logins = [];
+
+            for (const doc of querySnapshot.docs) {
+                const data = doc.data();
+
+                if (data.login_type === "main_page") {
+                    logins.push(data);
+                }
+            }
+
+            return logins;
+        }),
+
+    getAnalyticsLogins: publicProcedure
+        .query(async () => {
+            const userRef = collection(db, 'login_history');
+            const querySnapshot = await getDocs(userRef);
+
+            const logins = [];
+
+            for (const doc of querySnapshot.docs) {
+                const data = doc.data();
+
+                if (data.login_type === "stats_page") {
+                    logins.push(data);
+                }
+            }
+
+            return logins;
+        }),
 });
