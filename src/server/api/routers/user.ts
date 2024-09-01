@@ -248,4 +248,50 @@ export const userRouter = createTRPCRouter({
                 nextStepsDropdownValue: currentNextStepsDropdownValue,
             });
         }),
+
+    allNextSteps: publicProcedure
+        .query(async () => {
+            const potentialCustomerRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(potentialCustomerRef);
+
+            const nextSteps = [];
+
+            for (const doc of querySnapshot.docs) {
+                const data = doc.data();
+
+                // check if data has nextStepsDropdownValue or deferredDate or nextStepsNotes
+                if (Object(data).hasOwnProperty('nextStepsDropdownValue') || Object(data).hasOwnProperty('deferredDate') || Object(data).hasOwnProperty('nextStepsNotes')) {
+                    const { nextStepsDropdownValue, deferredDate, nextStepsNotes } = data;
+
+                    // query usersBookPhoneCall and usersBookPropertyTour for firstName and lastName
+                    let firstName = '';
+                    let lastName = '';
+                    let collectionRef = collection(db, 'usersBookPhoneCall');
+                    let querySnapshot = await getDocs(query(collectionRef, where('email', '==', data.email)));
+                    if (querySnapshot.empty) {
+                        collectionRef = collection(db, 'usersBookPropertyTour');
+                        querySnapshot = await getDocs(query(collectionRef, where('email', '==', data.email)));
+
+                        if (!querySnapshot.empty) {
+                            firstName = querySnapshot?.docs[0]?.data().firstName;
+                            lastName = querySnapshot?.docs[0]?.data().lastName;
+                        }
+                    } else {
+                        firstName = querySnapshot?.docs[0]?.data().firstName;
+                        lastName = querySnapshot?.docs[0]?.data().lastName;
+                    }
+
+                    nextSteps.push({
+                        email: data.email,
+                        firstName,
+                        lastName,
+                        nextStepsDropdownValue,
+                        deferredDate,
+                        nextStepsNotes,
+                    });
+                }
+            }
+
+            return nextSteps;
+        }),
 });
