@@ -64,7 +64,6 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
         }
     }, [existingNextSteps.data]);
 
-
     // TODO: break out into several components into a subfolder with a proper structure i.e. parent folder would be meeting-notes/...
     // https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=74675897
     return (
@@ -72,7 +71,7 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
             <DialogTrigger asChild>
                 <Button variant="default" className="w-full space-x-2 select-none">
                     {variant ? variant : <Check className="w-4 h-4" />}
-                    <span className="block xl:hidden">Next Steps</span>
+                    <span className={cn("block xl:hidden", variant && "ml-1")}>Next Steps</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] p-0 select-none">

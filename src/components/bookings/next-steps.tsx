@@ -6,6 +6,8 @@ import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { useInterval } from "@/contexts/IntervalContext";
 import NextStepsDialog from "./next-steps-dialog";
+import { Skeleton } from "../ui/skeleton";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
@@ -63,7 +65,7 @@ const NextSteps = (props: NextStepsProps) => {
           if (sortKey === "email") {
             return a.profile.email.localeCompare(b.profile.email);
           } else if (sortKey === "deferredDate") {
-            return a.deferredDate - b.deferredDate;
+            return a?.deferredDate - b?.deferredDate;
           } else if (sortKey === "status") {
             return a.latestStatus.localeCompare(b.latestStatus);
           }
@@ -71,7 +73,7 @@ const NextSteps = (props: NextStepsProps) => {
           if (sortKey === "email") {
             return b.profile.email.localeCompare(a.profile.email);
           } else if (sortKey === "deferredDate") {
-            return b.deferredDate - a.deferredDate;
+            return b?.deferredDate - a?.deferredDate;
           } else if (sortKey === "status") {
             return b.latestStatus.localeCompare(a.latestStatus);
           }
@@ -245,7 +247,7 @@ const NextSteps = (props: NextStepsProps) => {
                 {data.notes || "-"}
               </div>
               <div className="col-span-2">
-                {formatTimestamp(data.deferredDate, false, timezone) || "-"}
+                {formatTimestamp(data?.deferredDate, false, timezone) || "-"}
               </div>
               <div className="col-span-2">
                 <Badge className={cn(
@@ -265,7 +267,88 @@ const NextSteps = (props: NextStepsProps) => {
           ))}
         </div>
       </div>
+
+      <div className="mt-4 block xl:hidden">
+        {allNextSteps.isLoading ? (
+          <div className="space-y-2">
+            <Skeleton className="h-24" />
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            {sortedData?.map((item: any, index) => (
+              <NextStepsCard
+                key={index}
+                item={item}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
+  );
+};
+
+interface NextStepsCardProps {
+  item: any;
+}
+
+const NextStepsCard = (props: NextStepsCardProps) => {
+  const { item } = props;
+
+  const { timezone } = useInterval();
+
+  return (
+    <Card
+    >
+      <CardHeader>
+        <CardTitle className="flex flex-row items-center justify-between">
+          <div>{item?.profile?.firstName} {item?.profile?.lastName}</div>
+          <Badge
+            className={cn(
+              item?.latestStatus === "Action Required" ? "bg-red-500 hover:bg-red-500" : "bg-foreground hover:bg-foreground",
+            )}
+          >
+            {item?.latestStatus || "-"}
+          </Badge>
+        </CardTitle>
+        <CardDescription>
+          Deferred Date: {formatTimestamp(item?.deferredDate, false, timezone) || "-"}
+        </CardDescription>
+        <div>
+          <div className="flex flex-row items-center space-x-2">
+            <div>
+              {item?.latestStatus && (
+                <div>
+                  {item?.latestStatus === "Action Required" ? (
+                    <CircleAlert className="h-4 w-4" />
+                  ) : (
+                    <Hourglass className="h-4 w-4" />
+                  )}
+                </div>
+              )}
+            </div>
+            <div>
+              {item?.latestNextStep || "-"}
+            </div>
+          </div>
+
+          <div className="mt-2">
+            Notes: {item?.notes || "-"}
+          </div>
+
+          <div className="mt-2">
+            Email: {item?.profile?.email}
+          </div>
+
+          <div className="mt-2">
+            <NextStepsDialog
+              email={item?.profile?.email}
+              variant="Modify"
+            />
+          </div>
+        </div>
+      </CardHeader>
+    </Card>
   );
 };
 

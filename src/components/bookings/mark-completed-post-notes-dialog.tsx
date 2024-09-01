@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "../ui/textarea"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
 import Spinner from "../common/spinner";
-import { Check, NotepadText } from "lucide-react";
+import { Check, CircleAlert, Hourglass, NotepadText } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
 import { Slider } from "../ui/slider";
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
@@ -23,6 +23,10 @@ import { toast } from "../ui/use-toast";
 import { toastSuccessStyle } from "@/lib/toast-styles";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+import { cn } from "@/lib/utils";
+import NextStepsDropdown, { nextStepsMapping } from "./next-steps-dropdown";
+import { Separator } from "../ui/separator";
+import moment from "moment";
 
 interface MarkCompletedPostNotesDialogProps {
     booking: any;
@@ -57,6 +61,34 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [bookATourChecked, setBookATourChecked] = useState(false);
 
     const completeBooking = api.bookings.completeBooking.useMutation();
+
+    // next steps
+    const [nextStepsNotes, setNextStepsNotes] = useState('');
+    const [deferredDate, setDeferredDate] = useState<Date | null>(null);
+    const [typeOfStep, setTypeOfStep] = useState<string | null>(null);
+    const [nextStepsDropdownValue, setNextStepsDropdownValue] = useState<string>('');
+    const [otherNextSteps, setOtherNextSteps] = useState<string>('');
+    const [existingChainVisible, setExistingChainVisible] = useState(false);
+
+    const existingNextSteps = api.bookings.getNextSteps.useQuery(
+        {
+            email: booking?.email
+        },
+        {
+            enabled: !!booking?.email
+        }
+    );
+
+    const addNextSteps = api.bookings.addNextSteps.useMutation();
+
+    useEffect(() => {
+        if (existingNextSteps.data) {
+            setNextStepsNotes(existingNextSteps.data.nextStepsNotes);
+            setDeferredDate(
+                existingNextSteps.data.deferredDate ? moment.utc(moment.unix(existingNextSteps.data.deferredDate)).toDate() : null
+            );
+        }
+    }, [existingNextSteps.data]);
 
     // TODO: break out into several components into a subfolder with a proper structure i.e. parent folder would be meeting-notes/...
     // https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=74675897
@@ -275,11 +307,11 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectItem value="Immediate">Immediate</SelectItem>
-                                            <SelectItem value="1-3 Months">1-3 Months</SelectItem>
-                                            <SelectItem value="3-6 Months">3-6 Months</SelectItem>
-                                            <SelectItem value="6-12 Months">6-12 Months</SelectItem>
-                                            <SelectItem value="Not Sure">Not Sure</SelectItem>
+                                            <SelectItem value="Immediate" className="hover:bg-gray-100 dark:hover:bg-gray-800">Immediate</SelectItem>
+                                            <SelectItem value="1-3 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">1-3 Months</SelectItem>
+                                            <SelectItem value="3-6 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">3-6 Months</SelectItem>
+                                            <SelectItem value="6-12 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">6-12 Months</SelectItem>
+                                            <SelectItem value="Not Sure" className="hover:bg-gray-100 dark:hover:bg-gray-800">Not Sure</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -304,22 +336,141 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
 
                         {booking.type === "Phone Call" &&
                             <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex items-center space-x-1">
+                                        <Label htmlFor="book-a-tour">Book a Tour?</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer needs a tour" />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                        <Checkbox
+                                            checked={bookATourChecked}
+                                            onCheckedChange={(checked) => {
+                                                setBookATourChecked(!!checked);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>}
+
+                        <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
-                                    <Label htmlFor="book-a-tour">Book a Tour?</Label>
-                                    <CircularQuestionMarkTooltip label="Check this field if the potential customer needs a tour" />
-                                </div>
-                                <div className="flex flex-row items-center space-x-1">
-                                    <h1 className="text-sm text-muted-foreground">Qualified?</h1>
-                                    <Checkbox
-                                        checked={bookATourChecked}
-                                        onCheckedChange={(checked) => {
-                                            setBookATourChecked(!!checked);
-                                        }}
-                                    />
+                                    <Label htmlFor="date">Next Steps</Label>
+                                    <CircularQuestionMarkTooltip label="Potential Customer's Next Steps" />
                                 </div>
                             </div>
-                        </div>}
+                            <div>
+                                <h1 className="text-sm text-muted-foreground mt-1">Notes</h1>
+                                <Textarea
+                                    id="next-steps"
+                                    rows={4}
+                                    value={nextStepsNotes}
+                                    onChange={(e) => setNextStepsNotes(e.target.value)}
+                                    className="resize-none"
+                                    placeholder="Notes about next steps"
+                                />
+                                <div className="mt-2">
+                                    <h1 className="text-sm text-muted-foreground">Deferred Date</h1>
+                                    <DatePicker
+                                        placeholder="Select the deferred date"
+                                        // @ts-expect-error TODO: Fix DatePicker type
+                                        value={deferredDate}
+                                        onValueChange={(value) => setDeferredDate(value as Date)}
+                                    />
+                                </div>
+                                <div className="mt-2">
+                                    <h1 className="text-sm text-muted-foreground">Next Step</h1>
+                                    <div>
+                                        <div className="flex flex-row items-center justify-between space-x-2 mt-1">
+                                            <div
+                                                onClick={
+                                                    () => {
+                                                        setTypeOfStep('action')
+                                                        setNextStepsDropdownValue('')
+                                                    }
+                                                }
+                                                className={cn(`flex flex-row items-center justify-center space-x-1`, `w-full text-center border rounded-md text-sm py-2 hover:bg-accent cursor-pointer`, typeOfStep === "action" && "bg-accent")}
+                                            >
+                                                <CircleAlert className="w-4 h-4" />
+                                                <div>Action</div>
+                                            </div>
+                                            <div
+                                                onClick={
+                                                    () => {
+                                                        setTypeOfStep('awaiting')
+                                                        setNextStepsDropdownValue('')
+                                                    }
+                                                }
+                                                className={cn(`flex flex-row items-center justify-center space-x-1`, `w-full text-center border rounded-md text-sm py-2 hover:bg-accent cursor-pointer`, typeOfStep === "awaiting" && "bg-accent")}
+                                            >
+                                                <Hourglass className="w-4 h-4" />
+                                                <div>Awaiting</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-2">
+                                        <NextStepsDropdown
+                                            separate={typeOfStep}
+                                            value={nextStepsDropdownValue}
+                                            onChange={(value) => setNextStepsDropdownValue(value)}
+                                            disabled={typeOfStep === null}
+                                        />
+                                        {(existingNextSteps.data?.nextStepsDropdownValue || []).length > 0 && <p className="text-xs text-muted-foreground mt-1 select-none text-center">This value will append to existing steps.</p>}
+                                        {/* TODO: only display this if existing next steps exist (specifically if there's len > 0 of nextStepsDropdownValue from db) */}
+                                        {existingNextSteps.data && <div className="select-none">
+                                            {!existingChainVisible && (existingNextSteps.data?.nextStepsDropdownValue || []).length > 0 &&
+                                                <div className="flex flex-row items-center justify-center space-x-1">
+                                                    <div onClick={
+                                                        () => setExistingChainVisible(true)
+                                                    } className="text-xs text-blue-500 hover:underline cursor-pointer">View Chain</div>
+                                                </div>
+                                            }
+
+                                            {existingChainVisible &&
+                                                <div className="flex flex-col justify-center items-center">
+                                                    <Separator className="w-48 my-1" />
+                                                    <div className="text-xs text-muted-foreground space-y-1">
+                                                        {(existingNextSteps.data?.nextStepsDropdownValue || []).map((step: any, index: number) => (
+                                                            <div key={index} className="flex flex-row items-center space-x-1">
+                                                                {step.value.startsWith("action:") ? <CircleAlert className="w-4 h-4" /> : <Hourglass className="w-4 h-4" />}
+                                                                {/* @ts-expect-error TODO: Fix this */}
+                                                                <h1>{nextStepsMapping[step.value] || step.value.split(":").slice(1).join(":")
+                                                                } -</h1>
+                                                                <h1>{
+                                                                    moment.utc(moment.unix(step.timestamp)).format("MMM DD, YYYY")
+                                                                }</h1>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>}
+                                            {existingChainVisible && <div
+                                                onClick={() => setExistingChainVisible(false)}
+                                                className="text-xs text-blue-500 hover:underline cursor-pointer text-center"
+                                            >Hide Chain</div>}
+                                        </div>}
+                                    </div>
+                                    {
+                                        nextStepsDropdownValue === "other" &&
+                                        <div>
+                                            <Input
+                                                id="other-next-steps"
+                                                value={otherNextSteps}
+                                                onChange={(e) => {
+                                                    let value = e.target.value
+                                                    if (value.length > 0) {
+                                                        value = value.charAt(0).toUpperCase() + value.slice(1)
+                                                    }
+                                                    setOtherNextSteps(value)
+                                                }}
+                                                className="resize-none mt-2"
+                                                placeholder="You've selected other, describe the next steps"
+                                            />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <DialogFooter className="px-6 pb-6">
@@ -350,6 +501,19 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 timeline: timelineSelectedValue ?? null,
                                 bookATour: bookATourChecked,
                             });
+
+                            let deferredDateUtc = null;
+                            if (deferredDate) {
+                                deferredDateUtc = moment(deferredDate).utc().unix();
+                            }
+
+                            await addNextSteps.mutateAsync({
+                                email: booking?.email,
+                                nextStepsNotes,
+                                nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,
+                                deferredDate: deferredDateUtc,
+                            });
+                            await existingNextSteps.refetch();
                             await getBooking.refetch();
                             setOpen(false);
                             setLoading(false);
@@ -381,7 +545,9 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             })
                         }
                     }
-                        disabled={loading}
+                        disabled={loading || (
+                            nextStepsDropdownValue === "other" && !otherNextSteps
+                        )}
                         className="w-full"
                     >
                         {loading ? <Spinner /> :
