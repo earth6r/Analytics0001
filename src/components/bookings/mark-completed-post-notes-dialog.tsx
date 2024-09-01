@@ -21,8 +21,7 @@ import { DatePicker } from "./date-picker";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 import { toastSuccessStyle } from "@/lib/toast-styles";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { cn } from "@/lib/utils";
 import NextStepsDropdown, { nextStepsMapping } from "./next-steps-dropdown";
 import { Separator } from "../ui/separator";
@@ -61,6 +60,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [bookATourChecked, setBookATourChecked] = useState(false);
 
     const completeBooking = api.bookings.completeBooking.useMutation();
+    const api_utils = api.useUtils();
 
     // next steps
     const [nextStepsNotes, setNextStepsNotes] = useState('');
@@ -513,6 +513,8 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,
                                 deferredDate: deferredDateUtc,
                             });
+                            await api_utils.user.allNextSteps.refetch();
+                            await api_utils.user.getPotentialCustomerDetails.refetch();
                             await existingNextSteps.refetch();
                             await getBooking.refetch();
                             setOpen(false);

@@ -119,6 +119,7 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
                             });
                             await existingNextSteps.refetch();
                             await api_utils.user.getPotentialCustomerDetails.refetch();
+                            await api_utils.user.allNextSteps.refetch();
                             // TODO: do i refetch the table?
                             setOpen(false);
                             setLoading(false);
