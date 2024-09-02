@@ -13,14 +13,6 @@ interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
 }
 
-interface TestData {
-  profile: string;
-  nextSteps: string;
-  notes: string;
-  deferredDate: string;
-  latestStatus: string;
-}
-
 const NextSteps = (props: NextStepsProps) => {
   const { setNextStepsVisible } = props;
 

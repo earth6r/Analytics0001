@@ -55,15 +55,6 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
 
     const api_utils = api.useUtils();
 
-    useEffect(() => {
-        if (existingNextSteps.data) {
-            setNextStepsNotes(existingNextSteps.data.nextStepsNotes);
-            setDeferredDate(
-                existingNextSteps.data.deferredDate ? moment.utc(moment.unix(existingNextSteps.data.deferredDate)).toDate() : null
-            );
-        }
-    }, [existingNextSteps.data]);
-
     // TODO: break out into several components into a subfolder with a proper structure i.e. parent folder would be meeting-notes/...
     // https://github.com/users/apinanyogaratnam/projects/35/views/1?pane=issue&itemId=74675897
     return (
@@ -78,13 +69,12 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
                 <DialogHeader className="px-6 pt-6">
                     <DialogTitle>Next Steps</DialogTitle>
                     <DialogDescription>
-                        {`Potential customer's lead status and next steps.`}
+                        {`Add the potential customer's lead status and next steps.`}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-96 overflow-y-scroll">
                     <div className="grid gap-4 px-6 py-2">
                         <NextStepDialogTabs
-                            initialLoading={existingNextSteps.isLoading || existingNextSteps.isError || existingNextSteps.isFetching || existingNextSteps.isPending}
                             nextStepsNotes={nextStepsNotes}
                             setNextStepsNotes={setNextStepsNotes}
                             deferredDate={deferredDate}
@@ -137,11 +127,7 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
                             })
                         }
                     }
-                        disabled={loading || nextStepsNotes === '' || (nextStepsDropdownValue === "other" && !otherNextSteps) || (
-                            nextStepsNotes === existingNextSteps.data?.nextStepsNotes &&
-                            deferredDate?.getTime() === moment.utc(moment.unix(existingNextSteps.data?.deferredDate)).toDate().getTime() &&
-                            nextStepsDropdownValue === ''
-                        )}
+                        disabled={loading || nextStepsNotes === '' || nextStepsDropdownValue === '' || (nextStepsDropdownValue === "other" && otherNextSteps === '')}
                         className="w-full"
                     >
                         {loading ? <Spinner /> :

@@ -278,12 +278,12 @@ const Bookings = () => {
                           }}
                         >
                           <div className="flex flex-row items-center space-x-2">
-                            <h1 className="capitalize flex flex-row items-center space-x-1">
+                            <div className="capitalize flex flex-row items-center space-x-1">
                               {status.split("-").map((word, index) => (
                                 // TODO: make the badge color dynamic based on its status i.e. completed is green, cancelled and no-show is red, etc.
                                 <h1 key={index} className="capitalize">{word}</h1>
                               ))}
-                            </h1>
+                            </div>
                             <X className="h-4 w-4" />
                           </div>
                         </Badge>
@@ -309,11 +309,11 @@ const Bookings = () => {
                             }}
                           >
                             <div className="flex flex-row items-center space-x-2">
-                              <h1 className="capitalize flex flex-row items-center space-x-1">
+                              <div className="capitalize flex flex-row items-center space-x-1">
                                 {status.split("-").map((word, index) => (
                                   <h1 key={index} className="capitalize">{word}</h1>
                                 ))}
-                              </h1>
+                              </div>
                               <Plus className="h-4 w-4" />
                             </div>
                           </Badge>
@@ -421,7 +421,7 @@ const Bookings = () => {
               <div className="mt-4 space-y-4">
                 {sortedData?.map((booking: any) => (
                   <div
-                    key={booking.id}
+                    key={booking.uid}
                     className={cn("grid grid-cols-11 items-center gap-4")}
                   >
                     <TooltipProvider>

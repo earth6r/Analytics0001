@@ -293,6 +293,9 @@ export const userRouter = createTRPCRouter({
                         lastNextStepValue = lastNextStepValue?.replace('action:', '').replace('awaiting:', '');
                     }
 
+                    const lastDeferredDate = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].deferredDate : null;
+                    const lastNotes = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].nextStepsNotes : null;
+
                     nextSteps.push({
                         profile: {
                             email: data.email,
@@ -301,8 +304,8 @@ export const userRouter = createTRPCRouter({
                         },
                         latestNextStep: lastNextStepValue,
                         latestStatus: lastNextStepStatus,
-                        deferredDate,
-                        notes: nextStepsNotes,
+                        deferredDate: lastDeferredDate,
+                        notes: lastNotes,
                     });
                 }
             }

@@ -29,6 +29,7 @@ const BookingDetails = () => {
     const [displayImageUrl, setDisplayImageUrl] = useState<string | undefined>(undefined);
     const [imageLoaded, setImageLoaded] = useState(false);
     const [nextStepsAction, setNextStepsAction] = useState<string | null>(null);
+    const [latestNextStep, setLatestNextStep] = useState<any | null>(null);
 
     const { timezone } = useInterval();
 
@@ -82,6 +83,7 @@ const BookingDetails = () => {
     useEffect(() => {
         if (getPotentialCustomerDetails.data?.nextStepsDropdownValue && getPotentialCustomerDetails.data?.nextStepsDropdownValue.length > 0) {
             setNextStepsAction(getPotentialCustomerDetails.data?.nextStepsDropdownValue[getPotentialCustomerDetails.data?.nextStepsDropdownValue.length - 1].value);
+            setLatestNextStep(getPotentialCustomerDetails.data?.nextStepsDropdownValue[getPotentialCustomerDetails.data?.nextStepsDropdownValue.length - 1]);
         } else {
             setNextStepsAction(null);
         }
@@ -278,22 +280,22 @@ const BookingDetails = () => {
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Next Steps</CardTitle>
+                            <CardTitle>Latest Next Step</CardTitle>
                             <CardDescription>
-                                Next steps set by Home0001.
+                                Latest Next step set by Home0001.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             {/* TODO: make this ui much better, use untitledui for inspiration (maybe just make this a third card with profile notes and contact details) */}
                             <div>
-                                Notes: {getPotentialCustomerDetails.data?.nextStepsNotes || "-"}
+                                Notes: {latestNextStep?.nextStepsNotes || "-"}
                             </div>
                             <div>
                                 {/* TODO: format date using format and pass in analytics user's preferred timezone and such */}
-                                Deferred Date: {getPotentialCustomerDetails.data?.deferredDate ? moment.utc(moment.unix(getPotentialCustomerDetails.data?.deferredDate)).format("MMM DD, YYYY") : "-"}
+                                Deferred Date: {latestNextStep?.deferredDate ? moment.utc(moment.unix(latestNextStep?.deferredDate)).format("MMM DD, YYYY") : "-"}
                             </div>
                             <div>
-                                Latest Status: {
+                                Status: {
                                     nextStepsAction ? (
                                         <Badge className={cn(
                                             nextStepsAction.startsWith("action:") ? "bg-red-500 hover:bg-red-500" : "bg-blue-300 hover:bg-blue-300",

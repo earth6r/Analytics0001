@@ -1040,14 +1040,14 @@ export const bookingsRouter = createTRPCRouter({
                 if (result.empty) {
                     await addDoc(tableRef, {
                         email: input.email,
-                        nextStepsNotes: input.nextStepsNotes,
                         nextStepsDropdownValue: input.nextStepsDropdownValue ? [
                             {
                                 value: input.nextStepsDropdownValue,
                                 timestamp: Math.floor(moment.utc().valueOf() / 1000),
+                                nextStepsNotes: input.nextStepsNotes,
+                                deferredDate: input.deferredDate,
                             }
                         ] : [],
-                        deferredDate: input.deferredDate,
                     });
                 } else {
                     const d = doc(tableRef, result.docs[0]?.id);
@@ -1058,13 +1058,13 @@ export const bookingsRouter = createTRPCRouter({
                         currentNextStepsDropdownValue.push({
                             value: input.nextStepsDropdownValue,
                             timestamp: Math.floor(moment.utc().valueOf() / 1000),
+                            nextStepsNotes: input.nextStepsNotes,
+                            deferredDate: input.deferredDate,
                         });
                     }
 
                     await updateDoc(d, {
-                        nextStepsNotes: input.nextStepsNotes,
                         nextStepsDropdownValue: currentNextStepsDropdownValue,
-                        deferredDate: input.deferredDate,
                     });
                 }
             }

@@ -13,10 +13,8 @@ import NextStepsDropdown, { nextStepsMapping } from "./next-steps-dropdown"
 import { Separator } from "../ui/separator"
 import moment from "moment"
 import { cn } from "@/lib/utils"
-import { Skeleton } from "../ui/skeleton"
 
 interface NextStepDialogTabsProps {
-    initialLoading: boolean;
     nextStepsNotes: string;
     setNextStepsNotes: (value: string) => void;
     deferredDate: Date | null;
@@ -34,7 +32,6 @@ interface NextStepDialogTabsProps {
 
 const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
     const {
-        initialLoading,
         nextStepsNotes,
         setNextStepsNotes,
         deferredDate,
@@ -51,13 +48,8 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
     } = props;
 
     return (
-        <Tabs defaultValue="step" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="step">Step</TabsTrigger>
-                <TabsTrigger value="details">Details</TabsTrigger>
-            </TabsList>
-            <TabsContent value="step">
-                <div className="text-xs text-muted-foreground select-none">This is for adding a link to the next steps chain</div>
+        <div className="w-full">
+            <div>
                 <div className="mt-2">
                     <Label>Select a Next Step Type</Label>
                 </div>
@@ -148,37 +140,32 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
                         />
                     </div>
                 }
-            </TabsContent>
-            <TabsContent value="details">
-                {initialLoading ?
-                    <div>
-                        <Skeleton className="h-52" />
-                    </div> :
-                    <div>
-                        <div className="text-xs text-muted-foreground select-none">This is for updating next steps details</div>
-                        <div className="mt-2">
-                            <Label>Notes</Label>
-                        </div>
-                        <Textarea
-                            id="next-steps"
-                            rows={4}
-                            value={nextStepsNotes}
-                            onChange={(e) => setNextStepsNotes(e.target.value)}
-                            className="resize-none"
-                            placeholder="Notes about next steps"
+            </div>
+            <div>
+                <div>
+                    <div className="mt-2">
+                        <Label>Notes</Label>
+                    </div>
+                    <Textarea
+                        id="next-steps"
+                        rows={4}
+                        value={nextStepsNotes}
+                        onChange={(e) => setNextStepsNotes(e.target.value)}
+                        className="resize-none"
+                        placeholder="Notes about next steps"
+                    />
+                    <div className="mt-2">
+                        <Label>Deferred Date</Label>
+                        <DatePicker
+                            placeholder="Select the deferred date"
+                            // @ts-expect-error TODO: Fix DatePicker type
+                            value={deferredDate}
+                            onValueChange={(value) => setDeferredDate(value as Date)}
                         />
-                        <div className="mt-2">
-                            <Label>Deferred Date</Label>
-                            <DatePicker
-                                placeholder="Select the deferred date"
-                                // @ts-expect-error TODO: Fix DatePicker type
-                                value={deferredDate}
-                                onValueChange={(value) => setDeferredDate(value as Date)}
-                            />
-                        </div>
-                    </div>}
-            </TabsContent>
-        </Tabs>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 
