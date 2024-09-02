@@ -1,9 +1,12 @@
+import { useInterval } from "@/contexts/IntervalContext";
 import { formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
 
 const Metrics = () => {
     const getMainLogins = api.user.getMainLogins.useQuery();
     const getAnalyticsLogins = api.user.getAnalyticsLogins.useQuery();
+
+    const { timezone } = useInterval();
 
     return (
         <div className="space-y-6">
@@ -15,7 +18,7 @@ const Metrics = () => {
                     ?.map((login, index) => (
                         <div key={index} className="border-b grid grid-cols-3 gap-6">
                             <div>{login.email}</div>
-                            <div>{formatTimestamp(login.timestamp.seconds, false, 'America/New_York', true)}</div>
+                            <div>{formatTimestamp(login.timestamp.seconds, false, timezone, true)}</div>
                             <div>{login?.ipAddressMetadata?.city || "-"}, {login?.ipAddressMetadata?.country || "-"}</div>
                         </div>
                     ))}
@@ -28,7 +31,7 @@ const Metrics = () => {
                     ?.map((login, index) => (
                         <div key={index} className="border-b grid grid-cols-3 gap-6">
                             <div>{login.email}</div>
-                            <div>{formatTimestamp(login.timestamp, true, 'America/New_York', true)}</div>
+                            <div>{formatTimestamp(login.timestamp, true, timezone, true)}</div>
                             <div>{login?.ipAddressMetadata?.city || "-"}, {login?.ipAddressMetadata?.country || "-"}</div>
                         </div>
                     ))}
