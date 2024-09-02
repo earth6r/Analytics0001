@@ -101,8 +101,8 @@ const DisplayForm = () => {
     await api_utils.userSettings.getUserSettings.refetch();
 
     toast({
-      title: "Interval Updated",
-      description: "Interval has been updated successfully.",
+      title: "Display Settings Updated",
+      description: "Display Settings has been updated successfully.",
       className: toastSuccessStyle,
     });
   }
