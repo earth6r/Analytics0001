@@ -11,6 +11,7 @@ const sendNotification = async (
     lastName: string,
     phoneNumber: string,
     startTimestamp: string,
+    teamMember: string | null,
 ) => {
     // try {
     //     await axios.post(`${API_URL}/send-phone-call-reminder`, {
@@ -26,11 +27,18 @@ const sendNotification = async (
     //     console.error(`Failed to send notification to ${phoneNumber}`, error);
     // }
 
+    let message;
+
+    if (teamMember) {
+        message = `Hi ${firstName}, Quick reminder that you’ll be meeting ${teamMember} on Zoom in an hour. You can find the link in the email confirmation or join the call from the calendar invite. Let us know in case you’d prefer a phone call and we’ll ring you instead. ⁠ And please give us a heads up if you’re running late or need to reschedule.`
+    } else {
+        message = `Hi ${firstName}, Quick reminder that you’ll be meeting a member of the HOME0001 collective on Zoom in an hour. You can find the link in the email confirmation or join the call from the calendar invite. Let us know in case you’d prefer a phone call and we’ll ring you instead. ⁠ And please give us a heads up if you’re running late or need to reschedule.`
+    }
+
     try {
         await axios.post(`${API_URL}/send-message`, {
             recipientPhone: phoneNumber,
-            message:
-                `Hi, this is Talin from HOME0001. Quick reminder that we have a Zoom call coming up in an hour. You can find the call link in the email confirmation and the calendar invite we shared with you. Let me know in case you’d prefer a phone call and we’ll ring you instead.`,
+            message: message,
         })
     } catch (error) {
         console.error(`Failed to send notification to ${phoneNumber}`, error);
@@ -71,6 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 phoneCall.lastName,
                 phoneCall.phoneNumber,
                 startTimestampEst,
+                phoneCall?.interviewer || null,
             );
         }
     }
