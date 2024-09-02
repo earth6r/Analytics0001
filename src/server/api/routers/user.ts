@@ -262,7 +262,7 @@ export const userRouter = createTRPCRouter({
 
                 // check if data has nextStepsDropdownValue or deferredDate or nextStepsNotes
                 if (Object(data).hasOwnProperty('nextStepsDropdownValue') || Object(data).hasOwnProperty('deferredDate') || Object(data).hasOwnProperty('nextStepsNotes')) {
-                    const { nextStepsDropdownValue, deferredDate, nextStepsNotes } = data;
+                    const { nextStepsDropdownValue } = data;
 
                     // query usersBookPhoneCall and usersBookPropertyTour for firstName and lastName
                     let firstName = '';
@@ -301,6 +301,7 @@ export const userRouter = createTRPCRouter({
                             email: data.email,
                             firstName,
                             lastName,
+                            imageUrl: data?.imageUrl || '',
                         },
                         latestNextStep: lastNextStepValue,
                         latestStatus: lastNextStepStatus,

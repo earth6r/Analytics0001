@@ -188,7 +188,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                         <div className="px-6 pb-2">
                             {imageUrl ? <div className="relative flex items-center justify-center h-48">
                                 <Image
-                                    src={validateUrl(imageUrl) ? imageUrl : ""}
+                                    src={validateUrl(imageUrl) ? imageUrl : "https://google.com"}
                                     alt="Preview"
                                     className={cn("rounded-lg border transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
                                     layout="fill"
@@ -251,7 +251,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger className="w-full">
                                 <Button type="submit" className="w-full" onClick={onSubmit}
-                                    disabled={isDisabled}>
+                                    disabled={isDisabled || initialLoading}>
                                     {isLoading ? <Spinner /> :
                                         <div className="flex items-center justify-center space-x-2">
                                             <Save className="w-4 h-4" />

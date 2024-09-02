@@ -140,7 +140,7 @@ const BookingDetails = () => {
                         }</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
-                        <AddImageToUserDialog initialLoading={getPotentialCustomerDetails.isLoading || getPotentialCustomerDetails.isError || getPotentialCustomerDetails.isFetching || getPotentialCustomerDetails.isPending} email={bookingDetails?.data?.email} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
+                        <AddImageToUserDialog initialLoading={getPotentialCustomerDetails.isLoading || getPotentialCustomerDetails.isError || getPotentialCustomerDetails.isFetching || getPotentialCustomerDetails.isPending} email={email as string} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
                         {/* TODO: fix issue of image not showing in mobile view */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

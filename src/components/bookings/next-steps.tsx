@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import { ArrowUpDownIcon, CircleAlert, Hourglass, Plus, X } from "lucide-react";
+import { ArrowUpDownIcon, CircleAlert, Hourglass, Plus, User, X } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
@@ -8,6 +8,9 @@ import { useInterval } from "@/contexts/IntervalContext";
 import NextStepsDialog from "./next-steps-dialog";
 import { Skeleton } from "../ui/skeleton";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useRouter } from "next/router";
 
 interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
@@ -17,6 +20,8 @@ const NextSteps = (props: NextStepsProps) => {
   const { setNextStepsVisible } = props;
 
   const { timezone } = useInterval();
+
+  const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -77,8 +82,8 @@ const NextSteps = (props: NextStepsProps) => {
   }, [allNextSteps.data, sortKey, sortOrder, filterStatus, searchQuery]);
 
   // TODO:
-    // - add profile picture
-    // - add link to booking-details page
+  // - add profile picture
+  // - add link to booking-details page
 
   return (
     <div>
@@ -219,10 +224,79 @@ const NextSteps = (props: NextStepsProps) => {
         <div>
           {sortedData.map((data, index) => (
             <div key={index} className="grid grid-cols-12 gap-4 items-center space-y-2 border-b py-2">
-              <div className="col-span-2">
-                <div>{data.profile.firstName} {data.profile.lastName}</div>
-                <div className="text-muted-foreground">{data.profile.email}</div>
-              </div>
+
+              <TooltipProvider>
+                <Tooltip delayDuration={200}>
+                  <TooltipTrigger asChild>
+                    <div
+                      className="col-span-2 flex cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      onClick={async () =>
+                        await router.push(
+                          `/booking-details?email=${data.profile.email}`,
+                        )
+                      }
+                    >
+                      <div>
+                        <Avatar className="h-10 w-10 rounded-lg border">
+                          <AvatarImage
+                            src={data.profile?.imageUrl}
+                            alt="@user"
+                            className="object-cover"
+                          />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div>
+                        <div>
+                          {data.profile.firstName || "No First Name Provided"}{" "}
+                          {data.profile.lastName || "No Last Name Provided"}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {data.profile.email || "No Email Provided"}
+                        </div>
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="flex flex-row items-center space-x-4 p-1">
+                      <div>
+                        {/* TODO: make this a component and reuse above's component and make className a prop b/c above is different class */}
+                        <Avatar className="h-24 w-24 rounded-lg border">
+                          <AvatarImage
+                            src={data.profile?.imageUrl}
+                            alt="@user"
+                            className="object-cover"
+                          />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div>
+                        <div className="text-lg">
+                          {data.profile.firstName || "No First Name Provided"}{" "}
+                          {data.profile.lastName || "No Last Name Provided"}
+                        </div>
+                        <div className="text-md text-muted-foreground">
+                          {data.profile.email || "No Email Provided"}
+                        </div>
+                        <div
+                          className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"
+                          onClick={async () =>
+                            await router.push(
+                              `/booking-details?email=${data.profile.email}`,
+                            )
+                          }
+                        >
+                          <div className="flex flex-row items-center justify-center space-x-2">
+                            <User className="h-4 w-4" />
+                            <h1>View Profile</h1>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <div>
                   {data.latestStatus && (
