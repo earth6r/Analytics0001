@@ -278,7 +278,12 @@ const Bookings = () => {
                           }}
                         >
                           <div className="flex flex-row items-center space-x-2">
-                            <h1>{status}</h1>
+                            <h1 className="capitalize flex flex-row items-center space-x-1">
+                              {status.split("-").map((word, index) => (
+                                // TODO: make the badge color dynamic based on its status i.e. completed is green, cancelled and no-show is red, etc.
+                                <h1 key={index} className="capitalize">{word}</h1>
+                              ))}
+                            </h1>
                             <X className="h-4 w-4" />
                           </div>
                         </Badge>
@@ -304,7 +309,11 @@ const Bookings = () => {
                             }}
                           >
                             <div className="flex flex-row items-center space-x-2">
-                              <h1>{status}</h1>
+                              <h1 className="capitalize flex flex-row items-center space-x-1">
+                                {status.split("-").map((word, index) => (
+                                  <h1 key={index} className="capitalize">{word}</h1>
+                                ))}
+                              </h1>
                               <Plus className="h-4 w-4" />
                             </div>
                           </Badge>

@@ -34,14 +34,13 @@ const StatusSelect = (props: StatusSelectProps) => {
             <div
                 className="flex flex-row items-center space-x-2"
             >
-                {!editMode && <div className="flex flex-row items-center space-x-1">
-                    {value.split("-").map((word, index) => (
-                        // TODO: make the badge color dynamic based on its status i.e. completed is green, cancelled and no-show is red, etc.
-                        <Badge key={index} variant="secondary">
-                            <h1 className="capitalize">{word}</h1>
-                        </Badge>
-                    ))}
-                </div>}
+                {!editMode &&
+                    <Badge variant="secondary" className="flex flex-row items-center space-x-1 select-none">
+                        {value.split("-").map((word, index) => (
+                            // TODO: make the badge color dynamic based on its status i.e. completed is green, cancelled and no-show is red, etc.
+                            <h1 key={index} className="capitalize">{word}</h1>
+                        ))}
+                    </Badge>}
                 {editMode && <SelectTrigger className="w-[140px] focus:outline-none focus:ring-0 select-none">
                     {loading ? <div className="w-full flex items-center justify-center">
                         <Spinner />
