@@ -13,7 +13,7 @@ import { Textarea } from "../ui/textarea"
 import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
 import Spinner from "../common/spinner";
-import { Check, CircleAlert, Hourglass, NotepadText } from "lucide-react";
+import { Check, CircleAlert, Hourglass, Maximize2, Minimize2, NotepadText } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
 import { Slider } from "../ui/slider";
 import CircularQuestionMarkTooltip from "../common/circular-question-mark-tooltip";
@@ -69,6 +69,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [nextStepsDropdownValue, setNextStepsDropdownValue] = useState<string>('');
     const [otherNextSteps, setOtherNextSteps] = useState<string>('');
     const [existingChainVisible, setExistingChainVisible] = useState(false);
+    const [maximized, setMaximized] = useState(false);
 
     const existingNextSteps = api.bookings.getNextSteps.useQuery(
         {
@@ -102,15 +103,34 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                     <span>Meeting Notes</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] p-0 select-none">
+            <DialogContent className={cn("p-0 select-none", maximized ? "max-w-[95%] h-[95%]" : "sm:max-w-[425px]")}>
                 <DialogHeader className="px-6 pt-6">
-                    <DialogTitle>Meeting Notes</DialogTitle>
+                    <DialogTitle className="flex flex-row items-center space-x-2">
+                        <div>
+                            Meeting Notes
+                        </div>
+                        <div className="hidden md:block">
+                            {maximized ? <div
+                                className="hover:bg-accent w-6 h-6 rounded-md p-1 flex items-center justify-center"
+                                onClick={() => setMaximized(false)}
+                            >
+                                <Minimize2 className="w-4 h-4" />
+                            </div> : <div
+                                className="hover:bg-accent w-6 h-6 rounded-md p-1 flex items-center justify-center"
+                                onClick={() => setMaximized(true)}
+                            >
+                                <Maximize2 className="w-4 h-4" />
+                            </div>}
+                        </div>
+                    </DialogTitle>
                     <DialogDescription>
-                        Meeting notes about the potential customer. Click the checkbox if the criteria is met.
+                        Meeting notes about the potential customer.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="max-h-96 overflow-y-scroll">
-                    <div className="grid gap-4 px-6 py-2">
+                {/* TODO: try making a grid-cols-2 with two things in same row i.e. product fit and budget in same row, need to account for minimize styling as well */}
+                <div className={cn("overflow-y-scroll", maximized ? "h-full" : "max-h-96")}>
+                    {/* MEETING NOTES */}
+                    <div className="grid gap-4 px-6 py-2 w-full">
                         <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
@@ -472,6 +492,19 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             </div>
                         </div>
                     </div>
+
+                    {/* PROFILE DATA */}
+                    {/* <div className="grid gap-4 px-6 py-2 w-full">
+                        <Separator className="w-full text-blue-500" />
+                        <div>
+                            <h1 className="font-bold text-lg">User Profile</h1>
+                            <h2 className="text-sm text-muted-foreground">
+                                {`Information about the potential customer. This will be saved to the user's profile.`}
+                            </h2>
+                        </div>
+                        <div>
+                        </div>
+                    </div> */}
                 </div>
                 <DialogFooter className="px-6 pb-6">
                     <Button onClick={
