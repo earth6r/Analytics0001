@@ -27,6 +27,7 @@ const InterviewerDropdown = (props: InterviewerDropdownProps) => {
                     <SelectItem value="Arthur">Arthur</SelectItem>
                     <SelectItem value="Marty">Marty</SelectItem>
                     <SelectItem value="Annika">Annika</SelectItem>
+                    <SelectItem value="Carl">Carl</SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>
