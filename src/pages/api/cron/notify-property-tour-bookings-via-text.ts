@@ -5,6 +5,10 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import moment from "moment-timezone";
 import { type NextApiRequest, type NextApiResponse } from "next/types";
 
+export const config = {
+  maxDuration: 300,
+}
+
 const sendNotification = async (
   email: string,
   firstName: string,
