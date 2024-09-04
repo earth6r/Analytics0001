@@ -303,12 +303,10 @@ export const userRouter = createTRPCRouter({
                     let type = null;
 
                     if (!phoneCallBookingDetails.empty) {
-                        console.log("JSON:phoneCallBookingDetails", JSON.stringify(phoneCallBookingDetails?.docs[0]))
                         bookingUid = phoneCallBookingDetails?.docs[0]?.id;
                         type = 'Phone Call';
                     }
                     if (!propertyTourBookingDetails.empty) {
-                        console.log("JSON:propertyTourBookingDetails", JSON.stringify(propertyTourBookingDetails?.docs[0]))
                         bookingUid = propertyTourBookingDetails?.docs[0]?.id;
                         type = 'Property Tour';
                     }
