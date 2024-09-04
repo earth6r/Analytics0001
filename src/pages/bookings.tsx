@@ -32,6 +32,7 @@ import {
   Phone,
   Plus,
   School,
+  SquareArrowOutUpRight,
   Trash2,
   User,
   X,
@@ -506,6 +507,24 @@ const Bookings = () => {
                         {formatTimestamp(booking.startTimestamp, true, timezone) ||
                           "No Start Timestamp Provided"}
                       </div>
+                      {booking?.status !== "completed" &&
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <div className="cursor-pointer hover:text-blue-500 hover:bg-accent w-8 h-8 rounded-md p-1 flex items-center justify-center" onClick={
+                                () => {
+                                  window.open(ZOOM_URL, "_blank");
+                                }
+                              }>
+                                <SquareArrowOutUpRight className="h-4 w-4" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Click to open zoom link in new tab</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      }
                     </div>
                     {/* <div>{booking.property || "No Property Type Provided"}</div> */}
                     <div
