@@ -296,6 +296,23 @@ export const userRouter = createTRPCRouter({
                     const lastDeferredDate = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].deferredDate : null;
                     const lastNotes = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].nextStepsNotes : null;
 
+                    const phoneCallBookingDetails = await getDocs(query(collection(db, 'usersBookPhoneCall'), where('email', '==', data.email)));
+                    const propertyTourBookingDetails = await getDocs(query(collection(db, 'usersBookPropertyTour'), where('email', '==', data.email)));
+
+                    let bookingUid = null;
+                    let type = null;
+
+                    if (!phoneCallBookingDetails.empty) {
+                        console.log("JSON:phoneCallBookingDetails", JSON.stringify(phoneCallBookingDetails?.docs[0]))
+                        bookingUid = phoneCallBookingDetails?.docs[0]?.id;
+                        type = 'Phone Call';
+                    }
+                    if (!propertyTourBookingDetails.empty) {
+                        console.log("JSON:propertyTourBookingDetails", JSON.stringify(propertyTourBookingDetails?.docs[0]))
+                        bookingUid = propertyTourBookingDetails?.docs[0]?.id;
+                        type = 'Property Tour';
+                    }
+
                     nextSteps.push({
                         profile: {
                             email: data.email,
@@ -307,6 +324,8 @@ export const userRouter = createTRPCRouter({
                         latestStatus: lastNextStepStatus,
                         deferredDate: lastDeferredDate,
                         notes: lastNotes,
+                        bookingUid,
+                        type,
                     });
                 }
             }

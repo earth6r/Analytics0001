@@ -232,7 +232,7 @@ const NextSteps = (props: NextStepsProps) => {
                       className="col-span-2 flex cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                       onClick={async () =>
                         await router.push(
-                          `/booking-details?email=${data.profile.email}`,
+                          `/booking-details?email=${data.profile.email}&type=${data.type}&uid=${data.uid}`,
                         )
                       }
                     >
