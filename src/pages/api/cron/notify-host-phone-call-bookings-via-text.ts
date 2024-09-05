@@ -74,14 +74,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const interviewerPhone = interviewers[phoneCall?.interviewer];
             await sendNotification(
                 interviewerPhone,
-                `REMINDER: You have a call with ${phoneCall.firstName} ${phoneCall.lastName} in 30min. Check the profile here: https://home0001.com/booking-details?email=${phoneCall.email}&type=Phone%20Call&uid=${phoneCall.uid}`,
+                `REMINDER: You have a call with ${phoneCall.firstName} ${phoneCall.lastName} in 30min. Check the profile here: https://analytics.home0001.com/booking-details?email=${phoneCall.email}&type=Phone%20Call&uid=${phoneCall.uid}`,
             );
         } else if (minutesUntilTour === -30 && Object.keys(interviewers).includes(phoneCall?.interviewer || '')) {
             // @ts-expect-error TODO: fix this type error
             const interviewerPhone = interviewers[phoneCall?.interviewer];
             await sendNotification(
                 interviewerPhone,
-                `REMINDER complete the post-meeting notes for your call with ${phoneCall.firstName} ${phoneCall.lastName}. You can leave your notes here: https://home0001.com/booking-details?email=${phoneCall.email}&type=Phone%20Call&uid=${phoneCall.uid}`,
+                `REMINDER complete the post-meeting notes for your call with ${phoneCall.firstName} ${phoneCall.lastName}. You can leave your notes here: https://analytics.home0001.com/booking-details?email=${phoneCall.email}&type=Phone%20Call&uid=${phoneCall.uid}`,
             );
         }
     }

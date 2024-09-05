@@ -283,8 +283,8 @@ const Header = () => {
           </form>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <Avatar className="h-10 w-10">
+              <Button variant="secondary" size="icon" className="rounded-md">
+                <Avatar className="h-10 w-10 rounded-md">
                   <AvatarImage
                     src={
                       profilePictureUrl ?? (name

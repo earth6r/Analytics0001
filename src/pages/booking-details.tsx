@@ -362,7 +362,7 @@ const BookingDetails = () => {
                                         booking ? (booking?.firstName + " " + booking?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
                                     }
                                 </CardDescription>
-                                {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive">
+                                {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive" className="select-none">
                                     <AlertCircle className="h-4 w-4" />
                                     <AlertTitle>Action Required</AlertTitle>
                                     <AlertDescription>

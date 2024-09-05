@@ -169,7 +169,7 @@ const Bookings = () => {
           getBookings.data?.some(
             (booking: any) => booking.status === "pending",
           ) && (
-            <Alert variant="destructive" className="mb-4">
+            <Alert variant="destructive" className="mb-4 select-none">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Action Required</AlertTitle>
               <AlertDescription>
