@@ -48,18 +48,11 @@ NO PRI:
 - link validation for socials for update-profile.tsx inputs
 - add labels (bigger) to sections of Profile Data inputs
 - fix border-red-500 in bookings.tsx not doing the full width
+- add social icons to booking-details page and the social inputs of profile data as an icon (maybe placeholder?)
 
 HI PRI:
 - TODO: profile and meeting notes needs input fields of google docs
-    - make two save buttons for meeting notes ✅
-    - add in trpc use query to set default values so its always an update ✅
-    - add trpc mutation for update ✅
-    - add <UpdateProfile> to booking-details page ✅
     - query db i.e. bookings as well so it will have values otherwise would need to be stored twice
-
-- send email to user when they are rescheduled via google calendar api (might need to delete the old event and create a new one)
-
-- TODO: reschedule whatsapp message template
 
 - NEW MESSAGE LOOK: https://discord.com/channels/@me/935969951754375169/1280652341246296254
 
