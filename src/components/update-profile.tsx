@@ -85,9 +85,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
     const [otherNeighborhoods, setOtherNeighborhoods] = useState<string>("");
     const [otherCities, setOtherCities] = useState<string>("");
     const [additionalNotes, setAdditionalNotes] = useState<string>("");
-    const [tourWhichApartmentsDidTheySee, setTourWhichApartmentsDidTheySee] = useState<string>("");
-    const [tourWhichApartmentsAreTheirFavorites, setTourWhichApartmentsAreTheirFavorites] = useState<string>("");
-    const [tourAdditionalNotes, setTourAdditionalNotes] = useState<string>("");
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -164,9 +161,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             setOtherNeighborhoods(data?.otherNeighborhoods || "");
             setOtherCities(data?.otherCities || "");
             setAdditionalNotes(data?.additionalNotes || "");
-            setTourWhichApartmentsDidTheySee(data?.tourWhichApartmentsDidTheySee || "");
-            setTourWhichApartmentsAreTheirFavorites(data?.tourWhichApartmentsAreTheirFavorites || "");
-            setTourAdditionalNotes(data?.tourAdditionalNotes || "");
         }
     }, [getProfileData.data]);
 
@@ -235,9 +229,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             otherNeighborhoods,
             otherCities,
             additionalNotes,
-            tourWhichApartmentsDidTheySee,
-            tourWhichApartmentsAreTheirFavorites,
-            tourAdditionalNotes,
         });
 
         await getProfileData.refetch();
