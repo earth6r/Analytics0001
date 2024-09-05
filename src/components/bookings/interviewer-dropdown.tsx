@@ -19,10 +19,10 @@ const InterviewerDropdown = (props: InterviewerDropdownProps) => {
     // TODO: when changed, update immediately in the database instead of saving in state (just like the status select)
     return (
         <Select value={value} onValueChange={onChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] select-none">
                 <SelectValue placeholder="Select an interviewer" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="select-none">
                 <SelectGroup>
                     {
                         Object.keys(interviewers).map((interviewer) => (

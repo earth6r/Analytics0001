@@ -60,4 +60,5 @@ HI PRI:
 
 LOW PRI:
 - filter by host
-- add advanced options for reschedule
+- add advanced options for reschedule (including regular values + add in a "host" option, see other things that can be added maybe (fill in potentialCustomers details with what it can i.e. name, email, phone, etc. if it doesn't exist))
+- booking details should show skeleton when initially loading instead of saying undefined
