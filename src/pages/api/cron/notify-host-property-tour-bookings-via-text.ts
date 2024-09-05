@@ -82,13 +82,13 @@ export default async function handler(
             const interviewerPhone = interviewers["Carl"];
             await sendNotification(
                 interviewerPhone,
-                `REMINDER: You’re doing a tour with ${propertyTour.firstName} ${propertyTour.lastName} in 30min. Check the profile here: https://home0001.com/booking-details?email=${propertyTour.email}&type=Property Tour&uid=${propertyTour.uid}`,
+                `REMINDER: You’re doing a tour with ${propertyTour.firstName} ${propertyTour.lastName} in 30min. Check the profile here: https://home0001.com/booking-details?email=${propertyTour.email}&type=Property%20Tour&uid=${propertyTour.uid}`,
             );
         } else if (minutesUntilTour === -45) {
             const interviewerPhone = interviewers["Carl"];
             await sendNotification(
                 interviewerPhone,
-                `REMINDER complete the post-meeting notes after your tour with ${propertyTour.firstName} ${propertyTour.lastName}. You can leave your notes here: https://home0001.com/booking-details?email=${propertyTour.email}&type=Property Tour&uid=${propertyTour.uid}`,
+                `REMINDER complete the post-meeting notes after your tour with ${propertyTour.firstName} ${propertyTour.lastName}. You can leave your notes here: https://home0001.com/booking-details?email=${propertyTour.email}&type=Property%20Tour&uid=${propertyTour.uid}`,
             );
         }
     }
