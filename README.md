@@ -52,14 +52,20 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- TODO: profile and meeting notes needs input fields of google docs
-    - query db i.e. bookings as well so it will have values otherwise would need to be stored twice
-
-- NEW MESSAGE LOOK: https://discord.com/channels/@me/935969951754375169/1280652341246296254
-
-- reschedule should not show in next steps table: https://discord.com/channels/@me/935969951754375169/1280601124537372846
+- potentialCustomers needs to always have firstName and lastName and phoneNumber, when creating a booking, set these values in the customer, update booking-details to display potentialCustomers, remove firstName and lastName field in profileData
+- truncate email, name (not in hover, just first ui)
+- status field for next steps table with a button in next steps table once clicked, sets to completed but when adding a new next step, it will remove the completed status (boolean for each step)
+- show all next steps in the next steps table, just just the last next step in the array
+- move tour blue google doc inputs in meeting notes section - Textarea (add it, do not remove old inputs)
+- green info should only show in booking-details (hide this in the dialog of meeting-notes)
+- remove multiple tabs
+- google docs has the right order
+- fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
+- make the booking-detilas page look like a traditional settings page and remove the cards of all the items, make it boxless
+- when expanded, make the ui different to not make it stretched
+- if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
 
 LOW PRI:
 - filter by host
 - add advanced options for reschedule (including regular values + add in a "host" option, see other things that can be added maybe (fill in potentialCustomers details with what it can i.e. name, email, phone, etc. if it doesn't exist))
-- booking details should show skeleton when initially loading instead of saying undefined
+- booking details first and last name should show skeleton when initially loading instead of saying undefined
