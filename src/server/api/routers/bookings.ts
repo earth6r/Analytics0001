@@ -1089,4 +1089,51 @@ export const bookingsRouter = createTRPCRouter({
                 return result?.docs[0]?.data();
             }
         ),
+
+    getProfileData: publicProcedure
+        .input(z.object({
+            email: z.string(),
+        }))
+        .query(async ({ input }) => {
+            const tableNameRef = "potentialCustomers";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const result = await getDocs(query(tableRef, where("email", "==", input.email)));
+
+            if (result.empty) {
+                return null;
+            }
+
+            const data = result?.docs[0]?.data();
+
+            return data;
+        }),
+
+    updateProfileData: publicProcedure
+        .input(z.any()) // TODO: add zod schema with exact types
+        .mutation(async ({ input }) => {
+            const tableNameRef = "potentialCustomers";
+
+            const tableRef = collection(db, tableNameRef);
+
+            console.log(`---------------------------------`);
+            console.log(input);
+            console.log(`---------------------------------`);
+
+            const result = await getDocs(query(tableRef, where("email", "==", input.email)));
+
+            if (result.empty) {
+                await addDoc(tableRef, {
+                    ...input,
+                    email: input.email,
+                });
+            }
+
+            const d = doc(tableRef, result.docs[0]?.id);
+
+            await updateDoc(d, {
+                ...input,
+            });
+        }),
 });

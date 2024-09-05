@@ -26,6 +26,8 @@ import { cn } from "@/lib/utils";
 import NextStepsDropdown, { nextStepsMapping } from "./next-steps-dropdown";
 import { Separator } from "../ui/separator";
 import moment from "moment";
+import UpdateProfile from "../update-profile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface MarkCompletedPostNotesDialogProps {
     booking: any;
@@ -129,6 +131,16 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                 </DialogHeader>
                 {/* TODO: try making a grid-cols-2 with two things in same row i.e. product fit and budget in same row, need to account for minimize styling as well */}
                 <div className={cn("overflow-y-scroll", maximized ? "h-full" : "max-h-96")}>
+                    {/* <Tabs defaultValue="meeting" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="meeting">Meeting Notes</TabsTrigger>
+                            <TabsTrigger value="profile">Profile Data</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="meeting">
+                        </TabsContent>
+                        <TabsContent value="profile">
+                        </TabsContent>
+                    </Tabs> */}
                     {/* MEETING NOTES */}
                     <div className="grid gap-4 px-6 py-2 w-full">
                         <div>
@@ -493,8 +505,96 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                         </div>
                     </div>
 
+                    <div className="px-6 pb-6">
+                        <Button onClick={
+                            async () => {
+                                setLoading(true);
+                                await completeBooking.mutateAsync({
+                                    uid: booking?.uid,
+                                    bookingType: booking?.type,
+                                    productFit: productFitChecked,
+                                    productFitNotes: projectFitNotes,
+                                    budget: budgetChecked,
+                                    budgetAmount: sliderValue[0] as number,
+                                    budgetAmountMax: sliderValueMax[0] as number,
+                                    interest: interestChecked,
+                                    interestNotes: interestNotes,
+                                    communityMember: communityChecked,
+                                    losAngeles: losAngelesChecked,
+                                    newYork: newYorkChecked,
+                                    paris: parisChecked,
+                                    london: londonChecked,
+                                    berlin: berlinChecked,
+                                    mexicoCity: mexicoCityChecked,
+                                    somewhereElse: somewhereElseChecked,
+                                    somewhereElseNotes: somewhereElseNotes,
+                                    timing: timingChecked,
+                                    selectedDate: selectedDate,
+                                    timeline: timelineSelectedValue ?? null,
+                                    bookATour: bookATourChecked,
+                                });
+
+                                let deferredDateUtc = null;
+                                if (deferredDate) {
+                                    deferredDateUtc = moment(deferredDate).utc().unix();
+                                }
+
+                                await addNextSteps.mutateAsync({
+                                    email: booking?.email,
+                                    nextStepsNotes,
+                                    nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,
+                                    deferredDate: deferredDateUtc,
+                                });
+                                await api_utils.user.allNextSteps.refetch();
+                                await api_utils.user.getPotentialCustomerDetails.refetch();
+                                await existingNextSteps.refetch();
+                                await getBooking.refetch();
+                                setOpen(false);
+                                setLoading(false);
+
+                                setProductFitChecked(false);
+                                setProjectFitNotes('');
+                                setBudgetChecked(false);
+                                setSliderValue([500_000]);
+                                setSliderValueMax([2_000_000]);
+                                setInterestChecked(false);
+                                setInterestNotes('');
+                                setCommunityChecked(false);
+                                setLosAngelesChecked(false);
+                                setNewYorkChecked(false);
+                                setParisChecked(false);
+                                setLondonChecked(false);
+                                setBerlinChecked(false);
+                                setMexicoCityChecked(false);
+                                setSomewhereElseChecked(false);
+                                setSomewhereElseNotes('');
+                                setTimingChecked(false);
+                                setSelectedDate(undefined);
+                                setBookATourChecked(false);
+
+                                toast({
+                                    title: "Success", // TODO: keep all the titles and descriptions the same format and similar text labels
+                                    description: "Marked booking as completed",
+                                    className: toastSuccessStyle,
+                                })
+                            }
+                        }
+                            disabled={loading || (
+                                nextStepsDropdownValue === "other" && !otherNextSteps
+                            )}
+                            className="w-full"
+                        >
+                            {loading ? <Spinner /> :
+                                <div className="flex items-center justify-center space-x-2">
+                                    <Check className="w-4 h-4" />
+                                    <h1>Mark As Completed</h1>
+                                </div>
+                            }
+                        </Button>
+                    </div>
+
                     {/* PROFILE DATA */}
-                    {/* <div className="grid gap-4 px-6 py-2 w-full">
+                    <div className="grid gap-4 px-6 py-2 w-full mb-4">
                         <Separator className="w-full text-blue-500" />
                         <div>
                             <h1 className="font-bold text-lg">User Profile</h1>
@@ -502,97 +602,13 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                                 {`Information about the potential customer. This will be saved to the user's profile.`}
                             </h2>
                         </div>
-                        <div>
-                        </div>
-                    </div> */}
+                        <UpdateProfile
+                            isTour={booking.type === "Property Tour"}
+                            email={booking.email}
+                            setIsOpen={setOpen}
+                        />
+                    </div>
                 </div>
-                <DialogFooter className="px-6 pb-6">
-                    <Button onClick={
-                        async () => {
-                            setLoading(true);
-                            await completeBooking.mutateAsync({
-                                uid: booking?.uid,
-                                bookingType: booking?.type,
-                                productFit: productFitChecked,
-                                productFitNotes: projectFitNotes,
-                                budget: budgetChecked,
-                                budgetAmount: sliderValue[0] as number,
-                                budgetAmountMax: sliderValueMax[0] as number,
-                                interest: interestChecked,
-                                interestNotes: interestNotes,
-                                communityMember: communityChecked,
-                                losAngeles: losAngelesChecked,
-                                newYork: newYorkChecked,
-                                paris: parisChecked,
-                                london: londonChecked,
-                                berlin: berlinChecked,
-                                mexicoCity: mexicoCityChecked,
-                                somewhereElse: somewhereElseChecked,
-                                somewhereElseNotes: somewhereElseNotes,
-                                timing: timingChecked,
-                                selectedDate: selectedDate,
-                                timeline: timelineSelectedValue ?? null,
-                                bookATour: bookATourChecked,
-                            });
-
-                            let deferredDateUtc = null;
-                            if (deferredDate) {
-                                deferredDateUtc = moment(deferredDate).utc().unix();
-                            }
-
-                            await addNextSteps.mutateAsync({
-                                email: booking?.email,
-                                nextStepsNotes,
-                                nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,
-                                deferredDate: deferredDateUtc,
-                            });
-                            await api_utils.user.allNextSteps.refetch();
-                            await api_utils.user.getPotentialCustomerDetails.refetch();
-                            await existingNextSteps.refetch();
-                            await getBooking.refetch();
-                            setOpen(false);
-                            setLoading(false);
-
-                            setProductFitChecked(false);
-                            setProjectFitNotes('');
-                            setBudgetChecked(false);
-                            setSliderValue([500_000]);
-                            setSliderValueMax([2_000_000]);
-                            setInterestChecked(false);
-                            setInterestNotes('');
-                            setCommunityChecked(false);
-                            setLosAngelesChecked(false);
-                            setNewYorkChecked(false);
-                            setParisChecked(false);
-                            setLondonChecked(false);
-                            setBerlinChecked(false);
-                            setMexicoCityChecked(false);
-                            setSomewhereElseChecked(false);
-                            setSomewhereElseNotes('');
-                            setTimingChecked(false);
-                            setSelectedDate(undefined);
-                            setBookATourChecked(false);
-
-                            toast({
-                                title: "Success", // TODO: keep all the titles and descriptions the same format and similar text labels
-                                description: "Marked booking as completed",
-                                className: toastSuccessStyle,
-                            })
-                        }
-                    }
-                        disabled={loading || (
-                            nextStepsDropdownValue === "other" && !otherNextSteps
-                        )}
-                        className="w-full"
-                    >
-                        {loading ? <Spinner /> :
-                            <div className="flex items-center justify-center space-x-2">
-                                <Check className="w-4 h-4" />
-                                <h1>Mark As Completed</h1>
-                            </div>
-                        }
-                    </Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

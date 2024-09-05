@@ -46,7 +46,7 @@ export function formatTimestamp(timestampStr: string, threeDigits: boolean = tru
   date = date.tz(timezone);
 
   // Format components
-  const month = date.format('MMMM');
+  const month = date.format('MMM');
   const day = date.format('DD');
   const hours = date.format('h');
   const minutes = date.format('mm');

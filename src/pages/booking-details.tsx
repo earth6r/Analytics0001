@@ -18,6 +18,7 @@ import { useInterval } from "@/contexts/IntervalContext";
 import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
 import moment from "moment";
 import DeleteNextStepChainLink from "@/components/bookings/delete-next-step-chain-link";
+import UpdateProfile from "@/components/update-profile";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -188,6 +189,10 @@ const BookingDetails = () => {
                         There are multiple waitlist details for this email. We will show as many details as possible.
                     </AlertDescription>
                 </Alert>}
+
+                <div className="mt-4">
+                    <UpdateProfile email={email as string} isTour={true} setIsOpen={undefined} />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card className="mt-6 w-full">

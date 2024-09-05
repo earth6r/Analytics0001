@@ -423,7 +423,9 @@ const Bookings = () => {
                 {sortedData?.map((booking: any) => (
                   <div
                     key={booking.uid}
-                    className={cn("grid grid-cols-11 items-center gap-4")}
+                    className={cn("grid grid-cols-11 items-center gap-4",
+                      // booking?.status === "pending" && "border border-red-500" // TODO: fix this
+                    )}
                   >
                     <TooltipProvider>
                       <Tooltip delayDuration={200}>
@@ -505,7 +507,7 @@ const Bookings = () => {
                       )}
                       <div>
                         {formatTimestamp(booking.startTimestamp, true, timezone) ||
-                          "No Start Timestamp Provided"}
+                          "-"}
                       </div>
                       {booking?.status !== "completed" &&
                         <TooltipProvider>
