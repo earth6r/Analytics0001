@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { interviewers } from "@/lib/constants";
 
 interface InterviewerDropdownProps {
     value: string;
@@ -23,11 +24,13 @@ const InterviewerDropdown = (props: InterviewerDropdownProps) => {
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem value="Christopher">Christopher</SelectItem>
-                    <SelectItem value="Arthur">Arthur</SelectItem>
-                    <SelectItem value="Marty">Marty</SelectItem>
-                    <SelectItem value="Annika">Annika</SelectItem>
-                    <SelectItem value="Carl">Carl</SelectItem>
+                    {
+                        Object.keys(interviewers).map((interviewer) => (
+                            <SelectItem key={interviewer} value={interviewer}>
+                                {interviewer}
+                            </SelectItem>
+                        ))
+                    }
                 </SelectGroup>
             </SelectContent>
         </Select>

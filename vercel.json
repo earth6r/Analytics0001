@@ -11,6 +11,14 @@
     {
       "path": "/api/cron/notify-property-tour-bookings-via-text",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/notify-host-phone-call-bookings-via-text",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/notify-host-property-tour-bookings-via-text",
+      "schedule": "* * * * *"
     }
   ]
 }
