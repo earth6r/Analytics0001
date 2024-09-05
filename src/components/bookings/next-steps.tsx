@@ -330,7 +330,7 @@ const NextSteps = (props: NextStepsProps) => {
               <div className="col-span-1">
                 <NextStepsDialog
                   email={data.profile.email}
-                  variant="Modify"
+                  variant="Add Next Step"
                 />
               </div>
             </div>
@@ -413,7 +413,7 @@ const NextStepsCard = (props: NextStepsCardProps) => {
           <div className="mt-2">
             <NextStepsDialog
               email={item?.profile?.email}
-              variant="Modify"
+              variant="Add Next Step"
             />
           </div>
         </div>

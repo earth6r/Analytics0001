@@ -49,6 +49,7 @@ NO PRI:
 - add labels (bigger) to sections of Profile Data inputs
 - fix border-red-500 in bookings.tsx not doing the full width
 - add social icons to booking-details page and the social inputs of profile data as an icon (maybe placeholder?)
+- add a notification number beside bookings if there are pending bookings
 
 HI PRI:
 - TODO: profile and meeting notes needs input fields of google docs
