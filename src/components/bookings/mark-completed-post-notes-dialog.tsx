@@ -133,7 +133,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                 {/* TODO: try making a grid-cols-2 with two things in same row i.e. product fit and budget in same row, need to account for minimize styling as well */}
                 <div className={cn("overflow-y-scroll", maximized ? "h-full" : "max-h-96")}>
                     {/* MEETING NOTES */}
-                    <div className="grid gap-4 w-full">
+                    <div className="grid gap-4 w-full px-6 pb-4">
                         <div>
                             <div className="flex flex-row items-center justify-between">
                                 <div className="flex items-center space-x-1">
