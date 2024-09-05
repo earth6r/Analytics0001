@@ -191,7 +191,7 @@ const BookingDetails = () => {
                 </Alert>}
 
                 <div className="mt-4">
-                    <UpdateProfile email={email as string} isTour={true} setIsOpen={undefined} />
+                    <UpdateProfile email={email as string} setIsOpen={undefined} />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

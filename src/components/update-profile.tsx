@@ -13,13 +13,12 @@ import { toastSuccessStyle } from "@/lib/toast-styles";
 import { Skeleton } from "./ui/skeleton";
 
 interface UpdateProfileProps {
-    isTour: boolean;
     email: string;
     setIsOpen?: (isOpen: boolean) => void;
 }
 
 const UpdateProfile = (props: UpdateProfileProps) => {
-    const { isTour, email, setIsOpen = null } = props;
+    const { email, setIsOpen = null } = props;
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -1209,48 +1208,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         className="mt-1"
                     />
                 </div>
-
-                {isTour && (
-                    <div>
-                        <div>
-                            <Label>Which apartments did they see?</Label>
-                            <Input
-                                id="tourWhichApartmentsDidTheySee"
-                                value={tourWhichApartmentsDidTheySee}
-                                placeholder="Which apartments did they see?"
-                                onChange={(e) => {
-                                    setTourWhichApartmentsDidTheySee(e.target.value);
-                                }}
-                                className="mt-1"
-                            />
-                        </div>
-                        <div>
-                            <Label>Which apartments are their favorites?</Label>
-                            <Input
-                                id="tourWhichApartmentsAreTheirFavorites"
-                                value={tourWhichApartmentsAreTheirFavorites}
-                                placeholder="Which apartments are their favorites?"
-                                onChange={(e) => {
-                                    setTourWhichApartmentsAreTheirFavorites(e.target.value);
-                                }}
-                                className="mt-1"
-                            />
-                        </div>
-                        <div>
-                            <Label>Additional Notes:</Label>
-                            <Input
-                                id="tourAdditionalNotes"
-                                value={tourAdditionalNotes}
-                                placeholder="Additional Notes"
-                                onChange={(e) => {
-                                    setTourAdditionalNotes(e.target.value);
-                                }}
-                                className="mt-1"
-                            />
-                        </div>
-                    </div>
-                )}
-
                 <Button
                     onClick={onSubmit}
                 >
