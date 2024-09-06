@@ -52,7 +52,7 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- potentialCustomers needs to always have firstName and lastName and phoneNumber, when creating a booking, set  these values in the customer, update booking-details to display potentialCustomers, remove firstName and lastName field in profileData
+- update booking-details to display first name and last name from potentialCustomers
 - truncate email, name (not in hover, just first ui)
 - status field for next steps table with a button in next steps table once clicked, sets to completed but when adding a new next step, it will remove the completed status (boolean for each step)
 - show all next steps in the next steps table, just just the last next step in the array

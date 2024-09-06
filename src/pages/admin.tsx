@@ -28,7 +28,7 @@ const PotentialCustomer = (props: PotentialCustomerProps) => {
             </div>
             <div>
                 First Name:
-                {firstName ||
+                {
                     <Input
                         value={_firstName}
                         onChange={(e) => _setFirstName(e.target.value)}
@@ -37,7 +37,7 @@ const PotentialCustomer = (props: PotentialCustomerProps) => {
             </div>
             <div>
                 Last Name:
-                {lastName ||
+                {
                     <Input
                         value={_lastName}
                         onChange={(e) => _setLastName(e.target.value)}
@@ -46,7 +46,7 @@ const PotentialCustomer = (props: PotentialCustomerProps) => {
             </div>
             <div>
                 Phone:
-                {phoneNumber ||
+                {
                     <Input
                         value={_phoneNumber}
                         onChange={(e) => _setPhoneNumber(e.target.value)}
