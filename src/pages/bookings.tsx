@@ -453,7 +453,7 @@ const Bookings = () => {
                                 {booking.firstName || "No First Name Provided"}{" "}
                                 {booking.lastName || "No Last Name Provided"}
                               </div>
-                              <div className="text-sm text-muted-foreground">
+                              <div className="text-sm text-muted-foreground max-w-36 truncate">
                                 {booking.email || "No Email Provided"}
                               </div>
                             </div>
