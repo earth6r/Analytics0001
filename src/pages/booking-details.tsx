@@ -137,7 +137,7 @@ const BookingDetails = () => {
                     <div className="flex flex-row items-center space-x-2">
                         <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => referral ? router.push(referral as string) : router.push("/bookings")} />
                         <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">{
-                            bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                            getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
                         }</h1>
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
@@ -253,7 +253,7 @@ const BookingDetails = () => {
                             <CardTitle>Contact Details</CardTitle>
                             <CardDescription>
                                 Contact details for {
-                                    bookingDetails.data ? (bookingDetails.data?.firstName + " " + bookingDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                    getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
                                 }
                             </CardDescription>
                         </CardHeader>
@@ -274,7 +274,7 @@ const BookingDetails = () => {
                                 <div className="flex flex-row items-center space-x-2">
                                     <Bell className="w-4 h-4" />
                                     <div>
-                                        {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium : "-"}
+                                        {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium + " is the preferred communication" : "-"}
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +359,7 @@ const BookingDetails = () => {
                                 </CardTitle>
                                 <CardDescription>
                                     Appointment details for {
-                                        booking ? (booking?.firstName + " " + booking?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                        getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
                                     }
                                 </CardDescription>
                                 {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive" className="select-none">
