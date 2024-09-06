@@ -930,7 +930,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                 <div>
                     <Label>Buying Timeline</Label>
                     {
-                        ["Immediate", "1-3", "3-6", "6-12", "12 - 18 mos", "18 - 24 mos", "24 months+"]
+                        ["Immediate", "1-3 months", "3-6 months", "6-12 months", "12 - 18 months", "18 - 24 months", "24 months+"]
                             .map((timeline) => (
                                 <div key={timeline} className="flex items-center space-x-1">
                                     <h1 className="text-sm">{timeline}</h1>
