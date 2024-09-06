@@ -11,6 +11,7 @@ import Spinner from "./common/spinner";
 import { toast } from "./ui/use-toast";
 import { toastSuccessStyle } from "@/lib/toast-styles";
 import { Skeleton } from "./ui/skeleton";
+import { Textarea } from "./ui/textarea";
 
 interface UpdateProfileProps {
     email: string;
@@ -240,6 +241,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             otherNeighborhoods,
             otherCities,
             additionalNotes,
+            profileNotes,
         });
 
         await getProfileData.refetch();
@@ -436,14 +438,14 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         {/* profile notes */}
                         <div>
                             <Label htmlFor="profileNotes">Profile Notes</Label>
-                            <Input
+                            <Textarea
                                 id="profileNotes"
                                 value={profileNotes}
                                 placeholder="Profile Notes"
                                 onChange={(e) => {
                                     setProfileNotes(e.target.value);
                                 }}
-                                className="mt-1"
+                                className="mt-1 resize-none"
                             />
                         </div>
                     </div>
