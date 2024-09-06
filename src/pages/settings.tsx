@@ -234,6 +234,12 @@ const Settings = () => {
                 </h3>
                 <Separator className="mb-6 mt-6" />
                 <AccountForm />
+                <div
+                  className="mt-2 text-sm text-blue-500 hover:underline cursor-pointer select-none"
+                  onClick={() => router.push(`/admin`)}
+                >
+                  View Admin Portal
+                </div>
               </div>
             )}
 
