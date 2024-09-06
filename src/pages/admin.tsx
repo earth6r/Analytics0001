@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+import { toastSuccessStyle } from "@/lib/toast-styles";
 import { api } from "@/utils/api";
 import { useState } from "react";
 
@@ -63,6 +65,11 @@ const PotentialCustomer = (props: PotentialCustomerProps) => {
                             phoneNumber: _phoneNumber,
                         });
                         await potentialCustomers.refetch();
+                        toast({
+                            title: "Success",
+                            description: "Potential customer updated",
+                            className: toastSuccessStyle,
+                        })
                     }}
                 >Save</Button>
             </div>
