@@ -245,38 +245,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
     return (
         <div>
             {getProfileData.isLoading ? <Skeleton className="h-24" /> : <div className="grid gap-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                    <div className="">
-                        <div className="flex items-center space-x-1">
-                            <Label htmlFor="firstName">First Name</Label>
-                        </div>
-                        <Input
-                            id="firstName"
-                            value={firstName}
-                            placeholder="First Name"
-                            onChange={(e) => {
-                                setFirstName(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div className="">
-                        <div className="flex items-center space-x-1">
-                            <Label htmlFor="lastName">Last Name</Label>
-                        </div>
-                        <Input
-                            id="lastName"
-                            value={lastName}
-                            placeholder="Last Name"
-                            onChange={(e) => {
-                                setLastName(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-                </div>
-
                 <div className="">
                     <div className="flex items-center space-x-1">
                         <Label htmlFor="gender">Gender</Label>
