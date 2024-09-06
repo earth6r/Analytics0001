@@ -144,7 +144,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             setLookingForUnitType(data?.lookingForUnitType || "");
             setOtherUnitType(""); // because when submitting, if its other, it will get saved in lookingForUnitType and not otherUnitType
             setSliderValueMax([data?.maxBudget || 2_000_000]);
-            setBuyingTimeline(data?.buyingTimeline || "");
+            setBuyingTimeline(data?.buyingTimeline || []);
             setFunnelType(data?.funnelType || "");
             setRealBuyerTimeline(data?.realBuyerTimeline || "");
             setRelevantProperty(data?.relevantProperty || []);
