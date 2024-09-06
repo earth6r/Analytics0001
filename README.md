@@ -52,7 +52,7 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- potentialCustomers needs to always have firstName and lastName and phoneNumber, when creating a booking, set these values in the customer, update booking-details to display potentialCustomers, remove firstName and lastName field in profileData
+- potentialCustomers needs to always have firstName and lastName and phoneNumber, when creating a booking, set  these values in the customer, update booking-details to display potentialCustomers, remove firstName and lastName field in profileData
 - truncate email, name (not in hover, just first ui)
 - status field for next steps table with a button in next steps table once clicked, sets to completed but when adding a new next step, it will remove the completed status (boolean for each step)
 - show all next steps in the next steps table, just just the last next step in the array
@@ -61,9 +61,10 @@ HI PRI:
 - remove multiple tabs
 - google docs has the right order
 - fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
-- make the booking-detilas page look like a traditional settings page and remove the cards of all the items, make it boxless
+- make the booking-details page look like a traditional settings page and remove the cards of all the items, make it boxless
 - when expanded, make the ui different to not make it stretched
 - if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
+- i need meeting notes and next steps for property tours as well in mobile view
 
 LOW PRI:
 - filter by host
