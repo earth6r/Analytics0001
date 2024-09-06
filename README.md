@@ -52,7 +52,6 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- truncate email, name (not in hover, just first ui)
 - status field for next steps table with a button in next steps table once clicked, sets to completed but when adding a new next step, it will remove the completed status (boolean for each step)
 - show all next steps in the next steps table, just just the last next step in the array
 - move tour blue google doc inputs in meeting notes section - Textarea (add it, do not remove old inputs)
