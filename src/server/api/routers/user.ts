@@ -291,7 +291,7 @@ export const userRouter = createTRPCRouter({
                         }
 
                         let nextStepValue = nextStep.value;
-                        let status = nextStepValue.startsWith("action:") ? "Action Required" : "Awaiting Response";
+                        const status = nextStepValue.startsWith("action:") ? "Action Required" : "Awaiting Response";
 
                         // @ts-expect-error TODO: fix this type
                         if (nextStepsMapping[nextStepValue]) {
