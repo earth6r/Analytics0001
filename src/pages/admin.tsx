@@ -16,9 +16,9 @@ interface PotentialCustomerProps {
 const PotentialCustomer = (props: PotentialCustomerProps) => {
     const { uid, email, firstName, lastName, phoneNumber } = props;
 
-    const [_firstName, _setFirstName] = useState(firstName);
-    const [_lastName, _setLastName] = useState(lastName);
-    const [_phoneNumber, _setPhoneNumber] = useState(phoneNumber);
+    const [_firstName, _setFirstName] = useState(firstName || "");
+    const [_lastName, _setLastName] = useState(lastName || "");
+    const [_phoneNumber, _setPhoneNumber] = useState(phoneNumber || "");
 
     const potentialCustomers = api.bookings.getPotentialCustomers.useQuery();
     const updatePotentialCustomer = api.bookings.updatePotentialCustomer.useMutation();
