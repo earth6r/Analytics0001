@@ -5,6 +5,7 @@ import { put } from '@vercel/blob';
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { db } from "@/utils/firebase/initialize";
 import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
+import { profile } from "console";
 
 // Set configuration options for the API route
 export const config = {
@@ -282,52 +283,59 @@ export const userRouter = createTRPCRouter({
                         lastName = querySnapshot?.docs[0]?.data().lastName;
                     }
 
-                    let lastNextStepValue = (nextStepsDropdownValue || []).length > 0 ? (nextStepsDropdownValue[nextStepsDropdownValue.length - 1].value) : null;
-                    const lastNextStepStatus = lastNextStepValue?.startsWith("action:") ? "Action Required" : "Awaiting Response";
+                    const subNextSteps = [];
+                    for (let i = 0; i < nextStepsDropdownValue.length; i++) {
+                        const nextStep = nextStepsDropdownValue[i];
+                        if (nextStep?.completed) {
+                            continue;
+                        }
 
-                    // @ts-expect-error TODO: fix this type
-                    if (lastNextStepValue && nextStepsMapping[lastNextStepValue]) {
+                        let nextStepValue = nextStep.value;
+                        let status = nextStepValue.startsWith("action:") ? "Action Required" : "Awaiting Response";
+
                         // @ts-expect-error TODO: fix this type
-                        lastNextStepValue = nextStepsMapping[lastNextStepValue];
-                    } else if (lastNextStepValue) {
-                        lastNextStepValue = lastNextStepValue?.replace('action:', '').replace('awaiting:', '');
-                    }
+                        if (nextStepsMapping[nextStepValue]) {
+                            // @ts-expect-error TODO: fix this type
+                            nextStepValue = nextStepsMapping[nextStepValue];
+                        } else {
+                            nextStepValue = nextStepValue.replace('action:', '').replace('awaiting:', '');
+                        }
 
-                    const lastDeferredDate = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].deferredDate : null;
-                    const lastNotes = (nextStepsDropdownValue || []).length > 0 ? nextStepsDropdownValue[nextStepsDropdownValue.length - 1].nextStepsNotes : null;
+                        const phoneCallBookingDetails = await getDocs(query(collection(db, 'usersBookPhoneCall'), where('email', '==', data.email)));
+                        const propertyTourBookingDetails = await getDocs(query(collection(db, 'usersBookPropertyTour'), where('email', '==', data.email)));
 
-                    const phoneCallBookingDetails = await getDocs(query(collection(db, 'usersBookPhoneCall'), where('email', '==', data.email)));
-                    const propertyTourBookingDetails = await getDocs(query(collection(db, 'usersBookPropertyTour'), where('email', '==', data.email)));
+                        let bookingUid = null;
+                        let type = null;
 
-                    let bookingUid = null;
-                    let type = null;
+                        if (!phoneCallBookingDetails.empty) {
+                            bookingUid = phoneCallBookingDetails?.docs[0]?.id;
+                            type = 'Phone Call';
+                        }
+                        if (!propertyTourBookingDetails.empty) {
+                            bookingUid = propertyTourBookingDetails?.docs[0]?.id;
+                            type = 'Property Tour';
+                        }
 
-                    if (!phoneCallBookingDetails.empty) {
-                        bookingUid = phoneCallBookingDetails?.docs[0]?.id;
-                        type = 'Phone Call';
-                    }
-                    if (!propertyTourBookingDetails.empty) {
-                        bookingUid = propertyTourBookingDetails?.docs[0]?.id;
-                        type = 'Property Tour';
-                    }
+                        subNextSteps.push({
+                            index: i,
+                            profile: {
+                                email: data.email,
+                                firstName,
+                                lastName,
+                                imageUrl: data?.imageUrl || `https://ui-avatars.com/api/?name=${firstName} ${lastName}`,
+                            },
+                            latestNextStep: nextStepValue,
+                            latestStatus: status,
+                            deferredDate: nextStep.deferredDate,
+                            notes: nextStep.nextStepsNotes,
+                            bookingUid,
+                            type,
+                        });
+                    };
 
-                    nextSteps.push({
-                        profile: {
-                            email: data.email,
-                            firstName,
-                            lastName,
-                            imageUrl: data?.imageUrl || '',
-                        },
-                        latestNextStep: lastNextStepValue,
-                        latestStatus: lastNextStepStatus,
-                        deferredDate: lastDeferredDate,
-                        notes: lastNotes,
-                        bookingUid,
-                        type,
-                    });
+                    nextSteps.push(...subNextSteps);
                 }
             }
-
             return nextSteps;
         }),
 

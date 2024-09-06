@@ -1181,4 +1181,35 @@ export const bookingsRouter = createTRPCRouter({
                 phoneNumber: input.phoneNumber,
             });
         }),
+
+        markNextStepAsCompleted: publicProcedure
+        .input(z.object({
+            email: z.string(),
+            index: z.number(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = "potentialCustomers";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const result = await getDocs(query(tableRef, where("email", "==", input.email)));
+
+            if (result.empty) {
+                return;
+            }
+
+            const d = doc(tableRef, result.docs[0]?.id);
+
+            const currentNextStepsDropdownValue = result.docs[0]?.data()?.nextStepsDropdownValue || [];
+
+            if (currentNextStepsDropdownValue.length <= input.index) {
+                return;
+            }
+
+            currentNextStepsDropdownValue[input.index].completed = true;
+
+            await updateDoc(d, {
+                nextStepsDropdownValue: currentNextStepsDropdownValue,
+            });
+        }),
 });

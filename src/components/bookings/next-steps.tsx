@@ -11,6 +11,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/router";
+import MarkNextStepsAsCompletedDialog from "./mark-next-step-as-completed-dialog";
 
 interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
@@ -176,7 +177,7 @@ const NextSteps = (props: NextStepsProps) => {
           </div>
 
           {/* Notes */}
-          <div className="col-span-3 flex select-none flex-row items-center justify-start space-x-2">
+          <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Notes</h1>
           </div>
 
@@ -215,10 +216,18 @@ const NextSteps = (props: NextStepsProps) => {
           </div>
 
           {/* Actions */}
-          <div className="col-span-1 flex select-none flex-row items-center justify-start space-x-2">
+          <div className="col-span-2 flex select-none flex-row items-center justify-start space-x-2">
             <h1>Actions</h1>
           </div>
         </div>
+
+        {allNextSteps.isLoading && (
+          <div className="space-y-2">
+            <Skeleton className="h-24" />
+            <Skeleton className="h-24" />
+            <Skeleton className="h-24" />
+          </div>
+        )}
 
         {/* Test Data Rows */}
         <div>
@@ -313,7 +322,7 @@ const NextSteps = (props: NextStepsProps) => {
                   {data.latestNextStep || "-"}
                 </div>
               </div>
-              <div className="col-span-3 whitespace-pre-wrap break-words">
+              <div className="col-span-2 whitespace-pre-wrap break-words">
                 {data.notes || "-"}
               </div>
               <div className="col-span-2">
@@ -327,10 +336,14 @@ const NextSteps = (props: NextStepsProps) => {
                 </Badge>
               </div>
 
-              <div className="col-span-1">
+              <div className="col-span-2 flex flex-row items-center space-x-2">
                 <NextStepsDialog
                   email={data.profile.email}
                   variant="Add"
+                />
+                <MarkNextStepsAsCompletedDialog
+                  index={data.index}
+                  email={data.profile.email}
                 />
               </div>
             </div>
@@ -414,6 +427,13 @@ const NextStepsCard = (props: NextStepsCardProps) => {
             <NextStepsDialog
               email={item?.profile?.email}
               variant="Add"
+            />
+          </div>
+
+          <div className="mt-2">
+            <MarkNextStepsAsCompletedDialog
+              index={item?.index}
+              email={item?.profile?.email}
             />
           </div>
         </div>

@@ -148,7 +148,6 @@ const NextStepDialogTabs = (props: NextStepDialogTabsProps) => {
                     </div>
                     <Textarea
                         id="next-steps"
-                        rows={4}
                         value={nextStepsNotes}
                         onChange={(e) => setNextStepsNotes(e.target.value)}
                         className="resize-none"
