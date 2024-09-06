@@ -67,7 +67,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
     const [lookingForUnitType, setLookingForUnitType] = useState(""); // Studio, Townhouse, 1 Bedroom, 2 Bedroom, 3 Bedroom, Other
     const [otherUnitType, setOtherUnitType] = useState("");
     const [sliderValue,] = useState([500_000]);
-    const [sliderValueMax, setSliderValueMax] = useState([2_000_000]);
+    const [sliderValueMax, setSliderValueMax] = useState<number[] | null>([2_000_000]);
     const [buyingTimeline, setBuyingTimeline] = useState<string[]>([]); //  immediate, 1-3, 3-6, 6-12, 12 - 18 mos, 18 - 24 mos, 24 months+
     const [funnelType, setFunnelType] = useState(""); // Real Buyer, Window Shopper, Long Term Lead, Fan, Unqualified
     const [realBuyerTimeline, setRealBuyerTimeline] = useState(""); // Immediate, Midterm, Longterm
@@ -143,7 +143,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             setLookingForNeighborhood(data?.lookingForNeighborhood || "");
             setLookingForUnitType(data?.lookingForUnitType || "");
             setOtherUnitType(""); // because when submitting, if its other, it will get saved in lookingForUnitType and not otherUnitType
-            setSliderValueMax([data?.maxBudget || 2_000_000]);
+            setSliderValueMax(data?.maxBudget ? [data?.maxBudget] : null);
             setBuyingTimeline(data?.buyingTimeline || []);
             setFunnelType(data?.funnelType || "");
             setRealBuyerTimeline(data?.realBuyerTimeline || "");
@@ -211,7 +211,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             lookingForCity,
             lookingForNeighborhood,
             lookingForUnitType: lookingForUnitType === "Other" ? otherUnitType : lookingForUnitType,
-            maxBudget: sliderValueMax[0],
+            maxBudget: (sliderValueMax && sliderValueMax.length > 0) ? sliderValueMax[0] : null,
             buyingTimeline,
             funnelType,
             realBuyerTimeline: funnelType === "Real Buyer" ? realBuyerTimeline : null,
@@ -909,12 +909,14 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         </div>
                     </div>
                     <div className="flex flex-row items-center justify-center mt-1">
-                        <div className="text-muted-foreground text-sm">
+                        {sliderValueMax ? <div className="text-muted-foreground text-sm">
                             {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                        </div>
+                        </div> : <div className="text-muted-foreground text-sm">
+                            Unknown
+                        </div>}
                     </div>
                     <Slider
-                        value={sliderValueMax}
+                        value={sliderValueMax || [500_000]}
                         onValueChange={(value) => {
                             if (value[0] && sliderValue[0] && value[0] >= sliderValue[0]) {
                                 setSliderValueMax(value);
