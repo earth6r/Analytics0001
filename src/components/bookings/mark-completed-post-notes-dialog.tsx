@@ -496,6 +496,13 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                         </div>
                     </div>
 
+                    <div className="grid gap-4 w-full px-6 pb-4">
+                        <UpdateProfile
+                            email={booking.email}
+                            showProfileInputs={false}
+                        />
+                    </div>
+
                     <div className="px-6 pb-4 mt-2">
                         <Button onClick={
                             async () => {

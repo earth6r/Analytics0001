@@ -52,20 +52,19 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- status field for next steps table with a button in next steps table once clicked, sets to completed but when adding a new next step, it will remove the completed status (boolean for each step)
-- show all next steps in the next steps table, just just the last next step in the array
 - move tour blue google doc inputs in meeting notes section - Textarea (add it, do not remove old inputs)
 - green info should only show in booking-details (hide this in the dialog of meeting-notes)
-- remove multiple tabs
 - google docs has the right order
-- fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
 - make the booking-details page look like a traditional settings page and remove the cards of all the items, make it boxless
 - when expanded, make the ui different to not make it stretched
 - if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
 - i need meeting notes and next steps for property tours as well in mobile view
+- fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
 
 LOW PRI:
 - filter by host
 - add advanced options for reschedule (including regular values + add in a "host" option, see other things that can be added maybe (fill in potentialCustomers details with what it can i.e. name, email, phone, etc. if it doesn't exist))
 - booking details first and last name should show skeleton when initially loading instead of saying undefined
 - fix issue of adding next steps in next steps table row of adding ring to notes input
+- when creating a new next step, add advanced options to mark previous next step as completed
+- advanced options for reschedule booking
