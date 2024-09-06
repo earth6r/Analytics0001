@@ -1136,4 +1136,49 @@ export const bookingsRouter = createTRPCRouter({
                 ...input,
             });
         }),
+
+    getPotentialCustomers: publicProcedure
+        .query(async () => {
+            const tableNameRef = "potentialCustomers";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const result = await getDocs(tableRef);
+
+            // @ts-expect-error TODO: fix type
+            const data = [];
+
+            result.forEach((doc) => {
+                data.push(
+                    {
+                        uid: doc.id,
+                        ...doc.data(),
+                    }
+                );
+            });
+
+            // @ts-expect-error TODO: fix type
+            return data;
+        }),
+
+    updatePotentialCustomer: publicProcedure
+        .input(z.object({
+            uid: z.string(),
+            firstName: z.string(),
+            lastName: z.string(),
+            phoneNumber: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = "potentialCustomers";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            await updateDoc(d, {
+                firstName: input.firstName,
+                lastName: input.lastName,
+                phoneNumber: input.phoneNumber,
+            });
+        }),
 });
