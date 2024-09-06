@@ -68,7 +68,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
     const [otherUnitType, setOtherUnitType] = useState("");
     const [sliderValue,] = useState([500_000]);
     const [sliderValueMax, setSliderValueMax] = useState([2_000_000]);
-    const [buyingTimeline, setBuyingTimeline] = useState(""); //  immediate, 1-3, 3-6, 6-12, 12 - 18 mos, 18 - 24 mos, 24 months+
+    const [buyingTimeline, setBuyingTimeline] = useState<string[]>([]); //  immediate, 1-3, 3-6, 6-12, 12 - 18 mos, 18 - 24 mos, 24 months+
     const [funnelType, setFunnelType] = useState(""); // Real Buyer, Window Shopper, Long Term Lead, Fan, Unqualified
     const [realBuyerTimeline, setRealBuyerTimeline] = useState(""); // Immediate, Midterm, Longterm
     const [relevantProperty, setRelevantProperty] = useState<string[]>([]); // LES, Bed Stuy, Echo Park
@@ -929,19 +929,25 @@ const UpdateProfile = (props: UpdateProfileProps) => {
 
                 <div>
                     <Label>Buying Timeline</Label>
-                    <Select value={buyingTimeline || undefined} onValueChange={setBuyingTimeline}>
-                        <SelectTrigger className="w-full mt-1">
-                            <SelectValue placeholder="Select a buying timeline" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {["Immediate", "1-3 months", "3-6 months", "6-12 months", "12 - 18 months", "18 - 24 months", "24 months+"]
-                                .map((buyingTimelineItem) => (
-                                    <SelectItem key={buyingTimelineItem} value={buyingTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                        {buyingTimelineItem}
-                                    </SelectItem>
-                                ))}
-                        </SelectContent>
-                    </Select>
+                    {
+                        ["Immediate", "1-3", "3-6", "6-12", "12 - 18 mos", "18 - 24 mos", "24 months+"]
+                            .map((timeline) => (
+                                <div key={timeline} className="flex items-center space-x-1">
+                                    <h1 className="text-sm">{timeline}</h1>
+                                    <Checkbox
+                                        id={timeline}
+                                        checked={buyingTimeline.includes(timeline)}
+                                        onCheckedChange={(checked) => {
+                                            if (checked) {
+                                                setBuyingTimeline([...buyingTimeline, timeline]);
+                                            } else {
+                                                setBuyingTimeline(buyingTimeline.filter((item) => item !== timeline));
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            ))
+                    }
                 </div>
 
                 <div>
