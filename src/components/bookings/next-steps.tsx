@@ -251,7 +251,7 @@ const NextSteps = (props: NextStepsProps) => {
                           {data.profile.firstName || "No First Name Provided"}{" "}
                           {data.profile.lastName || "No Last Name Provided"}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-muted-foreground max-w-32 truncate">
                           {data.profile.email || "No Email Provided"}
                         </div>
                       </div>
@@ -272,11 +272,11 @@ const NextSteps = (props: NextStepsProps) => {
                       </div>
                       <div>
                         <div className="text-lg">
-                          {data.profile.firstName || "No First Name Provided"}{" "}
-                          {data.profile.lastName || "No Last Name Provided"}
+                          {data.profile.firstName || "-"}{" "}
+                          {data.profile.lastName || "-"}
                         </div>
                         <div className="text-md text-muted-foreground">
-                          {data.profile.email || "No Email Provided"}
+                          {data.profile.email || "-"}
                         </div>
                         <div
                           className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"
@@ -330,7 +330,7 @@ const NextSteps = (props: NextStepsProps) => {
               <div className="col-span-1">
                 <NextStepsDialog
                   email={data.profile.email}
-                  variant="Add Next Step"
+                  variant="Add"
                 />
               </div>
             </div>
@@ -413,7 +413,7 @@ const NextStepsCard = (props: NextStepsCardProps) => {
           <div className="mt-2">
             <NextStepsDialog
               email={item?.profile?.email}
-              variant="Add Next Step"
+              variant="Add"
             />
           </div>
         </div>
