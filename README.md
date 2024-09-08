@@ -69,6 +69,3 @@ LOW PRI:
 - when creating a new next step, add advanced options to mark previous next step as completed
 - advanced options for reschedule booking
 - mobile cards for bookings needs icon for phone vs tours and should not show meeting link but a link to the location or something
-
-IPR NOTES:
-- max budget still not fixed of UNKNOWN
