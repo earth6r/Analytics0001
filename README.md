@@ -56,8 +56,9 @@ HI PRI:
 - make the booking-details page look like a traditional settings page and remove the cards of all the items, make it boxless
 - when expanded, make the ui different to not make it stretched
 - if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
-- i need meeting notes and next steps for property tours as well in mobile view
 - fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
+- advanced options for reschedule booking
+- add a clear button for max budget if they have a value but want to undo (unknown) or a checkbox to set to unknown? also other fields that don't have a clear button that the user can't clear i.e. inputs can be cleared, selects can't
 
 LOW PRI:
 - filter by host
@@ -65,5 +66,5 @@ LOW PRI:
 - booking details first and last name should show skeleton when initially loading instead of saying undefined
 - fix issue of adding next steps in next steps table row of adding ring to notes input
 - when creating a new next step, add advanced options to mark previous next step as completed
-- advanced options for reschedule booking
 - mobile cards for bookings needs icon for phone vs tours and should not show meeting link but a link to the location or something
+- i need meeting notes and next steps for property tours as well in mobile view
