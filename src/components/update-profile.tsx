@@ -66,6 +66,8 @@ const UpdateProfile = (props: UpdateProfileProps) => {
     const [OMANotes, setOMANotes] = useState("");
     const [interestInHomeSwapping, setInterestInHomeSwapping] = useState<boolean | null>(null);
     const [interestInHomeSwappingNotes, setInterestInHomeSwappingNotes] = useState("");
+    const [interestInFurniture, setInterestInFurniture] = useState<boolean | null>(null);
+    const [interestInFurnitureNotes, setInterestInFurnitureNotes] = useState("");
     const [currentlyLivingIn, setCurrentlyLivingIn] = useState("");
     const [currentLivingSituation, setCurrentLivingSituation] = useState("");
     const [firstTimeBuyer, setFirstTimeBuyer] = useState<boolean | null>(null);
@@ -144,6 +146,8 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             setOMANotes(data?.OMANotes || "");
             setInterestInHomeSwapping(data?.interestInHomeSwapping || null);
             setInterestInHomeSwappingNotes(data?.interestInHomeSwappingNotes || "");
+            setInterestInFurniture(data?.interestInFurniture || null);
+            setInterestInFurnitureNotes(data?.interestInFurnitureNotes || "");
             setCurrentlyLivingIn(data?.currentlyLivingIn || "");
             setCurrentLivingSituation(data?.currentLivingSituation || "");
             setFirstTimeBuyer(data?.firstTimeBuyer || null);
@@ -215,6 +219,8 @@ const UpdateProfile = (props: UpdateProfileProps) => {
             OMANotes,
             interestInHomeSwapping,
             interestInHomeSwappingNotes,
+            interestInFurniture,
+            interestInFurnitureNotes,
             currentlyLivingIn,
             currentLivingSituation,
             firstTimeBuyer,
@@ -555,47 +561,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         }
                     </div>
 
-                    <div>
-                        <Label htmlFor="bio">Bio</Label>
-                        <Input
-                            id="bio"
-                            value={bio}
-                            placeholder="Bio"
-                            onChange={(e) => {
-                                setBio(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="personalNotes">Personal Notes</Label>
-                        <Input
-                            id="personalNotes"
-                            value={personalNotes}
-                            placeholder="Personal Notes"
-                            onChange={(e) => {
-                                setPersonalNotes(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div className="">
-                        <div className="flex items-center space-x-1">
-                            <Label htmlFor="communityFit">Community Fit</Label>
-                        </div>
-                        <Input
-                            id="communityFit"
-                            value={communityFit}
-                            placeholder="Community Fit"
-                            onChange={(e) => {
-                                setCommunityFit(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
                     <div className="">
                         <div className="flex items-center space-x-1">
                             <Label htmlFor="communityScore">Community Score</Label>
@@ -668,19 +633,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                     </div>
 
                     <div>
-                        <Label htmlFor="eyeCatchingNote">Eye Catching Note</Label>
-                        <Input
-                            id="eyeCatchingNote"
-                            value={eyeCatchingNote}
-                            placeholder="Eye Catching Note"
-                            onChange={(e) => {
-                                setEyeCatchingNote(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div>
                         <div className="flex flex-row items-center space-x-2">
                             <Label>Know OMA</Label>
                             <Checkbox
@@ -724,30 +676,29 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         </div>
                     </div>
 
+                    {/* interest in furniture (checkbox + input), assume value exists */}
                     <div>
-                        <Label htmlFor="currentlyLivingIn">Currently Living In</Label>
-                        <Input
-                            id="currentlyLivingIn"
-                            value={currentlyLivingIn}
-                            placeholder="Currently Living In"
-                            onChange={(e) => {
-                                setCurrentlyLivingIn(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="currentLivingSituation">Current Living Situation</Label>
-                        <Input
-                            id="currentLivingSituation"
-                            value={currentLivingSituation}
-                            placeholder="Current Living Situation (eg. rental, lease expiring Feb 25; own a home they are selling)"
-                            onChange={(e) => {
-                                setCurrentLivingSituation(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
+                        <Label>Interest in Furniture</Label>
+                        <div className="flex items-center space-x-1">
+                            <h1 className="text-sm">Yes</h1>
+                            <Checkbox
+                                id="interestInFurniture"
+                                checked={interestInFurniture || false}
+                                onCheckedChange={(checked) => setInterestInFurniture(!!checked)}
+                            />
+                        </div>
+                        <div>
+                            <Label>Interest in Furniture Notes</Label>
+                            <Input
+                                id="interestInFurnitureNotes"
+                                value={interestInFurnitureNotes}
+                                placeholder="Interest in Furniture Notes"
+                                onChange={(e) => {
+                                    setInterestInFurnitureNotes(e.target.value);
+                                }}
+                                className="mt-2"
+                            />
+                        </div>
                     </div>
 
                     <div>
@@ -887,32 +838,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                     </div>
 
                     <div>
-                        <Label htmlFor="lookingForCity">Looking For City</Label>
-                        <Input
-                            id="lookingForCity"
-                            value={lookingForCity}
-                            placeholder="Looking For City"
-                            onChange={(e) => {
-                                setLookingForCity(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="lookingForNeighborhood">Looking For Neighborhood</Label>
-                        <Input
-                            id="lookingForNeighborhood"
-                            value={lookingForNeighborhood}
-                            placeholder="Looking For Neighborhood"
-                            onChange={(e) => {
-                                setLookingForNeighborhood(e.target.value);
-                            }}
-                            className="mt-1"
-                        />
-                    </div>
-
-                    <div>
                         <Label>Looking For Unit Type</Label>
                         <Select value={lookingForUnitType || undefined} onValueChange={setLookingForUnitType}>
                             <SelectTrigger className="w-full mt-1">
@@ -1000,67 +925,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                     </div>
 
                     <div>
-                        <Label>Funnel Type</Label>
-                        <Select value={funnelType || undefined} onValueChange={setFunnelType}>
-                            <SelectTrigger className="w-full mt-1">
-                                <SelectValue placeholder="Select a funnel type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {["Real Buyer", "Window Shopper", "Long Term Lead", "Fan", "Unqualified"]
-                                    .map((funnelTypeItem) => (
-                                        <SelectItem key={funnelTypeItem} value={funnelTypeItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                            {funnelTypeItem}
-                                        </SelectItem>
-                                    ))}
-                            </SelectContent>
-                        </Select>
-
-                        {
-                            funnelType === "Real Buyer" && (
-                                <div>
-                                    <Label>Real Buyer Timeline</Label>
-                                    <Select value={realBuyerTimeline || undefined} onValueChange={setRealBuyerTimeline}>
-                                        <SelectTrigger className="w-full mt-1">
-                                            <SelectValue placeholder="Select a real buyer timeline" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {["Immediate", "Midterm", "Longterm"]
-                                                .map((realBuyerTimelineItem) => (
-                                                    <SelectItem key={realBuyerTimelineItem} value={realBuyerTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                                        {realBuyerTimelineItem}
-                                                    </SelectItem>
-                                                ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            )
-                        }
-                    </div>
-
-                    {/* multi checkbox */}
-                    <div>
-                        <Label>Relevant Property</Label>
-                        {
-                            ["LES", "Bed Stuy", "Echo Park"].map((property) => (
-                                <div key={property} className="flex items-center space-x-1">
-                                    <h1 className="text-sm">{property}</h1>
-                                    <Checkbox
-                                        id={property}
-                                        checked={relevantProperty.includes(property)}
-                                        onCheckedChange={(checked) => {
-                                            if (checked) {
-                                                setRelevantProperty([...relevantProperty, property]);
-                                            } else {
-                                                setRelevantProperty(relevantProperty.filter((item) => item !== property));
-                                            }
-                                        }}
-                                    />
-                                </div>
-                            ))
-                        }
-                    </div>
-
-                    <div>
                         <div className="flex flex-row items-center space-x-2">
                             <Label>Travel For Work</Label>
                             <Checkbox
@@ -1136,6 +1000,159 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                                     ))}
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div>
+                        <Label>Relevant Property</Label>
+                        {
+                            ["LES", "Bed Stuy", "Echo Park"].map((property) => (
+                                <div key={property} className="flex items-center space-x-1">
+                                    <h1 className="text-sm">{property}</h1>
+                                    <Checkbox
+                                        id={property}
+                                        checked={relevantProperty.includes(property)}
+                                        onCheckedChange={(checked) => {
+                                            if (checked) {
+                                                setRelevantProperty([...relevantProperty, property]);
+                                            } else {
+                                                setRelevantProperty(relevantProperty.filter((item) => item !== property));
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            ))
+                        }
+                    </div>
+
+                    <div>
+                        <Label htmlFor="personalNotes">Personal Notes</Label>
+                        <Input
+                            id="personalNotes"
+                            value={personalNotes}
+                            placeholder="Personal Notes"
+                            onChange={(e) => {
+                                setPersonalNotes(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div className="">
+                        <div className="flex items-center space-x-1">
+                            <Label htmlFor="communityFit">Community Fit</Label>
+                        </div>
+                        <Input
+                            id="communityFit"
+                            value={communityFit}
+                            placeholder="Community Fit"
+                            onChange={(e) => {
+                                setCommunityFit(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="eyeCatchingNote">Eye Catching Note</Label>
+                        <Input
+                            id="eyeCatchingNote"
+                            value={eyeCatchingNote}
+                            placeholder="Eye Catching Note"
+                            onChange={(e) => {
+                                setEyeCatchingNote(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="currentlyLivingIn">Currently Living In</Label>
+                        <Input
+                            id="currentlyLivingIn"
+                            value={currentlyLivingIn}
+                            placeholder="Currently Living In"
+                            onChange={(e) => {
+                                setCurrentlyLivingIn(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="currentLivingSituation">Current Living Situation</Label>
+                        <Input
+                            id="currentLivingSituation"
+                            value={currentLivingSituation}
+                            placeholder="Current Living Situation (eg. rental, lease expiring Feb 25; own a home they are selling)"
+                            onChange={(e) => {
+                                setCurrentLivingSituation(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="lookingForCity">Looking For City</Label>
+                        <Input
+                            id="lookingForCity"
+                            value={lookingForCity}
+                            placeholder="Looking For City"
+                            onChange={(e) => {
+                                setLookingForCity(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label htmlFor="lookingForNeighborhood">Looking For Neighborhood</Label>
+                        <Input
+                            id="lookingForNeighborhood"
+                            value={lookingForNeighborhood}
+                            placeholder="Looking For Neighborhood"
+                            onChange={(e) => {
+                                setLookingForNeighborhood(e.target.value);
+                            }}
+                            className="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <Label>Funnel Type</Label>
+                        <Select value={funnelType || undefined} onValueChange={setFunnelType}>
+                            <SelectTrigger className="w-full mt-1">
+                                <SelectValue placeholder="Select a funnel type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {["Real Buyer", "Window Shopper", "Long Term Lead", "Fan", "Unqualified"]
+                                    .map((funnelTypeItem) => (
+                                        <SelectItem key={funnelTypeItem} value={funnelTypeItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                            {funnelTypeItem}
+                                        </SelectItem>
+                                    ))}
+                            </SelectContent>
+                        </Select>
+
+                        {
+                            funnelType === "Real Buyer" && (
+                                <div>
+                                    <Label>Real Buyer Timeline</Label>
+                                    <Select value={realBuyerTimeline || undefined} onValueChange={setRealBuyerTimeline}>
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select a real buyer timeline" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {["Immediate", "Midterm", "Longterm"]
+                                                .map((realBuyerTimelineItem) => (
+                                                    <SelectItem key={realBuyerTimelineItem} value={realBuyerTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                        {realBuyerTimelineItem}
+                                                    </SelectItem>
+                                                ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )
+                        }
                     </div>
 
                     <div>
