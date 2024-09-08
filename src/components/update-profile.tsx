@@ -946,8 +946,13 @@ const UpdateProfile = (props: UpdateProfileProps) => {
 
                     <div>
                         <div className="flex flex-row items-center justify-between">
-                            <div className="flex items-center space-x-1">
-                                <Label htmlFor="budget">Max Budget</Label>
+                            <Label htmlFor="budget">Max Budget</Label>
+                            <div>
+                                {!!sliderValueMax && <div className="flex items-center justify-center">
+                                    <div className="cursor-pointer hover:bg-accent rounded-md px-2" onClick={() => setSliderValueMax(null)}>
+                                        <h1 className="text-blue-500 text-sm">clear</h1>
+                                    </div>
+                                </div>}
                             </div>
                         </div>
                         <div className="flex flex-row items-center justify-center mt-1">
@@ -969,11 +974,6 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                             step={50_000}
                             className="mt-2"
                         />
-                        {!!sliderValueMax && <div className="flex items-center justify-center mt-2.5">
-                            <div className="cursor-pointer hover:bg-accent rounded-md px-2" onClick={() => setSliderValueMax(null)}>
-                                <h1 className="text-blue-500 text-sm">clear</h1>
-                            </div>
-                        </div>}
                     </div>
 
                     <div>
