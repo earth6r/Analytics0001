@@ -52,8 +52,6 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- move tour blue google doc inputs in meeting notes section - Textarea (add it, do not remove old inputs)
-- green info should only show in booking-details (hide this in the dialog of meeting-notes)
 - google docs has the right order
 - make the booking-details page look like a traditional settings page and remove the cards of all the items, make it boxless
 - when expanded, make the ui different to not make it stretched
