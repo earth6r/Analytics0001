@@ -52,7 +52,7 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- google docs has the right order
+- google docs has the right order - tour meeting notes
 - make the booking-details page look like a traditional settings page and remove the cards of all the items, make it boxless
 - when expanded, make the ui different to not make it stretched
 - if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
