@@ -449,26 +449,13 @@ const BookingDetails = () => {
                                     {/* TODO: make badge have an option to have no hover i.e. hover={false} which if true, will have cursor-pointer and such and not if false. need to reuse everywhere because not consistent atm */}
                                     {booking?.additionalDetails ? <div className="ml-6">
                                         <div>
-                                            {/* TODO: consider using an icon instead of displaying true/false */}
-                                            Budget: {JSON.stringify(booking?.additionalDetails?.budget)} {booking?.additionalDetails?.budgetAmount?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD to {booking?.additionalDetails?.budgetAmountMax?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) || "$2,000,000"} USD
+                                            Meeting Notes: {booking?.additionalDetails?.meetingNotes}
                                         </div>
                                         <div>
-                                            Community Member: {JSON.stringify(booking?.additionalDetails?.communityMember)}
+                                            what apartments are their favorites: {booking?.additionalDetails?.whatApartmentsAreTheirFavorites}
                                         </div>
                                         <div>
-                                            Interest: {JSON.stringify(booking?.additionalDetails?.interest)} {booking?.additionalDetails?.interestNotes}
-                                        </div>
-                                        <div>
-                                            Locations: {booking?.additionalDetails?.locations?.berlin && <Badge>Berlin</Badge>} {booking?.additionalDetails?.locations?.london && <Badge>London</Badge>} {booking?.additionalDetails?.locations?.losAngeles && <Badge>Los Angeles</Badge>} {booking?.additionalDetails?.locations?.mexicoCity && <Badge>Mexico City</Badge>} {booking?.additionalDetails?.locations?.newYork && <Badge>New York</Badge>} {booking?.additionalDetails?.locations?.paris && <Badge>Paris</Badge>} {booking?.additionalDetails?.locations?.somewhereElse && <Badge>{booking?.additionalDetails?.locations?.somewhereElseNotes}</Badge>}
-                                        </div>
-                                        <div>
-                                            Product Fit: {JSON.stringify(booking?.additionalDetails?.productFit)} {booking?.additionalDetails?.productFitNotes}
-                                        </div>
-                                        <div>
-                                            Timing: {JSON.stringify(booking?.additionalDetails?.timing)}
-                                        </div>
-                                        <div>
-                                            Buying Timeline: {booking?.additionalDetails?.timeline}
+                                            what apartments did they see: {booking?.additionalDetails?.whatApartmentsDidTheySee}
                                         </div>
                                     </div> : <div className="ml-6">-</div>}
                                 </div>

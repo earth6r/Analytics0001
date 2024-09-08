@@ -19,6 +19,9 @@ interface UpdateProfileProps {
     showProfileInputs?: boolean;
     showMeetingNotesInputs?: boolean;
     showTourNotesInputs?: boolean;
+    additionalOnSubmit?: () => Promise<void>;
+    buttonLabel?: string;
+    disabled?: boolean;
 }
 
 const UpdateProfile = (props: UpdateProfileProps) => {
@@ -27,7 +30,10 @@ const UpdateProfile = (props: UpdateProfileProps) => {
         setIsOpen = null,
         showProfileInputs = true,
         showMeetingNotesInputs = true,
-        showTourNotesInputs = true
+        showTourNotesInputs = true,
+        additionalOnSubmit = null,
+        buttonLabel = null,
+        disabled = false,
     } = props;
 
     const [firstName, setFirstName] = useState("");
@@ -245,6 +251,10 @@ const UpdateProfile = (props: UpdateProfileProps) => {
         });
 
         await getProfileData.refetch();
+
+        if (additionalOnSubmit) {
+          await additionalOnSubmit();
+        }
 
         toast({
             title: "Success",
@@ -1207,10 +1217,12 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                             className="mt-1"
                         />
                     </div>
+
                     <Button
                         onClick={onSubmit}
+                        disabled={disabled}
                     >
-                        {isLoading ? <Spinner /> : "Update User Profile"}
+                        {isLoading ? <Spinner /> : (buttonLabel ?? "Update User Profile")}
                     </Button>
                 </div>}
         </div>

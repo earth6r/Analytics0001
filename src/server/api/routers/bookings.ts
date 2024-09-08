@@ -264,6 +264,9 @@ export const bookingsRouter = createTRPCRouter({
             selectedDate: z.date().optional(),
             bookATour: z.boolean(),
             timeline: z.string().nullable(),
+            whatApartmentsDidTheySee: z.string().nullable(),
+            whatApartmentsAreTheirFavorites: z.string().nullable(),
+            meetingNotes: z.string(),
         }))
         .mutation(async ({ input }) => {
             const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
@@ -339,6 +342,9 @@ export const bookingsRouter = createTRPCRouter({
                     selectedDate: input.selectedDate ? input.selectedDate.getTime() : null,
                     bookATour: input.bookATour,
                     timeline: input.timeline,
+                    whatApartmentsDidTheySee: input.whatApartmentsDidTheySee,
+                    whatApartmentsAreTheirFavorites: input.whatApartmentsAreTheirFavorites,
+                    meetingNotes: input.meetingNotes,
                 },
             });
 
@@ -1128,13 +1134,13 @@ export const bookingsRouter = createTRPCRouter({
                     ...input,
                     email: input.email,
                 });
+            } else {
+                const d = doc(tableRef, result.docs[0]?.id);
+
+                await updateDoc(d, {
+                    ...input,
+                });
             }
-
-            const d = doc(tableRef, result.docs[0]?.id);
-
-            await updateDoc(d, {
-                ...input,
-            });
         }),
 
     getPotentialCustomers: publicProcedure
@@ -1182,7 +1188,7 @@ export const bookingsRouter = createTRPCRouter({
             });
         }),
 
-        markNextStepAsCompleted: publicProcedure
+    markNextStepAsCompleted: publicProcedure
         .input(z.object({
             email: z.string(),
             index: z.number(),

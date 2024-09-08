@@ -68,3 +68,11 @@ LOW PRI:
 - fix issue of adding next steps in next steps table row of adding ring to notes input
 - when creating a new next step, add advanced options to mark previous next step as completed
 - advanced options for reschedule booking
+- mobile cards for bookings needs icon for phone vs tours and should not show meeting link but a link to the location or something
+
+IPR NOTES:
+- display meeting notes in each item in booking-details page
+- save meeting notes to db ✅
+- combine the buttons ✅
+- add in tour meeting notes ✅
+- max budget still not fixed of UNKNOWN
