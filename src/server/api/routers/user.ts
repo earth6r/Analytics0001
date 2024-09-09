@@ -374,4 +374,28 @@ export const userRouter = createTRPCRouter({
 
             return logins;
         }),
+
+    setHotWarmCold: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                hotWarmCold: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, hotWarmCold } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                hotWarmCold,
+            });
+        }),
 });

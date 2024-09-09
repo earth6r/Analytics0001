@@ -19,6 +19,7 @@ import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
 import moment from "moment";
 import DeleteNextStepChainLink from "@/components/bookings/delete-next-step-chain-link";
 import UpdateProfile from "@/components/update-profile";
+import HotWarmColdSelect from "@/components/hot-warm-cold-select";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -72,6 +73,8 @@ const BookingDetails = () => {
             enabled: !!email,
         }
     );
+
+    const setHotWarmCold = api.user.setHotWarmCold.useMutation();
 
     useEffect(() => {
         if (getPotentialCustomerDetails.data?.imageUrl) {
@@ -176,6 +179,14 @@ const BookingDetails = () => {
                             </DropdownMenuContent>}
                         </DropdownMenu>
                     </div>
+                </div>
+                <div className="mt-2 flex items-center justify-end">
+                    <HotWarmColdSelect value={getPotentialCustomerDetails.data?.hotWarmCold} onChange={async (value) => {
+                        await setHotWarmCold.mutateAsync({
+                            email: email as string,
+                            hotWarmCold: value,
+                        })
+                    }} />
                 </div>
 
                 {registerDetails.data && registerDetails.data.count > 1 && <Alert className="mt-4">
