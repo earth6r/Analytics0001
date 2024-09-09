@@ -25,12 +25,13 @@ import { cn } from "@/lib/utils";
 import NextStepDialogTabs from "./next-step-dialog-tabs";
 
 interface NextStepsDialogProps {
+    previousIndex?: number;
     email: string;
     variant?: string;
 };
 
 const NextStepsDialog = (props: NextStepsDialogProps) => {
-    const { email, variant = undefined } = props;
+    const { previousIndex = null, email, variant = undefined } = props;
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -102,6 +103,7 @@ const NextStepsDialog = (props: NextStepsDialogProps) => {
                                 deferredDateUtc = moment(deferredDate).utc().unix();
                             }
                             await addNextSteps.mutateAsync({
+                                previousIndex: previousIndex,
                                 email: email,
                                 nextStepsNotes,
                                 nextStepsDropdownValue: nextStepsDropdownValue === "other" ? `${typeOfStep}:${otherNextSteps}` : nextStepsDropdownValue,

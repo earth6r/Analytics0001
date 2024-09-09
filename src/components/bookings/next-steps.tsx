@@ -338,6 +338,7 @@ const NextSteps = (props: NextStepsProps) => {
 
               <div className="col-span-2 flex flex-row items-center space-x-2">
                 <NextStepsDialog
+                  previousIndex={data.index}
                   email={data.profile.email}
                   variant="Add"
                 />
@@ -425,6 +426,7 @@ const NextStepsCard = (props: NextStepsCardProps) => {
 
           <div className="mt-2">
             <NextStepsDialog
+              previousIndex={item?.index}
               email={item?.profile?.email}
               variant="Add"
             />

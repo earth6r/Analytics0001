@@ -1030,6 +1030,7 @@ export const bookingsRouter = createTRPCRouter({
 
     addNextSteps: publicProcedure
         .input(z.object({
+            previousIndex: z.number().nullable().optional(),
             email: z.string(),
             nextStepsNotes: z.string(),
             nextStepsDropdownValue: z.string(),
@@ -1059,6 +1060,10 @@ export const bookingsRouter = createTRPCRouter({
                     const d = doc(tableRef, result.docs[0]?.id);
 
                     const currentNextStepsDropdownValue = result.docs[0]?.data()?.nextStepsDropdownValue || [];
+
+                    if (input.previousIndex !== null && input.previousIndex !== undefined && currentNextStepsDropdownValue.length > input.previousIndex) {
+                          currentNextStepsDropdownValue[input.previousIndex].completed = true;
+                    }
 
                     if (input.nextStepsDropdownValue) {
                         currentNextStepsDropdownValue.push({
