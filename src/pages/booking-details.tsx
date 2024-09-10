@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { AlertCircle, ArrowLeftCircleIcon, Bell, Calendar, CircleAlert, CircleOff, Contact, FileQuestion, Hourglass, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, Trash2, TriangleAlert } from "lucide-react";
+import { AlertCircle, ArrowLeft, ArrowLeftCircleIcon, Bell, Calendar, CircleAlert, CircleOff, Contact, Facebook, FileQuestion, Globe, Hourglass, Instagram, Mail, MapPin, NotepadText, Phone, School, SquareArrowOutUpRight, Timer, Trash2, TriangleAlert, Twitter } from "lucide-react";
 import { useRouter } from "next/router";
 import AddImageToUserDialog from "@/components/bookings/add-image-to-user-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,8 @@ import moment from "moment";
 import DeleteNextStepChainLink from "@/components/bookings/delete-next-step-chain-link";
 import UpdateProfile from "@/components/update-profile";
 import HotWarmColdSelect from "@/components/hot-warm-cold-select";
+import { Separator } from "@/components/ui/separator";
+import { FaWhatsapp } from "react-icons/fa";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -136,73 +138,145 @@ const BookingDetails = () => {
         <div>
             <Header />
             <div className="p-6">
-                <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center space-x-2">
-                        <ArrowLeftCircleIcon className="w-10 h-10 cursor-pointer" onClick={() => referral ? router.push(referral as string) : router.push("/bookings")} />
-                        <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">{
-                            getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
-                        }</h1>
+                <div className="flex flex-row items-center justify-start">
+                    <div
+                        className="flex flex-row items-center space-x-0.5 cursor-pointer text-muted-foreground hover:text-foreground select-none"
+                        onClick={
+                            () => referral ? router.push(referral as string) : router.push("/bookings")
+                        }
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                        <h1 className="">Back to main site</h1>
+                    </div>
+                </div>
+
+                <div className="flex flex-row items-start justify-between mt-4">
+                    <div>
+                        {
+                            getPotentialCustomerDetails.isLoading ?
+                                <Skeleton className="w-52 h-10" /> :
+                                <div>
+                                    <h1 className="text-3xl font-bold truncate max-w-52 md:max-w-80 lg:max-w-96">
+                                        {
+                                            getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                        }
+                                    </h1>
+                                    <div className="text-muted-foreground">
+                                        {email}
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        {getPotentialCustomerDetails.data?.website &&
+                                            <Globe
+                                                className="w-6 h-6 hover:text-blue-500 cursor-pointer"
+                                                onClick={
+                                                    () => {
+                                                        window.open(getPotentialCustomerDetails.data?.website, "_blank")
+                                                    }
+                                                }
+                                            />
+                                        }
+                                        {getPotentialCustomerDetails.data?.instagram &&
+                                            <Instagram
+                                                className="w-6 h-6 hover:text-blue-500 cursor-pointer"
+                                                onClick={
+                                                    () => {
+                                                        window.open(getPotentialCustomerDetails.data?.instagram, "_blank")
+                                                    }
+                                                }
+                                            />
+                                        }
+                                        {getPotentialCustomerDetails.data?.facebook &&
+                                            <Facebook
+                                                className="w-6 h-6 hover:text-blue-500 cursor-pointer"
+                                                onClick={
+                                                    () => {
+                                                        window.open(getPotentialCustomerDetails.data?.facebook, "_blank")
+                                                    }
+                                                }
+                                            />
+                                        }
+                                        {getPotentialCustomerDetails.data?.twitter &&
+                                            <Twitter
+                                                className="w-6 h-6 hover:text-blue-500 cursor-pointer"
+                                                onClick={
+                                                    () => {
+                                                        window.open(getPotentialCustomerDetails.data?.twitter, "_blank")
+                                                    }
+                                                }
+                                            />
+                                        }
+                                        {getPotentialCustomerDetails.data?.whatsApp &&
+                                            <FaWhatsapp
+                                                className="w-6 h-6 hover:text-green-500 cursor-pointer"
+                                                onClick={
+                                                    () => {
+                                                        window.open(getPotentialCustomerDetails.data?.whatsApp, "_blank")
+                                                    }
+                                                }
+                                            />
+                                        }
+                                        <div className="text-blue-500 cursor-pointer">+ Add Socials</div>
+                                    </div>
+                                </div>
+                        }
                     </div>
                     <div className="flex flex-row items-center space-x-2 select-none">
+                        <HotWarmColdSelect
+                            value={getPotentialCustomerDetails.data?.hotWarmCold}
+                            onChange={async (value) => {
+                                await setHotWarmCold.mutateAsync({
+                                    email: email as string,
+                                    hotWarmCold: value,
+                                })
+                            }}
+                        />
                         <AddImageToUserDialog initialLoading={getPotentialCustomerDetails.isLoading || getPotentialCustomerDetails.isError || getPotentialCustomerDetails.isFetching || getPotentialCustomerDetails.isPending} email={email as string} refetch={getPotentialCustomerDetails.refetch} potentialCustomerData={getPotentialCustomerDetails.data} />
                         {/* TODO: fix issue of image not showing in mobile view */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="secondary" size="icon" className="rounded-full">
-                                    {<div className="relative w-10 h-10 hidden md:block">
-                                        <Avatar className="h-10 w-10">
-                                            <AvatarImage
-                                                src={displayImageUrl}
-                                                alt="@user"
-                                                className="object-cover"
-                                            />
-                                            <AvatarFallback>CN</AvatarFallback>
-                                        </Avatar>
-                                    </div>}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            {getPotentialCustomerDetails.data?.imageUrl && <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                    <div
-                                        className="flex flex-row items-center space-x-2"
-                                        onClick={
-                                            () => window.open(
-                                                displayImageUrl,
-                                                "_blank"
-                                            )
-                                        }
-                                    >
-                                        <SquareArrowOutUpRight className="w-4 h-4" />
-                                        <h1>View Image</h1>
-                                    </div>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>}
-                        </DropdownMenu>
                     </div>
                 </div>
-                <div className="mt-2 flex items-center justify-end">
-                    <HotWarmColdSelect value={getPotentialCustomerDetails.data?.hotWarmCold} onChange={async (value) => {
-                        await setHotWarmCold.mutateAsync({
-                            email: email as string,
-                            hotWarmCold: value,
-                        })
-                    }} />
-                </div>
 
-                {registerDetails.data && registerDetails.data.count > 1 && <Alert className="mt-4">
-                    <div className="flex flex-row space-x-1">
-                        <div className="text-yellow-500">
-                            <TriangleAlert className="h-4 w-4" />
+                {registerDetails.data && registerDetails.data.count > 1 &&
+                    <Alert className="mt-4">
+                        <div className="flex flex-row space-x-1">
+                            <div className="text-yellow-500">
+                                <TriangleAlert className="h-4 w-4" />
+                            </div>
+                            <AlertTitle>Heads up!</AlertTitle>
                         </div>
-                        <AlertTitle>Heads up!</AlertTitle>
-                    </div>
-                    <AlertDescription>
-                        There are multiple waitlist details for this email. We will show as many details as possible.
-                    </AlertDescription>
-                </Alert>}
+                        <AlertDescription>
+                            There are multiple waitlist details for this email. We will show as many details as possible.
+                        </AlertDescription>
+                    </Alert>
+                }
 
-                <div className="mt-4">
-                    <UpdateProfile email={email as string} setIsOpen={undefined} />
+                {displayImageUrl &&
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                        src={displayImageUrl as string}
+                        alt="@user"
+                        className="object-contain w-full h-96 mt-6"
+                        width={400}
+                        height={400}
+                        onLoad={() => { setImageLoaded(true) }}
+                    />
+                }
+
+                <div className="py-2 mt-4">
+                    <Separator className="" />
+                </div>
+                <div className="text-muted-foreground">
+                    <div className="max-w-max whitespace-pre-wrap break-words">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <div>
+                                    {typeof getPotentialCustomerDetails.data?.profileNotes === "string" ? createHyperlinks(getPotentialCustomerDetails.data?.profileNotes || "-") : "-"}
+                                </div>
+                                <TooltipContent>
+                                    Click to View the Link
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
