@@ -612,232 +612,371 @@ const BookingDetails = () => {
                     </Alert>
                 }
 
-                <div className="flex flex-row items-center space-x-8">
-                    <div className="relative w-[400px] h-[400px] mt-6">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src={displayImageUrl as string}
-                            alt="@user"
-                            className="object-contain h-full w-full"
-                            onLoad={() => { setImageLoaded(true) }}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <div className="flex flex-row items-center space-x-1">
-                            <Mail className="w-4 h-4" />
-                            <div>
-                                <CopyTooltip value={email as string} />
-                            </div>
+                <div className="flex flex-row items-center justify-between">
+                    <div className="flex flex-row items-center space-x-8">
+                        <div className="relative w-[400px] h-[400px] mt-6">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={displayImageUrl as string}
+                                alt="@user"
+                                className="object-contain h-full w-full"
+                                onLoad={() => { setImageLoaded(true) }}
+                            />
                         </div>
-                        <div className="flex flex-row items-center space-x-1">
-                            <Phone className="w-4 h-4" />
-                            <div>
-                                {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
-                            </div>
-                        </div>
-                        <h1>
-                            Identifies as a {getPotentialCustomerDetails.data?.gender || "-"}
-                        </h1>
-                        <div>
-                            {ageEditMode ?
-                                <div className="flex flex-row items-center space-x-2">
-                                    <Input
-                                        type="number"
-                                        value={age}
-                                        onChange={(e) => setAge(parseInt(e.target.value))}
-                                    />
-                                    <div
-                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                        onClick={async () => {
-                                            await updateAge.mutateAsync({
-                                                email: email as string,
-                                                age: age,
-                                            })
-                                            await getPotentialCustomerDetails.refetch();
-                                            setAgeEditMode(false)
-                                        }}
-                                    >
-                                        Done
-                                    </div>
-                                </div> :
-                                <div className="flex flex-row items-center space-x-2">
-                                    <h1>
-                                        {getPotentialCustomerDetails.data?.age || "-"} years old
-                                    </h1>
-                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setAgeEditMode(true)}>
-                                        Edit
-                                    </div>
+                        <div className="space-y-2">
+                            <div className="flex flex-row items-center space-x-1">
+                                <Mail className="w-4 h-4" />
+                                <div>
+                                    <CopyTooltip value={email as string} />
                                 </div>
-                            }
-                        </div>
-                        <div>
-                            {professionEditMode ?
-                                <div className="flex flex-row items-center space-x-2">
-                                    <div>
-                                        <Select value={profession || undefined} onValueChange={setProfession}>
-                                            <SelectTrigger className="w-full mt-1">
-                                                <SelectValue placeholder="Select a profession" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {["Creative", "Tech", "Student", "Rich Kid", "MedLaw", "Lit", "Finance", "Other"].map((professionItem) => (
-                                                    <SelectItem key={professionItem} value={professionItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                                        {professionItem}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {
-                                            profession === "Other" && (
-                                                <Input
-                                                    id="otherProfession"
-                                                    placeholder="Other Profession"
-                                                    value={otherProfession}
-                                                    onChange={(e) => {
-                                                        setOtherProfession(e.target.value);
-                                                    }}
-                                                    className="mt-2"
-                                                />
-                                            )
-                                        }
-                                    </div>
-                                    <div
-                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                        onClick={async () => {
-                                            await updateProfession.mutateAsync({
-                                                email: email as string,
-                                                profession: profession === "Other" ? otherProfession : profession,
-                                            })
-                                            await getPotentialCustomerDetails.refetch();
-                                            setProfessionEditMode(false)
-                                        }}
-                                    >
-                                        Done
-                                    </div>
-                                </div> :
-                                <div className="flex flex-row items-center space-x-2">
-                                    <h1>
-                                        Works in {getPotentialCustomerDetails.data?.profession || "-"}
-                                    </h1>
-                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setProfessionEditMode(true)}>
-                                        Edit
-                                    </div>
+                            </div>
+                            <div className="flex flex-row items-center space-x-1">
+                                <Phone className="w-4 h-4" />
+                                <div>
+                                    {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
                                 </div>
-                            }
-                        </div>
-                        {
-                            HotWarmColdEditMode ?
-                                <div className="flex flex-row items-center space-x-2">
-                                    <HotWarmColdSelect
-                                        value={getPotentialCustomerDetails.data?.hotWarmCold}
-                                        onChange={async (value) => {
-                                            await setHotWarmCold.mutateAsync({
-                                                email: email as string,
-                                                hotWarmCold: value,
-                                            })
-                                            await getPotentialCustomerDetails.refetch();
-                                        }}
-                                    />
+                            </div>
+                            <h1>
+                                Identifies as a {getPotentialCustomerDetails.data?.gender || "-"}
+                            </h1>
+                            <div>
+                                {ageEditMode ?
                                     <div className="flex flex-row items-center space-x-2">
-                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHotWarmColdEditMode(false)}>
-                                            Done
-                                        </div>
-                                    </div>
-                                </div>
-                                :
-                                <div className="flex flex-row items-center space-x-2">
-                                    <div
-                                        className={
-                                            cn(
-                                                "capitalize flex flex-row items-center",
-                                                getPotentialCustomerDetails.data?.hotWarmCold === "hot" && "text-red-500",
-                                                getPotentialCustomerDetails.data?.hotWarmCold === "warm" && "text-yellow-500",
-                                                getPotentialCustomerDetails.data?.hotWarmCold === "cold" && "text-blue-500",
-                                            )
-                                        }
-                                    >
-                                        <div>
-                                            {getPotentialCustomerDetails.data?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
-                                        </div>
-                                        <div>
-                                            {getPotentialCustomerDetails.data?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
-                                        </div>
-                                        <div>
-                                            {getPotentialCustomerDetails.data?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
-                                        </div>
-                                        <div className="ml-1">
-                                            {getPotentialCustomerDetails.data?.hotWarmCold || "-"}
-                                        </div>
-                                    </div>
-                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHotWarmColdEditMode(true)}>
-                                        Edit
-                                    </div>
-                                </div>
-                        }
-                        <div className="flex flex-row items-center space-x-2">
-                            <Bell className="w-4 h-4" />
-                            <div>
-                                {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium + " is the preferred communication" : "-"}
-                            </div>
-                        </div>
-
-                        <div>
-                            {kidsEditMode ?
-                                <div className="flex flex-row items-center space-x-2">
-                                    <Input
-                                        type="number"
-                                        value={kids}
-                                        onChange={(e) => setKids(parseInt(e.target.value))}
-                                    />
-                                    <div
-                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                        onClick={async () => {
-                                            await updateKids.mutateAsync({
-                                                email: email as string,
-                                                kids: kids,
-                                            })
-                                            await getPotentialCustomerDetails.refetch();
-                                            setKidsEditMode(false)
-                                        }}
-                                    >
-                                        Done
-                                    </div>
-                                </div> :
-                                <div className="flex flex-row items-center space-x-2">
-                                    <h1>
-                                        {getPotentialCustomerDetails.data?.kids || "-"} kids
-                                    </h1>
-                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setKidsEditMode(true)}>
-                                        Edit
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div>
-                            {
-                                relationshipStatusEditMode ?
-                                    <div>
-                                        <Select value={relationshipStatus || undefined} onValueChange={setRelationshipStatus}>
-                                            <SelectTrigger className="w-full mt-1">
-                                                <SelectValue placeholder="Select a relationship status" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {["Single", "Couple", "Family"].map((relationshipStatusItem) => (
-                                                    <SelectItem key={relationshipStatusItem} value={relationshipStatusItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                                        {relationshipStatusItem}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-
+                                        <Input
+                                            type="number"
+                                            value={age}
+                                            onChange={(e) => setAge(parseInt(e.target.value))}
+                                        />
                                         <div
                                             className="text-blue-500 hover:text-blue-400 cursor-pointer"
                                             onClick={async () => {
-                                                await updateRelationshipStatus.mutateAsync({
+                                                await updateAge.mutateAsync({
                                                     email: email as string,
-                                                    relationshipStatus: relationshipStatus,
+                                                    age: age,
                                                 })
                                                 await getPotentialCustomerDetails.refetch();
-                                                setRelationshipStatusEditMode(false)
+                                                setAgeEditMode(false)
+                                            }}
+                                        >
+                                            Done
+                                        </div>
+                                    </div> :
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <h1>
+                                            {getPotentialCustomerDetails.data?.age || "-"} years old
+                                        </h1>
+                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setAgeEditMode(true)}>
+                                            Edit
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div>
+                                {professionEditMode ?
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <div>
+                                            <Select value={profession || undefined} onValueChange={setProfession}>
+                                                <SelectTrigger className="w-full mt-1">
+                                                    <SelectValue placeholder="Select a profession" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {["Creative", "Tech", "Student", "Rich Kid", "MedLaw", "Lit", "Finance", "Other"].map((professionItem) => (
+                                                        <SelectItem key={professionItem} value={professionItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                            {professionItem}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            {
+                                                profession === "Other" && (
+                                                    <Input
+                                                        id="otherProfession"
+                                                        placeholder="Other Profession"
+                                                        value={otherProfession}
+                                                        onChange={(e) => {
+                                                            setOtherProfession(e.target.value);
+                                                        }}
+                                                        className="mt-2"
+                                                    />
+                                                )
+                                            }
+                                        </div>
+                                        <div
+                                            className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                            onClick={async () => {
+                                                await updateProfession.mutateAsync({
+                                                    email: email as string,
+                                                    profession: profession === "Other" ? otherProfession : profession,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setProfessionEditMode(false)
+                                            }}
+                                        >
+                                            Done
+                                        </div>
+                                    </div> :
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <h1>
+                                            Works in {getPotentialCustomerDetails.data?.profession || "-"}
+                                        </h1>
+                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setProfessionEditMode(true)}>
+                                            Edit
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            {
+                                HotWarmColdEditMode ?
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <HotWarmColdSelect
+                                            value={getPotentialCustomerDetails.data?.hotWarmCold}
+                                            onChange={async (value) => {
+                                                await setHotWarmCold.mutateAsync({
+                                                    email: email as string,
+                                                    hotWarmCold: value,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                            }}
+                                        />
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHotWarmColdEditMode(false)}>
+                                                Done
+                                            </div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <div
+                                            className={
+                                                cn(
+                                                    "capitalize flex flex-row items-center",
+                                                    getPotentialCustomerDetails.data?.hotWarmCold === "hot" && "text-red-500",
+                                                    getPotentialCustomerDetails.data?.hotWarmCold === "warm" && "text-yellow-500",
+                                                    getPotentialCustomerDetails.data?.hotWarmCold === "cold" && "text-blue-500",
+                                                )
+                                            }
+                                        >
+                                            <div>
+                                                {getPotentialCustomerDetails.data?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
+                                            </div>
+                                            <div>
+                                                {getPotentialCustomerDetails.data?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
+                                            </div>
+                                            <div>
+                                                {getPotentialCustomerDetails.data?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
+                                            </div>
+                                            <div className="ml-1">
+                                                {getPotentialCustomerDetails.data?.hotWarmCold || "-"}
+                                            </div>
+                                        </div>
+                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHotWarmColdEditMode(true)}>
+                                            Edit
+                                        </div>
+                                    </div>
+                            }
+                            <div className="flex flex-row items-center space-x-2">
+                                <Bell className="w-4 h-4" />
+                                <div>
+                                    {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium + " is the preferred communication" : "-"}
+                                </div>
+                            </div>
+
+                            <div>
+                                {kidsEditMode ?
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <Input
+                                            type="number"
+                                            value={kids}
+                                            onChange={(e) => setKids(parseInt(e.target.value))}
+                                        />
+                                        <div
+                                            className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                            onClick={async () => {
+                                                await updateKids.mutateAsync({
+                                                    email: email as string,
+                                                    kids: kids,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setKidsEditMode(false)
+                                            }}
+                                        >
+                                            Done
+                                        </div>
+                                    </div> :
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <h1>
+                                            {getPotentialCustomerDetails.data?.kids || "-"} kids
+                                        </h1>
+                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setKidsEditMode(true)}>
+                                            Edit
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    relationshipStatusEditMode ?
+                                        <div>
+                                            <Select value={relationshipStatus || undefined} onValueChange={setRelationshipStatus}>
+                                                <SelectTrigger className="w-full mt-1">
+                                                    <SelectValue placeholder="Select a relationship status" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {["Single", "Couple", "Family"].map((relationshipStatusItem) => (
+                                                        <SelectItem key={relationshipStatusItem} value={relationshipStatusItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                            {relationshipStatusItem}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+
+                                            <div
+                                                className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                onClick={async () => {
+                                                    await updateRelationshipStatus.mutateAsync({
+                                                        email: email as string,
+                                                        relationshipStatus: relationshipStatus,
+                                                    })
+                                                    await getPotentialCustomerDetails.refetch();
+                                                    setRelationshipStatusEditMode(false)
+                                                }}
+                                            >
+                                                Done
+                                            </div>
+                                        </div>
+                                        :
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <h1>
+                                                {getPotentialCustomerDetails.data?.relationshipStatus || "-"}
+                                            </h1>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setRelationshipStatusEditMode(true)}>
+                                                Edit
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    petsEditMode ?
+                                        <div>
+                                            <div>
+                                                <Label>Has Pets</Label>
+                                                <div className="flex items-center space-x-1">
+                                                    <h1 className="text-sm">Yes</h1>
+                                                    <Checkbox
+                                                        id="hasPets"
+                                                        checked={hasPets || false}
+                                                        onCheckedChange={(checked) => setHasPets(!!checked)}
+                                                    />
+                                                </div>
+                                                {
+                                                    hasPets && (
+                                                        <div>
+                                                            <Label>Pet Types</Label>
+                                                            <div>
+                                                                {
+                                                                    // Input
+                                                                    Array.from({ length: petCount }).map((_, index) => (
+                                                                        <div key={index} className="flex items-center space-x-1">
+                                                                            <Input
+                                                                                id={`petType${index}`}
+                                                                                value={petTypes[index] || ""}
+                                                                                placeholder="Pet Type"
+                                                                                onChange={(e) => {
+                                                                                    const newPetTypes = [...petTypes];
+                                                                                    newPetTypes[index] = e.target.value;
+                                                                                    setPetTypes(newPetTypes);
+                                                                                }}
+                                                                                className="mt-1"
+                                                                            />
+                                                                            <div className="cursor-pointer" onClick={() => {
+                                                                                const newPetTypes = [...petTypes];
+                                                                                newPetTypes.splice(index, 1);
+                                                                                setPetTypes(newPetTypes);
+                                                                                setPetCount(petCount - 1);
+                                                                            }}>
+                                                                                <X className="w-4 h-4" />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                                <div className="flex items-center justify-center space-x-1 cursor-pointer">
+                                                                    <div
+                                                                        onClick={() => setPetCount(petCount + 1)}
+                                                                        className="text-blue-600 hover:underline text-xs mt-1"
+                                                                    >
+                                                                        + Add Pet Type
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                                onClick={async () => {
+                                                                    await updatePets.mutateAsync({
+                                                                        email: email as string,
+                                                                        hasPets: hasPets,
+                                                                        petTypes: petTypes,
+                                                                    })
+                                                                    await getPotentialCustomerDetails.refetch();
+                                                                    setPetsEditMode(false)
+                                                                }}
+                                                            >
+                                                                Done
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                        </div> :
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <h1>
+                                                {getPotentialCustomerDetails.data?.hasPets ? "Has pets" : "No pets"}
+                                            </h1>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPetsEditMode(true)}>
+                                                Edit
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {personalityTypeEditMode ?
+                                    <div className="flex flex-row items-center space-x-2">
+                                        <div>
+                                            <Select value={personalityType || undefined} onValueChange={setPersonalityType}>
+                                                <SelectTrigger className="w-full mt-1">
+                                                    <SelectValue placeholder="Select a personality type" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {["Creative", "Tech", "Student", "Rich Kid", "MedLaw", "Lit", "Finance", "Other"].map((personality) => (
+                                                        <SelectItem key={personality} value={personality} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                            {personality}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            {
+                                                personalityType === "Other" && (
+                                                    <Input
+                                                        id="otherPersonality"
+                                                        placeholder="Other Personality Type"
+                                                        className="mt-2"
+                                                        value={otherPersonality}
+                                                        onChange={(e) => {
+                                                            setOtherPersonality(e.target.value);
+                                                        }}
+                                                    />
+                                                )
+                                            }
+                                        </div>
+                                        <div
+                                            className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                            onClick={async () => {
+                                                await updatePersonalityType.mutateAsync({
+                                                    email: email as string,
+                                                    personalityType: personalityType === "Other" ? otherPersonality : personalityType,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setPersonalityTypeEditMode(false)
                                             }}
                                         >
                                             Done
@@ -846,153 +985,16 @@ const BookingDetails = () => {
                                     :
                                     <div className="flex flex-row items-center space-x-2">
                                         <h1>
-                                            {getPotentialCustomerDetails.data?.relationshipStatus || "-"}
+                                            {getPotentialCustomerDetails.data?.personalityType || "-"} personality type
                                         </h1>
-                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setRelationshipStatusEditMode(true)}>
+                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPersonalityTypeEditMode(true)}>
                                             Edit
                                         </div>
-                                    </div>
-                            }
-                        </div>
-                        <div>
-                            {
-                                petsEditMode ?
-                                    <div>
-                                        <div>
-                                            <Label>Has Pets</Label>
-                                            <div className="flex items-center space-x-1">
-                                                <h1 className="text-sm">Yes</h1>
-                                                <Checkbox
-                                                    id="hasPets"
-                                                    checked={hasPets || false}
-                                                    onCheckedChange={(checked) => setHasPets(!!checked)}
-                                                />
-                                            </div>
-                                            {
-                                                hasPets && (
-                                                    <div>
-                                                        <Label>Pet Types</Label>
-                                                        <div>
-                                                            {
-                                                                // Input
-                                                                Array.from({ length: petCount }).map((_, index) => (
-                                                                    <div key={index} className="flex items-center space-x-1">
-                                                                        <Input
-                                                                            id={`petType${index}`}
-                                                                            value={petTypes[index] || ""}
-                                                                            placeholder="Pet Type"
-                                                                            onChange={(e) => {
-                                                                                const newPetTypes = [...petTypes];
-                                                                                newPetTypes[index] = e.target.value;
-                                                                                setPetTypes(newPetTypes);
-                                                                            }}
-                                                                            className="mt-1"
-                                                                        />
-                                                                        <div className="cursor-pointer" onClick={() => {
-                                                                            const newPetTypes = [...petTypes];
-                                                                            newPetTypes.splice(index, 1);
-                                                                            setPetTypes(newPetTypes);
-                                                                            setPetCount(petCount - 1);
-                                                                        }}>
-                                                                            <X className="w-4 h-4" />
-                                                                        </div>
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                            <div className="flex items-center justify-center space-x-1 cursor-pointer">
-                                                                <div
-                                                                    onClick={() => setPetCount(petCount + 1)}
-                                                                    className="text-blue-600 hover:underline text-xs mt-1"
-                                                                >
-                                                                    + Add Pet Type
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                            onClick={async () => {
-                                                                await updatePets.mutateAsync({
-                                                                    email: email as string,
-                                                                    hasPets: hasPets,
-                                                                    petTypes: petTypes,
-                                                                })
-                                                                await getPotentialCustomerDetails.refetch();
-                                                                setPetsEditMode(false)
-                                                            }}
-                                                        >
-                                                            Done
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div> :
-                                    <div className="flex flex-row items-center space-x-2">
-                                        <h1>
-                                            {getPotentialCustomerDetails.data?.hasPets ? "Has pets" : "No pets"}
-                                        </h1>
-                                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPetsEditMode(true)}>
-                                            Edit
-                                        </div>
-                                    </div>
-                            }
-                        </div>
-                        <div>
-                            {personalityTypeEditMode ?
-                                <div className="flex flex-row items-center space-x-2">
-                                    <div>
-                                        <Select value={personalityType || undefined} onValueChange={setPersonalityType}>
-                                            <SelectTrigger className="w-full mt-1">
-                                                <SelectValue placeholder="Select a personality type" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {["Creative", "Tech", "Student", "Rich Kid", "MedLaw", "Lit", "Finance", "Other"].map((personality) => (
-                                                    <SelectItem key={personality} value={personality} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                                        {personality}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {
-                                            personalityType === "Other" && (
-                                                <Input
-                                                    id="otherPersonality"
-                                                    placeholder="Other Personality Type"
-                                                    className="mt-2"
-                                                    value={otherPersonality}
-                                                    onChange={(e) => {
-                                                        setOtherPersonality(e.target.value);
-                                                    }}
-                                                />
-                                            )
-                                        }
-                                    </div>
-                                    <div
-                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                        onClick={async () => {
-                                            await updatePersonalityType.mutateAsync({
-                                                email: email as string,
-                                                personalityType: personalityType === "Other" ? otherPersonality : personalityType,
-                                            })
-                                            await getPotentialCustomerDetails.refetch();
-                                            setPersonalityTypeEditMode(false)
-                                        }}
-                                    >
-                                        Done
-                                    </div>
-                                </div>
-                                :
-                                <div className="flex flex-row items-center space-x-2">
-                                    <h1>
-                                        {getPotentialCustomerDetails.data?.personalityType || "-"} personality type
-                                    </h1>
-                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPersonalityTypeEditMode(true)}>
-                                        Edit
-                                    </div>
-                                </div>}
+                                    </div>}
+                            </div>
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    {/* <div className="space-y-4">
                         <div className="flex flex-row items-center space-x-1">
                             <MapPin className="w-4 h-4" />
                             <h1>
@@ -1029,7 +1031,18 @@ const BookingDetails = () => {
                                 {registerData?.city && <Badge>{registerData.city}</Badge>}
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                    <Card className="w-[40%]">
+                        <CardHeader className="select-none">
+                            <CardTitle>Waitlist Details</CardTitle>
+                            <CardDescription>
+                                {`Details about the potential customer's waitlist details.`}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <RegisterDetails registerDetails={registerDetails} />
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <Accordion type="single" collapsible className="w-full">
@@ -2729,9 +2742,12 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                     Country: {registerData.ipAddress.ipInfo.country || "-"}
                 </div> */}
 
-                <div>
-                    IP Location: {registerData?.ipAddress?.ipInfo?.city && registerData?.ipAddress?.ipInfo?.regionName && registerData?.ipAddress?.ipInfo?.country &&
-                        (registerData?.ipAddress?.ipInfo?.city + ", " + registerData.ipAddress?.ipInfo?.regionName + ", " + registerData?.ipAddress?.ipInfo?.country) || "-"}
+                <div className="flex flex-row items-center space-x-2">
+                    <MapPin className="w-4 h-4" />
+                    <div>
+                        {registerData?.ipAddress?.ipInfo?.city && registerData?.ipAddress?.ipInfo?.regionName && registerData?.ipAddress?.ipInfo?.country &&
+                            (registerData?.ipAddress?.ipInfo?.city + ", " + registerData.ipAddress?.ipInfo?.regionName + ", " + registerData?.ipAddress?.ipInfo?.country) || "-"}
+                    </div>
                 </div>
 
                 {/* <div>
