@@ -612,9 +612,9 @@ const BookingDetails = () => {
                     </Alert>
                 }
 
-                <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center space-x-8">
-                        <div className="relative w-[400px] h-[400px] mt-6">
+                <div className="flex flex-row items-start justify-between mt-6">
+                    <div className="flex flex-row items-start space-x-8">
+                        <div className="relative w-[400px] h-[400px]">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={displayImageUrl as string}
