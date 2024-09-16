@@ -1062,7 +1062,7 @@ export const bookingsRouter = createTRPCRouter({
                     const currentNextStepsDropdownValue = result.docs[0]?.data()?.nextStepsDropdownValue || [];
 
                     if (input.previousIndex !== null && input.previousIndex !== undefined && currentNextStepsDropdownValue.length > input.previousIndex) {
-                          currentNextStepsDropdownValue[input.previousIndex].completed = true;
+                        currentNextStepsDropdownValue[input.previousIndex].completed = true;
                     }
 
                     if (input.nextStepsDropdownValue) {
@@ -1128,10 +1128,6 @@ export const bookingsRouter = createTRPCRouter({
 
             const tableRef = collection(db, tableNameRef);
 
-            console.log(`---------------------------------`);
-            console.log(input);
-            console.log(`---------------------------------`);
-
             const result = await getDocs(query(tableRef, where("email", "==", input.email)));
 
             if (result.empty) {
@@ -1146,6 +1142,71 @@ export const bookingsRouter = createTRPCRouter({
                     ...input,
                 });
             }
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${input.email}`, {
+                properties: {
+                    ...(!!input.gender && { gender__1_: input.gender }),
+                    ...(!!input.age && { age: input.age }),
+                    ...(!!input.profession && { profession: input.profession }),
+                    ...(!!input.website && { website__1_: input.website }),
+                    ...(!!input.instagram && { instagram__1_: input.instagram }),
+                    ...(!!input.facebook && { facebook: input.facebook }),
+                    ...(!!input.twitter && { twitter: input.twitter }),
+                    ...(!!input.whatsApp && { whatsapp: input.whatsApp }),
+                    ...(!!input.telegram && { telegram: input.telegram }),
+                    ...(!!input.signal && { signal: input.signal }),
+                    ...(!!input.relationshipStatus && { relationship_status__1_: input.relationshipStatus }),
+                    ...(input.kids !== undefined && input.kids !== null && { kids: input.kids }),
+                    ...(input.hasPets !== undefined && input.hasPets !== null && { has_pets: input.hasPets }),
+                    ...(!!input.petTypes && { pet_types: input.petTypes.join(',') }),
+                    ...(!!input.bio && { bio: input.bio }),
+                    ...(!!input.personalNotes && { personal_notes: input.personalNotes }),
+                    ...(!!input.communityFit && { community_fit: input.communityFit }),
+                    ...(!!input.communityScore && { community_score: input.communityScore }),
+                    ...(!!input.personalityType && { personality_type: input.personalityType }),
+                    ...(!!input.relevance && { relevance: input.relevance.join(',') }),
+                    ...(!!input.eyeCatchingNote && { eye_catching_notes: input.eyeCatchingNote }),
+                    ...(input.knowOMA !== undefined && input.knowOMA !== null && { know_oma: input.knowOMA }),
+                    ...(!!input.OMANotes && { oma_notes: input.OMANotes }),
+                    ...(input.interestInHomeSwapping !== undefined && input.interestInHomeSwapping !== null && { interest_in_home_swapping: input.interestInHomeSwapping }),
+                    ...(!!input.interestInHomeSwappingNotes && { interest_in_home_swapping_notes: input.interestInHomeSwappingNotes }),
+                    ...(input.interestInFurniture !== undefined && input.interestInFurniture !== null && { interest_in_furniture: input.interestInFurniture }),
+                    ...(!!input.interestInFurnitureNotes && { interest_in_furniture_notes: input.interestInFurnitureNotes }),
+                    ...(!!input.currentlyLivingIn && { currently_living_in: input.currentlyLivingIn }),
+                    ...(!!input.currentLivingSituation && { current_living_situation: input.currentLivingSituation }),
+                    ...(input.firstTimeBuyer !== undefined && input.firstTimeBuyer !== null && { first_time_buyer: input.firstTimeBuyer }),
+                    ...(input.cashBuyer !== undefined && input.cashBuyer !== null && { cash_buyer: input.cashBuyer }),
+                    ...(input.broker !== undefined && input.broker !== null && { broker: input.broker }),
+                    ...(input.attorney !== undefined && input.attorney !== null && { attorney: input.attorney }),
+                    ...(!!input.whosPaying && { who_s_paying: input.whosPaying }),
+                    ...(!!input.homeType && { home_type__1_: input.homeType }),
+                    ...(!!input.homePurchaseType && { home_purchase_type: input.homePurchaseType }),
+                    ...(input.mortgagePreQualified !== undefined && input.mortgagePreQualified !== null && { mortgage_pre_qualified: input.mortgagePreQualified }),
+                    ...(input.wantsHelpFinancing !== undefined && input.wantsHelpFinancing !== null && { wants_help_financing: input.wantsHelpFinancing }),
+                    ...(!!input.lookingForCity && { looking_for_city: input.lookingForCity }),
+                    ...(!!input.lookingForNeighborhood && { looking_for_neighborhoold: input.lookingForNeighborhood }),
+                    ...(!!input.lookingForUnitType && { looking_for_unit_type: input.lookingForUnitType }),
+                    ...(!!input.maxBudget && { max_budget: input.maxBudget }),
+                    ...(!!input.buyingTimeline && { buying_timeline__1_: input.buyingTimeline.join(',') }),
+                    ...(!!input.funnelType && { funnel_type: input.funnelType }),
+                    ...(!!input.realBuyerTimeline && { real_buyer_timeline: input.realBuyerTimeline }),
+                    ...(!!input.relevantProperty && { relevant_property: input.relevantProperty.join(',') }),
+                    ...(input.travel_for_work !== undefined && input.travel_for_work !== null && { travel_for_work: input.travelForWork }),
+                    ...(!!input.travel_frequency && { travel_frequency: input.travelFrequency }),
+                    ...(!!input.family_abroad && { family_abroad: input.familyAbroad }),
+                    ...(!!input.frequented_cities && { frequented_cities: input.frequentedCities }),
+                    ...(!!input.desired_cities && { desired_cities: input.desiredCities }),
+                    ...(!!input.necessity_or_amenity && { necessity_or_amenity: input.necessityOrAmenity }),
+                    ...(!!input.how_they_found_home0001 && { how_they_found_home0001: input.howTheyFoundHome0001 }),
+                    ...(!!input.what_spark_interest && { what_spark_interest: input.whatSparkInterest }),
+                    ...(!!input.what_they_like_about_apartments && { what_they_like_about_apartments: input.whatTheyLikeAboutApartments }),
+                    ...(!!input.what_they_don_t_like_about_apartments && { what_they_don_t_like_about_apartments: input.whatTheyDontLikeAboutApartments }),
+                    ...(!!input.other_neighborhoods && { other_neighborhoods: input.otherNeighborhoods }),
+                    ...(!!input.other_cities && { other_cities: input.otherCities }),
+                    ...(!!input.additional_notes && { additional_notes: input.additionalNotes }),
+                    ...(!!input.profile_notes && { profile_notes: input.profileNotes }),
+                }
+            });
         }),
 
     getPotentialCustomers: publicProcedure
