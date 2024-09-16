@@ -398,4 +398,1096 @@ export const userRouter = createTRPCRouter({
                 hotWarmCold,
             });
         }),
+
+    updateSocials: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                website: z.string(),
+                instagram: z.string(),
+                facebook: z.string(),
+                twitter: z.string(),
+                whatsApp: z.string(),
+                signal: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, website, instagram, facebook, twitter, whatsApp, signal } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                website,
+                instagram,
+                facebook,
+                twitter,
+                whatsApp,
+                signal,
+            });
+        }),
+
+    updateProfession: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                profession: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, profession } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                profession,
+            });
+        }),
+
+    updateAge: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                age: z.number(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, age } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                age,
+            });
+        }),
+
+    updateKids: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                kids: z.number(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, kids } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                kids,
+            });
+        }),
+
+    updateRelationshipStatus: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                relationshipStatus: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, relationshipStatus } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                relationshipStatus,
+            });
+        }),
+
+    updatePets: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                hasPets: z.boolean(),
+                petTypes: z.array(z.string()),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, hasPets, petTypes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                hasPets,
+                petTypes,
+            });
+        }),
+
+    updatePersonalityType: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                personalityType: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, personalityType } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                personalityType,
+            });
+        }),
+
+    updateFirstTimeBuyer: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                firstTimeBuyer: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, firstTimeBuyer } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                firstTimeBuyer,
+            });
+        }),
+
+    updateCashBuyer: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                cashBuyer: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, cashBuyer } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                cashBuyer,
+            });
+        }),
+
+    updateBroker: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                broker: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, broker } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                broker,
+            });
+        }),
+
+    updateAttorney: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                attorney: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, attorney } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                attorney,
+            });
+        }),
+
+    updateWhosPaying: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                whosPaying: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, whosPaying } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                whosPaying,
+            });
+        }),
+
+    updateMortgagePreQualified: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                mortgagePreQualified: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, mortgagePreQualified } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                mortgagePreQualified,
+            });
+        }),
+
+    updateHomePurchaseType: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                homePurchaseType: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, homePurchaseType } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                homePurchaseType,
+            });
+        }),
+
+    updateWantsHelpFinancing: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                wantsHelpFinancing: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, wantsHelpFinancing } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                wantsHelpFinancing,
+            });
+        }),
+
+    updateNecessityOrAmenity: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                necessityOrAmenity: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, necessityOrAmenity } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                necessityOrAmenity,
+            });
+        }),
+
+    updateCommunityScore: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                communityScore: z.number(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, communityScore } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                communityScore,
+            });
+        }),
+
+    updateRelevance: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                relevance: z.array(z.string()),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, relevance } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                relevance,
+            });
+        }),
+
+    updateKnowOMA: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                knowOMA: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, knowOMA } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                knowOMA,
+            });
+        }),
+
+    updateInterestInHomeSwapping: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                interestInHomeSwapping: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, interestInHomeSwapping } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                interestInHomeSwapping,
+            });
+        }),
+
+    updateInterestInFurniture: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                interestInFurniture: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, interestInFurniture } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                interestInFurniture,
+            });
+        }),
+
+    updateHomeType: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                homeType: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, homeType } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                homeType,
+            });
+        }),
+
+    updateLookingForUnitType: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                lookingForUnitType: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, lookingForUnitType } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                lookingForUnitType,
+            });
+        }),
+
+    updateMaxBudget: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                maxBudget: z.number().nullable().optional(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, maxBudget } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                maxBudget: maxBudget || null,
+            });
+        }),
+
+    updateBuyingTimeline: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                buyingTimeline: z.array(z.string()),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, buyingTimeline } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                buyingTimeline,
+            });
+        }),
+
+    updateTravelForWork: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                travelForWork: z.boolean().nullable(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, travelForWork } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                travelForWork,
+            });
+        }),
+
+    updateTravelFrequency: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                travelFrequency: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, travelFrequency } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                travelFrequency,
+            });
+        }),
+
+    updateFamilyAbroad: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                familyAbroad: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, familyAbroad } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                familyAbroad,
+            });
+        }),
+
+    updateFrequentedCities: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                frequentedCities: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, frequentedCities } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                frequentedCities,
+            });
+        }),
+
+    updateDesiredCities: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                desiredCities: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, desiredCities } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                desiredCities,
+            });
+        }),
+
+    updateOtherCities: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                otherCities: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, otherCities } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                otherCities,
+            });
+        }),
+
+    updateRelevantProperty: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                relevantProperty: z.array(z.string()),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, relevantProperty } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                relevantProperty,
+            });
+        }),
+
+    updateCurrentLivingSituation: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                currentLivingSituation: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, currentLivingSituation } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                currentLivingSituation,
+            });
+        }),
+
+    updateCurrentlyLivingIn: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                currentlyLivingIn: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, currentlyLivingIn } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                currentlyLivingIn,
+            });
+        }),
+
+    updateLookingForCity: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                lookingForCity: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, lookingForCity } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                lookingForCity,
+            });
+        }),
+
+    updateLookingForNeighborhood: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                lookingForNeighborhood: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, lookingForNeighborhood } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                lookingForNeighborhood,
+            });
+        }),
+
+    updatePersonalNotes: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                personalNotes: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, personalNotes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                personalNotes,
+            });
+        }),
+
+    updateCommunityFit: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                communityFit: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, communityFit } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                communityFit,
+            });
+        }),
+
+    updateEyeCatchingNote: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                eyeCatchingNote: z.string(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            const { email, eyeCatchingNote } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                eyeCatchingNote,
+            });
+        }),
+
+    updateHowTheyFoundHome0001: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                howTheyFoundHome0001: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, howTheyFoundHome0001 } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                howTheyFoundHome0001,
+            });
+        }),
+
+    updateWhatSparkInterest: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                whatSparkInterest: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, whatSparkInterest } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                whatSparkInterest,
+            });
+        }),
+
+    updateWhatTheyLikeAboutApartments: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                whatTheyLikeAboutApartments: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, whatTheyLikeAboutApartments } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                whatTheyLikeAboutApartments,
+            });
+        }),
+
+    updateWhatTheyDontLikeAboutApartments: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                whatTheyDontLikeAboutApartments: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, whatTheyDontLikeAboutApartments } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                whatTheyDontLikeAboutApartments,
+            });
+        }),
+
+    updateAdditionalNotes: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                additionalNotes: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, additionalNotes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                additionalNotes,
+            });
+        }),
+
+    updateOMANotes: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                OMANotes: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, OMANotes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                OMANotes,
+            });
+        }),
 });

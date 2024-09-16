@@ -452,7 +452,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                         </div>
 
                         {/* profile notes */}
-                        <div>
+                        {/* <div>
                             <Label htmlFor="profileNotes">Profile Notes</Label>
                             <Textarea
                                 id="profileNotes"
@@ -463,7 +463,7 @@ const UpdateProfile = (props: UpdateProfileProps) => {
                                 }}
                                 className="mt-1 resize-none"
                             />
-                        </div>
+                        </div> */}
                     </div>
 
                     <div>
