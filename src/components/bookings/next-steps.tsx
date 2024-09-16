@@ -12,6 +12,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/router";
 import MarkNextStepsAsCompletedDialog from "./mark-next-step-as-completed-dialog";
+import NextStepsTabs from "./next-steps-tabs";
 
 interface NextStepsProps {
   setNextStepsVisible: (value: boolean) => void;
@@ -40,6 +41,8 @@ const NextSteps = (props: NextStepsProps) => {
   const [sortOrder, setSortOrder] = useState<string>('asc');
 
   const [sortedData, setSortedData] = useState<any[]>([]);
+
+  const [tab, setTab] = useState<string>('all'); // hot, warm, cold, all
 
   const allNextSteps = api.user.allNextSteps.useQuery();
 
@@ -78,9 +81,25 @@ const NextSteps = (props: NextStepsProps) => {
         }
       });
 
+      if (tab === "all") {
+        // do nothing
+      } else if (tab === "hot") {
+        filteredData = filteredData.filter((data) => {
+          return data.hotWarmCold === "hot";
+        });
+      } else if (tab === "warm") {
+        filteredData = filteredData.filter((data) => {
+          return data.hotWarmCold === "warm";
+        });
+      } else if (tab === "cold") {
+        filteredData = filteredData.filter((data) => {
+          return data.hotWarmCold === "cold";
+        });
+      }
+
       setSortedData(filteredData);
     }
-  }, [allNextSteps.data, sortKey, sortOrder, filterStatus, searchQuery]);
+  }, [allNextSteps.data, sortKey, sortOrder, filterStatus, searchQuery, tab]);
 
   // TODO:
   // - add profile picture
@@ -94,9 +113,13 @@ const NextSteps = (props: NextStepsProps) => {
       >
         View Bookings?
       </div>
+      <NextStepsTabs
+        value={tab}
+        onChange={setTab}
+      />
       <Input
         placeholder="Search..."
-        className="w-full lg:w-1/4"
+        className="w-full lg:w-1/4 mt-2"
         value={searchQuery}
         onChange={(e) => {
           setSearchQuery(e.target.value);

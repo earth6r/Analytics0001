@@ -330,6 +330,7 @@ export const userRouter = createTRPCRouter({
                             notes: nextStep.nextStepsNotes,
                             bookingUid,
                             type,
+                            hotWarmCold: data?.hotWarmCold,
                         });
                     };
 
