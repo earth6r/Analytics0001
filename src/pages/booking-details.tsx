@@ -766,7 +766,7 @@ const BookingDetails = () => {
                                                 {getPotentialCustomerDetails.data?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
                                             </div>
                                             <div className="ml-1">
-                                                {getPotentialCustomerDetails.data?.hotWarmCold || "-"}
+                                                {getPotentialCustomerDetails.data?.hotWarmCold || "Hot/Warm/Cold: -"}
                                             </div>
                                         </div>
                                         <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHotWarmColdEditMode(true)}>
@@ -847,7 +847,7 @@ const BookingDetails = () => {
                                         :
                                         <div className="flex flex-row items-center space-x-2">
                                             <h1>
-                                                {getPotentialCustomerDetails.data?.relationshipStatus || "-"}
+                                                {getPotentialCustomerDetails.data?.relationshipStatus || "Relationship Status: -"}
                                             </h1>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setRelationshipStatusEditMode(true)}>
                                                 Edit
