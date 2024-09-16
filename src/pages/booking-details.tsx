@@ -117,7 +117,7 @@ const BookingDetails = () => {
     const [lookingForUnitType, setLookingForUnitType] = useState<string>("");
     const [lookingForUnitTypeEditMode, setLookingForUnitTypeEditMode] = useState<boolean>(false);
 
-    const [sliderValueMax, setSliderValueMax] = useState<number[] | null>([50_000]);
+    const [sliderValueMax, setSliderValueMax] = useState<number[] | null>(null);
     const [maxBudgetEditMode, setMaxBudgetEditMode] = useState<boolean>(false);
 
     const [buyingTimeline, setBuyingTimeline] = useState<string[]>([]);
@@ -777,7 +777,7 @@ const BookingDetails = () => {
                             <div className="flex flex-row items-center space-x-2">
                                 <Bell className="w-4 h-4" />
                                 <div>
-                                    {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium + " is the preferred communication" : "-"}
+                                    {getPotentialCustomerDetails.data?.preferredCommunicationMedium ? getPotentialCustomerDetails.data?.preferredCommunicationMedium + " is the preferred communication" : "Preferred Communication: -"}
                                 </div>
                             </div>
 
@@ -1078,7 +1078,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                First Time Buyer: {getPotentialCustomerDetails.data?.firstTimeBuyer !== null || getPotentialCustomerDetails.data?.firstTimeBuyer !== undefined ? getPotentialCustomerDetails.data?.firstTimeBuyer ? "Yes" : "No" : "-"}
+                                                First Time Buyer: {getPotentialCustomerDetails.data?.firstTimeBuyer === null || getPotentialCustomerDetails.data?.firstTimeBuyer === undefined ? "-" : getPotentialCustomerDetails.data?.firstTimeBuyer ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setFirstTimeBuyerEditMode(true)}>
                                                 Edit
@@ -1115,7 +1115,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Cash Buyer: {getPotentialCustomerDetails.data?.cashBuyer !== null || getPotentialCustomerDetails.data?.cashBuyer !== undefined ? getPotentialCustomerDetails.data?.cashBuyer ? "Yes" : "No" : "-"}
+                                                Cash Buyer: {getPotentialCustomerDetails.data?.cashBuyer === null || getPotentialCustomerDetails.data?.cashBuyer === undefined ? "-" : getPotentialCustomerDetails.data?.cashBuyer ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setCashBuyerEditMode(true)}>
                                                 Edit
@@ -1152,7 +1152,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Broker: {getPotentialCustomerDetails.data?.broker !== null || getPotentialCustomerDetails.data?.broker !== undefined ? getPotentialCustomerDetails.data?.broker ? "Yes" : "No" : "-"}
+                                                Broker: {getPotentialCustomerDetails.data?.broker === null || getPotentialCustomerDetails.data?.broker === undefined ? "-" : getPotentialCustomerDetails.data?.broker ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setBrokerEditMode(true)}>
                                                 Edit
@@ -1189,7 +1189,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Attorney: {getPotentialCustomerDetails.data?.attorney !== null || getPotentialCustomerDetails.data?.attorney !== undefined ? getPotentialCustomerDetails.data?.attorney ? "Yes" : "No" : "-"}
+                                                Attorney: {getPotentialCustomerDetails.data?.attorney === null || getPotentialCustomerDetails.data?.attorney === undefined ? "-" : getPotentialCustomerDetails.data?.attorney ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setAttorneyEditMode(true)}>
                                                 Edit
@@ -1292,7 +1292,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Mortgage Pre-Qualified: {getPotentialCustomerDetails.data?.mortgagePreQualified !== null || getPotentialCustomerDetails.data?.mortgagePreQualified !== undefined ? getPotentialCustomerDetails.data?.mortgagePreQualified ? "Yes" : "No" : "-"}
+                                                Mortgage Pre-Qualified: {getPotentialCustomerDetails.data?.mortgagePreQualified === null || getPotentialCustomerDetails.data?.mortgagePreQualified === undefined ? "-" : getPotentialCustomerDetails.data?.mortgagePreQualified ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setMortgagePreQualifiedEditMode(true)}>
                                                 Edit
@@ -1372,7 +1372,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Wants Help Financing: {getPotentialCustomerDetails.data?.wantsHelpFinancing !== null || getPotentialCustomerDetails.data?.wantsHelpFinancing !== undefined ? getPotentialCustomerDetails.data?.wantsHelpFinancing ? "Yes" : "No" : "-"}
+                                                Wants Help Financing: {getPotentialCustomerDetails.data?.wantsHelpFinancing === null || getPotentialCustomerDetails.data?.wantsHelpFinancing === undefined ? "-" : getPotentialCustomerDetails.data?.wantsHelpFinancing ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setWantsHelpFinancingEditMode(true)}>
                                                 Edit
@@ -1550,7 +1550,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Know OMA: {getPotentialCustomerDetails.data?.knowOMA !== null || getPotentialCustomerDetails.data?.knowOMA !== undefined ? getPotentialCustomerDetails.data?.knowOMA ? "Yes" : "No" : "-"}
+                                                Know OMA: {getPotentialCustomerDetails.data?.knowOMA === null || getPotentialCustomerDetails.data?.knowOMA === undefined ? "-" : getPotentialCustomerDetails.data?.knowOMA ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setKnowOMAEditMode(true)}>
                                                 Edit
@@ -1587,7 +1587,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Interest in Home Swapping: {getPotentialCustomerDetails.data?.interestInHomeSwapping !== null || getPotentialCustomerDetails.data?.interestInHomeSwapping !== undefined ? getPotentialCustomerDetails.data?.interestInHomeSwapping ? "Yes" : "No" : "-"}
+                                                Interest in Home Swapping: {getPotentialCustomerDetails.data?.interestInHomeSwapping === null || getPotentialCustomerDetails.data?.interestInHomeSwapping === undefined ? "-" : getPotentialCustomerDetails.data?.interestInHomeSwapping ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingEditMode(true)}>
                                                 Edit
@@ -1624,7 +1624,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Interest in Furniture: {getPotentialCustomerDetails.data?.interestInFurniture !== null || getPotentialCustomerDetails.data?.interestInFurniture !== undefined ? getPotentialCustomerDetails.data?.interestInFurniture ? "Yes" : "No" : "-"}
+                                                Interest in Furniture: {getPotentialCustomerDetails.data?.interestInFurniture === null || getPotentialCustomerDetails.data?.interestInFurniture === undefined ? "-" : getPotentialCustomerDetails.data?.interestInFurniture ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureEditMode(true)}>
                                                 Edit
@@ -1744,9 +1744,13 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Max Budget: {sliderValueMax && <span>
+                                                Max Budget: {sliderValueMax ? <span>
                                                     {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                                                </span>}
+                                                </span> :
+                                                    <span className="text-muted-foreground text-sm">
+                                                        Unknown
+                                                    </span>
+                                                }
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setMaxBudgetEditMode(true)}>
                                                 Edit
@@ -1837,7 +1841,7 @@ const BookingDetails = () => {
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <div>
-                                                Travel For Work: {getPotentialCustomerDetails.data?.travelForWork !== null || getPotentialCustomerDetails.data?.travelForWork !== undefined ? getPotentialCustomerDetails.data?.travelForWork ? "Yes" : "No" : "-"}
+                                                Travel For Work: {getPotentialCustomerDetails.data?.travelForWork === null || getPotentialCustomerDetails.data?.travelForWork === undefined ? "-" : getPotentialCustomerDetails.data?.travelForWork ? "Yes" : "No"}
                                             </div>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setTravelForWorkEditMode(true)}>
                                                 Edit
