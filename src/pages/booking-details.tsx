@@ -2483,6 +2483,41 @@ const BookingDetails = () => {
                                         </div>
                                 }
                             </div>
+                            <div>
+                                {
+                                    howTheyFoundHome0001EditMode ?
+                                        <div>
+                                            <div>
+                                                <Input
+                                                    value={howTheyFoundHome0001}
+                                                    onChange={(e) => setHowTheyFoundHome0001(e.target.value)}
+                                                    placeholder="How They Found Home0001"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                await updateHowTheyFoundHome0001.mutateAsync({
+                                                    email: email as string,
+                                                    howTheyFoundHome0001: howTheyFoundHome0001,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setHowTheyFoundHome0001EditMode(false)
+                                            }}>
+                                                Done
+                                            </div>
+                                        </div> :
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    How They Found Home0001: {getPotentialCustomerDetails.data?.howTheyFoundHome0001 || "-"}
+                                                </h1>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHowTheyFoundHome0001EditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
