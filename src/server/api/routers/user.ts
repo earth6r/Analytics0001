@@ -6,6 +6,8 @@ import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "fireb
 import { db } from "@/utils/firebase/initialize";
 import { nextStepsMapping } from "@/components/bookings/next-steps-dropdown";
 import { profile } from "console";
+import axios from "axios";
+import { API_URL } from "./bookings";
 
 // Set configuration options for the API route
 export const config = {
@@ -398,6 +400,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 hotWarmCold,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    hot_warm_cold__1_: hotWarmCold,
+                },
+            });
         }),
 
     updateSocials: publicProcedure
@@ -432,6 +440,17 @@ export const userRouter = createTRPCRouter({
                 whatsApp,
                 signal,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    website__1_: website,
+                    instagram__1_: instagram,
+                    facebook: facebook,
+                    twitter: twitter,
+                    whatsapp: whatsApp,
+                    signal: signal,
+                },
+            });
         }),
 
     updateProfession: publicProcedure
@@ -455,6 +474,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 profession,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    profession: profession,
+                },
             });
         }),
 
@@ -480,6 +505,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 age,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    age: age,
+                },
+            });
         }),
 
     updateKids: publicProcedure
@@ -504,6 +535,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 kids,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    kids: kids,
+                },
+            });
         }),
 
     updateRelationshipStatus: publicProcedure
@@ -527,6 +564,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 relationshipStatus,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    relationship_status__1_: relationshipStatus,
+                },
             });
         }),
 
@@ -554,6 +597,13 @@ export const userRouter = createTRPCRouter({
                 hasPets,
                 petTypes,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    has_pets: hasPets,
+                    pet_types: petTypes.join(','),
+                },
+            });
         }),
 
     updatePersonalityType: publicProcedure
@@ -577,6 +627,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 personalityType,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    personality_type: personalityType,
+                },
             });
         }),
 
@@ -602,6 +658,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 firstTimeBuyer,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    first_time_buyer: firstTimeBuyer,
+                },
+            });
         }),
 
     updateCashBuyer: publicProcedure
@@ -625,6 +687,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 cashBuyer,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    cash_buyer: cashBuyer,
+                },
             });
         }),
 
@@ -650,6 +718,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 broker,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    broker: broker,
+                },
+            });
         }),
 
     updateAttorney: publicProcedure
@@ -673,6 +747,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 attorney,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    attorney: attorney,
+                },
             });
         }),
 
@@ -698,6 +778,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 whosPaying,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    who_s_paying: whosPaying,
+                },
+            });
         }),
 
     updateMortgagePreQualified: publicProcedure
@@ -721,6 +807,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 mortgagePreQualified,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    mortgage_pre_qualified: mortgagePreQualified,
+                },
             });
         }),
 
@@ -746,6 +838,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 homePurchaseType,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    home_purchase_type: homePurchaseType,
+                },
+            });
         }),
 
     updateWantsHelpFinancing: publicProcedure
@@ -769,6 +867,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 wantsHelpFinancing,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    wants_help_financing: wantsHelpFinancing,
+                },
             });
         }),
 
@@ -794,6 +898,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 necessityOrAmenity,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    necessity_or_amenity: necessityOrAmenity,
+                },
+            });
         }),
 
     updateCommunityScore: publicProcedure
@@ -817,6 +927,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 communityScore,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    community_score: communityScore,
+                },
             });
         }),
 
@@ -842,6 +958,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 relevance,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    relevance: relevance.join(','),
+                },
+            });
         }),
 
     updateKnowOMA: publicProcedure
@@ -865,6 +987,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 knowOMA,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    know_oma: knowOMA,
+                },
             });
         }),
 
@@ -890,6 +1018,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 interestInHomeSwapping,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    interest_in_home_swapping: interestInHomeSwapping,
+                },
+            });
         }),
 
     updateInterestInFurniture: publicProcedure
@@ -913,6 +1047,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 interestInFurniture,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    interest_in_furniture: interestInFurniture,
+                },
             });
         }),
 
@@ -938,6 +1078,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 homeType,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    home_type__1_: homeType,
+                },
+            });
         }),
 
     updateLookingForUnitType: publicProcedure
@@ -961,6 +1107,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 lookingForUnitType,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    looking_for_unit_type: lookingForUnitType,
+                },
             });
         }),
 
@@ -986,6 +1138,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 maxBudget: maxBudget || null,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    max_budget: maxBudget,
+                },
+            });
         }),
 
     updateBuyingTimeline: publicProcedure
@@ -1009,6 +1167,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 buyingTimeline,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    buying_timeline__1_: buyingTimeline.join(','),
+                },
             });
         }),
 
@@ -1034,6 +1198,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 travelForWork,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    travel_for_work: travelForWork,
+                },
+            });
         }),
 
     updateTravelFrequency: publicProcedure
@@ -1057,6 +1227,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 travelFrequency,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    travel_frequency: travelFrequency,
+                },
             });
         }),
 
@@ -1082,6 +1258,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 familyAbroad,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    family_abroad: familyAbroad,
+                },
+            });
         }),
 
     updateFrequentedCities: publicProcedure
@@ -1105,6 +1287,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 frequentedCities,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    frequented_cities: frequentedCities,
+                },
             });
         }),
 
@@ -1130,6 +1318,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 desiredCities,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    desired_cities: desiredCities,
+                },
+            });
         }),
 
     updateOtherCities: publicProcedure
@@ -1153,6 +1347,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 otherCities,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    other_cities: otherCities,
+                },
             });
         }),
 
@@ -1178,6 +1378,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 relevantProperty,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    relevant_property: relevantProperty.join(','),
+                },
+            });
         }),
 
     updateCurrentLivingSituation: publicProcedure
@@ -1201,6 +1407,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 currentLivingSituation,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    current_living_situation: currentLivingSituation,
+                },
             });
         }),
 
@@ -1226,6 +1438,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 currentlyLivingIn,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    currently_living_in: currentlyLivingIn,
+                },
+            });
         }),
 
     updateLookingForCity: publicProcedure
@@ -1249,6 +1467,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 lookingForCity,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    looking_for_city: lookingForCity,
+                },
             });
         }),
 
@@ -1274,6 +1498,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 lookingForNeighborhood,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    looking_for_neighborhoold: lookingForNeighborhood,
+                },
+            });
         }),
 
     updatePersonalNotes: publicProcedure
@@ -1297,6 +1527,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 personalNotes,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    personal_notes: personalNotes,
+                },
             });
         }),
 
@@ -1322,6 +1558,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 communityFit,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    community_fit: communityFit,
+                },
+            });
         }),
 
     updateEyeCatchingNote: publicProcedure
@@ -1345,6 +1587,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 eyeCatchingNote,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    eye_catching_notes: eyeCatchingNote,
+                },
             });
         }),
 
@@ -1370,6 +1618,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 howTheyFoundHome0001,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    how_they_found_home0001: howTheyFoundHome0001,
+                },
+            });
         }),
 
     updateWhatSparkInterest: publicProcedure
@@ -1393,6 +1647,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 whatSparkInterest,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    what_spark_interest: whatSparkInterest,
+                },
             });
         }),
 
@@ -1418,6 +1678,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 whatTheyLikeAboutApartments,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    what_they_like_about_apartments: whatTheyLikeAboutApartments,
+                },
+            });
         }),
 
     updateWhatTheyDontLikeAboutApartments: publicProcedure
@@ -1441,6 +1707,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 whatTheyDontLikeAboutApartments,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    what_they_don_t_like_about_apartments: whatTheyDontLikeAboutApartments,
+                },
             });
         }),
 
@@ -1466,6 +1738,12 @@ export const userRouter = createTRPCRouter({
             await updateDoc(doc.ref, {
                 additionalNotes,
             });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    additional_notes: additionalNotes,
+                },
+            });
         }),
 
     updateOMANotes: publicProcedure
@@ -1489,6 +1767,12 @@ export const userRouter = createTRPCRouter({
             // @ts-expect-error TODO: fix this
             await updateDoc(doc.ref, {
                 OMANotes,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    oma_notes: OMANotes,
+                },
             });
         }),
 });
