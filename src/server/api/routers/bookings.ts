@@ -293,6 +293,7 @@ export const bookingsRouter = createTRPCRouter({
                     ...(input.mexicoCity ? ['CDMX'] : []),
                     ...(input.somewhereElse ? ['Else'] : []),
                 ];
+
                 await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
                     properties: {
                         product_fit_verified: input.productFit,

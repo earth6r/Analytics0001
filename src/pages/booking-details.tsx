@@ -77,6 +77,9 @@ const BookingDetails = () => {
     const [brokerEditMode, setBrokerEditMode] = useState<boolean>(false);
     const [broker, setBroker] = useState<boolean | null>(null);
 
+    const [bio, setBio] = useState<string>("");
+    const [bioEditMode, setBioEditMode] = useState<boolean>(false);
+
     const [attorneyEditMode, setAttorneyEditMode] = useState<boolean>(false);
     const [attorney, setAttorney] = useState<boolean | null>(null);
 
@@ -95,6 +98,8 @@ const BookingDetails = () => {
 
     const [necessityOrAmenityEditMode, setNecessityOrAmenityEditMode] = useState<boolean>(false);
     const [necessityOrAmenity, setNecessityOrAmenity] = useState<string>("");
+
+    const [funnelTypeEditMode, setFunnelTypeEditMode] = useState<boolean>(false);
 
     const [communityScoreEditMode, setCommunityScoreEditMode] = useState<boolean>(false);
     const [communityScore, setCommunityScore] = useState<number>(0);
@@ -139,6 +144,9 @@ const BookingDetails = () => {
     const [desiredCitiesEditMode, setDesiredCitiesEditMode] = useState<boolean>(false);
     const [otherCitiesEditMode, setOtherCitiesEditMode] = useState<boolean>(false);
 
+    const [otherNeighborhoods, setOtherNeighborhoods] = useState<string>("");
+    const [otherNeighborhoodsEditMode, setOtherNeighborhoodsEditMode] = useState<boolean>(false);
+
     const [relevantProperty, setRelevantProperty] = useState<string[]>([]); // LES, Bed Stuy, Echo Park
     const [relevantPropertyEditMode, setRelevantPropertyEditMode] = useState<boolean>(false);
 
@@ -172,6 +180,16 @@ const BookingDetails = () => {
     const [additionalNotesEditMode, setAdditionalNotesEditMode] = useState<boolean>(false);
     const [OMANotes, setOMANotes] = useState<string>("");
     const [OMANotesEditMode, setOMANotesEditMode] = useState<boolean>(false);
+
+    const [funnelType, setFunnelType] = useState<string>("");
+
+    const [realBuyerTimeline, setRealBuyerTimeline] = useState<string>("");
+
+    const [interestInFurnitureNotesEditMode, setInterestInFurnitureNotesEditMode] = useState<boolean>(false);
+    const [interestInFurnitureNotes, setInterestInFurnitureNotes] = useState<string>("");
+
+    const [interestInHomeSwappingNotesEditMode, setInterestInHomeSwappingNotesEditMode] = useState<boolean>(false);
+    const [interestInHomeSwappingNotes, setInterestInHomeSwappingNotes] = useState<string>("");
 
     const [maxBookingsToShow, setMaxBookingsToShow] = useState<number>(2);
 
@@ -261,6 +279,12 @@ const BookingDetails = () => {
     const updateWhatTheyDontLikeAboutApartments = api.user.updateWhatTheyDontLikeAboutApartments.useMutation();
     const updateAdditionalNotes = api.user.updateAdditionalNotes.useMutation();
     const updateOMANotes = api.user.updateOMANotes.useMutation();
+    const updateBio = api.user.updateBio.useMutation();
+    const updateFunnelType = api.user.updateFunnelType.useMutation();
+    const updateInterestInFurnitureNotes = api.user.updateInterestInFurnitureNotes.useMutation();
+    const updateInterestInHomeSwappingNotes = api.user.updateInterestInHomeSwappingNotes.useMutation();
+    const updateOtherNeighborhoods = api.user.updateOtherNeighborhoods.useMutation();
+    const updateRealBuyerTimeline = api.user.updateRealBuyerTimeline.useMutation();
 
     useEffect(() => {
         if (getPotentialCustomerDetails.data?.imageUrl) {
@@ -440,6 +464,30 @@ const BookingDetails = () => {
 
         if (getPotentialCustomerDetails.data?.OMANotes) {
             setOMANotes(getPotentialCustomerDetails.data.OMANotes);
+        }
+
+        if (getPotentialCustomerDetails.data?.bio) {
+            setBio(getPotentialCustomerDetails.data.bio);
+        }
+
+        if (getPotentialCustomerDetails.data?.funnelType) {
+            setFunnelType(getPotentialCustomerDetails.data.funnelType);
+        }
+
+        if (getPotentialCustomerDetails.data?.interestInFurnitureNotes) {
+            setInterestInFurnitureNotes(getPotentialCustomerDetails.data.interestInFurnitureNotes);
+        }
+
+        if (getPotentialCustomerDetails.data?.interestInHomeSwappingNotes) {
+            setInterestInHomeSwappingNotes(getPotentialCustomerDetails.data.interestInHomeSwappingNotes);
+        }
+
+        if (getPotentialCustomerDetails.data?.otherNeighborhoods) {
+            setOtherNeighborhoods(getPotentialCustomerDetails.data.otherNeighborhoods);
+        }
+
+        if (getPotentialCustomerDetails.data?.realBuyerTimeline) {
+            setRealBuyerTimeline(getPotentialCustomerDetails.data.realBuyerTimeline);
         }
     }, [getPotentialCustomerDetails.data]);
 
@@ -909,28 +957,28 @@ const BookingDetails = () => {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div
-                                                                className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                                onClick={async () => {
-                                                                    await updatePets.mutateAsync({
-                                                                        email: email as string,
-                                                                        hasPets: hasPets,
-                                                                        petTypes: petTypes,
-                                                                    })
-                                                                    await getPotentialCustomerDetails.refetch();
-                                                                    setPetsEditMode(false)
-                                                                }}
-                                                            >
-                                                                Done
-                                                            </div>
                                                         </div>
                                                     )
                                                 }
+                                                <div
+                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                    onClick={async () => {
+                                                        await updatePets.mutateAsync({
+                                                            email: email as string,
+                                                            hasPets: hasPets,
+                                                            petTypes: hasPets ? petTypes : [],
+                                                        })
+                                                        await getPotentialCustomerDetails.refetch();
+                                                        setPetsEditMode(false)
+                                                    }}
+                                                >
+                                                    Done
+                                                </div>
                                             </div>
                                         </div> :
                                         <div className="flex flex-row items-center space-x-2">
                                             <h1>
-                                                {getPotentialCustomerDetails.data?.hasPets ? "Has pets" : "No pets"}
+                                                {getPotentialCustomerDetails.data?.hasPets === undefined || getPotentialCustomerDetails.data?.hasPets === null ? "Pets: -" : getPotentialCustomerDetails.data?.hasPets ? "Has pets" : "No pets"}
                                             </h1>
                                             <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPetsEditMode(true)}>
                                                 Edit
@@ -1421,6 +1469,84 @@ const BookingDetails = () => {
                                                     Necessity or Amenity: {getPotentialCustomerDetails.data?.necessityOrAmenity || "-"}
                                                 </h1>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setNecessityOrAmenityEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    funnelTypeEditMode ?
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>
+                                                    <Select value={funnelType || undefined} onValueChange={setFunnelType}>
+                                                        <SelectTrigger className="w-full mt-1">
+                                                            <SelectValue placeholder="Select a funnel type" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {["Real Buyer", "Window Shopper", "Long Term Lead", "Fan", "Unqualified"]
+                                                                .map((funnelTypeItem) => (
+                                                                    <SelectItem key={funnelTypeItem} value={funnelTypeItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                                        {funnelTypeItem}
+                                                                    </SelectItem>
+                                                                ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                {
+                                                    funnelType === "Real Buyer" && (
+                                                        <div>
+                                                            <Label>Real Buyer Timeline</Label>
+                                                            <Select value={realBuyerTimeline || undefined} onValueChange={
+                                                                async (value) => {
+                                                                    if (value) {
+                                                                        await updateRealBuyerTimeline.mutateAsync({
+                                                                            email: email as string,
+                                                                            realBuyerTimeline: value,
+                                                                        })
+                                                                        await getPotentialCustomerDetails.refetch();
+                                                                    }
+                                                                }
+                                                            }>
+                                                                <SelectTrigger className="w-full mt-1">
+                                                                    <SelectValue placeholder="Select a real buyer timeline" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {["Immediate", "Midterm", "Longterm"]
+                                                                        .map((realBuyerTimelineItem) => (
+                                                                            <SelectItem key={realBuyerTimelineItem} value={realBuyerTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                                                {realBuyerTimelineItem}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    )
+                                                }
+                                                <div>
+                                                    <div
+                                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                        onClick={async () => {
+                                                            await updateFunnelType.mutateAsync({
+                                                                email: email as string,
+                                                                funnelType: funnelType,
+                                                            })
+                                                            await getPotentialCustomerDetails.refetch();
+                                                            setFunnelTypeEditMode(false)
+                                                        }}
+                                                    >
+                                                        Done
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> : <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    Funnel Type: {getPotentialCustomerDetails.data?.funnelType || "-"}
+                                                </h1>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setFunnelTypeEditMode(true)}>
                                                     Edit
                                                 </div>
                                             </div>
@@ -2016,6 +2142,39 @@ const BookingDetails = () => {
                             </div>
                             <div>
                                 {
+                                    otherNeighborhoodsEditMode ?
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <div>
+                                                <Input
+                                                    type="text"
+                                                    value={otherNeighborhoods}
+                                                    onChange={(e) => setOtherNeighborhoods(e.target.value)}
+                                                    placeholder="Other Neighborhoods"
+                                                />
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                await updateOtherNeighborhoods.mutateAsync({
+                                                    email: email as string,
+                                                    otherNeighborhoods: otherNeighborhoods,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setOtherNeighborhoodsEditMode(false)
+                                            }}>
+                                                Done
+                                            </div>
+                                        </div> :
+                                        <div className="flex flex-row items-center space-x-2">
+                                            <div>
+                                                Other Neighborhoods: {getPotentialCustomerDetails.data?.otherNeighborhoods || "-"}
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setOtherNeighborhoodsEditMode(true)}>
+                                                Edit
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
                                     relevantPropertyEditMode ?
                                         <div>
                                             <div>
@@ -2232,6 +2391,41 @@ const BookingDetails = () => {
                                                     Personal Notes: {getPotentialCustomerDetails.data?.personalNotes || "-"}
                                                 </h1>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setPersonalNotesEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    bioEditMode ?
+                                        <div>
+                                            <div>
+                                                <Input
+                                                    value={bio}
+                                                    onChange={(e) => setBio(e.target.value)}
+                                                    placeholder="Bio"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                await updateBio.mutateAsync({
+                                                    email: email as string,
+                                                    bio: bio,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setBioEditMode(false)
+                                            }}>
+                                                Done
+                                            </div>
+                                        </div> :
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    Bio: {getPotentialCustomerDetails.data?.bio || "-"}
+                                                </h1>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setBioEditMode(true)}>
                                                     Edit
                                                 </div>
                                             </div>
@@ -2512,6 +2706,76 @@ const BookingDetails = () => {
                                                     How They Found Home0001: {getPotentialCustomerDetails.data?.howTheyFoundHome0001 || "-"}
                                                 </h1>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHowTheyFoundHome0001EditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    interestInFurnitureNotesEditMode ?
+                                        <div>
+                                            <div>
+                                                <Input
+                                                    value={interestInFurnitureNotes}
+                                                    onChange={(e) => setInterestInFurnitureNotes(e.target.value)}
+                                                    placeholder="Interest In Furniture Notes"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                await updateInterestInFurnitureNotes.mutateAsync({
+                                                    email: email as string,
+                                                    interestInFurnitureNotes: interestInFurnitureNotes,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setInterestInFurnitureNotesEditMode(false)
+                                            }}>
+                                                Done
+                                            </div>
+                                        </div> :
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    Interest In Furniture Notes: {getPotentialCustomerDetails.data?.interestInFurnitureNotes || "-"}
+                                                </h1>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureNotesEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
+                            </div>
+                            <div>
+                                {
+                                    interestInHomeSwappingNotesEditMode ?
+                                        <div>
+                                            <div>
+                                                <Input
+                                                    value={interestInHomeSwappingNotes}
+                                                    onChange={(e) => setInterestInHomeSwappingNotes(e.target.value)}
+                                                    placeholder="Interest In Home Swapping Notes"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                await updateInterestInHomeSwappingNotes.mutateAsync({
+                                                    email: email as string,
+                                                    interestInHomeSwappingNotes: interestInHomeSwappingNotes,
+                                                })
+                                                await getPotentialCustomerDetails.refetch();
+                                                setInterestInHomeSwappingNotesEditMode(false)
+                                            }}>
+                                                Done
+                                            </div>
+                                        </div> :
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    Interest In Home Swapping Notes: {getPotentialCustomerDetails.data?.interestInHomeSwappingNotes || "-"}
+                                                </h1>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingNotesEditMode(true)}>
                                                     Edit
                                                 </div>
                                             </div>

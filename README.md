@@ -52,9 +52,6 @@ NO PRI:
 - add a notification number beside bookings if there are pending bookings
 
 HI PRI:
-- add hubspot properties
-- google docs has the right order - tour meeting notes (add to booking-details page)
-- when expanded, make the ui different to not make it stretched
 - if an existing data entry exists, it should be in read mode, not write mode but in booking-details page, everything is read mode until edit trigger is clicked
 - fix up the whole design, add sections, nice looks, easy on the eyes, etc. - might not need sections to be cleaner and minimal
 - advanced options for reschedule booking

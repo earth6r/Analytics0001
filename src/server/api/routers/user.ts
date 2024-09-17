@@ -1775,4 +1775,184 @@ export const userRouter = createTRPCRouter({
                 },
             });
         }),
+
+    updateBio: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                bio: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, bio } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                bio,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    bio,
+                },
+            });
+        }),
+
+    updateFunnelType: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                funnelType: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, funnelType } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                funnelType,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    funnel_type: funnelType,
+                },
+            });
+        }),
+
+    updateInterestInFurnitureNotes: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                interestInFurnitureNotes: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, interestInFurnitureNotes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                interestInFurnitureNotes,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    interest_in_furniture_notes: interestInFurnitureNotes,
+                },
+            });
+        }),
+
+    updateInterestInHomeSwappingNotes: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                interestInHomeSwappingNotes: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, interestInHomeSwappingNotes } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                interestInHomeSwappingNotes,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    interest_in_home_swapping_notes: interestInHomeSwappingNotes,
+                },
+            });
+        }),
+
+    updateOtherNeighborhoods: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                otherNeighborhoods: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, otherNeighborhoods } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                otherNeighborhoods,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    other_neighborhoods: otherNeighborhoods,
+                },
+            });
+        }),
+
+        updateRealBuyerTimeline: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                realBuyerTimeline: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, realBuyerTimeline } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                realBuyerTimeline,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    real_buyer_timeline: realBuyerTimeline,
+                },
+            });
+        }),
 });
