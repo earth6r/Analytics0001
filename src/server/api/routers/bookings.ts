@@ -367,6 +367,46 @@ export const bookingsRouter = createTRPCRouter({
             }
         }),
 
+    addHubspotNote: publicProcedure
+        .input(z.object({
+            email: z.string(),
+            uid: z.string(),
+            bookingType: z.string(),
+        }))
+        .mutation(async ({ input }) => {
+            const tableNameRef = input.bookingType === "Property Tour" ? "usersBookPropertyTour" : "usersBookPhoneCall";
+
+            const tableRef = collection(db, tableNameRef);
+
+            const d = doc(tableRef, input.uid);
+
+            const currentDoc = await getDoc(d);
+
+            if (!currentDoc.exists()) {
+                throw new Error('Booking not found');
+            }
+
+            const { additionalDetails, interviewer = "" } = currentDoc.data();
+
+            let note = `Host: ${interviewer ?? '-'}
+Notes: ${additionalDetails?.meetingNotes ?? '-'}`;
+
+            if (input.bookingType === "Property Tour") {
+                const { whatApartmentsDidTheySee, whatApartmentsAreTheirFavorites } = currentDoc.data();
+
+                note += `What apartments did they see: ${whatApartmentsDidTheySee ?? '-'}\n\n`;
+                note += `What apartments are their favorites: ${whatApartmentsAreTheirFavorites ?? '-'}\n\n`;
+            }
+
+            try {
+                await axios.post(`${API_URL}/hubspot/add-note?email=${input.email}`, {
+                    note,
+                });
+            } catch (error) {
+                console.error('Error adding hubspot note', error);
+            }
+        }),
+
     updateBookingStatus: publicProcedure
         .input(z.object({
             uid: z.string(),
