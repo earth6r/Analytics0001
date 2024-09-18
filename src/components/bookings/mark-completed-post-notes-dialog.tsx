@@ -64,6 +64,7 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
     const [meetingNotes, setMeetingNotes] = useState('');
 
     const completeBooking = api.bookings.completeBooking.useMutation();
+    const addHubspotNote = api.bookings.addHubspotNote.useMutation();
     const api_utils = api.useUtils();
 
     // next steps
@@ -118,12 +119,16 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
             whatApartmentsAreTheirFavorites: booking?.type === "Phone Call" ? null : whatApartmentsAreTheirFavorites,
             meetingNotes: meetingNotes,
         });
+        await addHubspotNote.mutateAsync({
+            email: booking?.email,
+            uid: booking?.uid,
+            bookingType: booking?.type,
+        });
 
         let deferredDateUtc = null;
         if (deferredDate) {
             deferredDateUtc = moment(deferredDate).utc().unix();
         }
-
 
         await addNextSteps.mutateAsync({
             email: booking?.email,
