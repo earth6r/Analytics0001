@@ -281,7 +281,7 @@ export const bookingsRouter = createTRPCRouter({
                 throw new Error('Booking not found');
             }
 
-            const { email, firstName, lastName, phoneNumber } = currentDoc.data();
+            const { email, firstName, lastName, phoneNumber, interviewer = "" } = currentDoc.data();
 
             try {
                 const locationFitArray = [
@@ -388,8 +388,7 @@ export const bookingsRouter = createTRPCRouter({
 
             const { additionalDetails, interviewer = "" } = currentDoc.data();
 
-            let note = `Host: ${interviewer ?? '-'}
-Notes: ${additionalDetails?.meetingNotes ?? '-'}`;
+            let note = `Host: ${interviewer ?? '-'}\n\nNotes: ${additionalDetails?.meetingNotes ?? '-'}\n\n`;
 
             if (input.bookingType === "Property Tour") {
                 const { whatApartmentsDidTheySee, whatApartmentsAreTheirFavorites } = currentDoc.data();
