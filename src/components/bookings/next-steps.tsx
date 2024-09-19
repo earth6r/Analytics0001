@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import { ArrowUpDownIcon, CircleAlert, Hourglass, Plus, User, X } from "lucide-react";
+import { ArrowUpDownIcon, CircleAlert, Flame, Hourglass, Plus, Snowflake, ThermometerSun, User, X } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { api } from "@/utils/api";
@@ -283,8 +283,19 @@ const NextSteps = (props: NextStepsProps) => {
                           {data.profile.firstName || "No First Name Provided"}{" "}
                           {data.profile.lastName || "No Last Name Provided"}
                         </div>
-                        <div className="text-sm text-muted-foreground max-w-32 truncate">
-                          {data.profile.email || "No Email Provided"}
+                        <div className={cn("text-md text-muted-foreground flex flex-row items-center", !!data.profile?.hotWarmCold && "")}>
+                          <div className="text-red-500">
+                            {data.profile?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
+                          </div>
+                          <div className="text-blue-500">
+                            {data.profile?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
+                          </div>
+                          <div className="text-yellow-500">
+                            {data.profile?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
+                          </div>
+                          <div className={cn("text-sm text-muted-foreground max-w-32 truncate", !!data.profile?.hotWarmCold && "ml-1")}>
+                            {data.profile.email || "No Email Provided"}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -307,8 +318,19 @@ const NextSteps = (props: NextStepsProps) => {
                           {data.profile.firstName || "-"}{" "}
                           {data.profile.lastName || "-"}
                         </div>
-                        <div className="text-md text-muted-foreground">
-                          {data.profile.email || "-"}
+                        <div className="text-md text-muted-foreground flex flex-row items-center">
+                          <div className="text-red-500">
+                            {data.profile?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
+                          </div>
+                          <div className="text-blue-500">
+                            {data.profile?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
+                          </div>
+                          <div className="text-yellow-500">
+                            {data.profile?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
+                          </div>
+                          <div className={cn("text-md text-muted-foreground", !!data.profile?.hotWarmCold && "ml-1")}>
+                            {data.profile.email || "No Email Provided"}
+                          </div>
                         </div>
                         <div
                           className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"

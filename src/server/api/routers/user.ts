@@ -325,6 +325,7 @@ export const userRouter = createTRPCRouter({
                                 firstName,
                                 lastName,
                                 imageUrl: data?.imageUrl || `https://ui-avatars.com/api/?name=${firstName} ${lastName}`,
+                                hotWarmCold: data?.hotWarmCold || null,
                             },
                             latestNextStep: nextStepValue,
                             latestStatus: status,

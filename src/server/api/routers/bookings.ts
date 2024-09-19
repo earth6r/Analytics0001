@@ -78,6 +78,7 @@ export const bookingsRouter = createTRPCRouter({
                 } else {
                     const firstDoc = potentialCustomer.docs[0];
                     booking.imageUrl = firstDoc?.data()?.imageUrl || url;
+                    booking.hotWarmCold = firstDoc?.data()?.hotWarmCold || null;
                 }
             }
 

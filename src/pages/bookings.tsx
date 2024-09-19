@@ -29,10 +29,13 @@ import { api } from "@/utils/api";
 import {
   AlertCircle,
   ArrowUpDownIcon,
+  Flame,
   Phone,
   Plus,
   School,
+  Snowflake,
   SquareArrowOutUpRight,
+  ThermometerSun,
   Trash2,
   User,
   X,
@@ -453,8 +456,19 @@ const Bookings = () => {
                                 {booking.firstName || "No First Name Provided"}{" "}
                                 {booking.lastName || "No Last Name Provided"}
                               </div>
-                              <div className="text-sm text-muted-foreground max-w-36 truncate">
-                                {booking.email || "No Email Provided"}
+                              <div className="flex flex-row items-center">
+                                <div className="text-red-500">
+                                  {booking?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
+                                </div>
+                                <div className="text-blue-500">
+                                  {booking?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
+                                </div>
+                                <div className="text-yellow-500">
+                                  {booking?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
+                                </div>
+                                <div className={cn("text-sm text-muted-foreground max-w-36 truncate", !!booking?.hotWarmCold && "ml-1")}>
+                                  {booking.email || "No Email Provided"}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -477,8 +491,19 @@ const Bookings = () => {
                                 {booking.firstName || "No First Name Provided"}{" "}
                                 {booking.lastName || "No Last Name Provided"}
                               </div>
-                              <div className="text-md text-muted-foreground">
-                                {booking.email || "No Email Provided"}
+                              <div className={cn("flex flex-row items-center", !!booking?.hotWarmCold && "")}>
+                                <div className="text-red-500">
+                                  {booking?.hotWarmCold === "hot" && <Flame className="w-4 h-4" />}
+                                </div>
+                                <div className="text-blue-500">
+                                  {booking?.hotWarmCold === "cold" && <Snowflake className="w-4 h-4" />}
+                                </div>
+                                <div className="text-yellow-500">
+                                  {booking?.hotWarmCold === "warm" && <ThermometerSun className="w-4 h-4" />}
+                                </div>
+                                <div className={cn("text-md text-muted-foreground max-w-36 truncate", !!booking?.hotWarmCold && "ml-1")}>
+                                  {booking.email || "No Email Provided"}
+                                </div>
                               </div>
                               <div
                                 className="mt-2 cursor-pointer rounded-lg border border-muted-foreground p-1 text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:bg-gray-800"
