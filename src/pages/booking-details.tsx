@@ -1172,6 +1172,17 @@ const BookingDetails = () => {
                                 </div>
                             </CardContent>
                         </Card>
+                        {getPotentialCustomerDetails.data?.profileNotes && <Card className="mt-2">
+                            <CardHeader className="select-none">
+                                <CardTitle>Legacy Profile Notes</CardTitle>
+                                <CardDescription>
+                                    {`Details about the potential customer's profile notes that previously existed.`}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="max-h-48 overflow-y-scroll">
+                                {getPotentialCustomerDetails.data?.profileNotes}
+                            </CardContent>
+                        </Card>}
                     </div>
                 </div>
 
