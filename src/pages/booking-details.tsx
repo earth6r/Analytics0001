@@ -181,6 +181,9 @@ const BookingDetails = () => {
     const [OMANotes, setOMANotes] = useState<string>("");
     const [OMANotesEditMode, setOMANotesEditMode] = useState<boolean>(false);
 
+    const [gender, setGender] = useState<string>("");
+    const [genderEditMode, setGenderEditMode] = useState<boolean>(false);
+
     const [funnelType, setFunnelType] = useState<string>("");
 
     const [realBuyerTimeline, setRealBuyerTimeline] = useState<string>("");
@@ -285,6 +288,7 @@ const BookingDetails = () => {
     const updateInterestInHomeSwappingNotes = api.user.updateInterestInHomeSwappingNotes.useMutation();
     const updateOtherNeighborhoods = api.user.updateOtherNeighborhoods.useMutation();
     const updateRealBuyerTimeline = api.user.updateRealBuyerTimeline.useMutation();
+    const updateGender = api.user.updateGender.useMutation();
 
     useEffect(() => {
         if (getPotentialCustomerDetails.data?.imageUrl) {
@@ -489,6 +493,10 @@ const BookingDetails = () => {
         if (getPotentialCustomerDetails.data?.realBuyerTimeline) {
             setRealBuyerTimeline(getPotentialCustomerDetails.data.realBuyerTimeline);
         }
+
+        if (getPotentialCustomerDetails.data?.gender) {
+            setGender(getPotentialCustomerDetails.data.gender);
+        }
     }, [getPotentialCustomerDetails.data]);
 
     useEffect(() => {
@@ -684,9 +692,37 @@ const BookingDetails = () => {
                                     {bookingDetails.data?.phoneNumber ? <CopyTooltip value={bookingDetails.data?.phoneNumber} /> : "-"}
                                 </div>
                             </div>
-                            <h1>
-                                Identifies as a {getPotentialCustomerDetails.data?.gender || "-"}
-                            </h1>
+                            {genderEditMode ? <div>
+                                <div className="flex flex-row items-center space-x-2">
+                                    <Input
+                                        type="text"
+                                        value={gender}
+                                        onChange={(e) => setGender(e.target.value)}
+                                    />
+                                    <div
+                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                        onClick={async () => {
+                                            await updateGender.mutateAsync({
+                                                email: email as string,
+                                                gender,
+                                            })
+                                            await getPotentialCustomerDetails.refetch();
+                                            setGenderEditMode(false)
+                                        }}
+                                    >
+                                        Done
+                                    </div>
+                                </div>
+                            </div> :
+                                <div className="flex flex-row items-center space-x-2">
+                                    <h1>
+                                        Identifies as a {getPotentialCustomerDetails.data?.gender || "-"}
+                                    </h1>
+                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setGenderEditMode(true)}>
+                                        Edit
+                                    </div>
+                                </div>
+                            }
                             <div>
                                 {ageEditMode ?
                                     <div className="flex flex-row items-center space-x-2">

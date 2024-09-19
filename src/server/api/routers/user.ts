@@ -1926,7 +1926,7 @@ export const userRouter = createTRPCRouter({
             });
         }),
 
-        updateRealBuyerTimeline: publicProcedure
+    updateRealBuyerTimeline: publicProcedure
         .input(
             z.object({
                 email: z.string(),
@@ -1952,6 +1952,38 @@ export const userRouter = createTRPCRouter({
             await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
                 properties: {
                     real_buyer_timeline: realBuyerTimeline,
+                },
+            });
+        }),
+
+    updateGender: publicProcedure
+        .input(
+            z.object({
+                email: z.string(),
+                gender: z.string(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const { email, gender } = input;
+
+            const userRef = collection(db, 'potentialCustomers');
+
+            const querySnapshot = await getDocs(query(userRef, where('email', '==', email)));
+
+            if (querySnapshot.empty) {
+                throw new Error('User not found');
+            }
+
+            const doc = querySnapshot.docs[0];
+
+            // @ts-expect-error TODO: fix this
+            await updateDoc(doc.ref, {
+                gender,
+            });
+
+            await axios.post(`${API_URL}/hubspot/update-contact-properties?email=${email}`, {
+                properties: {
+                    gender__1_: gender,
                 },
             });
         }),
