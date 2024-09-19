@@ -166,13 +166,16 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRingLight dark:animate-pulseRingDark", className)}>
+                {/* <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRingLight dark:animate-pulseRingDark", className)}>
                     <CirclePlus className="w-4 h-4" />
                     <span className="hidden md:block">
                         Add Details
                     </span>
                     {!imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 animate-shine"></span>}
-                </Button>
+                </Button> */}
+                <div className={cn("text-blue-400 hover:text-blue-300 cursor-pointer", className)}>
+                    Edit
+                </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] md:max-w-[600px] px-0">
                 <DialogHeader className="px-6">
