@@ -1766,81 +1766,158 @@ const BookingDetails = () => {
                                         </div>
                                 }
                             </div>
-                            <div>
-                                {
-                                    interestInHomeSwappingEditMode ?
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <div className="flex flex-row items-center space-x-1">
-                                                    <Checkbox
-                                                        checked={interestInHomeSwapping || false}
-                                                        onCheckedChange={(checked) => setInterestInHomeSwapping(!!checked)}
-                                                    />
-                                                    <h1>Interest in Home Swapping</h1>
+
+                            <div className="mt-2">
+                                <div>
+                                    {
+                                        interestInHomeSwappingEditMode ?
+                                            <div>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <div className="flex flex-row items-center space-x-1">
+                                                        <Checkbox
+                                                            checked={interestInHomeSwapping || false}
+                                                            onCheckedChange={(checked) => setInterestInHomeSwapping(!!checked)}
+                                                        />
+                                                        <h1>Interest in Home Swapping</h1>
+                                                    </div>
+                                                    <div
+                                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                        onClick={async () => {
+                                                            await updateInterestInHomeSwapping.mutateAsync({
+                                                                email: email as string,
+                                                                interestInHomeSwapping: interestInHomeSwapping,
+                                                            })
+                                                            await getPotentialCustomerDetails.refetch();
+                                                            setInterestInHomeSwappingEditMode(false)
+                                                        }}
+                                                    >
+                                                        Done
+                                                    </div>
                                                 </div>
-                                                <div
-                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                    onClick={async () => {
-                                                        await updateInterestInHomeSwapping.mutateAsync({
-                                                            email: email as string,
-                                                            interestInHomeSwapping: interestInHomeSwapping,
-                                                        })
-                                                        await getPotentialCustomerDetails.refetch();
-                                                        setInterestInHomeSwappingEditMode(false)
-                                                    }}
-                                                >
+                                            </div> :
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>
+                                                    Interest in Home Swapping: {getPotentialCustomerDetails.data?.interestInHomeSwapping === null || getPotentialCustomerDetails.data?.interestInHomeSwapping === undefined ? "-" : getPotentialCustomerDetails.data?.interestInHomeSwapping ? "Yes" : "No"}
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                    }
+                                </div>
+                                <div>
+                                    {
+                                        interestInHomeSwappingNotesEditMode ?
+                                            <div>
+                                                <div>
+                                                    <Input
+                                                        value={interestInHomeSwappingNotes}
+                                                        onChange={(e) => setInterestInHomeSwappingNotes(e.target.value)}
+                                                        placeholder="Interest In Home Swapping Notes"
+                                                        className="w-full"
+                                                    />
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                    await updateInterestInHomeSwappingNotes.mutateAsync({
+                                                        email: email as string,
+                                                        interestInHomeSwappingNotes: interestInHomeSwappingNotes,
+                                                    })
+                                                    await getPotentialCustomerDetails.refetch();
+                                                    setInterestInHomeSwappingNotesEditMode(false)
+                                                }}>
                                                     Done
                                                 </div>
-                                            </div>
-                                        </div> :
-                                        <div className="flex flex-row items-center space-x-2">
+                                            </div> :
                                             <div>
-                                                Interest in Home Swapping: {getPotentialCustomerDetails.data?.interestInHomeSwapping === null || getPotentialCustomerDetails.data?.interestInHomeSwapping === undefined ? "-" : getPotentialCustomerDetails.data?.interestInHomeSwapping ? "Yes" : "No"}
-                                            </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingEditMode(true)}>
-                                                Edit
-                                            </div>
-                                        </div>
-                                }
-                            </div>
-                            <div>
-                                {
-                                    interestInFurnitureEditMode ?
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <div className="flex flex-row items-center space-x-1">
-                                                    <Checkbox
-                                                        checked={interestInFurniture || false}
-                                                        onCheckedChange={(checked) => setInterestInFurniture(!!checked)}
-                                                    />
-                                                    <h1>Interest in Furniture</h1>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <h1>
+                                                        Interest In Home Swapping Notes: {getPotentialCustomerDetails.data?.interestInHomeSwappingNotes || "-"}
+                                                    </h1>
+                                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingNotesEditMode(true)}>
+                                                        Edit
+                                                    </div>
                                                 </div>
-                                                <div
-                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                    onClick={async () => {
-                                                        await updateInterestInFurniture.mutateAsync({
-                                                            email: email as string,
-                                                            interestInFurniture: interestInFurniture,
-                                                        })
-                                                        await getPotentialCustomerDetails.refetch();
-                                                        setInterestInFurnitureEditMode(false)
-                                                    }}
-                                                >
+                                            </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="mt-2">
+                                <div>
+                                    {
+                                        interestInFurnitureEditMode ?
+                                            <div>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <div className="flex flex-row items-center space-x-1">
+                                                        <Checkbox
+                                                            checked={interestInFurniture || false}
+                                                            onCheckedChange={(checked) => setInterestInFurniture(!!checked)}
+                                                        />
+                                                        <h1>Interest in Furniture</h1>
+                                                    </div>
+                                                    <div
+                                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                        onClick={async () => {
+                                                            await updateInterestInFurniture.mutateAsync({
+                                                                email: email as string,
+                                                                interestInFurniture: interestInFurniture,
+                                                            })
+                                                            await getPotentialCustomerDetails.refetch();
+                                                            setInterestInFurnitureEditMode(false)
+                                                        }}
+                                                    >
+                                                        Done
+                                                    </div>
+                                                </div>
+                                            </div> :
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>
+                                                    Interest in Furniture: {getPotentialCustomerDetails.data?.interestInFurniture === null || getPotentialCustomerDetails.data?.interestInFurniture === undefined ? "-" : getPotentialCustomerDetails.data?.interestInFurniture ? "Yes" : "No"}
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                    }
+                                </div>
+                                <div>
+                                    {
+                                        interestInFurnitureNotesEditMode ?
+                                            <div>
+                                                <div>
+                                                    <Input
+                                                        value={interestInFurnitureNotes}
+                                                        onChange={(e) => setInterestInFurnitureNotes(e.target.value)}
+                                                        placeholder="Interest In Furniture Notes"
+                                                        className="w-full"
+                                                    />
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                    await updateInterestInFurnitureNotes.mutateAsync({
+                                                        email: email as string,
+                                                        interestInFurnitureNotes: interestInFurnitureNotes,
+                                                    })
+                                                    await getPotentialCustomerDetails.refetch();
+                                                    setInterestInFurnitureNotesEditMode(false)
+                                                }}>
                                                     Done
                                                 </div>
-                                            </div>
-                                        </div> :
-                                        <div className="flex flex-row items-center space-x-2">
+                                            </div> :
                                             <div>
-                                                Interest in Furniture: {getPotentialCustomerDetails.data?.interestInFurniture === null || getPotentialCustomerDetails.data?.interestInFurniture === undefined ? "-" : getPotentialCustomerDetails.data?.interestInFurniture ? "Yes" : "No"}
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <h1>
+                                                        Interest In Furniture Notes: {getPotentialCustomerDetails.data?.interestInFurnitureNotes || "-"}
+                                                    </h1>
+                                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureNotesEditMode(true)}>
+                                                        Edit
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureEditMode(true)}>
-                                                Edit
-                                            </div>
-                                        </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                            <div>
+
+                            <div className="mt-2">
                                 {
                                     homeTypeEditMode ?
                                         <div className="flex flex-row items-center space-x-2">
@@ -2753,76 +2830,6 @@ const BookingDetails = () => {
                                                     How They Found Home0001: {getPotentialCustomerDetails.data?.howTheyFoundHome0001 || "-"}
                                                 </h1>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setHowTheyFoundHome0001EditMode(true)}>
-                                                    Edit
-                                                </div>
-                                            </div>
-                                        </div>
-                                }
-                            </div>
-                            <div>
-                                {
-                                    interestInFurnitureNotesEditMode ?
-                                        <div>
-                                            <div>
-                                                <Input
-                                                    value={interestInFurnitureNotes}
-                                                    onChange={(e) => setInterestInFurnitureNotes(e.target.value)}
-                                                    placeholder="Interest In Furniture Notes"
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
-                                                await updateInterestInFurnitureNotes.mutateAsync({
-                                                    email: email as string,
-                                                    interestInFurnitureNotes: interestInFurnitureNotes,
-                                                })
-                                                await getPotentialCustomerDetails.refetch();
-                                                setInterestInFurnitureNotesEditMode(false)
-                                            }}>
-                                                Done
-                                            </div>
-                                        </div> :
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <h1>
-                                                    Interest In Furniture Notes: {getPotentialCustomerDetails.data?.interestInFurnitureNotes || "-"}
-                                                </h1>
-                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInFurnitureNotesEditMode(true)}>
-                                                    Edit
-                                                </div>
-                                            </div>
-                                        </div>
-                                }
-                            </div>
-                            <div>
-                                {
-                                    interestInHomeSwappingNotesEditMode ?
-                                        <div>
-                                            <div>
-                                                <Input
-                                                    value={interestInHomeSwappingNotes}
-                                                    onChange={(e) => setInterestInHomeSwappingNotes(e.target.value)}
-                                                    placeholder="Interest In Home Swapping Notes"
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
-                                                await updateInterestInHomeSwappingNotes.mutateAsync({
-                                                    email: email as string,
-                                                    interestInHomeSwappingNotes: interestInHomeSwappingNotes,
-                                                })
-                                                await getPotentialCustomerDetails.refetch();
-                                                setInterestInHomeSwappingNotesEditMode(false)
-                                            }}>
-                                                Done
-                                            </div>
-                                        </div> :
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <h1>
-                                                    Interest In Home Swapping Notes: {getPotentialCustomerDetails.data?.interestInHomeSwappingNotes || "-"}
-                                                </h1>
-                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setInterestInHomeSwappingNotesEditMode(true)}>
                                                     Edit
                                                 </div>
                                             </div>
