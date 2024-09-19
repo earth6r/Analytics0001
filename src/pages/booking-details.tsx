@@ -2481,41 +2481,6 @@ const BookingDetails = () => {
                             </div>
                             <div>
                                 {
-                                    bioEditMode ?
-                                        <div>
-                                            <div>
-                                                <Input
-                                                    value={bio}
-                                                    onChange={(e) => setBio(e.target.value)}
-                                                    placeholder="Bio"
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
-                                                await updateBio.mutateAsync({
-                                                    email: email as string,
-                                                    bio: bio,
-                                                })
-                                                await getPotentialCustomerDetails.refetch();
-                                                setBioEditMode(false)
-                                            }}>
-                                                Done
-                                            </div>
-                                        </div> :
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <h1>
-                                                    Bio: {getPotentialCustomerDetails.data?.bio || "-"}
-                                                </h1>
-                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setBioEditMode(true)}>
-                                                    Edit
-                                                </div>
-                                            </div>
-                                        </div>
-                                }
-                            </div>
-                            <div>
-                                {
                                     communityFitEditMode ?
                                         <div>
                                             <div>
