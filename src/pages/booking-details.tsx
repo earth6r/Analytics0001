@@ -1,4 +1,5 @@
 import Header from "@/components/common/header";
+import ReactMarkdown from 'react-markdown';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +32,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
 
 export const ZOOM_URL = "https://zoom.us/j/9199989063?pwd=RzhRMklXNWdJNGVKZjRkRTdkUmZOZz09";
 
@@ -1116,17 +1118,61 @@ const BookingDetails = () => {
                             </div>
                         </div>
                     </div> */}
-                    <Card className="w-[40%]">
-                        <CardHeader className="select-none">
-                            <CardTitle>Waitlist Details</CardTitle>
-                            <CardDescription>
-                                {`Details about the potential customer's waitlist details.`}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <RegisterDetails registerDetails={registerDetails} />
-                        </CardContent>
-                    </Card>
+                    <div className="w-[40%]">
+                        <Card className="">
+                            <CardHeader className="select-none">
+                                <CardTitle>Waitlist Details</CardTitle>
+                                <CardDescription>
+                                    {`Details about the potential customer's waitlist details.`}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <RegisterDetails registerDetails={registerDetails} />
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-2">
+                            <CardHeader className="select-none">
+                                <CardTitle>Bio</CardTitle>
+                                <CardDescription>
+                                    {`Details about the potential customer's bio.`}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="max-h-48 overflow-y-scroll">
+                                <div>
+                                    {
+                                        bioEditMode ?
+                                            <div>
+                                                <Textarea
+                                                    value={bio}
+                                                    onChange={(e) => setBio(e.target.value)}
+                                                />
+                                                <div
+                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                    onClick={async () => {
+                                                        await updateBio.mutateAsync({
+                                                            email: email as string,
+                                                            bio: bio,
+                                                        })
+                                                        await getPotentialCustomerDetails.refetch();
+                                                        setBioEditMode(false)
+                                                    }}
+                                                >
+                                                    Done
+                                                </div>
+                                            </div> :
+                                            <div>
+                                                <ReactMarkdown>
+                                                    {getPotentialCustomerDetails.data?.bio || "-"}
+                                                </ReactMarkdown>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setBioEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                    }
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
 
                 <Accordion type="single" collapsible className="w-full">
