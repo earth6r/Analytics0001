@@ -1729,42 +1729,80 @@ const BookingDetails = () => {
                                     </div>
                                 }
                             </div>
-                            <div>
-                                {
-                                    knowOMAEditMode ?
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <div className="flex flex-row items-center space-x-1">
-                                                    <Checkbox
-                                                        checked={knowOMA || false}
-                                                        onCheckedChange={(checked) => setKnowOMA(!!checked)}
-                                                    />
-                                                    <h1>Know OMA</h1>
+
+                            <div className="mt-2">
+                                <div>
+                                    {
+                                        knowOMAEditMode ?
+                                            <div>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <div className="flex flex-row items-center space-x-1">
+                                                        <Checkbox
+                                                            checked={knowOMA || false}
+                                                            onCheckedChange={(checked) => setKnowOMA(!!checked)}
+                                                        />
+                                                        <h1>Know OMA</h1>
+                                                    </div>
+                                                    <div
+                                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                        onClick={async () => {
+                                                            await updateKnowOMA.mutateAsync({
+                                                                email: email as string,
+                                                                knowOMA: knowOMA,
+                                                            })
+                                                            await getPotentialCustomerDetails.refetch();
+                                                            setKnowOMAEditMode(false)
+                                                        }}
+                                                    >
+                                                        Done
+                                                    </div>
                                                 </div>
-                                                <div
-                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                    onClick={async () => {
-                                                        await updateKnowOMA.mutateAsync({
-                                                            email: email as string,
-                                                            knowOMA: knowOMA,
-                                                        })
-                                                        await getPotentialCustomerDetails.refetch();
-                                                        setKnowOMAEditMode(false)
-                                                    }}
-                                                >
+                                            </div> :
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>
+                                                    Know OMA: {getPotentialCustomerDetails.data?.knowOMA === null || getPotentialCustomerDetails.data?.knowOMA === undefined ? "-" : getPotentialCustomerDetails.data?.knowOMA ? "Yes" : "No"}
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setKnowOMAEditMode(true)}>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                    }
+                                </div>
+                                <div>
+                                    {
+                                        OMANotesEditMode ?
+                                            <div>
+                                                <div>
+                                                    <Input
+                                                        value={OMANotes}
+                                                        onChange={(e) => setOMANotes(e.target.value)}
+                                                        placeholder="OMA Notes"
+                                                        className="w-full"
+                                                    />
+                                                </div>
+                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
+                                                    await updateOMANotes.mutateAsync({
+                                                        email: email as string,
+                                                        OMANotes: OMANotes,
+                                                    })
+                                                    await getPotentialCustomerDetails.refetch();
+                                                    setOMANotesEditMode(false)
+                                                }}>
                                                     Done
                                                 </div>
-                                            </div>
-                                        </div> :
-                                        <div className="flex flex-row items-center space-x-2">
+                                            </div> :
                                             <div>
-                                                Know OMA: {getPotentialCustomerDetails.data?.knowOMA === null || getPotentialCustomerDetails.data?.knowOMA === undefined ? "-" : getPotentialCustomerDetails.data?.knowOMA ? "Yes" : "No"}
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <h1>
+                                                        OMA Notes: {getPotentialCustomerDetails.data?.OMANotes || "-"}
+                                                    </h1>
+                                                    <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setOMANotesEditMode(true)}>
+                                                        Edit
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setKnowOMAEditMode(true)}>
-                                                Edit
-                                            </div>
-                                        </div>
-                                }
+                                    }
+                                </div>
                             </div>
 
                             <div className="mt-2">
@@ -2760,41 +2798,6 @@ const BookingDetails = () => {
                                                     Additional Notes: {getPotentialCustomerDetails.data?.additionalNotes || "-"}
                                                 </h1>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setAdditionalNotesEditMode(true)}>
-                                                    Edit
-                                                </div>
-                                            </div>
-                                        </div>
-                                }
-                            </div>
-                            <div>
-                                {
-                                    OMANotesEditMode ?
-                                        <div>
-                                            <div>
-                                                <Input
-                                                    value={OMANotes}
-                                                    onChange={(e) => setOMANotes(e.target.value)}
-                                                    placeholder="OMA Notes"
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                            <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
-                                                await updateOMANotes.mutateAsync({
-                                                    email: email as string,
-                                                    OMANotes: OMANotes,
-                                                })
-                                                await getPotentialCustomerDetails.refetch();
-                                                setOMANotesEditMode(false)
-                                            }}>
-                                                Done
-                                            </div>
-                                        </div> :
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <h1>
-                                                    OMA Notes: {getPotentialCustomerDetails.data?.OMANotes || "-"}
-                                                </h1>
-                                                <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={() => setOMANotesEditMode(true)}>
                                                     Edit
                                                 </div>
                                             </div>
