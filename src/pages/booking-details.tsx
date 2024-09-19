@@ -683,7 +683,7 @@ const BookingDetails = () => {
                             <img
                                 src={displayImageUrl as string}
                                 alt="@user"
-                                className={cn("object-contain h-full w-full", isHovered && "filter blur-sm")}
+                                className={cn("object-contain h-full w-full", isHovered && "filter blur-sm opacity-75")}
                                 onLoad={() => { setImageLoaded(true) }}
                             />
                             {isHovered && (
