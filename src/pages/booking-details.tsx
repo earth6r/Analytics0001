@@ -196,7 +196,7 @@ const BookingDetails = () => {
     const [interestInHomeSwappingNotesEditMode, setInterestInHomeSwappingNotesEditMode] = useState<boolean>(false);
     const [interestInHomeSwappingNotes, setInterestInHomeSwappingNotes] = useState<string>("");
 
-    const [maxBookingsToShow, setMaxBookingsToShow] = useState<number>(2);
+    const [maxBookingsToShow, setMaxBookingsToShow] = useState<number>(3);
 
     const { timezone } = useInterval();
 
@@ -2879,128 +2879,130 @@ const BookingDetails = () => {
                     </Card>
                 </div>
 
-                <div className="mt-6 space-y-6">
-                    {bookings.data && bookings.data
-                        .slice(0, maxBookingsToShow)
-                        .map((booking: any, index: number) => (
-                            <Card key={index}>
-                                <CardHeader>
-                                    <CardTitle className="flex flex-row items-center justify-between">
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <div>{booking?.type === "Property Tour" ? <School className="w-4 h-4" /> : <Phone className="w-4 h-4" />}</div>
-                                            <div>{booking?.type === "Property Tour" ? "Property Tour" : "Phone Call"} Appointment Details</div>
-                                        </div>
-                                        {(booking?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
-                                            rescheduled
-                                        </Badge>}
-                                    </CardTitle>
-                                    <CardDescription>
-                                        Appointment details for {
-                                            getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
-                                        }
-                                    </CardDescription>
-                                    {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive" className="select-none">
-                                        <AlertCircle className="h-4 w-4" />
-                                        <AlertTitle>Action Required</AlertTitle>
-                                        <AlertDescription>
-                                            Pending Booking. Add a date to this booking in the <span className="underline cursor-pointer" onClick={
-                                                () => router.push(`/bookings`)
-                                            }>bookings</span> page
-                                        </AlertDescription>
-                                    </Alert>}
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-2">
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <Calendar className="w-4 h-4" />
-                                            <div>{formatTimestamp(booking?.startTimestamp, true, timezone) || "-"}</div>
-                                        </div>
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <Timer className="w-4 h-4" />
-                                            <div className="font-semibold">Duration</div>
-                                            <div>{
-                                                booking && booking?.startTimestamp && booking?.endTimestamp ? (booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes" : "-"
-                                            }</div>
-                                        </div>
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <MapPin className="w-4 h-4" />
-                                            <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild>
-                                                        {booking ? <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
-                                                            () => {
-                                                                window.open(
-                                                                    booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL, "_blank")
-                                                            }
-                                                        }>{
-                                                                booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL
-                                                            }</div> : <div>-</div>}
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        {booking?.type === "Property Tour" ? "Click to view the location" : "Click to join the Zoom call"}
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
+                <div className="mt-6">
+                    <div className="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
+                        {bookings.data && bookings.data
+                            .slice(0, maxBookingsToShow)
+                            .map((booking: any, index: number) => (
+                                <Card key={index}>
+                                    <CardHeader>
+                                        <CardTitle className="flex flex-row items-center justify-between">
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>{booking?.type === "Property Tour" ? <School className="w-4 h-4" /> : <Phone className="w-4 h-4" />}</div>
+                                                <div>{booking?.type === "Property Tour" ? "Property Tour" : "Phone Call"} Appointment Details</div>
+                                            </div>
+                                            {(booking?.rescheduleCount || 0) > 1 && <Badge variant="default" className="select-none hover:bg-black dark:hover:bg-white">
+                                                rescheduled
+                                            </Badge>}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            Appointment details for {
+                                                getPotentialCustomerDetails.data ? (getPotentialCustomerDetails.data?.firstName + " " + getPotentialCustomerDetails.data?.lastName) : (registerDetails.data?.data?.firstName + " " + registerDetails.data?.data?.lastName)
+                                            }
+                                        </CardDescription>
+                                        {!booking?.startTimestamp && !booking?.endTimestamp && <Alert variant="destructive" className="select-none">
+                                            <AlertCircle className="h-4 w-4" />
+                                            <AlertTitle>Action Required</AlertTitle>
+                                            <AlertDescription>
+                                                Pending Booking. Add a date to this booking in the <span className="underline cursor-pointer" onClick={
+                                                    () => router.push(`/bookings`)
+                                                }>bookings</span> page
+                                            </AlertDescription>
+                                        </Alert>}
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="space-y-2">
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <Calendar className="w-4 h-4" />
+                                                <div>{formatTimestamp(booking?.startTimestamp, true, timezone) || "-"}</div>
+                                            </div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <Timer className="w-4 h-4" />
+                                                <div className="font-semibold">Duration</div>
+                                                <div>{
+                                                    booking && booking?.startTimestamp && booking?.endTimestamp ? (booking?.endTimestamp - booking?.startTimestamp) / (60 * 1000) + " minutes" : "-"
+                                                }</div>
+                                            </div>
+                                            {booking?.status !== "completed" && <div className="flex flex-row items-center space-x-2">
+                                                <MapPin className="w-4 h-4" />
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            {booking ? <div className="max-w-max truncate text-blue-500 hover:text-blue-400 cursor-pointer" onClick={
+                                                                () => {
+                                                                    window.open(
+                                                                        booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL, "_blank")
+                                                                }
+                                                            }>{
+                                                                    booking?.type === "Property Tour" ? "https://streeteasy.com/building/home0001-48-allen" : ZOOM_URL
+                                                                }</div> : <div>-</div>}
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            {booking?.type === "Property Tour" ? "Click to view the location" : "Click to join the Zoom call"}
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                            </div>}
+                                            <div>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <Contact className="w-4 h-4" />
+                                                    <h1 className="font-semibold">Interviewer</h1>
+                                                    <h1>{booking?.interviewer || "-"}</h1>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex flex-row items-center space-x-2">
+                                                    <Contact className="w-4 h-4" />
+                                                    <h1 className="font-semibold">Status</h1>
+                                                    <Badge>{booking?.status || "scheduled"}</Badge>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <FileQuestion className="w-4 h-4" />
+                                                <h1 className="font-semibold">Customer Questions</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                <p className="whitespace-pre-wrap break-words">
+                                                    {booking?.notes || "-"}
+                                                </p>
+                                            </div>
                                         </div>
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
-                                                <Contact className="w-4 h-4" />
-                                                <h1 className="font-semibold">Interviewer</h1>
-                                                <h1>{booking?.interviewer || "-"}</h1>
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Legacy Meeting Notes</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                <p className="whitespace-pre-wrap break-words">
+                                                    {booking?.additionalNotes || "-"}
+                                                </p>
                                             </div>
                                         </div>
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
-                                                <Contact className="w-4 h-4" />
-                                                <h1 className="font-semibold">Status</h1>
-                                                <Badge>{booking?.status || "scheduled"}</Badge>
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Meeting Notes</h1>
                                             </div>
+                                            {/* TODO: remove hover on badges */}
+                                            {/* TODO: make badge have an option to have no hover i.e. hover={false} which if true, will have cursor-pointer and such and not if false. need to reuse everywhere because not consistent atm */}
+                                            {booking?.additionalDetails ? <div className="ml-6">
+                                                <div>
+                                                    Meeting Notes: {booking?.additionalDetails?.meetingNotes}
+                                                </div>
+                                                <div>
+                                                    what apartments are their favorites: {booking?.additionalDetails?.whatApartmentsAreTheirFavorites}
+                                                </div>
+                                                <div>
+                                                    what apartments did they see: {booking?.additionalDetails?.whatApartmentsDidTheySee}
+                                                </div>
+                                            </div> : <div className="ml-6">-</div>}
                                         </div>
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <FileQuestion className="w-4 h-4" />
-                                            <h1 className="font-semibold">Customer Questions</h1>
-                                        </div>
-                                        <div className="ml-6">
-                                            <p className="whitespace-pre-wrap break-words">
-                                                {booking?.notes || "-"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <NotepadText className="w-4 h-4" />
-                                            <h1 className="font-semibold">Legacy Meeting Notes</h1>
-                                        </div>
-                                        <div className="ml-6">
-                                            <p className="whitespace-pre-wrap break-words">
-                                                {booking?.additionalNotes || "-"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <NotepadText className="w-4 h-4" />
-                                            <h1 className="font-semibold">Meeting Notes</h1>
-                                        </div>
-                                        {/* TODO: remove hover on badges */}
-                                        {/* TODO: make badge have an option to have no hover i.e. hover={false} which if true, will have cursor-pointer and such and not if false. need to reuse everywhere because not consistent atm */}
-                                        {booking?.additionalDetails ? <div className="ml-6">
-                                            <div>
-                                                Meeting Notes: {booking?.additionalDetails?.meetingNotes}
-                                            </div>
-                                            <div>
-                                                what apartments are their favorites: {booking?.additionalDetails?.whatApartmentsAreTheirFavorites}
-                                            </div>
-                                            <div>
-                                                what apartments did they see: {booking?.additionalDetails?.whatApartmentsDidTheySee}
-                                            </div>
-                                        </div> : <div className="ml-6">-</div>}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    </CardContent>
+                                </Card>
+                            ))}
+                    </div>
                     {bookings.data && bookings.data.length > maxBookingsToShow &&
-                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer text-center" onClick={() => setMaxBookingsToShow(maxBookingsToShow + 2)}>
+                        <div className="text-blue-500 hover:text-blue-400 cursor-pointer text-center" onClick={() => setMaxBookingsToShow(maxBookingsToShow + 3)}>
                             Show more
                         </div>
                     }
