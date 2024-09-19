@@ -27,6 +27,7 @@ interface AddImageToUserDialogProps {
     email: string;
     potentialCustomerData: any;
     initialLoading: boolean;
+    className?: string;
 }
 
 const MAX_FILE_SIZE = 1024 * 1024 * 4.5; // 4.5MB
@@ -49,7 +50,7 @@ const validateUrl = (url: string) => {
 };
 
 const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
-    const { refetch, email, potentialCustomerData, initialLoading } = props;
+    const { refetch, email, potentialCustomerData, initialLoading, className = "" } = props;
 
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -165,7 +166,7 @@ const AddImageToUserDialog = (props: AddImageToUserDialogProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRingLight dark:animate-pulseRingDark")}>
+                <Button variant="default" className={cn("space-x-2", !imageUrl.startsWith("https://xytqn69rqj5z5bea.public.blob.vercel-storage.com") && !profileNotes && "relative overflow-hidden focus:outline-none animate-pulseRingLight dark:animate-pulseRingDark", className)}>
                     <CirclePlus className="w-4 h-4" />
                     <span className="hidden md:block">
                         Add Details

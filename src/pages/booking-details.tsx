@@ -198,6 +198,8 @@ const BookingDetails = () => {
 
     const [maxBookingsToShow, setMaxBookingsToShow] = useState<number>(3);
 
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+
     const { timezone } = useInterval();
 
     const bookingDetails = api.bookings.getBookingDetails.useQuery(
@@ -672,14 +674,33 @@ const BookingDetails = () => {
 
                 <div className="flex flex-row items-start justify-between mt-6">
                     <div className="flex flex-row items-start space-x-8">
-                        <div className="relative w-[400px] h-[400px]">
+                        <div
+                            className="relative w-[400px] h-[400px]"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={displayImageUrl as string}
                                 alt="@user"
-                                className="object-contain h-full w-full"
+                                className={cn("object-contain h-full w-full", isHovered && "filter blur-sm")}
                                 onLoad={() => { setImageLoaded(true) }}
                             />
+                            {isHovered && (
+                                // <button
+                                //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded"
+                                //     onClick={() => alert('clicked')}
+                                // >
+                                //     Click Me
+                                // </button>
+                                <AddImageToUserDialog
+                                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                    email={email as string}
+                                    refetch={getPotentialCustomerDetails.refetch}
+                                    potentialCustomerData={getPotentialCustomerDetails.data}
+                                    initialLoading={getPotentialCustomerDetails.isLoading || getPotentialCustomerDetails.isError || getPotentialCustomerDetails.isFetching || getPotentialCustomerDetails.isPending}
+                                />
+                            )}
                         </div>
                         <div className="space-y-2">
                             <div className="flex flex-row items-center space-x-1">
