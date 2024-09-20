@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/utils/firebase/initialize";
-import { collection, getDocs, query, where } from "firebase/firestore/lite";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore/lite";
 import moment from "moment-timezone";
 import { z } from "zod";
 
@@ -156,5 +156,13 @@ export const registerRouter = createTRPCRouter({
                 { '3 to 6 months': counts.threeToSixMonths },
                 { '6+ months': counts.sixPlusMonths },
             ];
+        }),
+
+    addRegister: publicProcedure
+        .input(z.any())
+        .mutation(async ({ input }) => {
+            const registerRef = collection(db, "register");
+
+            await addDoc(registerRef, input);
         }),
 });
