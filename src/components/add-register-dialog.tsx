@@ -70,11 +70,10 @@ const AddRegisterDialog = () => {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="adSet" className="text-right">
+                            <Label className="text-right">
                                 adSet
                             </Label>
                             <Input
-                                id="adSet"
                                 className="col-span-3"
                                 value={adSet}
                                 onChange={(e) => setAdSet(e.target.value)}
