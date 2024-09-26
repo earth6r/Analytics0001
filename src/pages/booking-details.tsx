@@ -923,7 +923,7 @@ const BookingDetails = () => {
                             <div>
                                 {
                                     relationshipStatusEditMode ?
-                                        <div>
+                                        <div className="flex flex-row items-center space-x-2">
                                             <Select value={relationshipStatus || undefined} onValueChange={setRelationshipStatus}>
                                                 <SelectTrigger className="w-full mt-1">
                                                     <SelectValue placeholder="Select a relationship status" />
@@ -1593,10 +1593,10 @@ const BookingDetails = () => {
                                 {
                                     funnelTypeEditMode ?
                                         <div>
-                                            <div className="flex flex-row items-center space-x-2">
+                                            <div className="">
                                                 <div>
                                                     <Select value={funnelType || undefined} onValueChange={setFunnelType}>
-                                                        <SelectTrigger className="w-full mt-1">
+                                                        <SelectTrigger className="w-[300px] mt-1">
                                                             <SelectValue placeholder="Select a funnel type" />
                                                         </SelectTrigger>
                                                         <SelectContent>
@@ -1609,36 +1609,38 @@ const BookingDetails = () => {
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
-                                                {
-                                                    funnelType === "Real Buyer" && (
-                                                        <div>
-                                                            <Label>Real Buyer Timeline</Label>
-                                                            <Select value={realBuyerTimeline || undefined} onValueChange={
-                                                                async (value) => {
-                                                                    if (value) {
-                                                                        await updateRealBuyerTimeline.mutateAsync({
-                                                                            email: email as string,
-                                                                            realBuyerTimeline: value,
-                                                                        })
-                                                                        await getPotentialCustomerDetails.refetch();
+                                                <div>
+                                                    {
+                                                        funnelType === "Real Buyer" && (
+                                                            <div>
+                                                                <Label>Real Buyer Timeline</Label>
+                                                                <Select value={realBuyerTimeline || undefined} onValueChange={
+                                                                    async (value) => {
+                                                                        if (value) {
+                                                                            await updateRealBuyerTimeline.mutateAsync({
+                                                                                email: email as string,
+                                                                                realBuyerTimeline: value,
+                                                                            })
+                                                                            await getPotentialCustomerDetails.refetch();
+                                                                        }
                                                                     }
-                                                                }
-                                                            }>
-                                                                <SelectTrigger className="w-full mt-1">
-                                                                    <SelectValue placeholder="Select a real buyer timeline" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {["Immediate", "Midterm", "Longterm"]
-                                                                        .map((realBuyerTimelineItem) => (
-                                                                            <SelectItem key={realBuyerTimelineItem} value={realBuyerTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
-                                                                                {realBuyerTimelineItem}
-                                                                            </SelectItem>
-                                                                        ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                    )
-                                                }
+                                                                }>
+                                                                    <SelectTrigger className="w-[300px] mt-1">
+                                                                        <SelectValue placeholder="Select a real buyer timeline" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent className="max-w-min">
+                                                                        {["Immediate", "Midterm", "Longterm"]
+                                                                            .map((realBuyerTimelineItem) => (
+                                                                                <SelectItem key={realBuyerTimelineItem} value={realBuyerTimelineItem} className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer select-none">
+                                                                                    {realBuyerTimelineItem}
+                                                                                </SelectItem>
+                                                                            ))}
+                                                                    </SelectContent>
+                                                                </Select>
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
                                                 <div>
                                                     <div
                                                         className="text-blue-500 hover:text-blue-400 cursor-pointer"
