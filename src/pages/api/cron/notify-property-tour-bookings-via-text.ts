@@ -7,7 +7,7 @@ import { type NextApiRequest, type NextApiResponse } from "next/types";
 
 export const config = {
   maxDuration: 300,
-}
+};
 
 const sendNotification = async (
   email: string,
@@ -33,7 +33,7 @@ const sendNotification = async (
   try {
     await axios.post(`${API_URL}/send-message`, {
       recipientPhone: phoneNumber,
-      message: `Hi ${firstName}, Just a quick reminder about your upcoming tour of HOME0001 Lower East Side  tomorrow at ${startTimestamp}. You’ll meet Carl in front of the building at 48 Allen (btw. Hester and Grand). Please give us a heads up if you’re running late or want to reschedule.`,
+      message: `Hi ${firstName}, Just a quick reminder about your upcoming tour of HOME0001 Lower East Side  tomorrow at ${startTimestamp}. You’ll meet Marian in front of the building at 48 Allen (btw. Hester and Grand). Please give us a heads up if you’re running late or want to reschedule.`,
     });
   } catch (error) {
     console.error(`Failed to send notification to ${phoneNumber}`, error);
