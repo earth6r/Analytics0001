@@ -1465,6 +1465,7 @@ const BookingDetails = () => {
                             <div>
                                 {homePurchaseTypeEditMode ?
                                     <div className="flex flex-row items-center space-x-2">
+                                        <h1>Home Purchase Type:</h1>
                                         <div>
                                             <Select value={homePurchaseType || undefined} onValueChange={setHomePurchaseType}>
                                                 <SelectTrigger className="max-w-max mt-1">
@@ -1547,6 +1548,7 @@ const BookingDetails = () => {
                                     necessityOrAmenityEditMode ?
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
+                                                <h1>Necessity of Amenity:</h1>
                                                 <div>
                                                     <Select value={necessityOrAmenity || undefined} onValueChange={setNecessityOrAmenity}>
                                                         <SelectTrigger className="w-full mt-1">
@@ -1594,6 +1596,7 @@ const BookingDetails = () => {
                                     funnelTypeEditMode ?
                                         <div>
                                             <div className="">
+                                                <h1>Funnel Type:</h1>
                                                 <div>
                                                     <Select value={funnelType || undefined} onValueChange={setFunnelType}>
                                                         <SelectTrigger className="w-[300px] mt-1">
@@ -1679,8 +1682,8 @@ const BookingDetails = () => {
                                     communityScoreEditMode ?
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
+                                                <h1>Community Score:</h1>
                                                 <div className="flex flex-row items-center space-x-1">
-                                                    <h1>Community Score</h1>
                                                     <Input
                                                         type="number"
                                                         value={communityScore}
@@ -1715,6 +1718,7 @@ const BookingDetails = () => {
                             <div>
                                 {relevanceEditMode ?
                                     <div>
+                                        <h1>Relevance: </h1>
                                         <div>
                                             {
                                                 ["Design", "Home swapping", "Location", "Furnished", "Architecture", "Buying a home", "Investment", "Community"].map((relevanceItem) => (
@@ -1805,15 +1809,16 @@ const BookingDetails = () => {
                                 <div>
                                     {
                                         OMANotesEditMode ?
-                                            <div>
+                                            <div className="flex flex-row items-center space-x-2">
                                                 <div>
-                                                    <Input
-                                                        value={OMANotes}
-                                                        onChange={(e) => setOMANotes(e.target.value)}
-                                                        placeholder="OMA Notes"
-                                                        className="w-full"
-                                                    />
+                                                    <h1>Know OMA Notes:</h1>
                                                 </div>
+                                                <Input
+                                                    value={OMANotes}
+                                                    onChange={(e) => setOMANotes(e.target.value)}
+                                                    placeholder="OMA Notes"
+                                                    className="w-[200px]"
+                                                />
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
                                                     await updateOMANotes.mutateAsync({
                                                         email: email as string,
@@ -1880,13 +1885,14 @@ const BookingDetails = () => {
                                 <div>
                                     {
                                         interestInHomeSwappingNotesEditMode ?
-                                            <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>Interest In Home Swapping Notes:</h1>
                                                 <div>
                                                     <Input
                                                         value={interestInHomeSwappingNotes}
                                                         onChange={(e) => setInterestInHomeSwappingNotes(e.target.value)}
                                                         placeholder="Interest In Home Swapping Notes"
-                                                        className="w-full"
+                                                        className="w-[200px]"
                                                     />
                                                 </div>
                                                 <div className="text-blue-500 hover:text-blue-400 cursor-pointer" onClick={async () => {
@@ -1955,7 +1961,10 @@ const BookingDetails = () => {
                                 <div>
                                     {
                                         interestInFurnitureNotesEditMode ?
-                                            <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <h1>
+                                                    Interest In Furniture Notes:
+                                                </h1>
                                                 <div>
                                                     <Input
                                                         value={interestInFurnitureNotes}
@@ -1993,6 +2002,9 @@ const BookingDetails = () => {
                                 {
                                     homeTypeEditMode ?
                                         <div className="flex flex-row items-center space-x-2">
+                                            <h1>
+                                                Home Type:
+                                            </h1>
                                             <Select value={homeType || undefined} onValueChange={setHomeType}>
                                                 <SelectTrigger className="max-w-max mt-1">
                                                     <SelectValue placeholder="Select a home type" />
@@ -2030,6 +2042,9 @@ const BookingDetails = () => {
                                 {
                                     lookingForUnitTypeEditMode ?
                                         <div className="flex flex-row items-center space-x-2">
+                                            <h1>
+                                                Looking For Unit Type:
+                                            </h1>
                                             <Select value={lookingForUnitType || undefined} onValueChange={setLookingForUnitType}>
                                                 <SelectTrigger className="max-w-max mt-1">
                                                     <SelectValue placeholder="Select a unit type" className="max-w-max" />
@@ -2071,9 +2086,9 @@ const BookingDetails = () => {
                                         <div className="flex flex-row items-center space-x-2">
                                             <div className="">
                                                 {sliderValueMax ? <div className="text-muted-foreground text-sm">
-                                                    {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                                                    Max Budget: {sliderValueMax[0]?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                                                 </div> : <div className="text-muted-foreground text-sm">
-                                                    Unknown
+                                                    Max Budget: Unknown
                                                 </div>}
                                                 <div>
                                                     <Slider
@@ -2118,41 +2133,44 @@ const BookingDetails = () => {
                             <div>
                                 {
                                     buyingTimelineEditMode ?
-                                        <div className="flex flex-row items-center space-x-2">
-                                            <div>
-                                                {
-                                                    ["Immediate", "1-3 months", "3-6 months", "6-12 months", "12 - 18 months", "18 - 24 months", "24 months+"]
-                                                        .map((timeline) => (
-                                                            <div key={timeline} className="flex items-center space-x-1">
-                                                                <h1 className="text-sm">{timeline}</h1>
-                                                                <Checkbox
-                                                                    id={timeline}
-                                                                    checked={buyingTimeline.includes(timeline)}
-                                                                    onCheckedChange={(checked) => {
-                                                                        if (checked) {
-                                                                            setBuyingTimeline([...buyingTimeline, timeline]);
-                                                                        } else {
-                                                                            setBuyingTimeline(buyingTimeline.filter((item) => item !== timeline));
-                                                                        }
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        ))
-                                                }
-                                            </div>
-                                            <div>
-                                                <div
-                                                    className="text-blue-500 hover:text-blue-400 cursor-pointer"
-                                                    onClick={async () => {
-                                                        await updateBuyingTimeline.mutateAsync({
-                                                            email: email as string,
-                                                            buyingTimeline: buyingTimeline,
-                                                        })
-                                                        await getPotentialCustomerDetails.refetch();
-                                                        setBuyingTimelineEditMode(false)
-                                                    }}
-                                                >
-                                                    Done
+                                        <div>
+                                            <h1>Buying Timeline:</h1>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <div>
+                                                    {
+                                                        ["Immediate", "1-3 months", "3-6 months", "6-12 months", "12 - 18 months", "18 - 24 months", "24 months+"]
+                                                            .map((timeline) => (
+                                                                <div key={timeline} className="flex items-center space-x-1">
+                                                                    <h1 className="text-sm">{timeline}</h1>
+                                                                    <Checkbox
+                                                                        id={timeline}
+                                                                        checked={buyingTimeline.includes(timeline)}
+                                                                        onCheckedChange={(checked) => {
+                                                                            if (checked) {
+                                                                                setBuyingTimeline([...buyingTimeline, timeline]);
+                                                                            } else {
+                                                                                setBuyingTimeline(buyingTimeline.filter((item) => item !== timeline));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            ))
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        className="text-blue-500 hover:text-blue-400 cursor-pointer"
+                                                        onClick={async () => {
+                                                            await updateBuyingTimeline.mutateAsync({
+                                                                email: email as string,
+                                                                buyingTimeline: buyingTimeline,
+                                                            })
+                                                            await getPotentialCustomerDetails.refetch();
+                                                            setBuyingTimelineEditMode(false)
+                                                        }}
+                                                    >
+                                                        Done
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
