@@ -4,4 +4,5 @@ export const interviewers = {
     "Marty": "+17868633711",
     "Annika": "+491634841797",
     "Carl": "+4915114310790",
+    "Marian": "+33745277973",
 };
