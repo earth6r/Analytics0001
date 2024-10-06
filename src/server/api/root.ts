@@ -7,6 +7,7 @@ import { userSettingsRouter } from "@/server/api/routers/user-settings";
 import { bookingsRouter } from "@/server/api/routers/bookings";
 import { userRouter } from "@/server/api/routers/user";
 import { errorRouter } from "@/server/api/routers/errors";
+import { sendgridRouter } from "./routers/sendgrid";
 
 /**
  * This is the primary router for your server.
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   bookings: bookingsRouter,
   user: userRouter,
   error: errorRouter,
+  sendgrid: sendgridRouter,
 });
 
 // export type definition of API
