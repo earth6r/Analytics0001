@@ -3140,9 +3140,9 @@ const RegisterDetails = (props: RegisterDetailsProps) => {
                     City: {registerData.city || "-"}
                 </div> */}
 
-                {/* <div>
-                    Bedroom Preference: {registerData.bedroomPreference || "-"}
-                </div> */}
+                <div>
+                    Bedroom Preference: {typeof registerData.bedroomPreference === "object" ? registerData.bedroomPreference.join(", ") : registerData.bedroomPreference || "-"}
+                </div>
 
                 {/* <div>
                     IP Address: {registerData.ipAddress.ip || "-"}
