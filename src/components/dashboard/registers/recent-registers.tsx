@@ -108,7 +108,7 @@ const RecentRegisters = () => {
                       )}
                     </TableCell>
                     <TableCell className="text-right">
-                      {register.createdAt ? register.createdAt.slice(0, 10) : ""}
+                      {register.createdAt ? register.createdAt.toString().slice(0, 10) : ""}
                     </TableCell>
                   </TableRow>
                 ))
