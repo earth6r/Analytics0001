@@ -74,7 +74,7 @@ const BaseEmailsChart = (props: BaseEmailsChartProps) => {
                     <Line
                         type="monotone"
                         dataKey={label}
-                        stroke={chartColor}
+                        stroke={chartColor === "dark" ? "#000" : "#fff"}
                         activeDot={{ r: 8 }}
                     />
                 </LineChart>
