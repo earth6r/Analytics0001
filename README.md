@@ -65,3 +65,53 @@ LOW PRI:
 - when creating a new next step, add advanced options to mark previous next step as completed
 - mobile cards for bookings needs icon for phone vs tours and should not show meeting link but a link to the location or something
 - i need meeting notes and next steps for property tours as well in mobile view
+
+AK - P2 (data cleanup):
+- change all bed room preferences from strings to array
+- the above bullet point but for any field
+- add in all users who have not received an email for template B
+- add in latest registers to db and save the last number completed
+- i only want singleSendId in emailsSentHistory db, not templateId if it exists
+- text: "" should be text: null
+- clickedUrls needs to be {url: null, timestamp: null} if it doesn't exist or empty string
+- opened needs to be {timestamp: null} if it doesn't exist or empty string
+-
+flashdynasty@gmail.com
+darien.labeach@gmail.com
+kvdoherty@gmail.com
+joegefers@gmail.com
+jligotti@gmail.com
+hersy.reyn@exprealty.com
+ancagmarinescu@gmail.com
+vbondnyc@gmail.com
+darcynathanson@gmail.com
+deyvonrsanders@gmail.com
+danzahirjunk@gmail.com
+justindurazzo@gmail.com
+ranise@gmail.com
+e_b141@outlook.com
+cassieraebledsoeartistry@yahoo.com
+hasdinkabir11@gmail.com
+jessicaannewei@gmail.com
+nikhil.saukhla@gmail.com
+przemyslaw@przemyslaw.org
+duncan_jui@hotmail.com
+joeychoe101@gmail.com
+umyahc@yahoo.com
+govcampdavid@yahoo.com
+lapiapaez@gmail.com
+kurtml.pinlac@gmail.com
+grisha.sorokin@gmail.com
+nguyen.t.bella@gmail.com
+timlithinks@gmail.com
+michellekellywu@gmail.com
+smaesta@gmail.com
+
+might have duplicate entries in emailsSentHistory db
+
+AY - P1:
+- email stats dashboard
+- add in all users who were sent template A and B to the emailsSentHistory db
+- hubspot needs a webhook so it saves to our db about info about hubspot emails
+- look into unsubscribes not working
+- fix registers not being saved to db
