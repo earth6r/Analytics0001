@@ -136,6 +136,17 @@ const Header = () => {
           >
             Settings
           </Link>
+          <Link
+            href="/emails"
+            className={cn(
+              "transition-colors hover:text-foreground",
+              router.pathname === "/emails"
+                ? "text-foreground"
+                : "text-muted-foreground",
+            )}
+          >
+            Emails
+          </Link>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -222,6 +233,17 @@ const Header = () => {
                 )}
               >
                 Settings
+              </Link>
+              <Link
+                href="/emails"
+                className={cn(
+                  "text-muted-foreground hover:text-foreground",
+                  router.pathname === "/emails"
+                    ? "text-foreground"
+                    : "text-muted-foreground",
+                )}
+              >
+                Emails
               </Link>
             </nav>
           </SheetContent>
