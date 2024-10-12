@@ -3181,17 +3181,6 @@ const BookingDetails = () => {
                                             </div>
                                         </div>
 
-                                        {/* timeline */}
-                                        <div>
-                                            <div className="flex flex-row items-center space-x-2">
-                                                <NotepadText className="w-4 h-4" />
-                                                <h1 className="font-semibold">Timeline</h1>
-                                            </div>
-                                            {booking?.timeline ? <div className="ml-6">
-                                                {booking?.timeline}
-                                            </div> : <div className="ml-6">-</div>}
-                                        </div>
-
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
                                                 <NotepadText className="w-4 h-4" />
