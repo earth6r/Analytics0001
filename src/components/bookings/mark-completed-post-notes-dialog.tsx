@@ -504,41 +504,6 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             <div>
                                 <div className="flex flex-row items-center justify-between">
                                     <div className="flex items-center space-x-1">
-                                        <Label htmlFor="timeline">Timeline</Label>
-                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer is in the same buying timeline." />
-                                    </div>
-                                    <div className="flex flex-row items-center space-x-1">
-                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
-                                        <Checkbox
-                                            checked={timingChecked}
-                                            onCheckedChange={(checked) => setTimingChecked(!!checked)}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mt-2">
-                                    <Select
-                                        value={timelineSelectedValue || undefined}
-                                        onValueChange={(value) => setTimelineSelectedValue(value)}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a buying timeline" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectItem value="Immediate" className="hover:bg-gray-100 dark:hover:bg-gray-800">Immediate</SelectItem>
-                                                <SelectItem value="1-3 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">1-3 Months</SelectItem>
-                                                <SelectItem value="3-6 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">3-6 Months</SelectItem>
-                                                <SelectItem value="6-12 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">6-12 Months</SelectItem>
-                                                <SelectItem value="Not Sure" className="hover:bg-gray-100 dark:hover:bg-gray-800">Not Sure</SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex flex-row items-center justify-between">
-                                    <div className="flex items-center space-x-1">
                                         <Label htmlFor="community-member-qualified">Community Member Qualified</Label>
                                         <CircularQuestionMarkTooltip label="Check this field if the potential customer is community member qualified" />
                                     </div>
