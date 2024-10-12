@@ -361,16 +361,227 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             </div>
                         </div>
 
-                    <UpdateProfile
-                        email={booking.email}
-                        showProfileInputs={false}
-                        additionalOnSubmit={onSubmit}
-                        buttonLabel="Mark As Completed"
-                        disabled={loading || (nextStepsDropdownValue === "other" && !otherNextSteps) || !nextStepsDropdownValue || !nextStepsNotes} 
-                    />
-                </div>
+                        <div className="grid gap-4 w-full">
+                            <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex items-center space-x-1">
+                                        <Label htmlFor="product-fit">Product Fit</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer matches the product fit" />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                        <Checkbox
+                                            checked={productFitChecked}
+                                            onCheckedChange={(checked) => setProductFitChecked(!!checked)}
+                                        />
+                                    </div>
+                                </div>
+                                <Textarea
+                                    id="product-fit-notes"
+                                    rows={4}
+                                    value={projectFitNotes}
+                                    onChange={(e) => setProjectFitNotes(e.target.value)}
+                                    className="resize-none mt-2"
+                                    placeholder="Notes about product fit"
+                                />
+                            </div>
 
-                {/* <div className="px-6 pb-4 mt-2">
+                            <div className="mt-1">
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex items-center space-x-1">
+                                        <Label htmlFor="interest">Interest</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer is interested" />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                        <Checkbox
+                                            checked={interestChecked}
+                                            onCheckedChange={(checked) => setInterestChecked(!!checked)}
+                                        />
+                                    </div>
+                                </div>
+                                <Textarea
+                                    id="post-notes"
+                                    rows={4}
+                                    value={interestNotes}
+                                    onChange={(e) => setInterestNotes(e.target.value)}
+                                    className="resize-none mt-2"
+                                    placeholder="Notes about interest"
+                                />
+                            </div>
+
+                            <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <Label htmlFor="locations">Locations</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer is interested in any location" />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <div className="text-xs text-muted-foreground">Select all</div>
+                                        <Checkbox
+                                            checked={losAngelesChecked && newYorkChecked && parisChecked && londonChecked && berlinChecked && mexicoCityChecked}
+                                            onCheckedChange={(checked) => {
+                                                setLosAngelesChecked(!!checked);
+                                                setNewYorkChecked(!!checked);
+                                                setParisChecked(!!checked);
+                                                setLondonChecked(!!checked);
+                                                setBerlinChecked(!!checked);
+                                                setMexicoCityChecked(!!checked);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2 mt-[6px]">
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">Los Angeles</div>
+                                        <Checkbox
+                                            checked={losAngelesChecked}
+                                            onCheckedChange={(checked) => setLosAngelesChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">New York</div>
+                                        <Checkbox
+                                            checked={newYorkChecked}
+                                            onCheckedChange={(checked) => setNewYorkChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">Paris</div>
+                                        <Checkbox
+                                            checked={parisChecked}
+                                            onCheckedChange={(checked) => setParisChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">London</div>
+                                        <Checkbox
+                                            checked={londonChecked}
+                                            onCheckedChange={(checked) => setLondonChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">Berlin</div>
+                                        <Checkbox
+                                            checked={berlinChecked}
+                                            onCheckedChange={(checked) => setBerlinChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">Mexico City</div>
+                                        <Checkbox
+                                            checked={mexicoCityChecked}
+                                            onCheckedChange={(checked) => setMexicoCityChecked(!!checked)}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-row items-center justify-between space-x-1">
+                                        <div className="text-xs text-muted-foreground">Somewhere else</div>
+                                        <Checkbox
+                                            checked={somewhereElseChecked}
+                                            onCheckedChange={(checked) => setSomewhereElseChecked(!!checked)}
+                                        />
+                                    </div>
+                                    {somewhereElseChecked && (
+                                        <Input
+                                            id="somewhere-else-notes"
+                                            value={somewhereElseNotes}
+                                            onChange={(e) => setSomewhereElseNotes(e.target.value)}
+                                            className="resize-none mt-2 h-10"
+                                            placeholder="Specify the location"
+                                        />
+                                    )}
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex items-center space-x-1">
+                                        <Label htmlFor="timeline">Timeline</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer is in the same buying timeline." />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                        <Checkbox
+                                            checked={timingChecked}
+                                            onCheckedChange={(checked) => setTimingChecked(!!checked)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mt-2">
+                                    <Select
+                                        value={timelineSelectedValue || undefined}
+                                        onValueChange={(value) => setTimelineSelectedValue(value)}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a buying timeline" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectItem value="Immediate" className="hover:bg-gray-100 dark:hover:bg-gray-800">Immediate</SelectItem>
+                                                <SelectItem value="1-3 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">1-3 Months</SelectItem>
+                                                <SelectItem value="3-6 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">3-6 Months</SelectItem>
+                                                <SelectItem value="6-12 Months" className="hover:bg-gray-100 dark:hover:bg-gray-800">6-12 Months</SelectItem>
+                                                <SelectItem value="Not Sure" className="hover:bg-gray-100 dark:hover:bg-gray-800">Not Sure</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="flex flex-row items-center justify-between">
+                                    <div className="flex items-center space-x-1">
+                                        <Label htmlFor="community-member-qualified">Community Member Qualified</Label>
+                                        <CircularQuestionMarkTooltip label="Check this field if the potential customer is community member qualified" />
+                                    </div>
+                                    <div className="flex flex-row items-center space-x-1">
+                                        <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                        <Checkbox
+                                            checked={communityChecked}
+                                            onCheckedChange={(checked) => setCommunityChecked(!!checked)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {booking.type === "Phone Call" &&
+                                <div>
+                                    <div className="flex flex-row items-center justify-between">
+                                        <div className="flex items-center space-x-1">
+                                            <Label htmlFor="book-a-tour">Book a Tour?</Label>
+                                            <CircularQuestionMarkTooltip label="Check this field if the potential customer needs a tour" />
+                                        </div>
+                                        <div className="flex flex-row items-center space-x-1">
+                                            <h1 className="text-sm text-muted-foreground">Qualified?</h1>
+                                            <Checkbox
+                                                checked={bookATourChecked}
+                                                onCheckedChange={(checked) => {
+                                                    setBookATourChecked(!!checked);
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>}
+                        </div>
+
+                        <UpdateProfile
+                            email={booking.email}
+                            showProfileInputs={false}
+                            additionalOnSubmit={onSubmit}
+                            buttonLabel="Mark As Completed"
+                            disabled={loading || (nextStepsDropdownValue === "other" && !otherNextSteps) || !nextStepsDropdownValue || !nextStepsNotes}
+                        />
+                    </div>
+
+                    {/* <div className="px-6 pb-4 mt-2">
                         <Button onClick={onSubmit}
                             disabled={loading || (nextStepsDropdownValue === "other" && !otherNextSteps)}
                             className="w-full"
@@ -383,8 +594,8 @@ const MarkCompletedPostNotesDialog = (props: MarkCompletedPostNotesDialogProps) 
                             }
                         </Button>
                     </div> */}
-            </div>
-        </DialogContent>
+                </div>
+            </DialogContent>
         </Dialog >
     )
 }

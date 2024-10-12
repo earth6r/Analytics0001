@@ -3030,6 +3030,168 @@ const BookingDetails = () => {
                                                 </p>
                                             </div>
                                         </div>
+
+                                        <div>
+                                            <h1 className="font-semibold">Product Fit</h1>
+                                            <div className="ml-6">
+                                                <div>
+                                                    {JSON.stringify(booking?.productFit) || "-"}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* productFitNotes */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Product Fit Notes</h1>
+                                            </div>
+                                            {booking?.productFitNotes ? <div className="ml-6">
+                                                {booking?.productFitNotes}
+                                            </div> : <div className="ml-6">-</div>}
+                                        </div>
+
+                                        {/* communityMember - boolean */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Community Member</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.communityMember ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* interest - boolean */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Interest</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.interest ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* interestNotes */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Interest Notes</h1>
+                                            </div>
+                                            {booking?.productFitNotes ? <div className="ml-6">
+                                                {booking?.interestNotes}
+                                            </div> : <div className="ml-6">-</div>}
+                                        </div>
+
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Berlin</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.berlin ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">London</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.london ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* losAngeles */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Los Angeles</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.losAngeles ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* mexicoCity */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Mexico City</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.mexicoCity ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* newYork */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">New York</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.newYork ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* paris */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Paris</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.paris ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* somewhereElse */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Somewhere Else</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.locations?.somewhereElse ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* somewhereElseNotes */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Somewhere Else Notes</h1>
+                                            </div>
+                                            {booking?.locations?.somewhereElseNotes ? <div className="ml-6">
+                                                {booking?.locations?.somewhereElseNotes}
+                                            </div> : <div className="ml-6">-</div>}
+                                        </div>
+
+                                        {/* timing - boolean */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Timing</h1>
+                                            </div>
+                                            <div className="ml-6">
+                                                {booking?.timing ? "Yes" : "No"}
+                                            </div>
+                                        </div>
+
+                                        {/* timeline */}
+                                        <div>
+                                            <div className="flex flex-row items-center space-x-2">
+                                                <NotepadText className="w-4 h-4" />
+                                                <h1 className="font-semibold">Timeline</h1>
+                                            </div>
+                                            {booking?.timeline ? <div className="ml-6">
+                                                {booking?.timeline}
+                                            </div> : <div className="ml-6">-</div>}
+                                        </div>
+
                                         <div>
                                             <div className="flex flex-row items-center space-x-2">
                                                 <NotepadText className="w-4 h-4" />
