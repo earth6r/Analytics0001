@@ -12,7 +12,7 @@ const Emails = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mt-2">
                     {getMarketingEmailStats.data?.map((email) => (
-                        <div key={email.singleSendId} className="bg-white p-4 rounded-lg shadow border flex flex-row items-start space-x-4">
+                        <div key={email.singleSendId} className="bg-white p-4 rounded-lg shadow border flex flex-row items-center space-x-4">
                             <div className="relative w-1/2 h-[500px] overflow-hidden bg-blue-300">
                                 <div className="absolute top-0 left-0 w-full h-full transform scale-100 origin-top-left" dangerouslySetInnerHTML={{ __html: email.templateData.htmlContent }}></div>
                             </div>
